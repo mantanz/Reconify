@@ -1,0 +1,1 @@
+export default function ConfigDelete(){return <h2 className="p-8 text-xl font-semibold">Delete Config</h2>} 

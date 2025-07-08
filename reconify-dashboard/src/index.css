@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* Tailwind v4 theme tokens */
+@theme {
+  /* brand colours */
+  --color-primary: #2563eb;          /* blue-600 */
+  --color-primary-dark: #1e40af;     /* blue-800 */
+  --color-success: #22c55e;          /* green-500 */
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased font-sans overflow-x-hidden;
+}
