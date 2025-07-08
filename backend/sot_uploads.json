@@ -1,0 +1,33 @@
+[
+  {
+    "doc_id": "a6138921-019b-459b-a07b-2b4f185ebad1",
+    "doc_name": "HR_data_sample.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-06T12:05:41.690579",
+    "status": "success"
+  },
+  {
+    "doc_id": "caf1822f-d8ff-4e71-8a05-11383ae80cb1",
+    "doc_name": "SOT2_sample.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-07T18:28:20.650475",
+    "status": "error: Table for panel 'sot2' does not exist. Please add the panel first.",
+    "sot_type": "sot2"
+  },
+  {
+    "doc_id": "379c96e4-5d2a-44ca-a71f-436674655d9e",
+    "doc_name": "SOT2_sample.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-07T18:48:04.325698",
+    "status": "error: Table for panel 'sot2' does not exist. Please add the panel first.",
+    "sot_type": "sot2"
+  },
+  {
+    "doc_id": "f76b2e38-affd-42c0-8aff-031e7fc9fbac",
+    "doc_name": "SOT2_sample.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-07T19:04:16.544781",
+    "status": "success",
+    "sot_type": "sot2"
+  }
+]
