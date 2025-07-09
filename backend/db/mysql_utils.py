@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, String, inspect
+from sqlalchemy import create_engine, MetaData, Table, Column, String, inspect, select
 from sqlalchemy.exc import SQLAlchemyError, NoSuchTableError
 import traceback
 
@@ -143,4 +143,21 @@ def insert_sot_data_rows(sot_name, rows):
     except Exception as e:
         print(f"Error inserting into {table_name}:")
         import traceback; traceback.print_exc()
-        return False, str(e) 
+        return False, str(e)
+
+def fetch_all_rows(table_name):
+    """
+    Fetch all rows from the given table as a list of dicts.
+    """
+    metadata = MetaData()
+    table_name = table_name.replace(" ", "_").lower()
+    try:
+        table = Table(table_name, metadata, autoload_with=engine)
+        with engine.connect() as conn:
+            result = conn.execute(select(table)).fetchall()
+            columns = table.columns.keys()
+            return [dict(zip(columns, row)) for row in result]
+    except Exception as e:
+        print(f"Error fetching rows from {table_name}: {e}")
+        import traceback; traceback.print_exc()
+        return [] 
