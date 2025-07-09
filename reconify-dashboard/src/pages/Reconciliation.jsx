@@ -113,7 +113,7 @@ export default function Reconciliation() {
   const handleCancel=(index)=> setRows(prev=> prev.filter((_,i)=> i!==index));
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen pt-14">
       {/* Constrained content container */}
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-12 py-6">
         <div className="w-full bg-white px-4 py-6 sm:px-6 lg:px-8 rounded-lg shadow-sm">
@@ -139,11 +139,11 @@ export default function Reconciliation() {
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
-                  className={`flex items-center justify-center w-full md:w-4/5 h-10 border-2 border-dashed rounded-md cursor-pointer transition-colors text-sm gap-2 ${dragActive ? 'border-primary bg-primary/10' : 'border-gray-300 bg-gray-50 hover:bg-gray-100'}`}
+                  className={`flex items-center justify-center w-full md:w-4/5 h-10 border-2 border-dashed rounded-md cursor-pointer transition-colors text-sm gap-2 ${dragActive ? 'border-primary bg-primary/10' : 'border-gray-300 bg-gray-50 hover:bg-gray-100'} ${panel === ' -- Select -- ' ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <HiOutlineUpload className="text-gray-500 w-5 h-5" />
                   <span className="text-gray-600">Browse files</span>
-                  <input id="dropzone-file" type="file" multiple onChange={handleFilesChange} className="hidden" />
+                  <input id="dropzone-file" type="file" multiple onChange={handleFilesChange} className="hidden" disabled={panel === ' -- Select -- '} />
                 </label>
                 {/* Upload icon button */}
                 <button
@@ -166,7 +166,7 @@ export default function Reconciliation() {
             </div>
           </div>
           {/* Table */}
-          <div className="mt-10 overflow-x-auto">
+          <div className="mt-10 overflow-x-auto max-h-[60vh] overflow-y-auto rounded-md border border-gray-100">
             <table className="min-w-full text-left text-sm">
               <thead className="bg-gray-100 text-gray-700">
                 <tr>

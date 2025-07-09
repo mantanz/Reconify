@@ -48,7 +48,7 @@ export default function SOT() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-12 py-6">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-12 py-6 mt-8">
         <div className="bg-white rounded-lg shadow-sm px-4 py-6 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Source of Truth</h2>
           <table className="min-w-full text-sm text-left border">
