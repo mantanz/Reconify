@@ -6,9 +6,7 @@
         "hr_data": {
           "user_email": "email"
         },
-        "sot2": {
-          "cust_id": "user_id"
-        },
+        "sot2": {},
         "sot3": {}
       }
     }
