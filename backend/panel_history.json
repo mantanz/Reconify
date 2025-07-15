@@ -7,5 +7,14 @@
     "total_records": 1385,
     "uploadedby": "demo",
     "status": "uploaded"
+  },
+  {
+    "panelname": "sample panel",
+    "docid": "9290ed4c-a423-4997-9456-4000caade2b5",
+    "docname": "Panel_sample.csv",
+    "timestamp": "2025-07-14T12:21:25.284017",
+    "total_records": 3,
+    "uploadedby": "demo",
+    "status": "uploaded"
   }
 ]

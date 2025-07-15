@@ -5,13 +5,21 @@ import json
 import os
 import csv
 from fastapi.middleware.cors import CORSMiddleware
-from db.mysql_utils import create_panel_table, get_panel_headers_from_db, insert_panel_data_rows, get_panel_headers_from_db as get_hr_data_headers_from_db, insert_sot_data_rows, fetch_all_rows
+from db.mysql_utils import create_panel_table, get_panel_headers_from_db, insert_panel_data_rows, insert_sot_data_rows, fetch_all_rows
 import uuid
 from datetime import datetime
 import logging
-import math
 import pandas as pd
-import calendar
+
+# Configure logging for production
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('reconify.log'),
+        logging.StreamHandler()
+    ]
+)
 
 app = FastAPI()
 DB_PATH = "config_db.json"
@@ -106,6 +114,8 @@ def upload_panel_file(file: UploadFile = File(...)):
         if filename.endswith(".xlsx") or filename.endswith(".xls"):
             import io
             df = pd.read_excel(io.BytesIO(contents))
+            # Convert headers to lowercase
+            df.columns = [col.strip().lower() for col in df.columns]
             headers = list(df.columns)
         else:
             # Try different encodings for CSV files
@@ -124,7 +134,8 @@ def upload_panel_file(file: UploadFile = File(...)):
             
             import csv
             reader = csv.reader(lines)
-            headers = next(reader)
+            # Convert headers to lowercase
+            headers = [h.strip().lower() for h in next(reader)]
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error processing file: {str(e)}")
     
@@ -177,6 +188,8 @@ def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
         if filename.endswith(".xlsx") or filename.endswith(".xls"):
             import io
             df = pd.read_excel(io.BytesIO(contents))
+            # Convert headers to lowercase
+            df.columns = [col.strip().lower() for col in df.columns]
             rows = df.to_dict(orient="records")
         else:
             # Try different encodings for CSV files
@@ -192,7 +205,9 @@ def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
                 raise HTTPException(status_code=400, detail="Unable to decode file. Please ensure it's a valid CSV or Excel file.")
             import csv
             reader = csv.DictReader(lines)
-            rows = list(reader)
+            # Convert headers to lowercase
+            reader.fieldnames = [h.strip().lower() for h in reader.fieldnames]
+            rows = [dict((k.strip().lower(), v) for k, v in row.items()) for row in reader]
     except Exception as e:
         return {"error": f"Error processing file: {str(e)}", "doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": "error", "sot_type": sot_type}
     
@@ -223,6 +238,15 @@ def list_sot_uploads():
         return []
     with open(SOT_UPLOADS_PATH, "r") as f:
         return json.load(f)
+
+@app.get("/sot/list")
+def list_sots_from_config():
+    db = load_db()
+    sots = set()
+    for panel in db.get("panels", []):
+        key_mapping = panel.get("key_mapping", {})
+        sots.update(key_mapping.keys())
+    return {"sots": sorted(list(sots))}
 
 @app.post("/recon/upload")
 def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
@@ -299,10 +323,43 @@ def get_panel_upload_history():
 
 @app.get("/sot/fields/{sot_type}")
 def get_sot_fields(sot_type: str):
-    headers = get_hr_data_headers_from_db(sot_type)
+    headers = get_panel_headers_from_db(sot_type)
     if not headers:
         raise HTTPException(status_code=404, detail=f"{sot_type} table not found or has no columns")
     return {"fields": headers}
+
+@app.get("/debug/sot/{sot_name}")
+def debug_sot_table(sot_name: str):
+    """
+    Debug endpoint to inspect SOT table data and structure.
+    """
+    try:
+        from db.mysql_utils import fetch_all_rows
+        rows = fetch_all_rows(sot_name)
+        
+        if not rows:
+            return {
+                "sot_name": sot_name,
+                "row_count": 0,
+                "columns": [],
+                "sample_data": []
+            }
+        
+        # Get column names from first row
+        columns = list(rows[0].keys()) if rows else []
+        
+        # Get sample data (first 5 rows)
+        sample_data = rows[:5]
+        
+        return {
+            "sot_name": sot_name,
+            "row_count": len(rows),
+            "columns": columns,
+            "sample_data": sample_data
+        }
+    except Exception as e:
+        logging.error(f"Error debugging SOT table {sot_name}: {e}")
+        raise HTTPException(status_code=500, detail=f"Error accessing SOT table: {str(e)}")
 
 @app.post("/recon/process")
 def reconcile_panel_with_sot(panel_name: str = Form(...), sot_type: str = Form(...)):
@@ -424,3 +481,250 @@ def get_recon_summary_detail(recon_id: str = Path(...)):
         if rec.get("recon_id") == recon_id:
             return rec
     raise HTTPException(status_code=404, detail="Reconciliation summary not found") 
+
+@app.post("/categorize_users")
+def categorize_users(panel_name: str = Form(...)):
+    """
+    Dynamically categorize users in a panel based on configured SOT mappings.
+    This function is production-ready and handles any number of SOTs with any field mappings.
+    
+    NOTE: User categorization is restricted to only three SOTs:
+    - service_users (highest priority)
+    - internal_users (medium priority) 
+    - thirdparty_users (lowest priority)
+    
+    Other SOTs in the key_mapping will be ignored for categorization purposes.
+    """
+    try:
+        db = load_db()
+        panel = next((p for p in db["panels"] if p["name"] == panel_name), None)
+        if not panel:
+            raise HTTPException(status_code=404, detail="Panel not found")
+        
+        key_mapping = panel.get("key_mapping", {})
+        if not key_mapping:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"No key mappings configured for panel '{panel_name}'. Please configure key mappings first."
+            )
+        
+        # Get all configured SOTs dynamically
+        configured_sots = list(key_mapping.keys())
+        if not configured_sots:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"No SOTs configured for panel '{panel_name}'. Please configure at least one SOT mapping."
+            )
+        
+        # Restrict to only the three allowed SOTs for user categorization
+        allowed_sots = ["service_users", "internal_users", "thirdparty_users"]
+        configured_sots = [sot for sot in configured_sots if sot in allowed_sots]
+        
+        if not configured_sots:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"No valid SOTs configured for user categorization. Only 'service_users', 'internal_users', and 'thirdparty_users' are allowed. Available mappings: {list(key_mapping.keys())}"
+            )
+        
+        # Production logging (replace print with proper logging)
+        logging.info(f"Starting user categorization for panel: {panel_name}")
+        logging.info(f"Configured SOTs for categorization: {configured_sots}")
+        logging.debug(f"Key mapping configuration: {key_mapping}")
+        
+        # Fetch data for all configured SOTs
+        sot_data = {}
+        for sot in configured_sots:
+            try:
+                sot_data[sot] = fetch_all_rows(sot)
+                logging.info(f"Fetched {len(sot_data[sot])} rows from SOT: {sot}")
+            except Exception as e:
+                logging.error(f"Failed to fetch data from SOT '{sot}': {e}")
+                sot_data[sot] = []
+        
+        # Fetch panel data
+        try:
+            panel_rows = fetch_all_rows(panel_name)
+            logging.info(f"Fetched {len(panel_rows)} rows from panel: {panel_name}")
+        except Exception as e:
+            logging.error(f"Failed to fetch panel data: {e}")
+            raise HTTPException(status_code=500, detail=f"Failed to fetch panel data: {str(e)}")
+        
+        # Initialize summary dynamically
+        summary = {sot: 0 for sot in configured_sots}
+        summary["not_found"] = 0
+        summary["total"] = len(panel_rows)
+        summary["errors"] = 0
+        updates = []
+
+        # Helper function to extract panel_field and sot_field from mapping
+        def extract_mapping_fields(mapping):
+            """Extract panel_field and sot_field from mapping, supporting both old and new formats."""
+            if not mapping:
+                return None, None
+            
+            # Handle new format: {'panel_field': 'panel_field_value', 'sot_field': 'sot_field_value'}
+            if 'panel_field' in mapping and 'sot_field' in mapping:
+                return mapping['panel_field'], mapping['sot_field']
+            
+            # Handle old format: {'panel_field': 'sot_field'}
+            if len(mapping) == 1:
+                panel_field, sot_field = list(mapping.items())[0]
+                return panel_field, sot_field
+            
+            return None, None
+
+        # Determine the match_field (key field) for the panel
+        # Prioritize service_users mapping, then fall back to other SOTs
+        match_field = None
+        
+        # Define the priority order for match_field determination
+        priority_sots = ["service_users", "internal_users", "thirdparty_users"]
+        
+        # Try to get match_field from SOTs in priority order
+        for sot in priority_sots:
+            if sot in configured_sots:
+                mapping = key_mapping.get(sot, {})
+                panel_field, _ = extract_mapping_fields(mapping)
+                if panel_field:
+                    match_field = panel_field
+                    logging.info(f"Using '{match_field}' as primary key field (from {sot})")
+                    break
+        
+        if not match_field:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"No valid panel field mapping found in key_mapping for panel '{panel_name}'. Please configure the key mapping first. Available mappings: {key_mapping}"
+            )
+
+        # Build lookups for each SOT using the configured SOT field
+        lookups = {}
+        for sot in configured_sots:
+            mapping = key_mapping.get(sot, {})
+            panel_field, sot_field = extract_mapping_fields(mapping)
+            logging.info(f"SOT {sot}: panel_field='{panel_field}', sot_field='{sot_field}'")
+            
+            if sot_field:
+                # Create lookup with proper error handling
+                try:
+                    lookups[sot] = {
+                        str(row.get(sot_field, "")).strip().lower(): row 
+                        for row in sot_data[sot] 
+                        if row.get(sot_field) is not None
+                    }
+                    logging.info(f"Built lookup for {sot} with {len(lookups[sot])} entries using field '{sot_field}'")
+                    logging.debug(f"Sample lookup keys for {sot}: {list(lookups[sot].keys())[:5]}")  # Show first 5 keys
+                except Exception as e:
+                    logging.error(f"Error building lookup for {sot}: {e}")
+                    lookups[sot] = {}
+            else:
+                logging.warning(f"No SOT field configured for {sot}")
+                lookups[sot] = {}
+
+        # Process each panel row
+        for row_idx, row in enumerate(panel_rows):
+            try:
+                status = "not found"
+                found = False
+                
+                # Check SOTs in priority order: service_users -> internal_users -> thirdparty_users
+                priority_sots = ["service_users", "internal_users", "thirdparty_users"]
+                
+                for sot in priority_sots:
+                    if sot not in configured_sots:
+                        continue
+                        
+                    mapping = key_mapping.get(sot, {})
+                    panel_field, sot_field = extract_mapping_fields(mapping)
+                    
+                    if not panel_field or not sot_field:
+                        continue
+                    
+                    # Get panel value
+                    panel_value = row.get(panel_field, "")
+                    if not panel_value:
+                        continue
+                    
+                    panel_value = str(panel_value).strip().lower()
+                    original_panel_value = panel_value  # Keep original for logging
+                    
+                    # Apply domain matching for internal_users and thirdparty_users
+                    # Check if this SOT uses domain matching (either by flag or by field name)
+                    use_domain_matching = mapping.get("use_domain_matching", False)
+                    is_domain_sot = sot in ["internal_users", "thirdparty_users"] and sot_field == "domain"
+                    
+                    if (use_domain_matching or is_domain_sot) and "@" in panel_value:
+                        panel_value = panel_value.split("@")[-1].strip().lower()
+                        logging.debug(f"Row {row_idx}: Extracted domain '{panel_value}' from '{original_panel_value}' for {sot}")
+                    
+                    # Look for match in SOT
+                    if panel_value in lookups[sot]:
+                        sot_row = lookups[sot][panel_value]
+                        
+                        # Try to get user type from various possible field names
+                        user_type_fields = ["user_type", "usertype", "type", "status", "category"]
+                        user_type = None
+                        for field in user_type_fields:
+                            user_type = sot_row.get(field)
+                            if user_type:
+                                break
+                        
+                        status = user_type if user_type else "found"
+                        summary[sot] += 1
+                        found = True
+                        logging.debug(f"Row {row_idx}: Found in {sot} with status '{status}' (looked for '{panel_value}')")
+                        break  # Stop checking other SOTs once a match is found
+                    else:
+                        logging.debug(f"Row {row_idx}: Not found in {sot} (looked for '{panel_value}')")
+                
+                if not found:
+                    summary["not_found"] += 1
+                    logging.debug(f"Row {row_idx}: Not found in any SOT")
+                
+                # Add to updates
+                match_value = row.get(match_field, "")
+                if match_value is not None:
+                    updates.append({
+                        match_field: str(match_value).strip().lower(), 
+                        "initial_status": status
+                    })
+                else:
+                    logging.warning(f"Row {row_idx}: match_field '{match_field}' is None")
+                    summary["errors"] += 1
+                    
+            except Exception as e:
+                logging.error(f"Error processing row {row_idx}: {e}")
+                summary["errors"] += 1
+                continue
+
+        # Update database
+        try:
+            from db.mysql_utils import add_column_if_not_exists, update_initial_status_bulk
+            add_column_if_not_exists(panel_name, "initial_status", "VARCHAR(255)")
+            
+            success, error_msg = update_initial_status_bulk(panel_name, updates, match_field=match_field)
+            if not success:
+                raise HTTPException(status_code=500, detail=f"Database update failed: {error_msg}")
+            
+            if error_msg:
+                logging.warning(f"Database update completed with warnings: {error_msg}")
+            
+            logging.info(f"Successfully updated {len(updates)} rows in panel '{panel_name}'")
+        except Exception as e:
+            logging.error(f"Failed to update database: {e}")
+            raise HTTPException(status_code=500, detail=f"Database update failed: {str(e)}")
+        
+        logging.info(f"User categorization completed for panel '{panel_name}'. Summary: {summary}")
+        return {
+            "message": "User categorization complete", 
+            "summary": summary,
+            "panel_name": panel_name,
+            "total_processed": len(panel_rows),
+            "successful_updates": len(updates)
+        }
+        
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
+    except Exception as e:
+        logging.error(f"Unexpected error in categorize_users: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 

@@ -6,8 +6,15 @@
         "hr_data": {
           "user_email": "email"
         },
-        "sot2": {},
-        "sot3": {}
+        "service_users": {
+          "user_email": "email"
+        },
+        "internal_users": {
+          "user_email": "domain"
+        },
+        "thirdparty_users": {
+          "user_email": "domain"
+        }
       }
     }
   ]
