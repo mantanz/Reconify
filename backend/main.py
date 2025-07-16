@@ -59,6 +59,7 @@ def save_db(data):
     with open(DB_PATH, "w") as f:
         json.dump(data, f, indent=2)
 
+
 # API Endpoints
 
 app.add_middleware(
@@ -328,6 +329,46 @@ def get_sot_fields(sot_type: str):
         raise HTTPException(status_code=404, detail=f"{sot_type} table not found or has no columns")
     return {"fields": headers}
 
+@app.get("/panels/{panel_name}/details")
+def get_panel_details(panel_name: str):
+    """
+    Fetch panel data rows for a specific panel.
+    Returns only the panel rows data.
+    """
+    try:
+        # Load panel configuration to verify panel exists
+        db = load_db()
+        panel = next((p for p in db["panels"] if p["name"] == panel_name), None)
+        if not panel:
+            raise HTTPException(status_code=404, detail="Panel not found")
+        
+        # Get panel headers from database
+        headers = get_panel_headers_from_db(panel_name)
+        if not headers:
+            raise HTTPException(status_code=404, detail="Panel table not found in database")
+        
+        # Fetch all panel data
+        try:
+            panel_rows = fetch_all_rows(panel_name)
+            if not panel_rows:
+                panel_rows = []
+        except Exception as e:
+            logging.error(f"Error fetching panel data: {e}")
+            raise HTTPException(status_code=500, detail=f"Error fetching panel data: {str(e)}")
+        
+        logging.info(f"Fetched {len(panel_rows)} rows for panel '{panel_name}'")
+        
+        return {
+            "panel_name": panel_name,
+            "rows": panel_rows
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error fetching panel details for '{panel_name}': {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
 @app.get("/debug/sot/{sot_name}")
 def debug_sot_table(sot_name: str):
     """
@@ -362,102 +403,188 @@ def debug_sot_table(sot_name: str):
         raise HTTPException(status_code=500, detail=f"Error accessing SOT table: {str(e)}")
 
 @app.post("/recon/process")
-def reconcile_panel_with_sot(panel_name: str = Form(...), sot_type: str = Form(...)):
-    # Load config and get key mapping
-    db = load_db()
-    panel = next((p for p in db["panels"] if p["name"] == panel_name), None)
-    if not panel:
-        raise HTTPException(status_code=404, detail="Panel not found")
-    key_mapping = panel["key_mapping"].get(sot_type, {})
-    if not key_mapping:
-        raise HTTPException(status_code=400, detail="No key mapping found for this SOT and panel")
-    panel_key, sot_key = list(key_mapping.items())[0]
-    panel_rows = fetch_all_rows(panel_name)
-    sot_rows = fetch_all_rows(sot_type)
-    sot_lookup = {str(row.get(sot_key, "")).strip().lower(): row for row in sot_rows}
-    details = []
-    summary = {
-        "panel_name": panel_name,
-        "sot_type": sot_type,
-        "total_panel_users": len(panel_rows),
-        "matched": 0,
-        "found_active": 0,
-        "found_inactive": 0,
-        "not_found": 0
-    }
-    for prow in panel_rows:
-        panel_val = str(prow.get(panel_key, "")).strip().lower()
-        sot_row = sot_lookup.get(panel_val)
-        user_status = "Not Found"
-        employment_status = None
-        if sot_row:
-            employment_status = sot_row.get("Employment Status") or sot_row.get("employment_status")
-            if employment_status:
-                if employment_status.lower() in ["active", "resigned"]:
-                    user_status = "Found Active"
-                    summary["found_active"] += 1
-                elif employment_status.lower() == "inactive":
-                    user_status = "Found Inactive"
-                    summary["found_inactive"] += 1
-                else:
-                    user_status = f"Found ({employment_status})"
-            else:
-                user_status = "Found (Unknown Status)"
-            summary["matched"] += 1
-        else:
-            summary["not_found"] += 1
-        details.append({
-            "panel_user": prow,
-            "sot_user": sot_row,
-            "user_status": user_status,
-            "employment_status": employment_status
-        })
-    # --- New: Store reconciliation summary ---
-    now = datetime.utcnow()
-    recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
-    recon_month = now.strftime("%b'%y")  # e.g., Jul'25
-    start_date = now.strftime("%Y-%m-%d")
-    performed_by = "demo"
-    # Find upload info from panel history
-    upload_date = None
-    uploaded_by = None
-    if os.path.exists(RECON_HISTORY_PATH):
-        with open(RECON_HISTORY_PATH, "r") as f:
-            panel_history = json.load(f)
-        for entry in reversed(panel_history):
-            if entry.get("panelname") == panel_name:
-                upload_date = entry.get("timestamp", None)
-                uploaded_by = entry.get("uploadedby", None)
-                break
-    status = "complete"
-    error = None
-    # If any error occurred, set status and error (for now, always complete)
-    recon_record = {
-        "recon_id": recon_id,
-        "panelname": panel_name,
-        "sot_type": sot_type,
-        "recon_month": recon_month,
-        "status": status,
-        "upload_date": upload_date,
-        "uploaded_by": uploaded_by,
-        "start_date": start_date,
-        "performed_by": performed_by,
-        "error": error,
-        "details": {"summary": summary, "details": details}
-    }
-    # Store in reconciliation_summary.json
+def reconcile_panel_with_sot(panel_name: str = Form(...)):
+    """
+    Reconcile internal users from panel with HR data.
+    Only processes records where initial_status indicates internal users.
+    Updates initial_status column with HR status (active/inactive/not found).
+    """
     try:
-        if not os.path.exists(RECON_SUMMARY_PATH):
-            with open(RECON_SUMMARY_PATH, "w") as f:
-                json.dump([], f)
-        with open(RECON_SUMMARY_PATH, "r+") as f:
-            data = json.load(f)
-            data.append(recon_record)
-            f.seek(0)
-            json.dump(data, f, indent=2)
+        # Load config and get key mapping for HR data
+        db = load_db()
+        panel = next((p for p in db["panels"] if p["name"] == panel_name), None)
+        if not panel:
+            raise HTTPException(status_code=404, detail="Panel not found")
+        
+        key_mapping = panel["key_mapping"].get("hr_data", {})
+        if not key_mapping:
+            raise HTTPException(status_code=400, detail="No HR data key mapping found for this panel")
+        
+        panel_key, hr_key = list(key_mapping.items())[0]
+        
+        # Fetch panel data
+        panel_rows = fetch_all_rows(panel_name)
+        if not panel_rows:
+            raise HTTPException(status_code=404, detail="No panel data found")
+        
+        # Filter only internal users based on initial_status
+        internal_users = []
+        for row in panel_rows:
+            initial_status = row.get("initial_status", "").strip().lower()
+            # Check if this user is categorized as internal user
+            if initial_status in ["employee", "internal", "internal_user", "internal users"]:
+                internal_users.append(row)
+        
+        logging.info(f"Found {len(internal_users)} internal users out of {len(panel_rows)} total panel users")
+        
+        if not internal_users:
+            return {
+                "recon_id": None,
+                "summary": {
+                    "panel_name": panel_name,
+                    "total_panel_users": len(panel_rows),
+                    "internal_users": 0,
+                    "matched": 0,
+                    "found_active": 0,
+                    "found_inactive": 0,
+                    "not_found": 0
+                },
+                "details": [],
+                "message": "No internal users found to reconcile"
+            }
+        
+        # Fetch HR data
+        hr_rows = fetch_all_rows("hr_data")
+        if not hr_rows:
+            raise HTTPException(status_code=404, detail="HR data not found")
+        
+        # Create HR lookup
+        hr_lookup = {str(row.get(hr_key, "")).strip().lower(): row for row in hr_rows}
+        
+        details = []
+        summary = {
+            "panel_name": panel_name,
+            "total_panel_users": len(panel_rows),
+            "internal_users": len(internal_users),
+            "matched": 0,
+            "found_active": 0,
+            "found_inactive": 0,
+            "not_found": 0
+        }
+        
+        updates = []
+        
+        # Process each internal user
+        for user_row in internal_users:
+            panel_val = str(user_row.get(panel_key, "")).strip().lower()
+            hr_row = hr_lookup.get(panel_val)
+            
+            user_status = "not found"
+            employment_status = None
+            
+            if hr_row:
+                # Found in HR data
+                employment_status = hr_row.get("Employment Status") or hr_row.get("employment_status")
+                
+                if employment_status:
+                    if employment_status.lower() in ["active", "resigned"]:
+                        user_status = "active"
+                        summary["found_active"] += 1
+                    elif employment_status.lower() == "inactive":
+                        user_status = "inactive"
+                        summary["found_inactive"] += 1
+                    else:
+                        user_status = f"found ({employment_status.lower()})"
+                else:
+                    user_status = "found (unknown status)"
+                
+                summary["matched"] += 1
+            else:
+                summary["not_found"] += 1
+            
+            # Prepare update record
+            updates.append({
+                panel_key: panel_val,
+                "initial_status": user_status
+            })
+            
+            details.append({
+                "panel_user": user_row,
+                "hr_user": hr_row,
+                "user_status": user_status,
+                "employment_status": employment_status
+            })
+        
+        # Update panel table with new statuses
+        from db.mysql_utils import update_initial_status_bulk
+        success, error_msg = update_initial_status_bulk(panel_name, updates, match_field=panel_key)
+        
+        if not success:
+            raise HTTPException(status_code=500, detail=f"Failed to update panel data: {error_msg}")
+        
+        # Create reconciliation record
+        now = datetime.utcnow()
+        recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
+        recon_month = now.strftime("%b'%y")
+        start_date = now.strftime("%Y-%m-%d")
+        performed_by = "demo"
+        
+        # Find upload info from panel history
+        upload_date = None
+        uploaded_by = None
+        if os.path.exists(RECON_HISTORY_PATH):
+            with open(RECON_HISTORY_PATH, "r") as f:
+                panel_history = json.load(f)
+            for entry in reversed(panel_history):
+                if entry.get("panelname") == panel_name:
+                    upload_date = entry.get("timestamp", None)
+                    uploaded_by = entry.get("uploadedby", None)
+                    break
+        
+        status = "complete"
+        error = None
+        
+        recon_record = {
+            "recon_id": recon_id,
+            "panelname": panel_name,
+            "sot_type": "hr_data",
+            "recon_month": recon_month,
+            "status": status,
+            "upload_date": upload_date,
+            "uploaded_by": uploaded_by,
+            "start_date": start_date,
+            "performed_by": performed_by,
+            "error": error,
+            "summary": summary
+        }
+        
+        # Store in reconciliation_summary.json
+        try:
+            if not os.path.exists(RECON_SUMMARY_PATH):
+                with open(RECON_SUMMARY_PATH, "w") as f:
+                    json.dump([], f)
+            with open(RECON_SUMMARY_PATH, "r+") as f:
+                data = json.load(f)
+                data.append(recon_record)
+                f.seek(0)
+                json.dump(data, f, indent=2)
+        except Exception as e:
+            logging.error(f"Failed to write reconciliation summary: {e}")
+        
+        logging.info(f"HR reconciliation completed for panel '{panel_name}'. Summary: {summary}")
+        
+        return {
+            "recon_id": recon_id,
+            "summary": summary,
+            "details": [],
+            "message": f"Reconciled {len(internal_users)} internal users with HR data"
+        }
+        
+    except HTTPException:
+        raise
     except Exception as e:
-        logging.error(f"Failed to write reconciliation summary: {e}")
-    return {"recon_id": recon_id, "summary": summary, "details": details}
+        logging.error(f"Unexpected error in HR reconciliation: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @app.get("/recon/summary")
 def get_recon_summaries():
@@ -465,11 +592,7 @@ def get_recon_summaries():
         return []
     with open(RECON_SUMMARY_PATH, "r") as f:
         data = json.load(f)
-    # Exclude 'details' for summary view
-    summaries = [
-        {k: v for k, v in rec.items() if k != "details"} for rec in data
-    ]
-    return summaries
+    return data
 
 @app.get("/recon/summary/{recon_id}")
 def get_recon_summary_detail(recon_id: str = Path(...)):
@@ -480,7 +603,7 @@ def get_recon_summary_detail(recon_id: str = Path(...)):
     for rec in data:
         if rec.get("recon_id") == recon_id:
             return rec
-    raise HTTPException(status_code=404, detail="Reconciliation summary not found") 
+    raise HTTPException(status_code=404, detail="Reconciliation summary not found")
 
 @app.post("/categorize_users")
 def categorize_users(panel_name: str = Form(...)):
@@ -728,3 +851,4 @@ def categorize_users(panel_name: str = Form(...)):
     except Exception as e:
         logging.error(f"Unexpected error in categorize_users: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 
+
