@@ -38,3 +38,85 @@
 2025-07-15 00:18:00,321 - root - INFO - Bulk update completed: 1385 records updated, 0 errors
 2025-07-15 00:18:00,321 - root - INFO - Successfully updated 1385 rows in panel 'Seller Panel'
 2025-07-15 00:18:00,322 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'service_users': 132, 'internal_users': 984, 'thirdparty_users': 269, 'not_found': 0, 'total': 1385, 'errors': 0}
+2025-07-15 13:22:32,760 - root - INFO - Found 984 internal users out of 1385 total panel users
+2025-07-15 13:22:32,767 - root - INFO - Updating table 'seller_panel' with 984 records using match_field 'user_email'
+2025-07-15 13:22:34,609 - root - INFO - Bulk update completed: 984 records updated, 0 errors
+2025-07-15 13:22:34,759 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 1385, 'internal_users': 984, 'matched': 0, 'found_active': 0, 'found_inactive': 0, 'not_found': 984}
+2025-07-15 18:56:28,632 - root - INFO - Fetched details for panel 'Seller Panel' with 1385 rows
+2025-07-15 18:59:00,844 - root - INFO - Fetched details for panel 'Seller Panel' with 1385 rows
+2025-07-15 19:14:16,230 - root - INFO - Fetched details for panel 'Seller Panel' with 1385 rows
+2025-07-15 19:19:40,162 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-15 19:19:49,641 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-15 19:20:38,194 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-15 19:29:53,357 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-16 11:09:40,223 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-16 11:09:40,225 - root - INFO - Configured SOTs for categorization: ['service_users', 'internal_users', 'thirdparty_users']
+2025-07-16 11:09:40,371 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-16 11:09:40,379 - root - INFO - Fetched 20 rows from SOT: internal_users
+2025-07-16 11:09:40,390 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-16 11:09:40,413 - root - INFO - Fetched 1385 rows from panel: Seller Panel
+2025-07-16 11:09:40,413 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-16 11:09:40,414 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-16 11:09:40,414 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-16 11:09:40,415 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-16 11:09:40,415 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-16 11:09:40,415 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-16 11:09:40,415 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-16 11:09:40,425 - root - INFO - Updating table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-16 11:09:43,395 - root - INFO - Bulk update completed: 1385 records updated, 0 errors
+2025-07-16 11:09:43,396 - root - INFO - Successfully updated 1385 rows in panel 'Seller Panel'
+2025-07-16 11:09:43,396 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'service_users': 132, 'internal_users': 984, 'thirdparty_users': 269, 'not_found': 0, 'total': 1385, 'errors': 0}
+2025-07-16 11:09:43,430 - root - INFO - Found 984 internal users out of 1385 total panel users
+2025-07-16 11:09:43,437 - root - INFO - Updating table 'seller_panel' with 984 records using match_field 'user_email'
+2025-07-16 11:09:46,444 - root - INFO - Bulk update completed: 984 records updated, 0 errors
+2025-07-16 11:09:46,579 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 1385, 'internal_users': 984, 'matched': 0, 'found_active': 0, 'found_inactive': 0, 'not_found': 984}
+2025-07-16 11:27:03,176 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-16 11:53:55,992 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-16 11:53:55,997 - root - INFO - Configured SOTs for categorization: ['service_users', 'internal_users', 'thirdparty_users']
+2025-07-16 11:53:56,103 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-16 11:53:56,108 - root - INFO - Fetched 20 rows from SOT: internal_users
+2025-07-16 11:53:56,115 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-16 11:53:56,130 - root - INFO - Fetched 1385 rows from panel: Seller Panel
+2025-07-16 11:53:56,130 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-16 11:53:56,130 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-16 11:53:56,131 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-16 11:53:56,131 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-16 11:53:56,131 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-16 11:53:56,131 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-16 11:53:56,131 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-16 11:53:56,137 - root - INFO - Updating table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-16 11:53:58,653 - root - INFO - Bulk update completed: 1385 records updated, 0 errors
+2025-07-16 11:53:58,653 - root - INFO - Successfully updated 1385 rows in panel 'Seller Panel'
+2025-07-16 11:53:58,653 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'service_users': 132, 'internal_users': 984, 'thirdparty_users': 269, 'not_found': 0, 'total': 1385, 'errors': 0}
+2025-07-16 11:53:58,691 - root - INFO - Found 984 internal users out of 1385 total panel users
+2025-07-16 11:53:58,695 - root - INFO - Updating table 'seller_panel' with 984 records using match_field 'user_email'
+2025-07-16 11:54:02,093 - root - INFO - Bulk update completed: 984 records updated, 0 errors
+2025-07-16 11:54:02,097 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 1385, 'internal_users': 984, 'matched': 0, 'found_active': 0, 'found_inactive': 0, 'not_found': 984}
+2025-07-16 12:28:22,391 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-16 12:28:45,621 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-16 12:36:43,369 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-16 12:40:26,535 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-16 12:44:26,650 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-16 12:46:11,985 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-16 12:53:09,323 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-16 12:53:09,323 - root - INFO - Configured SOTs for categorization: ['service_users', 'internal_users', 'thirdparty_users']
+2025-07-16 12:53:09,349 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-16 12:53:09,353 - root - INFO - Fetched 20 rows from SOT: internal_users
+2025-07-16 12:53:09,357 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-16 12:53:09,371 - root - INFO - Fetched 1385 rows from panel: Seller Panel
+2025-07-16 12:53:09,372 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-16 12:53:09,372 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-16 12:53:09,373 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-16 12:53:09,373 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-16 12:53:09,373 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-16 12:53:09,373 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-16 12:53:09,373 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-16 12:53:09,385 - root - INFO - Updating table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-16 12:53:12,360 - root - INFO - Bulk update completed: 1385 records updated, 0 errors
+2025-07-16 12:53:12,361 - root - INFO - Successfully updated 1385 rows in panel 'Seller Panel'
+2025-07-16 12:53:12,361 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'service_users': 132, 'internal_users': 984, 'thirdparty_users': 269, 'not_found': 0, 'total': 1385, 'errors': 0}
+2025-07-16 12:53:12,409 - root - INFO - Found 984 internal users out of 1385 total panel users
+2025-07-16 12:53:12,420 - root - INFO - Updating table 'seller_panel' with 984 records using match_field 'user_email'
+2025-07-16 12:53:15,519 - root - INFO - Bulk update completed: 984 records updated, 0 errors
+2025-07-16 12:53:15,522 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 1385, 'internal_users': 984, 'matched': 0, 'found_active': 0, 'found_inactive': 0, 'not_found': 984}
+2025-07-16 12:56:51,228 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'

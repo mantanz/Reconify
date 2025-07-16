@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getPanels, getAllReconHistory, getPanelConfig, reconcilePanelWithSOT, getReconSummaries, getReconSummaryDetail } from "./api";
+import { getPanels, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, getReconSummaries, getReconSummaryDetail, getPanelDetails } from "./api";
 
 export default function Reconciliation() {
   const [panels, setPanels] = useState([]);
@@ -11,9 +11,18 @@ export default function Reconciliation() {
   const [history, setHistory] = useState([]);
   const [reconResults, setReconResults] = useState({});
   const [loading, setLoading] = useState({});
+  const [currentStep, setCurrentStep] = useState({});
   const [summaries, setSummaries] = useState([]);
   const [details, setDetails] = useState({});
   const [showDetails, setShowDetails] = useState({});
+  const [panelDetails, setPanelDetails] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [filteredRows, setFilteredRows] = useState(null);
+  const [filterField, setFilterField] = useState("");
+  const [filterValue, setFilterValue] = useState("");
+  const [showPanelDetails, setShowPanelDetails] = useState(false);
 
   useEffect(() => {
     getPanels().then(setPanels);
@@ -26,6 +35,26 @@ export default function Reconciliation() {
     setResult(null);
     setError("");
     setFile(null);
+    setPanelDetails(null); // Clear previous panel details
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const handleViewPanelDetails = async () => {
+    if (!selectedPanel) {
+      alert("Please select a panel first.");
+      return;
+    }
+    
+    setLoadingDetails(true);
+    try {
+      const details = await getPanelDetails(selectedPanel);
+      setPanelDetails(details);
+    } catch (error) {
+      console.error("Failed to fetch panel details:", error);
+      alert("Failed to fetch panel details. Please check the console for details.");
+    } finally {
+      setLoadingDetails(false);
+    }
   };
 
   const handleFileChange = (e) => {
@@ -67,36 +96,184 @@ export default function Reconciliation() {
   };
 
   const handleReconcile = async (upload) => {
-    setLoading(l => ({ ...l, [upload.docid || upload.doc_id]: true }));
-    const panelConfig = await getPanelConfig(upload.panelname);
-    if (!panelConfig || !panelConfig.key_mapping) {
-      alert("No key mapping found for this panel.");
-      setLoading(l => ({ ...l, [upload.docid || upload.doc_id]: false }));
-      return;
+    const uploadId = upload.docid || upload.doc_id;
+    setLoading(l => ({ ...l, [uploadId]: true }));
+    setCurrentStep(s => ({ ...s, [uploadId]: "Starting..." }));
+    
+    try {
+      // Step 1: Categorize users
+      setCurrentStep(s => ({ ...s, [uploadId]: "Categorizing users..." }));
+      console.log("Starting user categorization...");
+      const categorizationResult = await categorizeUsers(upload.panelname);
+      console.log("User categorization completed:", categorizationResult);
+      
+      // Step 2: Reconcile with HR data
+      setCurrentStep(s => ({ ...s, [uploadId]: "Reconciling with HR..." }));
+      console.log("Starting HR reconciliation...");
+      const reconciliationResult = await reconcilePanelWithHR(upload.panelname);
+      console.log("HR reconciliation completed:", reconciliationResult);
+      
+      // Store both results
+      setReconResults(r => ({ 
+        ...r, 
+        [uploadId]: { 
+          "categorization": categorizationResult,
+          "hr_data": reconciliationResult 
+        } 
+      }));
+      
+      setCurrentStep(s => ({ ...s, [uploadId]: "Completed" }));
+      getReconSummaries().then(setSummaries);
+    } catch (error) {
+      console.error("Process failed:", error);
+      setCurrentStep(s => ({ ...s, [uploadId]: "Failed" }));
+      alert("Process failed. Please check the console for details.");
+    } finally {
+      setLoading(l => ({ ...l, [uploadId]: false }));
     }
-    const mappings = panelConfig.key_mapping;
-    const results = {};
-    for (const sotType of Object.keys(mappings)) {
-      const result = await reconcilePanelWithSOT(upload.panelname, sotType);
-      results[sotType] = result;
-    }
-    setReconResults(r => ({ ...r, [upload.docid || upload.doc_id]: results }));
-    setLoading(l => ({ ...l, [upload.docid || upload.doc_id]: false }));
-    getReconSummaries().then(setSummaries);
   };
 
   const handleViewDetails = async (recon_id) => {
     if (!details[recon_id]) {
       const detail = await getReconSummaryDetail(recon_id);
       setDetails(d => ({ ...d, [recon_id]: detail }));
+      
+      // Automatically load panel details if panel name is available
+      if (detail.panelname) {
+        try {
+          const panelDetail = await getPanelDetails(detail.panelname);
+          setPanelDetails(panelDetail);
+        } catch (error) {
+          console.error("Failed to load panel details:", error);
+          // Don't show alert, just log the error
+        }
+      }
+    } else {
+      // If details already exist, check if we need to load different panel data
+      const existingDetail = details[recon_id];
+      if (existingDetail.panelname && (!panelDetails || panelDetails.panel_name !== existingDetail.panelname)) {
+        try {
+          const panelDetail = await getPanelDetails(existingDetail.panelname);
+          setPanelDetails(panelDetail);
+        } catch (error) {
+          console.error("Failed to load panel details:", error);
+        }
+      }
     }
     setShowDetails(s => ({ ...s, [recon_id]: !s[recon_id] }));
+  };
+
+  // Pagination helper functions
+  const getTotalPages = () => {
+    const dataToUse = filteredRows || (panelDetails?.rows || []);
+    return Math.ceil(dataToUse.length / rowsPerPage);
+  };
+
+  const getCurrentPageData = () => {
+    const dataToUse = filteredRows || (panelDetails?.rows || []);
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    return dataToUse.slice(startIndex, endIndex);
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage) => {
+    setRowsPerPage(newRowsPerPage);
+    setCurrentPage(1); // Reset to first page when changing rows per page
+  };
+
+  const handleFilterData = () => {
+    if (!panelDetails || !panelDetails.rows) {
+      alert("No data available to filter");
+      return;
+    }
+
+    const newFilterField = prompt("Enter field name to filter by (e.g., 'initial_status', 'email'):");
+    if (newFilterField) {
+      const newFilterValue = prompt(`Enter value to filter for '${newFilterField}':`);
+      if (newFilterValue !== null) {
+        setFilterField(newFilterField);
+        setFilterValue(newFilterValue);
+        
+        // Apply filter
+        const filtered = panelDetails.rows.filter(row => 
+          String(row[newFilterField] || "").toLowerCase().includes(newFilterValue.toLowerCase())
+        );
+        setFilteredRows(filtered);
+        setCurrentPage(1); // Reset to first page
+        
+        alert(`Filter applied: Found ${filtered.length} rows matching "${newFilterValue}" in "${newFilterField}"`);
+      }
+    }
+  };
+
+  const clearFilter = () => {
+    setFilteredRows(null);
+    setFilterField("");
+    setFilterValue("");
+    setCurrentPage(1);
+  };
+
+  const handleDownloadData = () => {
+    const dataToDownload = filteredRows || (panelDetails?.rows || []);
+    if (!dataToDownload || dataToDownload.length === 0) {
+      alert("No data available to download");
+      return;
+    }
+
+    try {
+      // Create CSV content
+      const headers = Object.keys(dataToDownload[0]);
+      const csvContent = [
+        headers.join(','), // Header row
+        ...dataToDownload.map(row => 
+          headers.map(header => {
+            const value = row[header] || '';
+            // Escape commas and quotes in CSV
+            if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+              return `"${value.replace(/"/g, '""')}"`;
+            }
+            return value;
+          }).join(',')
+        )
+      ].join('\n');
+
+      // Create and download file
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      
+      // Create filename with filter info if applicable
+      let filename = `${panelDetails.panel_name}_data`;
+      if (filteredRows) {
+        filename += `_filtered_${filterField}_${filterValue}`;
+      }
+      filename += `_${new Date().toISOString().split('T')[0]}.csv`;
+      
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      const message = filteredRows 
+        ? `Downloaded ${dataToDownload.length} filtered rows to CSV file`
+        : `Downloaded ${dataToDownload.length} rows to CSV file`;
+      alert(message);
+    } catch (error) {
+      console.error('Download error:', error);
+      alert('Error downloading data. Please try again.');
+    }
   };
 
   return (
     <div style={{ background: "#f4f6fb", borderRadius: 8, padding: 24, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", marginBottom: 16, maxWidth: 1200, margin: "40px auto" }}>
       <div style={{ marginBottom: 36 }}>
-        <h2 style={{ textAlign: "center", color: "#343a40", marginBottom: 24 }}>Reconciliation Upload</h2>
+        <h2 style={{ textAlign: "center", color: "#343a40", marginBottom: 24 }}>Reconciliation</h2>
         <div style={{ marginBottom: 18 }}>
           <label style={{ fontWeight: 600, color: "#495057" }}>Select Panel:</label>
           <select
@@ -160,12 +337,13 @@ export default function Reconciliation() {
             <div><strong>Doc ID:</strong> {result.docid}</div>
             <div><strong>File Name:</strong> {result.docname}</div>
             <div><strong>Timestamp:</strong> {result.timestamp}</div>
-            <div><strong>Total Records:</strong> {result.total_records}</div>
+            <div><strong>#Total Records:</strong> {result.total_records}</div>
             <div><strong>Uploaded By:</strong> {result.uploadedby}</div>
             <div><strong>Status:</strong> {result.status}</div>
           </div>
         )}
       </div>
+      
       <h3 style={{ marginTop: 36, color: "#343a40", fontWeight: 700, fontSize: 20 }}>Panel Upload History</h3>
       <div style={{ overflowX: "auto", marginTop: 12 }}>
         <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 6, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
@@ -175,10 +353,10 @@ export default function Reconciliation() {
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>File Name</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Panel Name</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Timestamp</th>
-              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Total Records</th>
+              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>#Total Records</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Uploaded By</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Status</th>
-              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Reconcile</th>
+              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -200,21 +378,40 @@ export default function Reconciliation() {
                         onClick={() => handleReconcile(item)}
                         disabled={loading[item.docid || item.doc_id]}
                       >
-                        {loading[item.docid || item.doc_id] ? "Reconciling..." : "Reconcile"}
+                        {loading[item.docid || item.doc_id] 
+                          ? (currentStep[item.docid || item.doc_id] || "Processing...") 
+                          : "Start Recon"}
                       </button>
                     </td>
                   </tr>
                   {reconResults[item.docid || item.doc_id] && (
                     <tr>
                       <td colSpan={8}>
-                        {Object.entries(reconResults[item.docid || item.doc_id]).map(([sotType, result]) => (
-                          <div key={sotType} style={{ marginBottom: 16 }}>
-                            <h4>Reconciliation with SOT: {sotType}</h4>
-                            <pre style={{ background: "#f4f4f4", padding: 8 }}>
-                              {JSON.stringify(result.summary, null, 2)}
-                            </pre>
-                          </div>
-                        ))}
+                        {/* User Categorization Results */}
+                        <div style={{ marginBottom: 16, borderBottom: "1px solid #dee2e6", paddingBottom: 16 }}>
+                          <h4 style={{ color: "#495057", marginBottom: 8 }}>📊 User Categorization Results</h4>
+                          <pre style={{ background: "#f8f9fa", padding: 8, borderRadius: 4, fontSize: 12 }}>
+                            {JSON.stringify(reconResults[item.docid || item.doc_id].categorization?.summary, null, 2)}
+                          </pre>
+                          {reconResults[item.docid || item.doc_id].categorization?.message && (
+                            <div style={{ color: "#17a2b8", fontWeight: 500, marginTop: 8, fontSize: 14 }}>
+                              ✅ {reconResults[item.docid || item.doc_id].categorization.message}
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* HR Reconciliation Results */}
+                        <div style={{ marginBottom: 16 }}>
+                          <h4 style={{ color: "#495057", marginBottom: 8 }}>🏢 HR Reconciliation Results</h4>
+                          <pre style={{ background: "#f8f9fa", padding: 8, borderRadius: 4, fontSize: 12 }}>
+                            {JSON.stringify(reconResults[item.docid || item.doc_id].hr_data?.summary, null, 2)}
+                          </pre>
+                          {reconResults[item.docid || item.doc_id].hr_data?.message && (
+                            <div style={{ color: "#28a745", fontWeight: 500, marginTop: 8, fontSize: 14 }}>
+                              ✅ {reconResults[item.docid || item.doc_id].hr_data.message}
+                            </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   )}
@@ -238,6 +435,7 @@ export default function Reconciliation() {
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Reconciliation Start Date</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Reconciliation Performed By</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Failure Reason</th>
+              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -255,6 +453,7 @@ export default function Reconciliation() {
                     <td>{row.uploaded_by || "-"}</td>
                     <td>{row.start_date || "-"}</td>
                     <td>{row.performed_by || "-"}</td>
+                    <td>{row.error || "-"}</td>
                     <td>
                       {row.error ? (
                         <span style={{ color: "#e74c3c" }}>{row.error}</span>
@@ -268,9 +467,408 @@ export default function Reconciliation() {
                   {showDetails[row.recon_id] && (
                     <tr>
                       <td colSpan={9}>
-                        <pre style={{ background: "#f4f4f4", padding: 8 }}>
-                          {details[row.recon_id] ? JSON.stringify(details[row.recon_id].details.summary, null, 2) : "Loading..."}
-                        </pre>
+                        <div style={{ padding: 16, background: "#f8f9fa", borderRadius: 6, margin: 8 }}>
+                          <h4 style={{ color: "#495057", marginBottom: 12, fontSize: 16 }}>📊 Reconciliation Summary</h4>
+                          
+                          {details[row.recon_id] ? (
+                            <div>
+                              {/* Basic Info */}
+                              <div style={{ marginBottom: 16 }}>
+                                <h5 style={{ color: "#6c757d", marginBottom: 8, fontSize: 14 }}>Reconciliation Information</h5>
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 8 }}>
+                                  <div style={{ background: "#fff", padding: 8, borderRadius: 4, border: "1px solid #dee2e6" }}>
+                                    <strong>Panel Name:</strong> {details[row.recon_id].panelname || "N/A"}
+                                  </div>
+                                  <div style={{ background: "#fff", padding: 8, borderRadius: 4, border: "1px solid #dee2e6" }}>
+                                    <strong>SOT Type:</strong> {details[row.recon_id].sot_type || "N/A"}
+                                  </div>
+                                  <div style={{ background: "#fff", padding: 8, borderRadius: 4, border: "1px solid #dee2e6" }}>
+                                    <strong>Status:</strong> 
+                                    <span style={{ 
+                                      color: details[row.recon_id].status === "complete" ? "#28a745" : "#dc3545",
+                                      fontWeight: 600,
+                                      marginLeft: 4
+                                    }}>
+                                      {details[row.recon_id].status || "N/A"}
+                                    </span>
+                                  </div>
+                                  <div style={{ background: "#fff", padding: 8, borderRadius: 4, border: "1px solid #dee2e6" }}>
+                                    <strong>Performed By:</strong> {details[row.recon_id].performed_by || "N/A"}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Summary Statistics */}
+                              {details[row.recon_id].summary && (
+                                <div style={{ marginBottom: 16 }}>
+                                  <h5 style={{ color: "#6c757d", marginBottom: 8, fontSize: 14 }}>Reconciliation Results</h5>
+                                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8 }}>
+                                    {Object.entries(details[row.recon_id].summary).map(([key, value]) => (
+                                      <div key={key} style={{ 
+                                        background: "#fff", 
+                                        padding: 12, 
+                                        borderRadius: 6, 
+                                        border: "1px solid #dee2e6",
+                                        textAlign: "center"
+                                      }}>
+                                        <div style={{ 
+                                          fontSize: 12, 
+                                          color: "#6c757d", 
+                                          textTransform: "uppercase",
+                                          fontWeight: 600,
+                                          marginBottom: 4
+                                        }}>
+                                          {key.replace(/_/g, ' ')}
+                                        </div>
+                                        <div style={{ 
+                                          fontSize: 20, 
+                                          fontWeight: 700,
+                                          color: key.includes("found") || key.includes("matched") ? "#28a745" : 
+                                                 key.includes("not_found") || key.includes("errors") ? "#dc3545" : "#007bff"
+                                        }}>
+                                          {value}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Panel Details Section */}
+                              {details[row.recon_id].panelname && (
+                                <div style={{ marginBottom: 16 }}>
+                                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                                    <h5 style={{ color: "#6c757d", fontSize: 14 }}>📋 Panel Details</h5>
+                                    <button
+                                      onClick={() => setShowPanelDetails(!showPanelDetails)}
+                                      style={{
+                                        padding: "4px 8px",
+                                        background: "#007bff",
+                                        color: "#fff",
+                                        border: "none",
+                                        borderRadius: 4,
+                                        fontSize: 12,
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "4px"
+                                      }}
+                                    >
+                                      {showPanelDetails ? "📋 Hide Panel Data" : "📋 View Details"}
+                                    </button>
+                                  </div>
+                                  
+                                  {showPanelDetails && panelDetails && panelDetails.panel_name === details[row.recon_id].panelname ? (
+                                    <div style={{ background: "#fff", borderRadius: 6, padding: 12, border: "1px solid #dee2e6" }}>
+                                      {/* Basic Statistics */}
+                                      <div style={{ marginBottom: 12 }}>
+                                        <h6 style={{ color: "#495057", marginBottom: 6, fontSize: 13 }}>Panel Statistics</h6>
+                                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 6 }}>
+                                          <div style={{ background: "#f8f9fa", padding: 6, borderRadius: 4, textAlign: "center" }}>
+                                            <div style={{ fontSize: 10, color: "#6c757d" }}>Total Rows</div>
+                                            <div style={{ fontSize: 16, fontWeight: 600, color: "#007bff" }}>
+                                              {panelDetails.rows ? panelDetails.rows.length : 0}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Status Distribution */}
+                                      {panelDetails.rows && panelDetails.rows.length > 0 && (
+                                        <div style={{ marginBottom: 12 }}>
+                                          <h6 style={{ color: "#495057", marginBottom: 6, fontSize: 13 }}>Status Distribution</h6>
+                                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 4 }}>
+                                            {(() => {
+                                              const dataToAnalyze = filteredRows || panelDetails.rows;
+                                              const statusCounts = {};
+                                              dataToAnalyze.forEach(row => {
+                                                const status = row.initial_status || "unknown";
+                                                statusCounts[status] = (statusCounts[status] || 0) + 1;
+                                              });
+                                              return Object.entries(statusCounts).map(([status, count]) => (
+                                                <div key={status} style={{ 
+                                                  background: "#e9ecef", 
+                                                  padding: 6, 
+                                                  borderRadius: 4, 
+                                                  textAlign: "center",
+                                                  fontSize: 12
+                                                }}>
+                                                  <div style={{ fontWeight: 600, fontSize: 10 }}>{status}</div>
+                                                  <div style={{ fontSize: 14, color: "#007bff" }}>{count}</div>
+                                                </div>
+                                              ));
+                                            })()}
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {/* Complete Panel Data with Pagination */}
+                                      {panelDetails.rows && panelDetails.rows.length > 0 && (
+                                        <div>
+                                          <h6 style={{ color: "#495057", marginBottom: 6, fontSize: 13 }}>
+                                            Panel Data ({filteredRows ? filteredRows.length : panelDetails.rows.length} total rows)
+                                            {filteredRows && (
+                                              <span style={{ 
+                                                color: "#17a2b8", 
+                                                fontSize: 11, 
+                                                marginLeft: 8,
+                                                fontWeight: "normal"
+                                              }}>
+                                                (Filtered: {filterField} = "{filterValue}")
+                                              </span>
+                                            )}
+                                          </h6>
+                                          
+                                          {/* Action Buttons */}
+                                          <div style={{ 
+                                            marginBottom: 8, 
+                                            display: "flex", 
+                                            justifyContent: "space-between", 
+                                            alignItems: "center" 
+                                          }}>
+                                            {/* Rows per page selector */}
+                                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                              <label style={{ fontSize: 11, color: "#495057" }}>Rows per page:</label>
+                                              <select
+                                                value={rowsPerPage}
+                                                onChange={(e) => handleRowsPerPageChange(Number(e.target.value))}
+                                                style={{
+                                                  padding: "2px 6px",
+                                                  border: "1px solid #ced4da",
+                                                  borderRadius: 3,
+                                                  fontSize: 11
+                                                }}
+                                              >
+                                                <option value={5}>5</option>
+                                                <option value={10}>10</option>
+                                                <option value={25}>25</option>
+                                                <option value={50}>50</option>
+                                              </select>
+                                            </div>
+                                            
+                                            {/* Action Icons */}
+                                            <div style={{ display: "flex", gap: 4 }}>
+                                              <button
+                                                onClick={() => handleFilterData()}
+                                                style={{
+                                                  padding: "4px 8px",
+                                                  background: filteredRows ? "#ffc107" : "#17a2b8",
+                                                  color: "#fff",
+                                                  border: "none",
+                                                  borderRadius: 3,
+                                                  fontSize: 11,
+                                                  cursor: "pointer",
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                  gap: "4px"
+                                                }}
+                                                title={filteredRows ? "Change Filter" : "Filter Data"}
+                                              >
+                                                🔍 {filteredRows ? "Change Filter" : "Filter"}
+                                              </button>
+                                              
+                                              {filteredRows && (
+                                                <button
+                                                  onClick={clearFilter}
+                                                  style={{
+                                                    padding: "4px 8px",
+                                                    background: "#dc3545",
+                                                    color: "#fff",
+                                                    border: "none",
+                                                    borderRadius: 3,
+                                                    fontSize: 11,
+                                                    cursor: "pointer",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: "4px"
+                                                  }}
+                                                  title="Clear Filter"
+                                                >
+                                                  ❌ Clear
+                                                </button>
+                                              )}
+                                              
+                                              <button
+                                                onClick={() => handleDownloadData()}
+                                                style={{
+                                                  padding: "4px 8px",
+                                                  background: "#28a745",
+                                                  color: "#fff",
+                                                  border: "none",
+                                                  borderRadius: 3,
+                                                  fontSize: 11,
+                                                  cursor: "pointer",
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                  gap: "4px"
+                                                }}
+                                                title="Download Data"
+                                              >
+                                                📥 Download
+                                              </button>
+                                            </div>
+                                          </div>
+                                          
+                                          <div style={{ overflowX: "auto", maxHeight: 300 }}>
+                                            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 10 }}>
+                                              <thead>
+                                                <tr style={{ background: "#e9ecef" }}>
+                                                  {Object.keys(panelDetails.rows[0]).map(header => (
+                                                    <th key={header} style={{ 
+                                                      padding: "4px 6px", 
+                                                      textAlign: "left", 
+                                                      border: "1px solid #dee2e6",
+                                                      fontSize: 10,
+                                                      fontWeight: 600
+                                                    }}>
+                                                      {header}
+                                                    </th>
+                                                  ))}
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                {getCurrentPageData().map((row, idx) => (
+                                                  <tr key={idx}>
+                                                    {Object.keys(panelDetails.rows[0]).map(header => (
+                                                      <td key={header} style={{ 
+                                                        padding: "4px 6px", 
+                                                        border: "1px solid #dee2e6", 
+                                                        maxWidth: 100, 
+                                                        overflow: "hidden", 
+                                                        textOverflow: "ellipsis",
+                                                        fontSize: 10
+                                                      }}>
+                                                        {row[header] || ""}
+                                                      </td>
+                                                    ))}
+                                                  </tr>
+                                                ))}
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                          
+                                          {/* Compact Pagination Controls */}
+                                          <div style={{ 
+                                            marginTop: 8, 
+                                            display: "flex", 
+                                            justifyContent: "space-between", 
+                                            alignItems: "center",
+                                            padding: "6px 0",
+                                            borderTop: "1px solid #dee2e6",
+                                            fontSize: 11
+                                          }}>
+                                            <div style={{ color: "#495057" }}>
+                                              Showing {((currentPage - 1) * rowsPerPage) + 1} to {Math.min(currentPage * rowsPerPage, (filteredRows ? filteredRows.length : panelDetails.rows.length))} of {filteredRows ? filteredRows.length : panelDetails.rows.length} rows
+                                            </div>
+                                            
+                                            <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                                              <button
+                                                onClick={() => handlePageChange(1)}
+                                                disabled={currentPage === 1}
+                                                style={{
+                                                  padding: "3px 8px",
+                                                  border: "1px solid #ced4da",
+                                                  borderRadius: 3,
+                                                  background: currentPage === 1 ? "#f8f9fa" : "#fff",
+                                                  color: currentPage === 1 ? "#adb5bd" : "#495057",
+                                                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                                                  fontSize: 10
+                                                }}
+                                              >
+                                                First
+                                              </button>
+                                              
+                                              <button
+                                                onClick={() => handlePageChange(currentPage - 1)}
+                                                disabled={currentPage === 1}
+                                                style={{
+                                                  padding: "3px 8px",
+                                                  border: "1px solid #ced4da",
+                                                  borderRadius: 3,
+                                                  background: currentPage === 1 ? "#f8f9fa" : "#fff",
+                                                  color: currentPage === 1 ? "#adb5bd" : "#495057",
+                                                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                                                  fontSize: 10
+                                                }}
+                                              >
+                                                Prev
+                                              </button>
+                                              
+                                              <span style={{ color: "#495057", padding: "0 8px", fontSize: 10 }}>
+                                                {currentPage} of {getTotalPages()}
+                                              </span>
+                                              
+                                              <button
+                                                onClick={() => handlePageChange(currentPage + 1)}
+                                                disabled={currentPage === getTotalPages()}
+                                                style={{
+                                                  padding: "3px 8px",
+                                                  border: "1px solid #ced4da",
+                                                  borderRadius: 3,
+                                                  background: currentPage === getTotalPages() ? "#f8f9fa" : "#fff",
+                                                  color: currentPage === getTotalPages() ? "#adb5bd" : "#495057",
+                                                  cursor: currentPage === getTotalPages() ? "not-allowed" : "pointer",
+                                                  fontSize: 10
+                                                }}
+                                              >
+                                                Next
+                                              </button>
+                                              
+                                              <button
+                                                onClick={() => handlePageChange(getTotalPages())}
+                                                disabled={currentPage === getTotalPages()}
+                                                style={{
+                                                  padding: "3px 8px",
+                                                  border: "1px solid #ced4da",
+                                                  borderRadius: 3,
+                                                  background: currentPage === getTotalPages() ? "#f8f9fa" : "#fff",
+                                                  color: currentPage === getTotalPages() ? "#adb5bd" : "#495057",
+                                                  cursor: currentPage === getTotalPages() ? "not-allowed" : "pointer",
+                                                  fontSize: 10
+                                                }}
+                                              >
+                                                Last
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  ) : showPanelDetails && (
+                                    <div style={{ 
+                                      background: "#fff", 
+                                      borderRadius: 6, 
+                                      padding: 12, 
+                                      border: "1px solid #dee2e6",
+                                      textAlign: "center",
+                                      color: "#6c757d"
+                                    }}>
+                                      Loading panel details...
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+
+                              {/* Error Information */}
+                              {details[row.recon_id].error && (
+                                <div style={{ 
+                                  background: "#f8d7da", 
+                                  color: "#721c24", 
+                                  padding: 12, 
+                                  borderRadius: 6, 
+                                  border: "1px solid #f5c6cb",
+                                  marginTop: 12
+                                }}>
+                                  <strong>Error:</strong> {details[row.recon_id].error}
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <div style={{ textAlign: "center", color: "#6c757d" }}>
+                              Loading reconciliation details...
+                            </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   )}

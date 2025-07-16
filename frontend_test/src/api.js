@@ -64,11 +64,21 @@ export async function getPanelConfig(panelName) {
   return panels.find(p => p.name === panelName);
 }
 
-// Trigger reconciliation
-export async function reconcilePanelWithSOT(panelName, sotType) {
+// Trigger user categorization
+export async function categorizeUsers(panelName) {
   const formData = new FormData();
   formData.append("panel_name", panelName);
-  formData.append("sot_type", sotType);
+  const res = await fetch(`http://localhost:8000/categorize_users`, {
+    method: "POST",
+    body: formData,
+  });
+  return res.json();
+}
+
+// Trigger reconciliation with HR data (only for internal users)
+export async function reconcilePanelWithHR(panelName) {
+  const formData = new FormData();
+  formData.append("panel_name", panelName);
   const res = await fetch(`http://localhost:8000/recon/process`, {
     method: "POST",
     body: formData,
@@ -85,6 +95,15 @@ export async function getAllReconHistory() {
 // Fetch all reconciliation summaries (excluding details)
 export async function getReconSummaries() {
   const res = await fetch(`${API_BASE}/recon/summary`);
+  return res.json();
+}
+
+// Fetch panel details including configuration, data, and history
+export async function getPanelDetails(panelName) {
+  const res = await fetch(`${API_BASE}/panels/${encodeURIComponent(panelName)}/details`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch panel details: ${res.statusText}`);
+  }
   return res.json();
 }
 
