@@ -36,19 +36,19 @@ const initialRows = [
     reconReady: false,
     completed: true,
   },
-];
-
+    ];
+  
 function Progress({ percent }) {
-  return (
+    return (
     <div className="w-24">
       <div className="w-full bg-gray-200 rounded-full h-2.5">
         <div
           className="bg-primary h-2.5 rounded-full"
           style={{ width: `${percent}%` }}
         />
-      </div>
+                </div>
       <span className="text-xs ml-1">{percent}%</span>
-    </div>
+              </div>
   );
 }
 
@@ -151,17 +151,17 @@ export default function Dashboard() {
           {/* Panel selector */}
           <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700 mb-1">Panel</label>
-            <select
+                <select
               value={panel}
               onChange={(e) => setPanel(e.target.value)}
               className="border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary rounded-md p-2"
-            >
+                >
               <option>Panel</option>
-              <option>Panel 1</option>
-              <option>Panel 2</option>
+                  <option>Panel 1</option>
+                  <option>Panel 2</option>
               <option>Panel 3</option>
-            </select>
-          </div>
+                </select>
+              </div>
 
           {/* Drop zone */}
           <div className="lg:col-span-2">
@@ -202,20 +202,20 @@ export default function Dashboard() {
               <input id="dropzone-file" type="file" multiple onChange={handleFilesChange} className="hidden" />
             </label>
           </div>
-        </div>
+            </div>
 
         {/* Upload button */}
         <div className="flex justify-center mt-6">
           <button onClick={handleUpload} className="bg-primary text-white px-8 py-2 rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50" disabled={!files.length || panel === 'Panel'}>
-            Upload
-          </button>
-        </div>
+                Upload
+              </button>
+            </div>
 
         {/* Table */}
-        <div className="mt-10 overflow-x-auto">
+            <div className="mt-10 overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead className="bg-gray-100 text-gray-700">
-              <tr>
+                  <tr>
                 <th className="px-4 py-3 font-medium">User Name</th>
                 <th className="px-4 py-3 font-medium">DateTime</th>
                 <th className="px-4 py-3 font-medium">Panel Name</th>
@@ -223,8 +223,8 @@ export default function Dashboard() {
                 <th className="px-4 py-3 font-medium">Uploaded</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Actions</th>
-              </tr>
-            </thead>
+                  </tr>
+                </thead>
             <tbody className="divide-y divide-gray-200">
               {rows.map((row, idx) => (
                 <tr key={idx} className="whitespace-nowrap">
@@ -238,36 +238,36 @@ export default function Dashboard() {
                   <td className="px-4 py-3">{row.rows}</td>
                   <td className="px-4 py-3">
                     <Progress percent={row.uploaded} />
-                  </td>
+                      </td>
                   <td className="px-4 py-3">{row.status}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center space-x-2">
-                      <button
+                        <button
                         disabled={!row.reconReady}
                         onClick={() => handleRecon(idx)}
                         className={`px-3 py-1 rounded-md text-white text-xs ${row.reconReady ? 'bg-success hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'}`}
-                      >
+                        >
                         Recon
-                      </button>
-                      <button
+                        </button>
+                        <button
                         onClick={() => toggleComplete(idx)}
                         className={`px-3 py-1 rounded-md text-xs border inline-flex items-center gap-1 ${row.completed ? 'border-primary text-primary bg-primary/5' : 'border-gray-300 text-gray-500'}`}
-                      >
+                        >
                         <span className={`${row.completed ? 'opacity-100' : 'opacity-0'}`}>✓</span>
                         <span>Complete</span>
-                      </button>
+                        </button>
                       <button className="text-red-600 text-lg leading-none" onClick={() => handleCancel(idx)}>
                         ×
-                      </button>
+                        </button>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 }
   

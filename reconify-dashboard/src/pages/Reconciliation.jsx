@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BsBinocularsFill, BsCheckCircle, BsCheckCircleFill } from 'react-icons/bs';
 import { HiOutlineUpload } from 'react-icons/hi';
-import { FiUpload } from 'react-icons/fi';
+import { FiUpload, FiSettings } from 'react-icons/fi';
 import Tooltip from '../components/Tooltip.jsx';
 
 // contents copied from Dashboard with modifications
@@ -110,6 +110,7 @@ export default function Reconciliation() {
 
   const toggleComplete = (index) => setRows((prev)=> prev.map((r,i)=> (i===index && !r.completed) ? {...r, completed: true} : r));
   const handleRecon = (index)=> setRows((prev)=> prev.map((r,i)=> i===index? {...r,status:'Recon Finished',reconReady:false} : r));
+  const handleReconfigure = (index) => setRows((prev)=> prev.map((r,i)=> i===index? {...r,status:'Ready to Recon',reconReady:true} : r));
   const handleCancel=(index)=> setRows(prev=> prev.filter((_,i)=> i!==index));
 
   return (
@@ -192,6 +193,11 @@ export default function Reconciliation() {
                       <Tooltip label="Recon">
                         <button disabled={!row.reconReady} onClick={()=>handleRecon(idx)} className={`w-8 h-8 flex items-center justify-center rounded-md ${row.reconReady?'bg-primary text-white hover:bg-primary-dark':'bg-gray-400 text-white cursor-not-allowed'}`}>
                           <BsBinocularsFill className="w-4 h-4" />
+                        </button>
+                      </Tooltip>
+                      <Tooltip label="Reconfigure">
+                        <button disabled={row.status!=='Recon Finished'} onClick={()=>handleReconfigure(idx)} className={`w-8 h-8 flex items-center justify-center rounded-md ${row.status==='Recon Finished' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-400 text-white cursor-not-allowed'}`}>
+                          <FiSettings className="w-4 h-4" />
                         </button>
                       </Tooltip>
                       <Tooltip label="Cancel">
