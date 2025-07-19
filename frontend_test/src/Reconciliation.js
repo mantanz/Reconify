@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getPanels, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, getReconSummaries, getReconSummaryDetail, getPanelDetails } from "./api";
+import { getPanels, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, getReconSummaries, getReconSummaryDetail, getPanelDetails, recategorizeUsers } from "./api";
 
 export default function Reconciliation() {
   const [panels, setPanels] = useState([]);
@@ -23,6 +23,9 @@ export default function Reconciliation() {
   const [filterField, setFilterField] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const [showPanelDetails, setShowPanelDetails] = useState(false);
+  const [recategorizationFile, setRecategorizationFile] = useState(null);
+  const [recategorizationLoading, setRecategorizationLoading] = useState({});
+  const [showRecategorization, setShowRecategorization] = useState({});
 
   useEffect(() => {
     getPanels().then(setPanels);
@@ -61,6 +64,41 @@ export default function Reconciliation() {
     setFile(e.target.files[0]);
     setResult(null);
     setError("");
+  };
+
+  const handleRecategorizationFileChange = (e) => {
+    setRecategorizationFile(e.target.files[0]);
+  };
+
+  const handleShowRecategorization = (reconId) => {
+    setShowRecategorization(s => ({ ...s, [reconId]: !s[reconId] }));
+    setRecategorizationFile(null); // Clear any previous file
+  };
+
+  const handleUserRecategorization = async (panelName, reconId) => {
+    if (!recategorizationFile) {
+      alert("Please select a recategorization file first.");
+      return;
+    }
+
+    setRecategorizationLoading(l => ({ ...l, [reconId]: true }));
+    
+    try {
+      const result = await recategorizeUsers(panelName, recategorizationFile);
+      alert(`Recategorization completed!\n\nSummary:\n- Total users: ${result.summary.total_panel_users}\n- Matched: ${result.summary.matched}\n- Not found: ${result.summary.not_found}\n- Errors: ${result.summary.errors}`);
+      
+      // Refresh the reconciliation summaries to show updated data
+      getReconSummaries().then(setSummaries);
+      
+      // Clear the file and hide recategorization interface
+      setRecategorizationFile(null);
+      setShowRecategorization(s => ({ ...s, [reconId]: false }));
+    } catch (error) {
+      console.error("Recategorization failed:", error);
+      alert(`Recategorization failed: ${error.message || "Unknown error"}`);
+    } finally {
+      setRecategorizationLoading(l => ({ ...l, [reconId]: false }));
+    }
   };
 
   const handleUpload = async () => {
@@ -458,7 +496,18 @@ export default function Reconciliation() {
                       {row.error ? (
                         <span style={{ color: "#e74c3c" }}>{row.error}</span>
                       ) : (
-                        <button onClick={() => handleViewDetails(row.recon_id)}>
+                        <button 
+                          onClick={() => handleViewDetails(row.recon_id)}
+                          style={{
+                            padding: "4px 8px",
+                            background: "#007bff",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: 4,
+                            fontSize: 12,
+                            cursor: "pointer"
+                          }}
+                        >
                           {showDetails[row.recon_id] ? "Hide Details" : "View Details"}
                         </button>
                       )}
@@ -498,39 +547,165 @@ export default function Reconciliation() {
                                 </div>
                               </div>
 
+                              {/* Total Users Overview */}
+                              {details[row.recon_id].summary && details[row.recon_id].summary.total_panel_users && (
+                                <div style={{ marginBottom: 16 }}>
+                                  <h5 style={{ color: "#6c757d", marginBottom: 8, fontSize: 14 }}>Panel Overview</h5>
+                                  <div style={{ 
+                                    background: "#fff", 
+                                    padding: 16, 
+                                    borderRadius: 6, 
+                                    border: "1px solid #dee2e6",
+                                    textAlign: "center"
+                                  }}>
+                                    <div style={{ 
+                                      fontSize: 14, 
+                                      color: "#6c757d", 
+                                      textTransform: "uppercase",
+                                      fontWeight: 600,
+                                      marginBottom: 4
+                                    }}>
+                                      Total Panel Users
+                                    </div>
+                                    <div style={{ 
+                                      fontSize: 32, 
+                                      fontWeight: 700,
+                                      color: "#007bff"
+                                    }}>
+                                      {details[row.recon_id].summary.total_panel_users}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
                               {/* Summary Statistics */}
                               {details[row.recon_id].summary && (
                                 <div style={{ marginBottom: 16 }}>
                                   <h5 style={{ color: "#6c757d", marginBottom: 8, fontSize: 14 }}>Reconciliation Results</h5>
                                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8 }}>
-                                    {Object.entries(details[row.recon_id].summary).map(([key, value]) => (
-                                      <div key={key} style={{ 
-                                        background: "#fff", 
-                                        padding: 12, 
-                                        borderRadius: 6, 
-                                        border: "1px solid #dee2e6",
-                                        textAlign: "center"
-                                      }}>
-                                        <div style={{ 
-                                          fontSize: 12, 
-                                          color: "#6c757d", 
-                                          textTransform: "uppercase",
-                                          fontWeight: 600,
-                                          marginBottom: 4
+                                    {Object.entries(details[row.recon_id].summary).map(([key, value]) => {
+                                      // Skip certain fields that are better displayed separately
+                                      if (["panel_name", "total_panel_users"].includes(key)) {
+                                        return null;
+                                      }
+                                      
+                                      // Determine color based on key
+                                      let color = "#007bff"; // default blue
+                                      if (key.includes("found") || key.includes("matched") || key.includes("active")) {
+                                        color = "#28a745"; // green
+                                      } else if (key.includes("not_found") || key.includes("errors") || key.includes("inactive")) {
+                                        color = "#dc3545"; // red
+                                      } else if (key.includes("service_users")) {
+                                        color = "#17a2b8"; // info blue
+                                      } else if (key.includes("thirdparty_users")) {
+                                        color = "#ffc107"; // warning yellow
+                                      } else if (key.includes("internal_users")) {
+                                        color = "#6f42c1"; // purple
+                                      } else if (key.includes("other_users")) {
+                                        color = "#fd7e14"; // orange
+                                      }
+                                      
+                                      return (
+                                        <div key={key} style={{ 
+                                          background: "#fff", 
+                                          padding: 12, 
+                                          borderRadius: 6, 
+                                          border: "1px solid #dee2e6",
+                                          textAlign: "center"
                                         }}>
-                                          {key.replace(/_/g, ' ')}
+                                          <div style={{ 
+                                            fontSize: 12, 
+                                            color: "#6c757d", 
+                                            textTransform: "uppercase",
+                                            fontWeight: 600,
+                                            marginBottom: 4
+                                          }}>
+                                            {key.replace(/_/g, ' ')}
+                                          </div>
+                                          <div style={{ 
+                                            fontSize: 20, 
+                                            fontWeight: 700,
+                                            color: color
+                                          }}>
+                                            {value}
+                                          </div>
                                         </div>
-                                        <div style={{ 
-                                          fontSize: 20, 
-                                          fontWeight: 700,
-                                          color: key.includes("found") || key.includes("matched") ? "#28a745" : 
-                                                 key.includes("not_found") || key.includes("errors") ? "#dc3545" : "#007bff"
-                                        }}>
-                                          {value}
+                                      );
+                                    }).filter(Boolean)}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* User Recategorization Section */}
+                              {details[row.recon_id].panelname && (
+                                <div style={{ marginBottom: 16 }}>
+                                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                                    <h5 style={{ color: "#6c757d", fontSize: 14 }}>🔄 User Recategorization</h5>
+                                    <button
+                                      onClick={() => handleShowRecategorization(row.recon_id)}
+                                      style={{
+                                        padding: "4px 8px",
+                                        background: "#28a745",
+                                        color: "#fff",
+                                        border: "none",
+                                        borderRadius: 4,
+                                        fontSize: 12,
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "4px"
+                                      }}
+                                    >
+                                      {showRecategorization[row.recon_id] ? "🔄 Hide Recategorization" : "🔄 Recategorize Users"}
+                                    </button>
+                                  </div>
+                                  
+                                  {showRecategorization[row.recon_id] && (
+                                    <div style={{ background: "#fff", borderRadius: 6, padding: 12, border: "1px solid #dee2e6" }}>
+                                      <div style={{ marginBottom: 12 }}>
+                                        <h6 style={{ color: "#495057", marginBottom: 6, fontSize: 13 }}>Recategorization Instructions</h6>
+                                        <div style={{ fontSize: 11, color: "#6c757d", marginBottom: 8 }}>
+                                          <strong>File Requirements:</strong>
+                                          <ul style={{ margin: "4px 0", paddingLeft: 16 }}>
+                                            <li>Must contain a match column (email, user_email, domain, id, user_id, employee_id)</li>
+                                            <li>Must contain a type column (type, user_type, status, category, final_status, classification)</li>
+                                            <li>Match column values will be compared with panel data</li>
+                                            <li>Type column values will be used as the new final_status</li>
+                                          </ul>
                                         </div>
                                       </div>
-                                    ))}
-                                  </div>
+                                      
+                                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                                        <input
+                                          type="file"
+                                          accept=".csv, .xlsx, .xls"
+                                          onChange={handleRecategorizationFileChange}
+                                          style={{
+                                            padding: "6px",
+                                            border: "1px solid #ced4da",
+                                            borderRadius: 4,
+                                            fontSize: 12
+                                          }}
+                                        />
+                                        <button
+                                          onClick={() => handleUserRecategorization(details[row.recon_id].panelname, row.recon_id)}
+                                          disabled={!recategorizationFile || recategorizationLoading[row.recon_id]}
+                                          style={{
+                                            padding: "6px 12px",
+                                            background: recategorizationLoading[row.recon_id] ? "#adb5bd" : "#28a745",
+                                            color: "#fff",
+                                            border: "none",
+                                            borderRadius: 4,
+                                            fontSize: 12,
+                                            cursor: recategorizationLoading[row.recon_id] ? "not-allowed" : "pointer",
+                                            fontWeight: 600
+                                          }}
+                                        >
+                                          {recategorizationLoading[row.recon_id] ? "🔄 Processing..." : "🔄 Start Recategorization"}
+                                        </button>
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               )}
 

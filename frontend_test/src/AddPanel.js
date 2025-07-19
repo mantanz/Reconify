@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { uploadPanelFile, getHRFields, savePanelConfig, getPanels, getSOTFields } from "./api";
+import { uploadPanelFile, getHRFields, savePanelConfig, getPanels, getSOTFields, getSOTList } from "./api";
 
 export default function AddPanel() {
   const [panelName, setPanelName] = useState("");
@@ -7,19 +7,38 @@ export default function AddPanel() {
   const [panelHeaders, setPanelHeaders] = useState([]);
   const [hrFields, setHRFields] = useState([]);
   const [sotType, setSotType] = useState("hr_data");
-  const [keyMappings, setKeyMappings] = useState({
-    hr_data: { panel: "", hr: "" },
-    sot2: { panel: "", hr: "" },
-    sot3: { panel: "", hr: "" }
-  });
+  const [keyMappings, setKeyMappings] = useState({});
   const [message, setMessage] = useState("");
   const [panels, setPanels] = useState([]);
   const [panelExists, setPanelExists] = useState(false);
+  const [availableSOTs, setAvailableSOTs] = useState([]);
 
   useEffect(() => {
     getPanels().then(setPanels);
-    // Default to hr_data fields
-    getSOTFields("hr_data").then(res => setHRFields(res.fields || []));
+    // Fetch available SOTs
+    getSOTList().then(data => {
+      const sots = data.sots || [];
+      setAvailableSOTs(sots);
+      // Initialize keyMappings dynamically based on available SOTs
+      const initialMappings = {};
+      sots.forEach(sot => {
+        initialMappings[sot] = { panel: "", hr: "" };
+      });
+      setKeyMappings(initialMappings);
+      // Default to first available SOT or hr_data
+      if (sots.length > 0) {
+        setSotType(sots[0]);
+        getSOTFields(sots[0]).then(res => setHRFields(res.fields || []));
+      } else {
+        // Fallback to hr_data if no SOTs available
+        getSOTFields("hr_data").then(res => setHRFields(res.fields || []));
+      }
+    }).catch(error => {
+      console.error("Error fetching SOT list:", error);
+      setAvailableSOTs([]);
+      setKeyMappings({});
+      setMessage("Error loading available SOTs. Please check if the backend server is running.");
+    });
   }, []);
 
   const handlePanelNameChange = (e) => {
@@ -33,29 +52,50 @@ export default function AddPanel() {
     setPanelFile(null);
     setPanelHeaders([]);
     setHRFields([]);
-    setKeyMappings({
-      hr_data: { panel: "", hr: "" },
-      sot2: { panel: "", hr: "" },
-      sot3: { panel: "", hr: "" }
+    // Reset keyMappings to initial state
+    const initialMappings = {};
+    availableSOTs.forEach(sot => {
+      initialMappings[sot] = { panel: "", hr: "" };
     });
+    setKeyMappings(initialMappings);
   };
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     setPanelFile(file);
-    const res = await uploadPanelFile(file);
-    setPanelHeaders(res.headers || []);
-    // Fetch fields for the current SOT type
-    const sotFields = await getSOTFields(sotType);
-    setHRFields(sotFields.fields || []);
+    try {
+      const res = await uploadPanelFile(file);
+      setPanelHeaders(res.headers || []);
+      // Fetch fields for the current SOT type
+      const sotFields = await getSOTFields(sotType);
+      setHRFields(sotFields.fields || []);
+      setMessage(""); // Clear any previous error messages
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setPanelHeaders([]);
+      setHRFields([]);
+      setMessage("Error uploading file. Please check the file format and try again.");
+    }
   };
 
   const handleSotTypeChange = async (e) => {
     const sot = e.target.value;
     setSotType(sot);
+    // Initialize mapping if not present
+    setKeyMappings(km => ({
+      ...km,
+      [sot]: km[sot] || { panel: "", hr: "" }
+    }));
     // Fetch fields for the selected SOT
-    const res = await getSOTFields(sot);
-    setHRFields(res.fields || []);
+    try {
+      const res = await getSOTFields(sot);
+      setHRFields(res.fields || []);
+      setMessage(""); // Clear any previous error messages
+    } catch (error) {
+      console.error(`Error fetching fields for SOT '${sot}':`, error);
+      setHRFields([]);
+      setMessage(`No fields found for SOT '${sot}'. Please upload SOT data first.`);
+    }
   };
 
   const handleKeyMappingChange = (field, value) => {
@@ -79,23 +119,27 @@ export default function AddPanel() {
       setMessage("Panel already exists");
       return;
     }
-    // Build key_mapping object for config
+    // Build key_mapping object for config - only include SOTs with actual mappings
     const key_mapping = {};
     Object.entries(keyMappings).forEach(([sot, km]) => {
       if (km.panel && km.hr) {
         key_mapping[sot] = { [km.panel]: km.hr };
-      } else {
-        key_mapping[sot] = {};
       }
+      // Don't include empty mappings
     });
     const data = {
       name: panelName,
       key_mapping,
       panel_headers: panelHeaders,
     };
-    const res = await savePanelConfig(data);
-    setMessage(res.message || "Saved!");
-    getPanels().then(setPanels);
+    try {
+      const res = await savePanelConfig(data);
+      setMessage(res.message || "Saved!");
+      getPanels().then(setPanels);
+    } catch (error) {
+      console.error("Error saving panel config:", error);
+      setMessage("Error saving panel configuration. Please try again.");
+    }
   };
 
   return (
@@ -144,9 +188,15 @@ export default function AddPanel() {
             onChange={handleSotTypeChange}
             style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #ced4da", borderRadius: 4, fontSize: 15, marginBottom: 10 }}
           >
-            <option value="hr_data">HR Data</option>
-            <option value="sot2">SOT2</option>
-            <option value="sot3">SOT3</option>
+            {availableSOTs.map(sot => (
+              <option key={sot} value={sot}>
+                {sot === "hr_data" ? "HR Data" : 
+                 sot === "service_users" ? "Service Users" :
+                 sot === "internal_users" ? "Internal Users" :
+                 sot === "thirdparty_users" ? "Third Party Users" :
+                 sot.toUpperCase()}
+              </option>
+            ))}
           </select>
           {hrFields.length === 0 ? (
             <div style={{ color: "#e74c3c", marginTop: 10, fontWeight: 500 }}>
@@ -154,7 +204,11 @@ export default function AddPanel() {
             </div>
           ) : (
             <>
-              <label style={{ fontWeight: 600, color: "#495057" }}>Key Mapping for {sotType === "hr_data" ? "HR Data" : sotType.toUpperCase()}:</label>
+              <label style={{ fontWeight: 600, color: "#495057" }}>Key Mapping for {sotType === "hr_data" ? "HR Data" : 
+                sotType === "service_users" ? "Service Users" :
+                sotType === "internal_users" ? "Internal Users" :
+                sotType === "thirdparty_users" ? "Third Party Users" :
+                sotType.toUpperCase()}:</label>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
                 <select
                   value={keyMappings[sotType].panel}

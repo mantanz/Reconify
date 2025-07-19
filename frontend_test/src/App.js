@@ -19,65 +19,88 @@ function App() {
 
   return (
     <div style={{ fontFamily: "Segoe UI, Arial, sans-serif", background: "#f8f9fa", minHeight: "100vh" }}>
-      <nav style={{ background: "#343a40", color: "#fff", padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ fontWeight: 700, fontSize: 22 }}>Reconify Config</div>
-        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-          <div
-            style={{ position: "relative" }}
-            onMouseEnter={() => setShowDropdown(true)}
-            onMouseLeave={() => setShowDropdown(false)}
-          >
-            <button
-              style={{ background: "#495057", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 4, cursor: "pointer", fontSize: 16 }}
-              onClick={() => setShowDropdown((v) => !v)}
-            >
-              Config ▼
-            </button>
-            {showDropdown && (
-              <div style={{ position: "absolute", right: 0, top: 38, background: "#fff", color: "#343a40", border: "1px solid #dee2e6", borderRadius: 4, boxShadow: "0 2px 8px rgba(0,0,0,0.08)", minWidth: 160, zIndex: 10 }}>
-                {NAV_ITEMS.map(item => (
-                  <div
-                    key={item.key}
-                    onClick={() => { setSelected(item.key); setShowDropdown(false); setShowSOT(false); setShowRecon(false); }}
-                    style={{
-                      padding: "10px 18px",
-                      cursor: "pointer",
-                      background: selected === item.key && !showSOT && !showRecon ? "#e9ecef" : "#fff",
-                      fontWeight: selected === item.key && !showSOT && !showRecon ? 600 : 400,
-                      borderBottom: "1px solid #f1f3f5",
-                      transition: "background 0.2s"
-                    }}
-                  >
-                    {item.label}
-                  </div>
-                ))}
-              </div>
-            )}
+      <nav style={{ background: "#fff", padding: "16px 24px", boxShadow: "0 2px 4px rgba(0,0,0,0.06)", borderBottom: "1px solid #e9ecef" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <h1 style={{ margin: 0, color: "#343a40", fontSize: 24, fontWeight: 600 }}>Reconify</h1>
           </div>
-          <button
-            style={{ background: showSOT ? "#007bff" : "#495057", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 4, cursor: "pointer", fontSize: 16, fontWeight: showSOT ? 600 : 400 }}
-            onClick={() => { setShowSOT(true); setShowDropdown(false); setShowRecon(false); }}
-          >
-            SOT Upload
-          </button>
-          <button
-            style={{ background: showRecon ? "#007bff" : "#495057", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 4, cursor: "pointer", fontSize: 16, fontWeight: showRecon ? 600 : 400 }}
-            onClick={() => { setShowRecon(true); setShowDropdown(false); setShowSOT(false); }}
-          >
-            Reconciliation
-          </button>
+          <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ position: "relative" }}>
+              <button
+                style={{ 
+                  background: !showSOT && !showRecon ? "#007bff" : "#495057", 
+                  color: "#fff", 
+                  border: "none", 
+                  padding: "8px 18px", 
+                  borderRadius: 4, 
+                  cursor: "pointer", 
+                  fontSize: 16, 
+                  fontWeight: !showSOT && !showRecon ? 600 : 400 
+                }}
+                onClick={() => { setShowDropdown(!showDropdown); setShowSOT(false); setShowRecon(false); }}
+              >
+                Panel Management ▼
+              </button>
+              {showDropdown && (
+                <div style={{ 
+                  position: "absolute", 
+                  top: "100%", 
+                  left: 0, 
+                  background: "#fff", 
+                  border: "1px solid #dee2e6", 
+                  borderRadius: 4, 
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)", 
+                  zIndex: 1000,
+                  minWidth: 200
+                }}>
+                  {NAV_ITEMS.map(item => (
+                    <button
+                      key={item.key}
+                      style={{ 
+                        display: "block", 
+                        width: "100%", 
+                        textAlign: "left", 
+                        padding: "12px 16px", 
+                        border: "none", 
+                        background: selected === item.key ? "#f8f9fa" : "#fff", 
+                        color: selected === item.key ? "#007bff" : "#495057", 
+                        cursor: "pointer", 
+                        fontSize: 14,
+                        fontWeight: selected === item.key ? 600 : 400
+                      }}
+                      onClick={() => { setSelected(item.key); setShowDropdown(false); }}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button
+              style={{ background: showSOT ? "#007bff" : "#495057", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 4, cursor: "pointer", fontSize: 16, fontWeight: showSOT ? 600 : 400 }}
+              onClick={() => { setShowSOT(true); setShowDropdown(false); setShowRecon(false); }}
+            >
+              SOT Upload
+            </button>
+            <button
+              style={{ background: showRecon ? "#007bff" : "#495057", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 4, cursor: "pointer", fontSize: 16, fontWeight: showRecon ? 600 : 400 }}
+              onClick={() => { setShowRecon(true); setShowDropdown(false); setShowSOT(false); }}
+            >
+              Reconciliation
+            </button>
+          </div>
         </div>
       </nav>
-      {!showSOT && !showRecon ? (
+      
+      {!showSOT && !showRecon && (
         <div style={{ maxWidth: 500, margin: "40px auto", background: "#fff", borderRadius: 8, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", padding: 32 }}>
           <h2 style={{ textAlign: "center", color: "#343a40", marginBottom: 32 }}>{NAV_ITEMS.find(i => i.key === selected).label}</h2>
           {NAV_ITEMS.find(i => i.key === selected).component}
         </div>
-      ) : showSOT ? (
-        <SOTUpload />
-      ) : (
-        <Reconciliation />
       )}
+      
+      {showSOT && <SOTUpload />}
+      {showRecon && <Reconciliation />}
     </div>
   );
 }
