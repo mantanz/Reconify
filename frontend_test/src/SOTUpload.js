@@ -81,12 +81,24 @@ export default function SOTUpload() {
           style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #ced4da", borderRadius: 4, marginTop: 6, fontSize: 15 }}
         >
           {sotList.map(sot => (
-            <option key={sot} value={sot}>{sot}</option>
+            <option key={sot} value={sot}>
+              {sot === "hr_data" ? "HR Data" : 
+               sot === "service_users" ? "Service Users" :
+               sot === "internal_users" ? "Internal Users" :
+               sot === "thirdparty_users" ? "Third Party Users" :
+               sot.toUpperCase()}
+            </option>
           ))}
         </select>
       </div>
       <div style={{ marginBottom: 18 }}>
-        <label style={{ fontWeight: 600, color: "#495057" }}>Upload {sotType === "hr_data" ? "HR Data" : sotType.toUpperCase()} (CSV or Excel):</label>
+        <label style={{ fontWeight: 600, color: "#495057" }}>
+          Upload {sotType === "hr_data" ? "HR Data" : 
+                  sotType === "service_users" ? "Service Users" :
+                  sotType === "internal_users" ? "Internal Users" :
+                  sotType === "thirdparty_users" ? "Third Party Users" :
+                  sotType.toUpperCase()} (CSV or Excel):
+        </label>
         <input
           type="file"
           accept=".csv, .xlsx, .xls"

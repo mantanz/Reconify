@@ -49,11 +49,22 @@ export async function deletePanelByName(name) {
 
 export async function getPanelHeaders(panelName) {
   const res = await fetch(`http://127.0.0.1:8000/panels/${encodeURIComponent(panelName)}/headers`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch panel headers: ${res.statusText}`);
+  }
   return res.json();
 }
 
 export async function getSOTFields(sotType) {
   const res = await fetch(`${API_BASE}/sot/fields/${sotType}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch SOT fields: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function getSOTList() {
+  const res = await fetch(`${API_BASE}/sot/list`);
   return res.json();
 }
 
@@ -110,5 +121,20 @@ export async function getPanelDetails(panelName) {
 // Fetch reconciliation summary details by recon_id
 export async function getReconSummaryDetail(reconId) {
   const res = await fetch(`${API_BASE}/recon/summary/${reconId}`);
+  return res.json();
+}
+
+// Recategorize users with uploaded file
+export async function recategorizeUsers(panelName, file) {
+  const formData = new FormData();
+  formData.append("panel_name", panelName);
+  formData.append("file", file);
+  const res = await fetch(`${API_BASE}/recategorize_users`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to recategorize users: ${res.statusText}`);
+  }
   return res.json();
 } 

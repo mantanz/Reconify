@@ -206,9 +206,9 @@ def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
                 raise HTTPException(status_code=400, detail="Unable to decode file. Please ensure it's a valid CSV or Excel file.")
             import csv
             reader = csv.DictReader(lines)
-            # Convert headers to lowercase
+            # Convert headers to lowercase and clean data
             reader.fieldnames = [h.strip().lower() for h in reader.fieldnames]
-            rows = [dict((k.strip().lower(), v) for k, v in row.items()) for row in reader]
+            rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
     except Exception as e:
         return {"error": f"Error processing file: {str(e)}", "doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": "error", "sot_type": sot_type}
     
@@ -247,6 +247,17 @@ def list_sots_from_config():
     for panel in db.get("panels", []):
         key_mapping = panel.get("key_mapping", {})
         sots.update(key_mapping.keys())
+    
+    # If no SOTs found in config, provide default SOT types
+    if not sots:
+        default_sots = [
+            "hr_data",
+            "service_users", 
+            "internal_users",
+            "thirdparty_users"
+        ]
+        sots.update(default_sots)
+    
     return {"sots": sorted(list(sots))}
 
 @app.post("/recon/upload")
@@ -282,7 +293,7 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
             
             import csv
             reader = csv.DictReader(lines)
-            rows = list(reader)
+            rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
             total_records = max(len(lines) - 1, 0)  # Exclude header
     except Exception as e:
         return {"error": f"Error processing file: {str(e)}", "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": 0, "uploadedby": uploaded_by, "status": "error"}
@@ -326,7 +337,8 @@ def get_panel_upload_history():
 def get_sot_fields(sot_type: str):
     headers = get_panel_headers_from_db(sot_type)
     if not headers:
-        raise HTTPException(status_code=404, detail=f"{sot_type} table not found or has no columns")
+        # Return empty fields instead of 404 error for SOTs that don't exist yet
+        return {"fields": []}
     return {"fields": headers}
 
 @app.get("/panels/{panel_name}/details")
@@ -405,8 +417,8 @@ def debug_sot_table(sot_name: str):
 @app.post("/recon/process")
 def reconcile_panel_with_sot(panel_name: str = Form(...)):
     """
-    Reconcile internal users from panel with HR data.
-    Only processes records where initial_status indicates internal users.
+    Reconcile internal users and not found users from panel with HR data.
+    Processes records where initial_status indicates internal users or not found users.
     Updates initial_status column with HR status (active/inactive/not found).
     """
     try:
@@ -427,30 +439,54 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
         if not panel_rows:
             raise HTTPException(status_code=404, detail="No panel data found")
         
-        # Filter only internal users based on initial_status
-        internal_users = []
+        # Categorize users based on initial_status
+        users_to_reconcile = []  # Internal users + not found users
+        other_users = []
+        service_users_count = 0
+        thirdparty_users_count = 0
+        not_found_count = 0
+        internal_users_count = 0
+        
         for row in panel_rows:
-            initial_status = row.get("initial_status", "").strip().lower()
-            # Check if this user is categorized as internal user
+            initial_status_raw = row.get("initial_status", "")
+            initial_status = initial_status_raw.strip().lower() if initial_status_raw is not None else ""
+            
+            # Check if this user should be reconciled (internal users or not found users)
             if initial_status in ["employee", "internal", "internal_user", "internal users"]:
-                internal_users.append(row)
+                users_to_reconcile.append(row)
+                internal_users_count += 1
+            elif initial_status in ["not found", "not_found"]:
+                users_to_reconcile.append(row)
+                not_found_count += 1
+            else:
+                other_users.append(row)
+                # Count by category for summary
+                if initial_status in ["service", "service_user", "service users"]:
+                    service_users_count += 1
+                elif initial_status in ["thirdparty", "thirdparty_user", "thirdparty users"]:
+                    thirdparty_users_count += 1
         
-        logging.info(f"Found {len(internal_users)} internal users out of {len(panel_rows)} total panel users")
+        logging.info(f"Found {len(users_to_reconcile)} users to reconcile ({internal_users_count} internal + {not_found_count} not found) and {len(other_users)} other users out of {len(panel_rows)} total panel users")
         
-        if not internal_users:
+        if not users_to_reconcile:
             return {
                 "recon_id": None,
                 "summary": {
                     "panel_name": panel_name,
                     "total_panel_users": len(panel_rows),
                     "internal_users": 0,
+                    "not_found_users": 0,
+                    "users_to_reconcile": 0,
+                    "other_users": len(other_users),
+                    "service_users": service_users_count,
+                    "thirdparty_users": thirdparty_users_count,
                     "matched": 0,
                     "found_active": 0,
                     "found_inactive": 0,
                     "not_found": 0
                 },
                 "details": [],
-                "message": "No internal users found to reconcile"
+                "message": "No internal users or not found users to reconcile"
             }
         
         # Fetch HR data
@@ -459,13 +495,22 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             raise HTTPException(status_code=404, detail="HR data not found")
         
         # Create HR lookup
-        hr_lookup = {str(row.get(hr_key, "")).strip().lower(): row for row in hr_rows}
+        hr_lookup = {}
+        for row in hr_rows:
+            hr_value = row.get(hr_key, "")
+            if hr_value is not None:
+                hr_lookup[str(hr_value).strip().lower()] = row
         
         details = []
         summary = {
             "panel_name": panel_name,
             "total_panel_users": len(panel_rows),
-            "internal_users": len(internal_users),
+            "internal_users": internal_users_count,
+            "not_found_users": not_found_count,
+            "users_to_reconcile": len(users_to_reconcile),
+            "other_users": len(other_users),
+            "service_users": service_users_count,
+            "thirdparty_users": thirdparty_users_count,
             "matched": 0,
             "found_active": 0,
             "found_inactive": 0,
@@ -474,9 +519,10 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
         
         updates = []
         
-        # Process each internal user
-        for user_row in internal_users:
-            panel_val = str(user_row.get(panel_key, "")).strip().lower()
+        # Process each user to reconcile (internal users + not found users)
+        for user_row in users_to_reconcile:
+            panel_val_raw = user_row.get(panel_key, "")
+            panel_val = str(panel_val_raw).strip().lower() if panel_val_raw is not None else ""
             hr_row = hr_lookup.get(panel_val)
             
             user_status = "not found"
@@ -577,7 +623,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             "recon_id": recon_id,
             "summary": summary,
             "details": [],
-            "message": f"Reconciled {len(internal_users)} internal users with HR data"
+            "message": f"Reconciled {len(users_to_reconcile)} users ({internal_users_count} internal + {not_found_count} not found) with HR data"
         }
         
     except HTTPException:
@@ -850,5 +896,182 @@ def categorize_users(panel_name: str = Form(...)):
         raise
     except Exception as e:
         logging.error(f"Unexpected error in categorize_users: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 
+
+@app.post("/recategorize_users")
+def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)):
+    """
+    Recategorize users in a panel based on an uploaded file.
+    Matches panel users with the uploaded file and updates final_status column.
+    If no match found, uses initial_status value.
+    """
+    try:
+        # Load panel configuration
+        db = load_db()
+        panel = next((p for p in db["panels"] if p["name"] == panel_name), None)
+        if not panel:
+            raise HTTPException(status_code=404, detail="Panel not found")
+        
+        # Process uploaded file
+        filename = file.filename.lower()
+        contents = file.file.read()
+        
+        try:
+            # Read and parse file
+            if filename.endswith(".xlsx") or filename.endswith(".xls"):
+                import io
+                df = pd.read_excel(io.BytesIO(contents))
+                # Convert headers to lowercase
+                df.columns = [col.strip().lower() for col in df.columns]
+                recategorization_data = df.to_dict(orient="records")
+            else:
+                # Try different encodings for CSV files
+                encodings = ['utf-8', 'latin-1', 'cp1252', 'iso-8859-1']
+                lines = None
+                for encoding in encodings:
+                    try:
+                        lines = contents.decode(encoding).splitlines()
+                        break
+                    except UnicodeDecodeError:
+                        continue
+                if lines is None:
+                    raise HTTPException(status_code=400, detail="Unable to decode file. Please ensure it's a valid CSV or Excel file.")
+                
+                import csv
+                reader = csv.DictReader(lines)
+                # Convert headers to lowercase and clean data
+                reader.fieldnames = [h.strip().lower() for h in reader.fieldnames]
+                recategorization_data = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Error processing file: {str(e)}")
+        
+        if not recategorization_data:
+            raise HTTPException(status_code=400, detail="No data found in uploaded file")
+        
+        # Get panel data
+        panel_rows = fetch_all_rows(panel_name)
+        if not panel_rows:
+            raise HTTPException(status_code=404, detail="No panel data found")
+        
+        # Determine match field from panel configuration
+        # Use the first available mapping field as the match field
+        key_mapping = panel.get("key_mapping", {})
+        if not key_mapping:
+            raise HTTPException(status_code=400, detail="No key mappings configured for this panel")
+        
+        # Get the first mapping to determine the match field
+        first_mapping = next(iter(key_mapping.values()))
+        if not first_mapping:
+            raise HTTPException(status_code=400, detail="Invalid key mapping configuration")
+        
+        # Extract panel field from mapping
+        panel_field = list(first_mapping.keys())[0]
+        
+        # Determine type column from uploaded file
+        # Look for common type column names
+        type_column = None
+        type_column_candidates = ["type", "user_type", "status", "category", "final_status", "classification"]
+        
+        for candidate in type_column_candidates:
+            if candidate in recategorization_data[0]:
+                type_column = candidate
+                break
+        
+        if not type_column:
+            raise HTTPException(status_code=400, detail="No type column found in uploaded file. Expected one of: type, user_type, status, category, final_status, classification")
+        
+        # Determine match column from uploaded file
+        # Look for common match column names
+        match_column = None
+        match_column_candidates = ["email", "user_email", "domain", "id", "user_id", "employee_id"]
+        
+        for candidate in match_column_candidates:
+            if candidate in recategorization_data[0]:
+                match_column = candidate
+                break
+        
+        if not match_column:
+            raise HTTPException(status_code=400, detail="No match column found in uploaded file. Expected one of: email, user_email, domain, id, user_id, employee_id")
+        
+        logging.info(f"Recategorization: panel_field='{panel_field}', match_column='{match_column}', type_column='{type_column}'")
+        
+        # Create lookup from uploaded file
+        recategorization_lookup = {}
+        for row in recategorization_data:
+            match_value = row.get(match_column, "")
+            type_value = row.get(type_column, "")
+            if match_value and type_value:
+                recategorization_lookup[str(match_value).strip().lower()] = str(type_value).strip()
+        
+        logging.info(f"Created recategorization lookup with {len(recategorization_lookup)} entries")
+        
+        # Process each panel user
+        updates = []
+        summary = {
+            "total_panel_users": len(panel_rows),
+            "matched": 0,
+            "not_found": 0,
+            "errors": 0
+        }
+        
+        for row_idx, panel_row in enumerate(panel_rows):
+            try:
+                panel_value = panel_row.get(panel_field, "")
+                if not panel_value:
+                    logging.warning(f"Row {row_idx}: Missing panel field '{panel_field}'")
+                    summary["errors"] += 1
+                    continue
+                
+                panel_value = str(panel_value).strip().lower()
+                initial_status = panel_row.get("initial_status", "")
+                
+                # Look for match in recategorization data
+                if panel_value in recategorization_lookup:
+                    final_status = recategorization_lookup[panel_value]
+                    summary["matched"] += 1
+                    logging.debug(f"Row {row_idx}: Matched '{panel_value}' -> '{final_status}'")
+                else:
+                    # No match found, use initial_status
+                    final_status = initial_status if initial_status else "not_found"
+                    summary["not_found"] += 1
+                    logging.debug(f"Row {row_idx}: No match for '{panel_value}', using initial_status '{final_status}'")
+                
+                # Prepare update
+                updates.append({
+                    panel_field: str(panel_row.get(panel_field, "")).strip().lower(),
+                    "final_status": final_status
+                })
+                
+            except Exception as e:
+                logging.error(f"Error processing row {row_idx}: {e}")
+                summary["errors"] += 1
+                continue
+        
+        # Add final_status column if it doesn't exist
+        from db.mysql_utils import add_column_if_not_exists, update_final_status_bulk
+        add_column_if_not_exists(panel_name, "final_status", "VARCHAR(255)")
+        
+        # Update database
+        success, error_msg = update_final_status_bulk(panel_name, updates, match_field=panel_field)
+        if not success:
+            raise HTTPException(status_code=500, detail=f"Database update failed: {error_msg}")
+        
+        logging.info(f"User recategorization completed for panel '{panel_name}'. Summary: {summary}")
+        
+        return {
+            "message": "User recategorization complete",
+            "summary": summary,
+            "panel_name": panel_name,
+            "total_processed": len(panel_rows),
+            "successful_updates": len(updates),
+            "match_column": match_column,
+            "type_column": type_column,
+            "panel_field": panel_field
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Unexpected error in recategorize_users: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 
 

@@ -10,8 +10,11 @@ This document provides comprehensive documentation for all available API endpoin
 - [SOT (Source of Truth) APIs](#sot-source-of-truth-apis)
 - [Reconciliation APIs](#reconciliation-apis)
 - [User Categorization APIs](#user-categorization-apis)
+- [User Recategorization APIs](#user-recategorization-apis)
+- [Panel Details APIs](#panel-details-apis)
 - [Debug APIs](#debug-apis)
 - [Error Handling](#error-handling)
+- [Recent Updates](#recent-updates)
 
 ## Authentication
 Currently, the API does not require authentication. All endpoints are publicly accessible.
@@ -163,6 +166,7 @@ http://localhost:8000
 
 **Error Responses:**
 - `404 Not Found`: Panel not found
+- `400 Bad Request`: Panel exists in config but no database table found
 
 ---
 
@@ -391,6 +395,7 @@ http://localhost:8000
 
 **Error Responses:**
 - `404 Not Found`: SOT table not found or has no columns
+- `200 OK` with empty fields array: SOT table doesn't exist (returns empty array instead of 404)
 
 ---
 
@@ -463,14 +468,7 @@ http://localhost:8000
     "found_active": 0,
     "found_inactive": 0,
     "not_found": 0
-  },
-  "details": [
-    {
-      "panel_user": "string",
-      "status": "string",
-      "sot_data": {}
-    }
-  ]
+  }
 }
 ```
 
@@ -526,9 +524,16 @@ http://localhost:8000
   "start_date": "string",
   "performed_by": "string",
   "error": "string",
-  "details": {
-    "summary": {},
-    "details": []
+  "summary": {
+    "total_panel_users": 0,
+    "service_users": 0,
+    "internal_users": 0,
+    "thirdparty_users": 0,
+    "other_users": 0,
+    "not_found": 0,
+    "active": 0,
+    "inactive": 0,
+    "errors": 0
   }
 }
 ```
@@ -592,6 +597,95 @@ http://localhost:8000
 - `404 Not Found`: Panel not found
 - `400 Bad Request`: No key mappings configured or no valid SOTs
 - `500 Internal Server Error`: Database update failed
+
+---
+
+---
+
+## User Recategorization APIs
+
+### 1. Recategorize Users
+**Endpoint:** `POST /recategorize_users`
+
+**Description:** Recategorize users in a panel using a new file with match and type columns. Updates the `final_status` column in the panel table.
+
+**Request:**
+- **Content-Type:** `multipart/form-data`
+- **Body:**
+  - `panel_name` (string): Name of the panel
+  - `file` (CSV or Excel file): File containing match and type columns
+
+**File Requirements:**
+- Must contain a match column (email, user_email, domain, id, user_id, employee_id)
+- Must contain a type column (type, user_type, status, category, final_status, classification)
+- Match column values will be compared with panel data
+- Type column values will be used as the new final_status
+
+**Response:**
+```json
+{
+  "message": "User recategorization complete",
+  "summary": {
+    "total_panel_users": 0,
+    "matched": 0,
+    "not_found": 0,
+    "errors": 0
+  },
+  "panel_name": "string"
+}
+```
+
+**Example Response:**
+```json
+{
+  "message": "User recategorization complete",
+  "summary": {
+    "total_panel_users": 100,
+    "matched": 85,
+    "not_found": 15,
+    "errors": 0
+  },
+  "panel_name": "HR Panel"
+}
+```
+
+**Error Responses:**
+- `404 Not Found`: Panel not found
+- `400 Bad Request`: Invalid file format or missing required columns
+- `500 Internal Server Error`: Database update failed
+
+---
+
+---
+
+## Panel Details APIs
+
+### 1. Get Panel Details
+**Endpoint:** `GET /panels/{panel_name}/details`
+
+**Description:** Get complete panel data including all rows with pagination support.
+
+**Path Parameters:**
+- `panel_name` (string): Name of the panel
+
+**Response:**
+```json
+{
+  "panel_name": "string",
+  "rows": [
+    {
+      "id": 1,
+      "email": "user@example.com",
+      "name": "John Doe",
+      "initial_status": "internal_users",
+      "final_status": "active"
+    }
+  ]
+}
+```
+
+**Error Responses:**
+- `404 Not Found`: Panel not found or no data available
 
 ---
 
@@ -677,9 +771,10 @@ http://localhost:8000
 
 ### File Processing
 - Files are automatically processed to extract headers
-- Headers are converted to lowercase
+- Headers are converted to lowercase and cleaned
 - Multiple encoding formats are supported (UTF-8, Latin-1, CP1252, ISO-8859-1)
 - Large files are handled efficiently
+- Null values are properly handled and cleaned
 
 ### File Size Limits
 - No explicit file size limits are set
@@ -692,13 +787,60 @@ http://localhost:8000
 ### Panel Tables
 - Tables are created dynamically based on panel configuration
 - Table names are sanitized (lowercase, underscores)
-- All columns are VARCHAR(2000) to accommodate various data types
-- Additional columns like `initial_status` are added as needed
+- All columns are TEXT to accommodate large data
+- Additional columns like `initial_status` and `final_status` are added as needed
+- Tables use local metadata instances to prevent redefinition errors
 
 ### SOT Tables
 - Tables are created automatically when SOT data is uploaded
 - Schema matches the uploaded file structure
-- All columns are VARCHAR(2000)
+- All columns are TEXT for better data handling
+
+---
+
+## Recent Updates
+
+### Version 2.0 - Major Enhancements
+
+#### New Features
+1. **User Recategorization API**: Added ability to recategorize users using external files
+2. **Panel Details API**: Complete panel data retrieval with pagination support
+3. **Enhanced Error Handling**: Improved error messages and validation
+4. **Dynamic SOT Management**: Frontend now dynamically fetches SOT list from backend
+5. **Improved Reconciliation Flow**: Two-step process with user categorization and HR reconciliation
+
+#### Backend Improvements
+1. **Database Schema Updates**: Changed column types from VARCHAR(2000) to TEXT for better data handling
+2. **SQLAlchemy Fixes**: Resolved table redefinition errors using local metadata
+3. **Null Value Handling**: Improved handling of None values in data processing
+4. **CSV Processing**: Enhanced header and value cleaning for better data quality
+5. **Default SOT Support**: Backend provides default SOT types when config is empty
+
+#### Frontend Enhancements
+1. **Reconciliation Summary Display**: Formatted table view instead of raw JSON
+2. **Panel Data Integration**: Panel details embedded in reconciliation summary
+3. **Advanced Filtering**: Stateful filtering with clear and change filter options
+4. **CSV Download**: Download functionality for panel data
+5. **Pagination**: Full pagination support for large datasets
+6. **User Recategorization UI**: Integrated recategorization interface in reconciliation details
+7. **Error Handling**: Improved error messages and user feedback
+8. **Dynamic SOT Dropdowns**: User-friendly SOT names in dropdowns
+
+#### Process Improvements
+1. **Two-Step Reconciliation**: 
+   - Step 1: User categorization (service_users, internal_users, thirdparty_users)
+   - Step 2: HR reconciliation (includes both internal and "not found" users)
+2. **Status Tracking**: 
+   - `initial_status`: Set during user categorization
+   - `final_status`: Set during recategorization (optional)
+3. **Enhanced Logging**: Better debug information and error tracking
+
+#### Bug Fixes
+1. **MySQL Row Size Errors**: Resolved by using TEXT columns
+2. **NoneType Errors**: Fixed in HR reconciliation and user categorization
+3. **Table Redefinition**: Resolved SQLAlchemy metadata conflicts
+4. **Missing Panel Tables**: Better error handling when panel tables don't exist
+5. **SOT Field Errors**: Returns empty fields instead of 404 for missing tables
 
 ---
 
@@ -709,5 +851,7 @@ http://localhost:8000
 3. **UUID Generation**: Unique IDs are generated for documents and reconciliations
 4. **Bulk Operations**: Database operations are optimized for bulk inserts and updates
 5. **Error Recovery**: The system includes comprehensive error handling and recovery mechanisms
+6. **Data Integrity**: Enhanced data cleaning and validation for better data quality
+7. **Performance**: Optimized for handling large datasets with pagination support
 
 For additional support or questions, please refer to the backend code or contact the development team. 
