@@ -371,3 +371,76 @@
 2025-07-18 18:26:11,804 - root - INFO - Final status bulk update completed: 3033 records updated, 0 errors
 2025-07-18 18:26:11,805 - root - INFO - User recategorization completed for panel 'OE Panel'. Summary: {'total_panel_users': 3029, 'matched': 4, 'not_found': 3023, 'errors': 2}
 2025-07-18 18:26:37,554 - root - INFO - Fetched 3029 rows for panel 'OE Panel'
+2025-07-20 15:57:28,598 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-20 15:57:33,386 - root - INFO - Fetched 3029 rows for panel 'OE Panel'
+2025-07-20 16:22:02,533 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:22:02,582 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:22:02,583 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-20 16:22:02,632 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:22:02,662 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:22:02,664 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-20 16:22:33,497 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:22:33,542 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:22:33,543 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-20 16:22:35,084 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:22:35,112 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:22:35,113 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-20 16:22:48,745 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:22:48,795 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:22:48,797 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-20 16:24:30,778 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:24:30,813 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:24:30,814 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-20 16:28:53,845 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:28:53,878 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:28:53,880 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-20 16:29:46,418 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:29:46,472 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:29:46,474 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-20 16:31:50,533 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-20 16:31:56,803 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:31:56,882 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:31:56,883 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-20 16:31:56,934 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-20 16:31:56,967 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-20 16:31:56,969 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 00:26:58,710 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 00:26:58,748 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 00:26:58,750 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 00:26:58,801 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 00:26:58,858 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 00:26:58,859 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 00:28:46,058 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 00:28:46,091 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 00:28:46,092 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 09:45:08,474 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 09:45:08,525 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 09:45:08,527 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 09:45:08,580 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 09:45:08,625 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 09:45:08,626 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 10:19:14,630 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 10:19:14,665 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 10:19:14,667 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 10:19:14,721 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 10:19:14,759 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 10:19:14,761 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 10:23:10,639 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-21 10:23:16,319 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 10:23:16,352 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 10:23:16,354 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 10:23:16,414 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 10:23:16,444 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 10:23:16,445 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 12:06:34,316 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 12:06:34,361 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 12:06:34,362 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 12:06:34,413 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 12:06:34,443 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 12:06:34,445 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 12:07:15,579 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 12:07:15,619 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 12:07:15,620 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 12:07:15,717 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-21 12:07:15,746 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-21 12:07:15,748 - root - INFO - User-wise summary completed. Total users: 4412

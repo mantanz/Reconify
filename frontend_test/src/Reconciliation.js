@@ -308,6 +308,20 @@ export default function Reconciliation() {
     }
   };
 
+  const getStatusColor = (status) => {
+    if (!status) return "#6c757d"; // Default gray
+    
+    const statusLower = status.toLowerCase();
+    
+    // Success statuses
+    if (statusLower === "complete" || statusLower === "uploaded") return "#27ae60"; // Green
+    
+    // Failed statuses
+    if (statusLower === "failed") return "#e74c3c"; // Red
+    
+    return "#6c757d"; // Default gray
+  };
+
   return (
     <div style={{ background: "#f4f6fb", borderRadius: 8, padding: 24, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", marginBottom: 16, maxWidth: 1200, margin: "40px auto" }}>
       <div style={{ marginBottom: 36 }}>
@@ -368,9 +382,9 @@ export default function Reconciliation() {
           {uploading ? "Uploading..." : "Upload"}
         </button>
         {error && <div style={{ marginTop: 14, color: "#e74c3c", fontWeight: 500 }}>{error}</div>}
-        {result && !result.error && (
-          <div style={{ marginTop: 18, background: "#eafaf1", borderRadius: 6, padding: 16, color: "#145a32" }}>
-            <div><strong>File Uploaded!</strong></div>
+        {result && (
+          <div style={{ marginTop: 18, background: result.status === "failed" ? "#fdf2f2" : "#eafaf1", borderRadius: 6, padding: 16, color: result.status === "failed" ? "#991b1b" : "#145a32" }}>
+            <div><strong>{result.status === "failed" ? "Upload Failed!" : "File Uploaded!"}</strong></div>
             <div><strong>Panel Name:</strong> {result.panelname}</div>
             <div><strong>Doc ID:</strong> {result.docid}</div>
             <div><strong>File Name:</strong> {result.docname}</div>
@@ -378,6 +392,7 @@ export default function Reconciliation() {
             <div><strong>#Total Records:</strong> {result.total_records}</div>
             <div><strong>Uploaded By:</strong> {result.uploadedby}</div>
             <div><strong>Status:</strong> {result.status}</div>
+            {result.error && <div><strong>Error:</strong> {result.error}</div>}
           </div>
         )}
       </div>
@@ -394,12 +409,13 @@ export default function Reconciliation() {
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>#Total Records</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Uploaded By</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Status</th>
+              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Error</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Action</th>
             </tr>
           </thead>
           <tbody>
             {history.length === 0 ? (
-              <tr><td colSpan={8} style={{ textAlign: "center", color: "#adb5bd", padding: 16 }}>No uploads yet.</td></tr>
+              <tr><td colSpan={9} style={{ textAlign: "center", color: "#adb5bd", padding: 16 }}>No uploads yet.</td></tr>
             ) : (
               history.map((item, idx) => (
                 <React.Fragment key={item.docid || idx}>
@@ -410,7 +426,8 @@ export default function Reconciliation() {
                     <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.timestamp}</td>
                     <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.total_records}</td>
                     <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.uploadedby}</td>
-                    <td style={{ padding: "8px 12px", fontSize: 14, color: item.status && item.status.startsWith("error") ? "#e74c3c" : "#27ae60", fontWeight: 600 }}>{item.status}</td>
+                    <td style={{ padding: "8px 12px", fontSize: 14, color: getStatusColor(item.status), fontWeight: 600 }}>{item.status}</td>
+                    <td style={{ padding: "8px 12px", fontSize: 14, color: "#e74c3c" }}>{item.error || "-"}</td>
                     <td style={{ padding: "8px 12px", fontSize: 14 }}>
                       <button
                         onClick={() => handleReconcile(item)}
@@ -424,7 +441,7 @@ export default function Reconciliation() {
                   </tr>
                   {reconResults[item.docid || item.doc_id] && (
                     <tr>
-                      <td colSpan={8}>
+                      <td colSpan={9}>
                         {/* User Categorization Results */}
                         <div style={{ marginBottom: 16, borderBottom: "1px solid #dee2e6", paddingBottom: 16 }}>
                           <h4 style={{ color: "#495057", marginBottom: 8 }}>📊 User Categorization Results</h4>
@@ -486,7 +503,10 @@ export default function Reconciliation() {
                     <td>{row.panelname}</td>
                     <td>{row.recon_id}</td>
                     <td>{row.recon_month}</td>
-                    <td style={{ color: row.status === "complete" ? "#27ae60" : "#e74c3c", fontWeight: 600 }}>{row.status}</td>
+                    <td style={{ 
+                      color: getStatusColor(row.status), 
+                      fontWeight: 600 
+                    }}>{row.status}</td>
                     <td>{row.upload_date ? new Date(row.upload_date).toLocaleDateString() : "-"}</td>
                     <td>{row.uploaded_by || "-"}</td>
                     <td>{row.start_date || "-"}</td>
@@ -534,7 +554,7 @@ export default function Reconciliation() {
                                   <div style={{ background: "#fff", padding: 8, borderRadius: 4, border: "1px solid #dee2e6" }}>
                                     <strong>Status:</strong> 
                                     <span style={{ 
-                                      color: details[row.recon_id].status === "complete" ? "#28a745" : "#dc3545",
+                                      color: getStatusColor(details[row.recon_id].status),
                                       fontWeight: 600,
                                       marginLeft: 4
                                     }}>

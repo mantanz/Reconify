@@ -137,4 +137,13 @@ export async function recategorizeUsers(panelName, file) {
     throw new Error(`Failed to recategorize users: ${res.statusText}`);
   }
   return res.json();
+}
+
+// Get user-wise summary across all panels
+export async function getUserWiseSummary() {
+  const res = await fetch(`${API_BASE}/users/summary`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch user summary: ${res.statusText}`);
+  }
+  return res.json();
 } 

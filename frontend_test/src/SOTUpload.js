@@ -43,6 +43,20 @@ export default function SOTUpload() {
     setError("");
   };
 
+  const getStatusColor = (status) => {
+    if (!status) return "#6c757d"; // Default gray
+    
+    const statusLower = status.toLowerCase();
+    
+    // Success statuses
+    if (statusLower === "complete" || statusLower === "uploaded") return "#27ae60"; // Green
+    
+    // Failed statuses
+    if (statusLower === "failed") return "#e74c3c"; // Red
+    
+    return "#6c757d"; // Default gray
+  };
+
   const handleUpload = async () => {
     if (!file) {
       setError("Please select a file to upload.");
@@ -132,15 +146,16 @@ export default function SOTUpload() {
         {uploading ? "Uploading..." : "Upload"}
       </button>
       {error && <div style={{ marginTop: 14, color: "#e74c3c", fontWeight: 500 }}>{error}</div>}
-      {result && !result.error && (
-        <div style={{ marginTop: 18, background: "#eafaf1", borderRadius: 6, padding: 16, color: "#145a32" }}>
-          <div><strong>File Uploaded!</strong></div>
+      {result && (
+        <div style={{ marginTop: 18, background: result.status === "failed" ? "#fdf2f2" : "#eafaf1", borderRadius: 6, padding: 16, color: result.status === "failed" ? "#991b1b" : "#145a32" }}>
+          <div><strong>{result.status === "failed" ? "Upload Failed!" : "File Uploaded!"}</strong></div>
           <div><strong>Doc ID:</strong> {result.doc_id}</div>
           <div><strong>File Name:</strong> {result.doc_name}</div>
           <div><strong>Uploaded By:</strong> {result.uploaded_by}</div>
           <div><strong>Timestamp:</strong> {result.timestamp}</div>
           <div><strong>Status:</strong> {result.status}</div>
           <div><strong>SOT Type:</strong> {result.sot_type}</div>
+          {result.error && <div><strong>Error:</strong> {result.error}</div>}
         </div>
       )}
       <h3 style={{ marginTop: 36, color: "#343a40", fontWeight: 700, fontSize: 20 }}>Upload History</h3>
@@ -153,12 +168,13 @@ export default function SOTUpload() {
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Uploaded By</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Timestamp</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Status</th>
+              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Error</th>
               <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>SOT Type</th>
             </tr>
           </thead>
           <tbody>
             {history.length === 0 ? (
-              <tr><td colSpan={6} style={{ textAlign: "center", color: "#adb5bd", padding: 16 }}>No uploads yet.</td></tr>
+              <tr><td colSpan={7} style={{ textAlign: "center", color: "#adb5bd", padding: 16 }}>No uploads yet.</td></tr>
             ) : (
               history.map((item, idx) => (
                 <tr key={item.doc_id || idx} style={{ borderBottom: "1px solid #f1f3f5" }}>
@@ -166,7 +182,8 @@ export default function SOTUpload() {
                   <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.doc_name}</td>
                   <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.uploaded_by}</td>
                   <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.timestamp}</td>
-                  <td style={{ padding: "8px 12px", fontSize: 14, color: item.status && item.status.startsWith("error") ? "#e74c3c" : "#27ae60", fontWeight: 600 }}>{item.status}</td>
+                  <td style={{ padding: "8px 12px", fontSize: 14, color: getStatusColor(item.status), fontWeight: 600 }}>{item.status}</td>
+                  <td style={{ padding: "8px 12px", fontSize: 14, color: "#e74c3c" }}>{item.error || "-"}</td>
                   <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.sot_type || "hr_data"}</td>
                 </tr>
               ))
