@@ -31,6 +31,7 @@ export default function Config() {
   // Real data from backend
   const [panels, setPanels] = useState([]);
   const [sots, setSots] = useState([]);
+  const [sotFields, setSotFields] = useState({});
   const [mappings, setMappings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -52,13 +53,29 @@ export default function Config() {
       ]);
 
       setPanels(panelsData || []);
-      setSots(sotsData || []);
+      // Handle the case where sotsData is wrapped in an object with 'sots' key
+      const sotsArray = sotsData?.sots || sotsData || [];
+      setSots(sotsArray);
       setMappings([]); // Mappings will be loaded per panel when needed
     } catch (err) {
       setError('Failed to load configuration data: ' + err.message);
       console.error('Error loading config data:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadSotFields = async (sotName) => {
+    if (!sotName || sotFields[sotName]) return; // Already loaded
+    
+    try {
+      const fieldsData = await getSOTFields(sotName);
+      setSotFields(prev => ({
+        ...prev,
+        [sotName]: fieldsData?.fields || []
+      }));
+    } catch (err) {
+      console.error(`Error loading SOT fields for ${sotName}:`, err);
     }
   };
 
@@ -228,14 +245,18 @@ export default function Config() {
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={selectedSot}
                     onChange={e => {
-                      setSelectedSot(e.target.value);
+                      const sotName = e.target.value;
+                      setSelectedSot(sotName);
                       setSelectedSotHeader('');
+                      if (sotName) {
+                        loadSotFields(sotName);
+                      }
                     }}
                     disabled={!selectedPanelHeader}
                   >
                     <option value="">-- Select SOT --</option>
                     {sots.map(sot => (
-                      <option key={sot.name} value={sot.name}>{sot.name}</option>
+                      <option key={sot} value={sot}>{sot}</option>
                     ))}
                   </select>
                 </div>
@@ -248,7 +269,7 @@ export default function Config() {
                     disabled={!selectedSot}
                   >
                     <option value="">-- Select SOT Header --</option>
-                    {sots.find(s => s.name === selectedSot)?.headers?.map(h => (
+                    {sotFields[selectedSot]?.map(h => (
                       <option key={h} value={h}>{h}</option>
                     ))}
                   </select>
