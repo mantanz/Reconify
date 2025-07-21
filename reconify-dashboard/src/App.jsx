@@ -6,7 +6,6 @@ import ConfigAdd from './pages/ConfigAdd.jsx';
 import ConfigModify from './pages/ConfigModify.jsx';
 import ConfigDelete from './pages/ConfigDelete.jsx';
 import SOT from './pages/SOT.jsx';
-import SOTUpload from './pages/SOTUpload.jsx';
 import UserSummary from './pages/UserSummary.jsx';
 import Recertification from './pages/Recertification.jsx';
 import Reports from './pages/Reports.jsx';
@@ -27,7 +26,6 @@ export default function App() {
         <Route path="/config/modify" element={<Config />} />
         <Route path="/config/delete" element={<Config />} />
         <Route path="/sot" element={<SOT />} />
-        <Route path="/sot-upload" element={<SOTUpload />} />
         <Route path="/user-summary" element={<UserSummary />} />
         <Route path="/reconciliation" element={<Reconciliation />} />
         <Route path="/recertification" element={<Recertification />} />

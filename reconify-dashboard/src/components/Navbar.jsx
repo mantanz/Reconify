@@ -7,7 +7,6 @@ const navItems = [
   { name: 'Home', path: '/home' },
   { name: 'Config', path: '/config' },
   { name: 'SOT', path: '/sot' },
-  { name: 'SOT Upload', path: '/sot-upload' },
   { name: 'User Summary', path: '/user-summary' },
   { name: 'Reconciliation', path: '/reconciliation' },
   { name: 'Recertification', path: '/recertification' },
