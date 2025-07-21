@@ -1,0 +1,38 @@
+{
+  "panels": [
+    {
+      "name": "Seller Panel",
+      "key_mapping": {
+        "hr_data": {
+          "user_email": "email"
+        },
+        "internal_users": {
+          "user_email": "domain"
+        },
+        "service_users": {
+          "user_email": "email"
+        },
+        "thirdparty_users": {
+          "user_email": "domain"
+        }
+      }
+    },
+    {
+      "name": "OE Panel",
+      "key_mapping": {
+        "hr_data": {
+          "email": "email"
+        },
+        "internal_users": {
+          "email": "domain"
+        },
+        "service_users": {
+          "email": "email"
+        },
+        "thirdparty_users": {
+          "email": "domain"
+        }
+      }
+    }
+  ]
+}

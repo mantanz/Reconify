@@ -1,0 +1,53 @@
+[
+  {
+    "recon_id": "RCN_44ae60eb",
+    "panelname": "Seller Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "upload_date": "2025-07-18T08:10:36.749763",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-18",
+    "performed_by": "demo",
+    "error": null,
+    "summary": {
+      "panel_name": "Seller Panel",
+      "total_panel_users": 1385,
+      "internal_users": 984,
+      "other_users": 401,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "not_found_users": 0,
+      "matched": 369,
+      "found_active": 330,
+      "found_inactive": 39,
+      "not_found": 615
+    }
+  },
+  {
+    "recon_id": "RCN_19f2970f",
+    "panelname": "OE Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "upload_date": "2025-07-18T12:06:15.082708",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-18",
+    "performed_by": "demo",
+    "error": null,
+    "summary": {
+      "panel_name": "OE Panel",
+      "total_panel_users": 3029,
+      "internal_users": 1927,
+      "not_found_users": 0,
+      "users_to_reconcile": 1927,
+      "other_users": 1102,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 95,
+      "found_active": 88,
+      "found_inactive": 7,
+      "not_found": 1832
+    }
+  }
+]
