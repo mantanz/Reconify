@@ -4,6 +4,7 @@ import ModifyPanel from "./ModifyPanel";
 import DeletePanel from "./DeletePanel";
 import SOTUpload from "./SOTUpload";
 import Reconciliation from "./Reconciliation";
+import UserSummary from "./UserSummary";
 
 const NAV_ITEMS = [
   { key: "add", label: "Add Panel", component: <AddPanel /> },
@@ -16,6 +17,7 @@ function App() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showSOT, setShowSOT] = useState(false);
   const [showRecon, setShowRecon] = useState(false);
+  const [showUserSummary, setShowUserSummary] = useState(false);
 
   return (
     <div style={{ fontFamily: "Segoe UI, Arial, sans-serif", background: "#f8f9fa", minHeight: "100vh" }}>
@@ -28,16 +30,16 @@ function App() {
             <div style={{ position: "relative" }}>
               <button
                 style={{ 
-                  background: !showSOT && !showRecon ? "#007bff" : "#495057", 
+                  background: !showSOT && !showRecon && !showUserSummary ? "#007bff" : "#495057", 
                   color: "#fff", 
                   border: "none", 
                   padding: "8px 18px", 
                   borderRadius: 4, 
                   cursor: "pointer", 
                   fontSize: 16, 
-                  fontWeight: !showSOT && !showRecon ? 600 : 400 
+                  fontWeight: !showSOT && !showRecon && !showUserSummary ? 600 : 400 
                 }}
-                onClick={() => { setShowDropdown(!showDropdown); setShowSOT(false); setShowRecon(false); }}
+                onClick={() => { setShowDropdown(!showDropdown); setShowSOT(false); setShowRecon(false); setShowUserSummary(false); }}
               >
                 Panel Management ▼
               </button>
@@ -78,21 +80,27 @@ function App() {
             </div>
             <button
               style={{ background: showSOT ? "#007bff" : "#495057", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 4, cursor: "pointer", fontSize: 16, fontWeight: showSOT ? 600 : 400 }}
-              onClick={() => { setShowSOT(true); setShowDropdown(false); setShowRecon(false); }}
+              onClick={() => { setShowSOT(true); setShowDropdown(false); setShowRecon(false); setShowUserSummary(false); }}
             >
               SOT Upload
             </button>
             <button
               style={{ background: showRecon ? "#007bff" : "#495057", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 4, cursor: "pointer", fontSize: 16, fontWeight: showRecon ? 600 : 400 }}
-              onClick={() => { setShowRecon(true); setShowDropdown(false); setShowSOT(false); }}
+              onClick={() => { setShowRecon(true); setShowDropdown(false); setShowSOT(false); setShowUserSummary(false); }}
             >
               Reconciliation
+            </button>
+            <button
+              style={{ background: showUserSummary ? "#007bff" : "#495057", color: "#fff", border: "none", padding: "8px 18px", borderRadius: 4, cursor: "pointer", fontSize: 16, fontWeight: showUserSummary ? 600 : 400 }}
+              onClick={() => { setShowUserSummary(true); setShowDropdown(false); setShowSOT(false); setShowRecon(false); }}
+            >
+              Reports
             </button>
           </div>
         </div>
       </nav>
       
-      {!showSOT && !showRecon && (
+      {!showSOT && !showRecon && !showUserSummary && (
         <div style={{ maxWidth: 500, margin: "40px auto", background: "#fff", borderRadius: 8, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", padding: 32 }}>
           <h2 style={{ textAlign: "center", color: "#343a40", marginBottom: 32 }}>{NAV_ITEMS.find(i => i.key === selected).label}</h2>
           {NAV_ITEMS.find(i => i.key === selected).component}
@@ -101,6 +109,7 @@ function App() {
       
       {showSOT && <SOTUpload />}
       {showRecon && <Reconciliation />}
+      {showUserSummary && <UserSummary />}
     </div>
   );
 }

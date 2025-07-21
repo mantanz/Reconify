@@ -210,13 +210,20 @@ def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
             reader.fieldnames = [h.strip().lower() for h in reader.fieldnames]
             rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
     except Exception as e:
-        return {"error": f"Error processing file: {str(e)}", "doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": "error", "sot_type": sot_type}
+        return {"error": f"Error processing file: {str(e)}", "doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": "failed", "sot_type": sot_type}
     
     # Insert into the correct SOT table (auto-create if needed)
     db_status, db_error = insert_sot_data_rows(sot_type, rows)
-    status = "success" if db_status else f"error: {db_error}"
+    status = "uploaded" if db_status else "failed"
+    error_message = None if db_status else db_error
+    
     # Store metadata in JSON
     meta = {"doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": status, "sot_type": sot_type}
+    
+    # Add error message if there was an error
+    if error_message:
+        meta["error"] = error_message
+    
     try:
         if not os.path.exists(SOT_UPLOADS_PATH):
             with open(SOT_UPLOADS_PATH, "w") as f:
@@ -228,7 +235,10 @@ def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
             json.dump(data, f, indent=2)
     except Exception as e:
         logging.error(f"Failed to write SOT metadata: {e}")
+        meta["status"] = "failed"
+        meta["error"] = f"Failed to write metadata: {e}"
         return {"error": f"Failed to write metadata: {e}", **meta}
+    
     if not db_status:
         return {"error": db_error, **meta}
     return meta
@@ -296,14 +306,28 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
             rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
             total_records = max(len(lines) - 1, 0)  # Exclude header
     except Exception as e:
-        return {"error": f"Error processing file: {str(e)}", "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": 0, "uploadedby": uploaded_by, "status": "error"}
+        return {"error": f"Error processing file: {str(e)}", "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": 0, "uploadedby": uploaded_by, "status": "failed"}
     
+    # Determine status based on actual success/failure
     status = "uploaded"
-    # Insert into panel table
-    db_status, db_error = insert_panel_data_rows(panel_name, rows)
-    if not db_status:
-        status = f"error: {db_error}"
-        return {"error": db_error, "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": total_records, "uploadedby": uploaded_by, "status": status}
+    error_message = None
+    
+    # Check if we have data to process
+    if not rows or len(rows) == 0:
+        status = "failed"
+        error_message = "No data found in uploaded file"
+    else:
+        # Insert into panel table
+        db_status, db_error = insert_panel_data_rows(panel_name, rows)
+        if not db_status:
+            status = "failed"
+            error_message = db_error
+        else:
+            # Check if all records were inserted successfully
+            if len(rows) != total_records:
+                status = "failed"
+                error_message = f"Only {len(rows)} out of {total_records} records were processed"
+    
     meta = {
         "panelname": panel_name,
         "docid": doc_id,
@@ -313,6 +337,12 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
         "uploadedby": uploaded_by,
         "status": status
     }
+    
+    # Add error message if there was an error
+    if error_message:
+        meta["error"] = error_message
+        return {"error": error_message, **meta}
+    
     try:
         if not os.path.exists(RECON_HISTORY_PATH):
             with open(RECON_HISTORY_PATH, "w") as f:
@@ -323,7 +353,11 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
             f.seek(0)
             json.dump(data, f, indent=2)
     except Exception as e:
+        # If we can't save to history, update status
+        meta["status"] = "failed"
+        meta["error"] = f"Failed to write panel history: {e}"
         return {"error": f"Failed to write panel history: {e}", **meta}
+    
     return meta
 
 @app.get("/panels/upload_history")
@@ -587,8 +621,19 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
                     uploaded_by = entry.get("uploadedby", None)
                     break
         
+        # Determine status based on actual success/failure
         status = "complete"
         error = None
+        
+        # Check if there were any errors during the process
+        if summary.get("errors", 0) > 0:
+            status = "failed"
+            error = f"Process completed with {summary.get('errors', 0)} errors"
+        
+        # Check if no users were processed
+        if summary.get("users_to_reconcile", 0) == 0:
+            status = "failed"
+            error = "No internal users or not found users to reconcile"
         
         recon_record = {
             "recon_id": recon_id,
@@ -616,20 +661,146 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
                 json.dump(data, f, indent=2)
         except Exception as e:
             logging.error(f"Failed to write reconciliation summary: {e}")
+            # Update status if we can't save the record
+            status = "failed"
+            error = f"Failed to save reconciliation record: {str(e)}"
+            recon_record["status"] = status
+            recon_record["error"] = error
         
-        logging.info(f"HR reconciliation completed for panel '{panel_name}'. Summary: {summary}")
+        logging.info(f"HR reconciliation completed for panel '{panel_name}'. Status: {status}, Summary: {summary}")
         
         return {
             "recon_id": recon_id,
             "summary": summary,
             "details": [],
-            "message": f"Reconciled {len(users_to_reconcile)} users ({internal_users_count} internal + {not_found_count} not found) with HR data"
+            "message": f"Reconciled {len(users_to_reconcile)} users ({internal_users_count} internal + {not_found_count} not found) with HR data. Status: {status}"
         }
         
     except HTTPException:
+        # Create failed reconciliation record for HTTP exceptions
+        try:
+            now = datetime.utcnow()
+            recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
+            recon_month = now.strftime("%b'%y")
+            start_date = now.strftime("%Y-%m-%d")
+            performed_by = "demo"
+            
+            # Find upload info from panel history
+            upload_date = None
+            uploaded_by = None
+            if os.path.exists(RECON_HISTORY_PATH):
+                with open(RECON_HISTORY_PATH, "r") as f:
+                    panel_history = json.load(f)
+                for entry in reversed(panel_history):
+                    if entry.get("panelname") == panel_name:
+                        upload_date = entry.get("timestamp", None)
+                        uploaded_by = entry.get("uploadedby", None)
+                        break
+            
+            failed_record = {
+                "recon_id": recon_id,
+                "panelname": panel_name,
+                "sot_type": "hr_data",
+                "recon_month": recon_month,
+                "status": "failed",
+                "upload_date": upload_date,
+                "uploaded_by": uploaded_by,
+                "start_date": start_date,
+                "performed_by": performed_by,
+                "error": "Reconciliation process failed",
+                "summary": {
+                    "panel_name": panel_name,
+                    "total_panel_users": 0,
+                    "internal_users": 0,
+                    "not_found_users": 0,
+                    "users_to_reconcile": 0,
+                    "other_users": 0,
+                    "service_users": 0,
+                    "thirdparty_users": 0,
+                    "matched": 0,
+                    "found_active": 0,
+                    "found_inactive": 0,
+                    "not_found": 0,
+                    "errors": 1
+                }
+            }
+            
+            # Store failed record
+            if not os.path.exists(RECON_SUMMARY_PATH):
+                with open(RECON_SUMMARY_PATH, "w") as f:
+                    json.dump([], f)
+            with open(RECON_SUMMARY_PATH, "r+") as f:
+                data = json.load(f)
+                data.append(failed_record)
+                f.seek(0)
+                json.dump(data, f, indent=2)
+        except Exception as e:
+            logging.error(f"Failed to write failed reconciliation record: {e}")
+        
         raise
     except Exception as e:
         logging.error(f"Unexpected error in HR reconciliation: {e}")
+        
+        # Create failed reconciliation record for unexpected exceptions
+        try:
+            now = datetime.utcnow()
+            recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
+            recon_month = now.strftime("%b'%y")
+            start_date = now.strftime("%Y-%m-%d")
+            performed_by = "demo"
+            
+            # Find upload info from panel history
+            upload_date = None
+            uploaded_by = None
+            if os.path.exists(RECON_HISTORY_PATH):
+                with open(RECON_HISTORY_PATH, "r") as f:
+                    panel_history = json.load(f)
+                for entry in reversed(panel_history):
+                    if entry.get("panelname") == panel_name:
+                        upload_date = entry.get("timestamp", None)
+                        uploaded_by = entry.get("uploadedby", None)
+                        break
+            
+            failed_record = {
+                "recon_id": recon_id,
+                "panelname": panel_name,
+                "sot_type": "hr_data",
+                "recon_month": recon_month,
+                "status": "failed",
+                "upload_date": upload_date,
+                "uploaded_by": uploaded_by,
+                "start_date": start_date,
+                "performed_by": performed_by,
+                "error": f"Unexpected error: {str(e)}",
+                "summary": {
+                    "panel_name": panel_name,
+                    "total_panel_users": 0,
+                    "internal_users": 0,
+                    "not_found_users": 0,
+                    "users_to_reconcile": 0,
+                    "other_users": 0,
+                    "service_users": 0,
+                    "thirdparty_users": 0,
+                    "matched": 0,
+                    "found_active": 0,
+                    "found_inactive": 0,
+                    "not_found": 0,
+                    "errors": 1
+                }
+            }
+            
+            # Store failed record
+            if not os.path.exists(RECON_SUMMARY_PATH):
+                with open(RECON_SUMMARY_PATH, "w") as f:
+                    json.dump([], f)
+            with open(RECON_SUMMARY_PATH, "r+") as f:
+                data = json.load(f)
+                data.append(failed_record)
+                f.seek(0)
+                json.dump(data, f, indent=2)
+        except Exception as save_error:
+            logging.error(f"Failed to write failed reconciliation record: {save_error}")
+        
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @app.get("/recon/summary")
@@ -1074,4 +1245,121 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
     except Exception as e:
         logging.error(f"Unexpected error in recategorize_users: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 
+
+@app.get("/users/summary")
+def get_user_wise_summary():
+    """
+    Get a comprehensive user-wise summary across all panels.
+    Returns all users from all panels with their reconciliation details.
+    """
+    try:
+        # Load configuration and reconciliation summaries
+        db = load_db()
+        
+        # Load reconciliation summaries
+        if os.path.exists(RECON_SUMMARY_PATH):
+            with open(RECON_SUMMARY_PATH, 'r') as f:
+                recon_summaries = json.load(f)
+        else:
+            recon_summaries = []
+        
+        # Create a lookup for reconciliation details by panel name
+        recon_lookup = {}
+        for recon in recon_summaries:
+            panel_name = recon.get('panelname', '')
+            if panel_name:
+                if panel_name not in recon_lookup:
+                    recon_lookup[panel_name] = []
+                recon_lookup[panel_name].append(recon)
+        
+        all_users = []
+        
+        # Process each panel
+        for panel in db.get("panels", []):
+            panel_name = panel["name"]
+            
+            try:
+                # Get panel data
+                panel_rows = fetch_all_rows(panel_name)
+                if not panel_rows:
+                    logging.info(f"No data found for panel: {panel_name}")
+                    continue
+                
+                # Get key mapping field (email field)
+                key_mapping = panel.get("key_mapping", {})
+                if not key_mapping:
+                    logging.warning(f"No key mapping found for panel: {panel_name}")
+                    continue
+                
+                # Determine the key field (email field) from the first mapping
+                first_mapping = next(iter(key_mapping.values()))
+                if not first_mapping:
+                    logging.warning(f"Invalid key mapping for panel: {panel_name}")
+                    continue
+                
+                # Extract the panel field (email field) from mapping
+                panel_field = list(first_mapping.keys())[0]
+                
+                # Get reconciliation details for this panel
+                panel_recons = recon_lookup.get(panel_name, [])
+                
+                # Process each user in the panel
+                for row in panel_rows:
+                    email_id = row.get(panel_field, "")
+                    if not email_id:
+                        continue  # Skip rows without email
+                    
+                    # Get reconciliation details for this panel
+                    recon_id = None
+                    recon_month = None
+                    
+                    if panel_recons:
+                        # Use the most recent reconciliation
+                        latest_recon = max(panel_recons, key=lambda x: x.get('start_date', '') or '')
+                        recon_id = latest_recon.get('recon_id', '')
+                        recon_month = latest_recon.get('recon_month', '')
+                    
+                    # Get status information
+                    initial_status = row.get('initial_status', '')
+                    final_status = row.get('final_status', '')
+                    
+                    # If no final_status, use initial_status
+                    if not final_status:
+                        final_status = initial_status
+                    
+                    user_summary = {
+                        "email_id": str(email_id).strip(),
+                        "recon_id": recon_id,
+                        "recon_month": recon_month,
+                        "panel_name": panel_name,
+                        "initial_status": initial_status,
+                        "final_status": final_status
+                    }
+                    
+                    all_users.append(user_summary)
+                
+                logging.info(f"Processed {len(panel_rows)} users from panel: {panel_name}")
+                
+            except Exception as e:
+                logging.error(f"Error processing panel {panel_name}: {e}")
+                continue
+        
+        # Sort by email_id for consistent ordering
+        all_users.sort(key=lambda x: x['email_id'].lower())
+        
+        logging.info(f"User-wise summary completed. Total users: {len(all_users)}")
+        
+        return {
+            "total_users": len(all_users),
+            "users": all_users
+        }
+        
+    except Exception as e:
+        logging.error(f"Unexpected error in get_user_wise_summary: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000) 
 
