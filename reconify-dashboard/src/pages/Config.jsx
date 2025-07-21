@@ -79,6 +79,42 @@ export default function Config() {
     }
   };
 
+  const loadPanelMappings = async (panelName) => {
+    if (!panelName) return;
+    
+    try {
+      setLoading(true);
+      const panelConfig = await getPanelConfig(panelName);
+      
+      if (panelConfig && panelConfig.key_mapping) {
+        // Convert backend key_mapping format to frontend mappings format
+        const mappings = [];
+        let id = 1;
+        
+        Object.entries(panelConfig.key_mapping).forEach(([sot, sotMapping]) => {
+          Object.entries(sotMapping).forEach(([sotField, panelField]) => {
+            mappings.push({
+              id: id++,
+              panel: panelName,
+              panelField: panelField,
+              sot: sot,
+              sotField: sotField
+            });
+          });
+        });
+        
+        setMappings(mappings);
+      } else {
+        setMappings([]);
+      }
+    } catch (err) {
+      setError('Failed to load panel mappings: ' + err.message);
+      console.error('Error loading panel mappings:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Filter mappings for selected panel
   const panelMappings = func === 'modify' || func === 'delete'
     ? mappings.filter(m => m.panel === selectedPanel)
@@ -91,8 +127,8 @@ export default function Config() {
 
   // Handlers
   const handleFuncChange = e => {
-    setFunc(e.target.value);
-    setSelectedPanel('');
+    const newFunc = e.target.value;
+    setFunc(newFunc);
     setNewPanelName('');
     setSelectedMappings([]);
     setSelectAll(false);
@@ -100,15 +136,29 @@ export default function Config() {
     setPanelHeaderSelections({});
     setSubmitted(false);
     setUploadedFile(null);
+    
+    // If switching to modify/delete and a panel is already selected, load its mappings
+    if ((newFunc === 'modify' || newFunc === 'delete') && selectedPanel) {
+      loadPanelMappings(selectedPanel);
+    } else {
+      setSelectedPanel('');
+      setMappings([]);
+    }
   };
   const handlePanelChange = e => {
-    setSelectedPanel(e.target.value);
+    const panelName = e.target.value;
+    setSelectedPanel(panelName);
     setSelectedMappings([]);
     setSelectAll(false);
     setSotHeaderSelections({});
     setPanelHeaderSelections({});
     setSubmitted(false);
     setUploadedFile(null);
+    
+    // Load panel mappings if in modify or delete mode
+    if ((func === 'modify' || func === 'delete') && panelName) {
+      loadPanelMappings(panelName);
+    }
   };
   const handleMappingSelect = id => {
     setSelectedMappings(prev =>
@@ -134,18 +184,47 @@ export default function Config() {
     setSubmitted(false);
   };
 
-  // Simulate backend header detection after file upload
-  const handleFileUpload = (file) => {
+  // Get panel headers from uploaded file via backend
+  const handleFileUpload = async (file) => {
+    if (!file) return;
+    
     setUploadedFile(file);
-    // Simulate async backend call
-    setTimeout(() => {
-      // Example: pretend backend found these headers in the uploaded file
-      setDetectedPanelHeaders(['Email Id', 'Cust Name']);
+    setLoading(true);
+    
+    try {
+      // Upload file to backend and get headers
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch('http://127.0.0.1:8000/panels/upload_file', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to upload file: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      // Extract headers from the response and convert to proper case
+      const headers = data.headers || [];
+      // Convert headers to proper case (first letter uppercase, rest lowercase)
+      const formattedHeaders = headers.map(header => 
+        header.charAt(0).toUpperCase() + header.slice(1).toLowerCase()
+      );
+      setDetectedPanelHeaders(formattedHeaders);
       setSelectedPanelHeader('');
       setSelectedSot('');
       setSelectedSotHeader('');
       setAddedMappings([]);
-    }, 500);
+      
+    } catch (err) {
+      setError('Failed to process uploaded file: ' + err.message);
+      console.error('Error uploading file:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -476,7 +555,14 @@ function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selecte
         await uploadPanelFile(uploadedFile);
         await savePanelConfig({
           name: newPanelName,
-          mappings: addedMappings
+          key_mapping: addedMappings.reduce((acc, mapping) => {
+            if (!acc[mapping.sot]) {
+              acc[mapping.sot] = {};
+            }
+            acc[mapping.sot][mapping.sotField] = mapping.panelField;
+            return acc;
+          }, {}),
+          panel_headers: detectedPanelHeaders
         });
       }
       // Modify
