@@ -10,6 +10,17 @@ export async function uploadPanelFile(file) {
   return res.json();
 }
 
+export async function uploadPanelFileWithHistory(panelName, file) {
+  const formData = new FormData();
+  formData.append("panel_name", panelName);
+  formData.append("file", file);
+  const res = await fetch(`${API_BASE}/recon/upload`, {
+    method: "POST",
+    body: formData,
+  });
+  return res.json();
+}
+
 export async function getHRFields() {
   const res = await fetch(`${API_BASE}/hr_data/fields`);
   return res.json();

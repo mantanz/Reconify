@@ -6,6 +6,7 @@ import {
   modifyPanelConfig, 
   deletePanelByName,
   uploadPanelFile,
+  uploadPanelFileWithHistory,
   getPanelConfig,
   getSOTFields,
   getAllReconHistory
@@ -618,8 +619,7 @@ function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selecte
           return;
         }
 
-        // Upload file and save panel config
-        await uploadPanelFile(uploadedFile);
+        // Save panel config first
         await savePanelConfig({
           name: newPanelName,
           key_mapping: addedMappings.reduce((acc, mapping) => {
@@ -631,6 +631,9 @@ function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selecte
           }, {}),
           panel_headers: detectedPanelHeaders
         });
+        
+        // Upload file with history tracking
+        await uploadPanelFileWithHistory(newPanelName, uploadedFile);
       }
       // Modify
       else if (func === 'modify') {
