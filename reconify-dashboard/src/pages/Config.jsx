@@ -1,21 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { 
+  getPanels, 
+  getSOTList, 
+  savePanelConfig, 
+  modifyPanelConfig, 
+  deletePanelByName,
+  uploadPanelFile 
+} from '../utils/api';
 
-const STATIC_PANELS = [
-  { id: 1, name: 'Seller Panel' },
-  { id: 2, name: 'Buyer Panel' },
-  { id: 3, name: 'HR Panel' },
-];
-const STATIC_SOTS = [
-  { id: 1, name: 'SOT 1', headers: ['email-id', 'cust-name', 'emp-id'] },
-  { id: 2, name: 'SOT 2', headers: ['user_id', 'designation', 'user_email'] },
-  { id: 3, name: 'SOT 3', headers: ['employee_id', 'role', 'user_email'] },
-];
-const STATIC_MAPPINGS = [
-  { id: 1, panel: 'Seller Panel', panelField: 'Email Id', sot: 'SOT 1', sotField: 'email-id' },
-  { id: 2, panel: 'Seller Panel', panelField: 'Cust Name', sot: 'SOT 2', sotField: 'user_id' },
-  { id: 3, panel: 'Buyer Panel', panelField: 'Emp Id', sot: 'SOT 1', sotField: 'emp-id' },
-  { id: 4, panel: 'HR Panel', panelField: 'Role', sot: 'SOT 3', sotField: 'role' },
-];
+// Real data will be loaded from backend
 
 export default function Config() {
   const [func, setFunc] = useState('');
@@ -34,10 +27,44 @@ export default function Config() {
   const [selectedSot, setSelectedSot] = useState('');
   const [selectedSotHeader, setSelectedSotHeader] = useState('');
   const [addedMappings, setAddedMappings] = useState([]);
+  
+  // Real data from backend
+  const [panels, setPanels] = useState([]);
+  const [sots, setSots] = useState([]);
+  const [mappings, setMappings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // Load real data from backend
+  useEffect(() => {
+    loadConfigData();
+  }, []);
+
+  const loadConfigData = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      
+      // Load panels, SOTs, and mappings from backend
+      const [panelsData, sotsData] = await Promise.all([
+        getPanels(),
+        getSOTList()
+      ]);
+
+      setPanels(panelsData || []);
+      setSots(sotsData || []);
+      setMappings([]); // Mappings will be loaded per panel when needed
+    } catch (err) {
+      setError('Failed to load configuration data: ' + err.message);
+      console.error('Error loading config data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filter mappings for selected panel
   const panelMappings = func === 'modify' || func === 'delete'
-    ? STATIC_MAPPINGS.filter(m => m.panel === selectedPanel)
+    ? mappings.filter(m => m.panel === selectedPanel)
     : [];
 
   // Unique SOTs for selected mappings
@@ -107,6 +134,22 @@ export default function Config() {
   return (
     <div className="bg-white p-8 rounded-lg shadow max-w-3xl mx-auto mt-10">
       <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Config</h2>
+      
+      {/* Loading and Error States */}
+      {loading && (
+        <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+          <div className="flex items-center">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+            <span className="text-blue-800">Loading configuration data...</span>
+          </div>
+        </div>
+      )}
+      
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+          <span className="text-red-800">{error}</span>
+        </div>
+      )}
 
       {/* Function and Panel Row */}
       <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
@@ -132,8 +175,8 @@ export default function Config() {
           ) : (
             <select value={selectedPanel} onChange={handlePanelChange} className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="">-- Select Panel --</option>
-              {STATIC_PANELS.map(panel => (
-                <option key={panel.id} value={panel.name}>{panel.name}</option>
+              {panels.map(panel => (
+                <option key={panel.id || panel.name} value={panel.name}>{panel.name}</option>
               ))}
             </select>
           )}
@@ -191,7 +234,7 @@ export default function Config() {
                     disabled={!selectedPanelHeader}
                   >
                     <option value="">-- Select SOT --</option>
-                    {STATIC_SOTS.map(sot => (
+                    {sots.map(sot => (
                       <option key={sot.name} value={sot.name}>{sot.name}</option>
                     ))}
                   </select>
@@ -205,7 +248,7 @@ export default function Config() {
                     disabled={!selectedSot}
                   >
                     <option value="">-- Select SOT Header --</option>
-                    {STATIC_SOTS.find(s => s.name === selectedSot)?.headers.map(h => (
+                    {sots.find(s => s.name === selectedSot)?.headers?.map(h => (
                       <option key={h} value={h}>{h}</option>
                     ))}
                   </select>
@@ -377,59 +420,90 @@ export default function Config() {
 }
 
 // ConfigSubmit: Handles validation and submit for all config modes
-function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selectedPanel, selectedMappings }) {
+function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selectedPanel, selectedMappings, onSuccess }) {
   const [submitted, setSubmitted] = useState(false);
   const [warning, setWarning] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const validFuncs = ['add', 'modify', 'delete'];
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     if (!func || !validFuncs.includes(func)) {
       setWarning('Please select a function before submitting.');
       setSubmitted(false);
       return;
     }
-    // Add
-    if (func === 'add') {
-      if (!newPanelName || !uploadedFile) {
-        setWarning('Please enter a panel name and upload a document.');
-        setSubmitted(false);
-        return;
+
+    try {
+      setLoading(true);
+      setWarning('');
+
+      // Add
+      if (func === 'add') {
+        if (!newPanelName || !uploadedFile) {
+          setWarning('Please enter a panel name and upload a document.');
+          setSubmitted(false);
+          return;
+        }
+        if (!addedMappings || addedMappings.length === 0) {
+          setWarning('Please add at least one mapping before submitting.');
+          setSubmitted(false);
+          return;
+        }
+
+        // Upload file and save panel config
+        await uploadPanelFile(uploadedFile);
+        await savePanelConfig({
+          name: newPanelName,
+          mappings: addedMappings
+        });
       }
-      if (!addedMappings || addedMappings.length === 0) {
-        setWarning('Please add at least one mapping before submitting.');
-        setSubmitted(false);
-        return;
+      // Modify
+      else if (func === 'modify') {
+        if (!selectedPanel) {
+          setWarning('Please select a panel.');
+          setSubmitted(false);
+          return;
+        }
+        if (!selectedMappings || selectedMappings.length !== 1) {
+          setWarning('Please select exactly one mapping to modify.');
+          setSubmitted(false);
+          return;
+        }
+
+        // Modify panel config
+        await modifyPanelConfig({
+          panelName: selectedPanel,
+          mappingId: selectedMappings[0]
+        });
       }
+      // Delete
+      else if (func === 'delete') {
+        if (!selectedPanel) {
+          setWarning('Please select a panel.');
+          setSubmitted(false);
+          return;
+        }
+        if (!selectedMappings || selectedMappings.length === 0) {
+          setWarning('Please select at least one row to delete.');
+          setSubmitted(false);
+          return;
+        }
+
+        // Delete panel
+        await deletePanelByName(selectedPanel);
+      }
+
+      setWarning('');
+      setSubmitted(true);
+      if (onSuccess) onSuccess();
+    } catch (err) {
+      setWarning('Operation failed: ' + err.message);
+      setSubmitted(false);
+      console.error('Config operation failed:', err);
+    } finally {
+      setLoading(false);
     }
-    // Modify
-    else if (func === 'modify') {
-      if (!selectedPanel) {
-        setWarning('Please select a panel.');
-        setSubmitted(false);
-        return;
-      }
-      if (!selectedMappings || selectedMappings.length !== 1) {
-        setWarning('Please select exactly one mapping to modify.');
-        setSubmitted(false);
-        return;
-      }
-    }
-    // Delete
-    else if (func === 'delete') {
-      if (!selectedPanel) {
-        setWarning('Please select a panel.');
-        setSubmitted(false);
-        return;
-      }
-      if (!selectedMappings || selectedMappings.length === 0) {
-        setWarning('Please select at least one row to delete.');
-        setSubmitted(false);
-        return;
-      }
-    }
-    setWarning('');
-    setSubmitted(true);
   };
 
   // Button disabled logic
@@ -447,11 +521,18 @@ function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selecte
   return (
     <>
       <button
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md shadow mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md shadow mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         onClick={handleSubmit}
-        disabled={isDisabled}
+        disabled={isDisabled || loading}
       >
-        Submit
+        {loading ? (
+          <>
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+            Processing...
+          </>
+        ) : (
+          'Submit'
+        )}
       </button>
       {warning && (
         <div className="text-red-600 text-center mt-2 font-medium">{warning}</div>

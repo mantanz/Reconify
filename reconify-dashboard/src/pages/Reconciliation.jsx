@@ -1,50 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BsBinocularsFill, BsCheckCircle, BsCheckCircleFill } from 'react-icons/bs';
 import { HiOutlineUpload } from 'react-icons/hi';
 import { FiUpload, FiSettings } from 'react-icons/fi';
 import Tooltip from '../components/Tooltip.jsx';
+import { 
+  getPanels, 
+  uploadPanelFile, 
+  reconcilePanelWithHR, 
+  recategorizeUsers, 
+  getAllReconHistory,
+  getReconSummaries 
+} from '../utils/api';
 
-// contents copied from Dashboard with modifications
-// Dummy data ...
-const initialRows = [
-  {
-    userName: 'John Doe',
-    dateTime: '2025-07-04 14:00',
-    panelName: 'Panel 1',
-    docId: 'DOC123',
-    rows: 120,
-    uploaded: 70,   
-    status: 'Processing',
-    reconReady: false,
-    recategoriseReady: false,
-    completed: false,
-  },
-  {
-    userName: 'John Doe',
-    dateTime: '2025-07-04 14:00',
-    panelName: 'Panel 2',
-    docId: 'DOC456',
-    rows: 200,
-    uploaded: 100,
-    status: 'Ready to Recon',
-    reconReady: true,
-    recategoriseReady: false,
-    completed: false,
-  },
-  {
-    userName: 'John Doe',
-    dateTime: '2025-07-04 14:00',
-    panelName: 'Panel 3',
-    docId: 'DOC789',
-    rows: 90,
-    uploaded: 100,
-    status: 'Recon Finished',
-    reconReady: false,
-    recategoriseReady: true,
-    completed: false,
-  },
-];
+// Real data structure for reconciliation history
 
 function Progress({ percent }) {
   return (
@@ -59,16 +28,69 @@ function Progress({ percent }) {
 
 export default function Reconciliation() {
   const [panel, setPanel] = useState(' -- Select -- ');
-  const [rows, setRows] = useState(initialRows);
+  const [rows, setRows] = useState([]);
   const [files, setFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
   const [recategoriseModalOpen, setRecategoriseModalOpen] = useState(false);
   const [recategoriseFiles, setRecategoriseFiles] = useState([]);
   const [recategoriseDragActive, setRecategoriseDragActive] = useState(false);
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [availablePanels, setAvailablePanels] = useState([]);
 
   const MAX_FILES = 10;
   const MAX_SIZE_MB = 50;
+
+  // Load real data from backend
+  useEffect(() => {
+    loadReconciliationData();
+    loadAvailablePanels();
+  }, []);
+
+  const loadReconciliationData = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      
+      // Load reconciliation history and summaries
+      const [historyData, summariesData] = await Promise.all([
+        getAllReconHistory(),
+        getReconSummaries()
+      ]);
+
+      // Combine and format the data
+      const formattedRows = historyData.map(item => ({
+        userName: item.uploaded_by || 'Unknown',
+        dateTime: item.upload_date || new Date().toISOString(),
+        panelName: item.panel_name || 'Unknown Panel',
+        docId: item.id || `DOC${Math.random().toString(36).substr(2, 9)}`,
+        rows: item.row_count || 0,
+        uploaded: 100, // Assuming uploaded files are complete
+        status: item.status || 'Ready to Recon',
+        reconReady: item.status === 'Ready to Recon',
+        recategoriseReady: item.status === 'Recon Finished',
+        completed: item.status === 'Completed',
+        reconId: item.recon_id
+      }));
+
+      setRows(formattedRows);
+    } catch (err) {
+      setError('Failed to load reconciliation data: ' + err.message);
+      console.error('Error loading reconciliation data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadAvailablePanels = async () => {
+    try {
+      const panelsData = await getPanels();
+      setAvailablePanels(panelsData.map(p => p.name));
+    } catch (err) {
+      console.error('Error loading panels:', err);
+    }
+  };
 
   function validateAndSet(selected) {
     if (!selected?.length) return;
@@ -113,40 +135,57 @@ export default function Reconciliation() {
   function handleRecategoriseDragLeave(e) { e.preventDefault(); setRecategoriseDragActive(false);}  
   function handleRecategoriseDrop(e) { e.preventDefault(); setRecategoriseDragActive(false); validateAndSetRecategorise(e.dataTransfer.files);}  
 
-  function handleUpload() {
+  const handleUpload = async () => {
     if (!files.length) return;
     if (panel === ' -- Select -- ') {
       alert('Please select a panel before uploading.');
       return;
     }
-    const now = new Date();
-    const dateStr = now.toISOString().slice(0, 16).replace('T', ' ');
-    const newRows = files.map((file) => ({
-      userName: 'Current User',
-      dateTime: dateStr,
-      panelName: panel,
-      docId: file.name,
-      rows: Math.floor(Math.random() * 200) + 20,
-      uploaded: 100,
-      status: 'Ready to Recon',
-      reconReady: true,
-      recategoriseReady: false,
-      completed: false,
-    }));
-    setRows((prev) => [...newRows, ...prev]);
-    setFiles([]);
-    document.getElementById('dropzone-file').value = '';
-  }
+
+    try {
+      setLoading(true);
+      
+      // Upload each file to the backend
+      for (const file of files) {
+        await uploadPanelFile(file);
+      }
+
+      // Reload the data to show the new uploads
+      await loadReconciliationData();
+      
+      setFiles([]);
+      document.getElementById('dropzone-file').value = '';
+      
+      alert('Files uploaded successfully!');
+    } catch (err) {
+      setError('Failed to upload files: ' + err.message);
+      console.error('Error uploading files:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggleComplete = (index) => setRows((prev)=> prev.map((r,i)=> (i===index && !r.completed) ? {...r, completed: true} : r));
-  const handleRecon = (index) => {
-    // Start recon process immediately
-    setRows((prev)=> prev.map((r,i)=> i===index? {
-      ...r,
-      status:'Recon Finished',
-      reconReady: false,
-      recategoriseReady: true
-    } : r));
+  const handleRecon = async (index) => {
+    const row = rows[index];
+    if (!row) return;
+
+    try {
+      setLoading(true);
+      
+      // Call backend reconciliation API
+      await reconcilePanelWithHR(row.panelName);
+      
+      // Reload data to get updated status
+      await loadReconciliationData();
+      
+      alert('Reconciliation process started successfully!');
+    } catch (err) {
+      setError('Failed to start reconciliation: ' + err.message);
+      console.error('Error starting reconciliation:', err);
+    } finally {
+      setLoading(false);
+    }
   };
   
   const handleRecategorise = (index) => {
@@ -156,22 +195,34 @@ export default function Reconciliation() {
     setRecategoriseFiles([]);
   };
   
-  const handleRecategoriseUpload = () => {
+  const handleRecategoriseUpload = async () => {
     if (!recategoriseFiles.length) return;
     
-    // Process recategorise upload
-    setRows((prev)=> prev.map((r,i)=> i===selectedRowIndex? {
-      ...r,
-      status:'Recategorised',
-      reconReady: false,
-      recategoriseReady: false
-    } : r));
-    
-    // Close modal
-    setRecategoriseModalOpen(false);
-    setRecategoriseFiles([]);
-    setRecategoriseDragActive(false);
-    setSelectedRowIndex(null);
+    const row = rows[selectedRowIndex];
+    if (!row) return;
+
+    try {
+      setLoading(true);
+      
+      // Upload recategorisation file to backend
+      await recategorizeUsers(row.panelName, recategoriseFiles[0]);
+      
+      // Reload data to get updated status
+      await loadReconciliationData();
+      
+      // Close modal
+      setRecategoriseModalOpen(false);
+      setRecategoriseFiles([]);
+      setRecategoriseDragActive(false);
+      setSelectedRowIndex(null);
+      
+      alert('Recategorisation completed successfully!');
+    } catch (err) {
+      setError('Failed to recategorise: ' + err.message);
+      console.error('Error recategorising:', err);
+    } finally {
+      setLoading(false);
+    }
   };
   
   const handleRecategoriseCancel = () => {
@@ -194,6 +245,21 @@ export default function Reconciliation() {
       {/* Constrained content container */}
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-12 py-6">
         <div className="w-full bg-white px-4 py-6 sm:px-6 lg:px-8 rounded-lg shadow-sm">
+          {/* Loading and Error States */}
+          {loading && (
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                <span className="text-blue-800">Loading...</span>
+              </div>
+            </div>
+          )}
+          
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+              <span className="text-red-800">{error}</span>
+            </div>
+          )}
           {/* Upload section */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-16 gap-y-6">
             {/* Panel selector inline */}
@@ -201,9 +267,9 @@ export default function Reconciliation() {
               <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">Panel</span>
               <select value={panel} onChange={(e)=>setPanel(e.target.value)} className="border border-gray-300 bg-white rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary flex-1">
                 <option> -- Select -- </option>
-                <option>Panel 1</option>
-                <option>Panel 2</option>
-                <option>Panel 3</option>
+                {availablePanels.map((panelName) => (
+                  <option key={panelName} value={panelName}>{panelName}</option>
+                ))}
               </select>
             </div>
 
