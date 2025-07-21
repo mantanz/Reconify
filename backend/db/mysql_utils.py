@@ -4,7 +4,7 @@ import traceback
 import logging
 
 # Update with your actual MySQL credentials and database name
-MYSQL_URL = "mysql+pymysql://reconify:Paytmkaro%4012@localhost/reconify"
+MYSQL_URL = "mysql+pymysql://reconify:Paytmkaro%4012@10.150.192.78/reconify_db"
 engine = create_engine(MYSQL_URL)
 metadata = MetaData()
 

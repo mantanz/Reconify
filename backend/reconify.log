@@ -444,3 +444,9 @@
 2025-07-21 12:07:15,717 - root - INFO - Processed 1385 users from panel: Seller Panel
 2025-07-21 12:07:15,746 - root - INFO - Processed 3029 users from panel: OE Panel
 2025-07-21 12:07:15,748 - root - INFO - User-wise summary completed. Total users: 4412
+2025-07-21 14:44:58,648 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 14:44:58,670 - root - INFO - No data found for panel: OE Panel
+2025-07-21 14:44:58,670 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 14:44:58,701 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 14:44:58,767 - root - INFO - No data found for panel: OE Panel
+2025-07-21 14:44:58,768 - root - INFO - User-wise summary completed. Total users: 0
