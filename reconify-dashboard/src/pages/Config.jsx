@@ -162,11 +162,19 @@ export default function Config() {
       loadPanelMappings(panelName);
     }
   };
-  const handleMappingSelect = id => {
+  const handleMappingSelect = async id => {
     setSelectedMappings(prev =>
       prev.includes(id) ? prev.filter(mid => mid !== id) : [...prev, id]
     );
     setSubmitted(false);
+    
+    // Load SOT fields for the selected mapping if in modify mode
+    if (func === 'modify') {
+      const selectedMapping = panelMappings.find(m => m.id === id);
+      if (selectedMapping && selectedMapping.sot) {
+        await loadSotFields(selectedMapping.sot);
+      }
+    }
   };
   const handleSelectAll = () => {
     if (selectAll) {
@@ -431,9 +439,15 @@ export default function Config() {
                     <input
                       type="checkbox"
                       checked={selectedMappings.includes(m.id)}
-                      onChange={() => {
+                      onChange={async () => {
                         if (func === 'modify') {
-                          setSelectedMappings(selectedMappings.includes(m.id) ? [] : [m.id]);
+                          const newSelection = selectedMappings.includes(m.id) ? [] : [m.id];
+                          setSelectedMappings(newSelection);
+                          
+                          // Load SOT fields for the selected mapping
+                          if (newSelection.length > 0) {
+                            await loadSotFields(m.sot);
+                          }
                         } else {
                           handleMappingSelect(m.id);
                         }
@@ -486,7 +500,6 @@ export default function Config() {
             {panelMappings
               .filter(m => selectedMappings.includes(m.id))
               .map(m => {
-                const sot = STATIC_SOTS.find(s => s.name === m.sot);
                 // Initial value: either from state or the mapping's sotField
                 const selectedValue = sotHeaderSelections[m.sot] || m.sotField;
                 return (
@@ -497,9 +510,9 @@ export default function Config() {
                       onChange={e => handleSotHeaderChange(m.sot, e.target.value)}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      {sot.headers.map(h => (
+                      {sotFields[m.sot]?.map(h => (
                         <option key={h} value={h}>{h}</option>
-                      ))}
+                      )) || []}
                     </select>
                   </div>
                 );
