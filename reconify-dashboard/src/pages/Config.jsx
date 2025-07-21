@@ -5,7 +5,9 @@ import {
   savePanelConfig, 
   modifyPanelConfig, 
   deletePanelByName,
-  uploadPanelFile 
+  uploadPanelFile,
+  getPanelConfig,
+  getSOTFields
 } from '../utils/api';
 
 // Real data will be loaded from backend
