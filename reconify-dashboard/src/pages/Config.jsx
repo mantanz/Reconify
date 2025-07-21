@@ -7,7 +7,8 @@ import {
   deletePanelByName,
   uploadPanelFile,
   getPanelConfig,
-  getSOTFields
+  getSOTFields,
+  getAllReconHistory
 } from '../utils/api';
 
 // Real data will be loaded from backend
@@ -35,6 +36,7 @@ export default function Config() {
   const [sots, setSots] = useState([]);
   const [sotFields, setSotFields] = useState({});
   const [mappings, setMappings] = useState([]);
+  const [uploadHistory, setUploadHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -48,10 +50,11 @@ export default function Config() {
       setLoading(true);
       setError('');
       
-      // Load panels, SOTs, and mappings from backend
-      const [panelsData, sotsData] = await Promise.all([
+      // Load panels, SOTs, mappings, and upload history from backend
+      const [panelsData, sotsData, historyData] = await Promise.all([
         getPanels(),
-        getSOTList()
+        getSOTList(),
+        getAllReconHistory()
       ]);
 
       setPanels(panelsData || []);
@@ -59,6 +62,7 @@ export default function Config() {
       const sotsArray = sotsData?.sots || sotsData || [];
       setSots(sotsArray);
       setMappings([]); // Mappings will be loaded per panel when needed
+      setUploadHistory(historyData || []);
     } catch (err) {
       setError('Failed to load configuration data: ' + err.message);
       console.error('Error loading config data:', err);
@@ -114,6 +118,15 @@ export default function Config() {
       console.error('Error loading panel mappings:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const refreshUploadHistory = async () => {
+    try {
+      const historyData = await getAllReconHistory();
+      setUploadHistory(historyData || []);
+    } catch (err) {
+      console.error('Error refreshing upload history:', err);
     }
   };
 
@@ -521,6 +534,43 @@ export default function Config() {
         </div>
       )}
 
+      {/* Upload History Table */}
+      {uploadHistory.length > 0 && (
+        <div className="mb-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Upload History</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm border rounded">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-3 py-2 border">Panel Name</th>
+                  <th className="px-3 py-2 border">DateTime</th>
+                  <th className="px-3 py-2 border">Author</th>
+                  <th className="px-3 py-2 border">#Rows</th>
+                  <th className="px-3 py-2 border">Uploaded</th>
+                  <th className="px-3 py-2 border">Status</th>
+                  <th className="px-3 py-2 border">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {uploadHistory.map((item, index) => (
+                  <tr key={index}>
+                    <td className="px-3 py-2 border">{item.panel_name || 'Unknown'}</td>
+                    <td className="px-3 py-2 border">{item.upload_date || 'Unknown'}</td>
+                    <td className="px-3 py-2 border">{item.uploaded_by || 'Unknown'}</td>
+                    <td className="px-3 py-2 border">{item.row_count || 0}</td>
+                    <td className="px-3 py-2 border">100%</td>
+                    <td className="px-3 py-2 border">{item.status || 'Uploaded'}</td>
+                    <td className="px-3 py-2 border">
+                      <button className="text-blue-600 hover:text-blue-800">View</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {/* Submit and validation for all modes */}
       <ConfigSubmit
         func={func}
@@ -530,6 +580,7 @@ export default function Config() {
         selectedPanel={selectedPanel}
         selectedMappings={selectedMappings}
         detectedPanelHeaders={detectedPanelHeaders}
+        onSuccess={refreshUploadHistory}
       />
     </div>
   );
