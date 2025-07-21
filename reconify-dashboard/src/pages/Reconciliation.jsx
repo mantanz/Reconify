@@ -17,6 +17,7 @@ const initialRows = [
     uploaded: 70,   
     status: 'Processing',
     reconReady: false,
+    recategoriseReady: false,
     completed: false,
   },
   {
@@ -28,6 +29,7 @@ const initialRows = [
     uploaded: 100,
     status: 'Ready to Recon',
     reconReady: true,
+    recategoriseReady: false,
     completed: false,
   },
   {
@@ -39,6 +41,7 @@ const initialRows = [
     uploaded: 100,
     status: 'Recon Finished',
     reconReady: false,
+    recategoriseReady: true,
     completed: false,
   },
 ];
@@ -59,6 +62,10 @@ export default function Reconciliation() {
   const [rows, setRows] = useState(initialRows);
   const [files, setFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
+  const [recategoriseModalOpen, setRecategoriseModalOpen] = useState(false);
+  const [recategoriseFiles, setRecategoriseFiles] = useState([]);
+  const [recategoriseDragActive, setRecategoriseDragActive] = useState(false);
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
 
   const MAX_FILES = 10;
   const MAX_SIZE_MB = 50;
@@ -82,7 +89,29 @@ export default function Reconciliation() {
   }
   function handleDragOver(e) { e.preventDefault(); setDragActive(true);}  
   function handleDragLeave(e) { e.preventDefault(); setDragActive(false);}  
-  function handleDrop(e) { e.preventDefault(); setDragActive(false); validateAndSet(e.dataTransfer.files);}  
+  function handleDrop(e) { e.preventDefault(); setDragActive(false); validateAndSet(e.dataTransfer.files);}
+
+  // Recategorise file handling
+  function validateAndSetRecategorise(selected) {
+    if (!selected?.length) return;
+    if (selected.length > MAX_FILES) {
+      alert(`Please select no more than ${MAX_FILES} files.`);
+      return;
+    }
+    const oversize = Array.from(selected).find((f) => f.size / (1024 * 1024) > MAX_SIZE_MB);
+    if (oversize) {
+      alert(`File "${oversize.name}" exceeds ${MAX_SIZE_MB} MB.`);
+      return;
+    }
+    setRecategoriseFiles(Array.from(selected));
+  }
+
+  function handleRecategoriseFilesChange(e) {
+    validateAndSetRecategorise(e.target.files);
+  }
+  function handleRecategoriseDragOver(e) { e.preventDefault(); setRecategoriseDragActive(true);}  
+  function handleRecategoriseDragLeave(e) { e.preventDefault(); setRecategoriseDragActive(false);}  
+  function handleRecategoriseDrop(e) { e.preventDefault(); setRecategoriseDragActive(false); validateAndSetRecategorise(e.dataTransfer.files);}  
 
   function handleUpload() {
     if (!files.length) return;
@@ -101,6 +130,7 @@ export default function Reconciliation() {
       uploaded: 100,
       status: 'Ready to Recon',
       reconReady: true,
+      recategoriseReady: false,
       completed: false,
     }));
     setRows((prev) => [...newRows, ...prev]);
@@ -109,8 +139,54 @@ export default function Reconciliation() {
   }
 
   const toggleComplete = (index) => setRows((prev)=> prev.map((r,i)=> (i===index && !r.completed) ? {...r, completed: true} : r));
-  const handleRecon = (index)=> setRows((prev)=> prev.map((r,i)=> i===index? {...r,status:'Recon Finished',reconReady:false} : r));
-  const handleReconfigure = (index) => setRows((prev)=> prev.map((r,i)=> i===index? {...r,status:'Ready to Recon',reconReady:true} : r));
+  const handleRecon = (index) => {
+    // Start recon process immediately
+    setRows((prev)=> prev.map((r,i)=> i===index? {
+      ...r,
+      status:'Recon Finished',
+      reconReady: false,
+      recategoriseReady: true
+    } : r));
+  };
+  
+  const handleRecategorise = (index) => {
+    // Open recategorise modal
+    setSelectedRowIndex(index);
+    setRecategoriseModalOpen(true);
+    setRecategoriseFiles([]);
+  };
+  
+  const handleRecategoriseUpload = () => {
+    if (!recategoriseFiles.length) return;
+    
+    // Process recategorise upload
+    setRows((prev)=> prev.map((r,i)=> i===selectedRowIndex? {
+      ...r,
+      status:'Recategorised',
+      reconReady: false,
+      recategoriseReady: false
+    } : r));
+    
+    // Close modal
+    setRecategoriseModalOpen(false);
+    setRecategoriseFiles([]);
+    setRecategoriseDragActive(false);
+    setSelectedRowIndex(null);
+  };
+  
+  const handleRecategoriseCancel = () => {
+    setRecategoriseModalOpen(false);
+    setRecategoriseFiles([]);
+    setRecategoriseDragActive(false);
+    setSelectedRowIndex(null);
+  };
+  
+  // Handle escape key to close modal
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape' && recategoriseModalOpen) {
+      handleRecategoriseCancel();
+    }
+  };
   const handleCancel=(index)=> setRows(prev=> prev.filter((_,i)=> i!==index));
 
   return (
@@ -166,6 +242,8 @@ export default function Reconciliation() {
               )}
             </div>
           </div>
+
+
           {/* Table */}
           <div className="mt-10 overflow-x-auto max-h-[60vh] overflow-y-auto rounded-md border border-gray-100">
             <table className="min-w-full text-left text-sm">
@@ -195,8 +273,16 @@ export default function Reconciliation() {
                           <BsBinocularsFill className="w-4 h-4" />
                         </button>
                       </Tooltip>
-                      <Tooltip label="Reconfigure">
-                        <button disabled={row.status!=='Recon Finished'} onClick={()=>handleReconfigure(idx)} className={`w-8 h-8 flex items-center justify-center rounded-md ${row.status==='Recon Finished' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-400 text-white cursor-not-allowed'}`}>
+                      <Tooltip label="Recategorise">
+                        <button 
+                          disabled={!row.recategoriseReady} 
+                          onClick={()=>handleRecategorise(idx)} 
+                          className={`w-8 h-8 flex items-center justify-center rounded-md ${
+                            row.recategoriseReady 
+                              ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                              : 'bg-gray-400 text-white cursor-not-allowed'
+                          }`}
+                        >
                           <FiSettings className="w-4 h-4" />
                         </button>
                       </Tooltip>
@@ -204,7 +290,7 @@ export default function Reconciliation() {
                         <button onClick={()=>handleCancel(idx)} className="w-8 h-8 flex items-center justify-center rounded-md border border-gray-300 text-red-600 hover:bg-gray-100">×</button>
                       </Tooltip>
                       <Tooltip label="Complete">
-                        <button disabled={row.status!=='Recon Finished'} onClick={()=>toggleComplete(idx)} className={`w-8 h-8 flex items-center justify-center rounded-md ${row.status==='Recon Finished' ? (row.completed ? 'bg-green-600 text-white' : 'border border-green-600 text-green-600') : 'border border-gray-300 text-gray-400 cursor-not-allowed'}` }>
+                        <button disabled={row.status!=='Recategorised'} onClick={()=>toggleComplete(idx)} className={`w-8 h-8 flex items-center justify-center rounded-md ${row.status==='Recategorised' ? (row.completed ? 'bg-green-600 text-white' : 'border border-green-600 text-green-600') : 'border border-gray-300 text-gray-400 cursor-not-allowed'}` }>
                           {row.completed ? <BsCheckCircleFill className="w-4 h-4"/> : <BsCheckCircle className="w-4 h-4"/>}
                         </button>
                       </Tooltip>
@@ -215,6 +301,85 @@ export default function Reconciliation() {
           </div>
         </div>
       </div>
+
+      {/* Recategorise Modal */}
+      {recategoriseModalOpen && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50" onKeyDown={handleKeyDown} tabIndex={0}>
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Recategorise Document</h3>
+              <button
+                onClick={handleRecategoriseCancel}
+                className="text-gray-400 hover:text-gray-600 text-xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="mb-4">
+              <p className="text-sm text-gray-600 mb-3">
+                Upload a new document to recategorise the data for <strong>{rows[selectedRowIndex]?.panelName}</strong>
+              </p>
+              
+              <div className="space-y-3">
+                <label
+                  htmlFor="recategorise-dropzone-file"
+                  onDragOver={handleRecategoriseDragOver}
+                  onDragLeave={handleRecategoriseDragLeave}
+                  onDrop={handleRecategoriseDrop}
+                  className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+                    recategoriseDragActive 
+                      ? 'border-blue-500 bg-blue-50' 
+                      : 'border-gray-300 bg-gray-50 hover:bg-gray-100'
+                  }`}
+                >
+                  <HiOutlineUpload className="w-8 h-8 text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium">Click to upload</span> or drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">CSV, Excel files up to 50MB</p>
+                  <input 
+                    id="recategorise-dropzone-file" 
+                    type="file" 
+                    multiple 
+                    onChange={handleRecategoriseFilesChange} 
+                    className="hidden" 
+                  />
+                </label>
+                
+                {recategoriseFiles.length > 0 && (
+                  <div className="bg-green-50 border border-green-200 rounded-md p-3">
+                    <p className="text-sm text-green-800 font-medium">
+                      {recategoriseFiles.length} file(s) selected
+                    </p>
+                    <ul className="text-xs text-green-700 mt-1">
+                      {recategoriseFiles.map((file, idx) => (
+                        <li key={idx}>• {file.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <button
+                onClick={handleRecategoriseCancel}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRecategoriseUpload}
+                disabled={!recategoriseFiles.length}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Upload & Recategorise
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
