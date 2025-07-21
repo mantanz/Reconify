@@ -529,13 +529,14 @@ export default function Config() {
         addedMappings={addedMappings}
         selectedPanel={selectedPanel}
         selectedMappings={selectedMappings}
+        detectedPanelHeaders={detectedPanelHeaders}
       />
     </div>
   );
 }
 
 // ConfigSubmit: Handles validation and submit for all config modes
-function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selectedPanel, selectedMappings, onSuccess }) {
+function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selectedPanel, selectedMappings, detectedPanelHeaders, onSuccess }) {
   const [submitted, setSubmitted] = useState(false);
   const [warning, setWarning] = useState('');
   const [loading, setLoading] = useState(false);
