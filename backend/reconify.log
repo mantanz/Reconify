@@ -450,3 +450,61 @@
 2025-07-21 14:44:58,701 - root - INFO - No data found for panel: Seller Panel
 2025-07-21 14:44:58,767 - root - INFO - No data found for panel: OE Panel
 2025-07-21 14:44:58,768 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:04:22,609 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 15:04:22,647 - root - INFO - No data found for panel: OE Panel
+2025-07-21 15:04:22,648 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:04:22,678 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 15:04:22,715 - root - INFO - No data found for panel: OE Panel
+2025-07-21 15:04:22,716 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:28:18,422 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:28:18,427 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:36:58,285 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:36:58,288 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:36:59,010 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:36:59,013 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:36:59,808 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 15:36:59,811 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 16:06:04,507 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 16:06:04,507 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 16:06:04,588 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 16:06:04,589 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 16:53:09,498 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 16:53:09,499 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 16:53:09,568 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 16:53:09,570 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 17:56:44,500 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 17:56:44,501 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 17:56:44,535 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 17:56:44,536 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 17:59:18,088 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 17:59:18,188 - root - INFO - Processed 1385 users from panel: Test Panel
+2025-07-21 17:59:18,189 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-21 17:59:18,223 - root - INFO - No data found for panel: Seller Panel
+2025-07-21 17:59:18,313 - root - INFO - Processed 1385 users from panel: Test Panel
+2025-07-21 17:59:18,313 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 11:15:07,339 - sqlalchemy.pool.impl.QueuePool - ERROR - Exception during reset or similar
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 782, in _read_bytes
+    data = self._rfile.read(num_bytes)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socket.py", line 704, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: [Errno 60] Operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 987, in _finalize_fairy
+    fairy._reset(
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 1433, in _reset
+    pool._dialect.do_rollback(self)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/engine/default.py", line 703, in do_rollback
+    dbapi_connection.rollback()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 493, in rollback
+    self._read_ok_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 453, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 744, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 788, in _read_bytes
+    raise err.OperationalError(
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query ([Errno 60] Operation timed out)')
