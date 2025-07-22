@@ -6,6 +6,24 @@
     "timestamp": "2025-07-21T12:28:55.025982",
     "total_records": 1385,
     "uploadedby": "demo",
+    "status": "Ready to Recon"
+  },
+  {
+    "panelname": "TT Panel",
+    "docid": "517eed96-f4bf-4892-897e-fe808b34f670",
+    "docname": "1. Seller Panel Users List with Assigned Roles.csv",
+    "timestamp": "2025-07-22T07:49:33.408797",
+    "total_records": 1385,
+    "uploadedby": "demo",
+    "status": "Recon Finished"
+  },
+  {
+    "panelname": "Test Panel 1",
+    "docid": "a99c3573-d0f1-4737-89c7-890bb7cf83a0",
+    "docname": "1. Seller Panel Users List with Assigned Roles.csv",
+    "timestamp": "2025-07-22T07:51:49.178058",
+    "total_records": 1385,
+    "uploadedby": "demo",
     "status": "uploaded"
   }
 ]

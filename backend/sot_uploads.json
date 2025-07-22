@@ -61,5 +61,85 @@
     "timestamp": "2025-07-18T08:05:41.698602",
     "status": "success",
     "sot_type": "hr_data"
+  },
+  {
+    "doc_id": "ddd91b18-75e7-4450-817b-b0bf4af840ed",
+    "doc_name": "test_sot.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T07:25:21.017871",
+    "status": "uploaded",
+    "sot_type": "test_sot"
+  },
+  {
+    "doc_id": "b9728f55-dc75-49d1-a1f2-ae2d6cea110b",
+    "doc_name": "1. Seller Panel Users List with Assigned Roles.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T07:28:24.974471",
+    "status": "uploaded",
+    "sot_type": "hr_data"
+  },
+  {
+    "doc_id": "39158366-c726-407a-926e-236c206195dd",
+    "doc_name": "1. Seller Panel Users List with Assigned Roles.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T07:32:08.755341",
+    "status": "uploaded",
+    "sot_type": "hr_data"
+  },
+  {
+    "doc_id": "c6a9338a-2c58-4d05-9263-8d66d3e3bf47",
+    "doc_name": "Sample_hr_recon - Sheet1.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T07:37:19.590523",
+    "status": "uploaded",
+    "sot_type": "hr_data"
+  },
+  {
+    "doc_id": "1b59c3cb-c280-45d2-9b8d-5b18b46ea3a5",
+    "doc_name": "Sample_hr_recon - Sheet1.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T07:37:34.706223",
+    "status": "uploaded",
+    "sot_type": "hr_data"
+  },
+  {
+    "doc_id": "fce58cf4-0259-4538-9c7c-cbd2c2fb5f3e",
+    "doc_name": "Sample_hr_recon - Sheet1.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T07:37:52.111760",
+    "status": "uploaded",
+    "sot_type": "hr_data"
+  },
+  {
+    "doc_id": "f4568bd6-530b-4759-b326-ca854a9a210d",
+    "doc_name": "Sample_hr_recon - Sheet1.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T07:37:58.499756",
+    "status": "uploaded",
+    "sot_type": "hr_data"
+  },
+  {
+    "doc_id": "f8816cb1-5fb0-4eaf-bbb3-3958080a8d24",
+    "doc_name": "Sample_hr_recon - Sheet1.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T07:38:12.741092",
+    "status": "uploaded",
+    "sot_type": "hr_data"
+  },
+  {
+    "doc_id": "ac8460f5-3a88-49df-ad8e-60527a6e0c45",
+    "doc_name": "Sample_hr_recon - Sheet1.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T09:34:30.371730",
+    "status": "uploaded",
+    "sot_type": "hr_data"
+  },
+  {
+    "doc_id": "ac456e60-72bf-48d2-ada8-de8bcee08f00",
+    "doc_name": "Sample_hr_recon - Sheet1.csv",
+    "uploaded_by": "demo",
+    "timestamp": "2025-07-22T09:34:40.720479",
+    "status": "uploaded",
+    "sot_type": "hr_data"
   }
 ]

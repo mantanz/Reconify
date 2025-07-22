@@ -508,3 +508,71 @@ Traceback (most recent call last):
   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 788, in _read_bytes
     raise err.OperationalError(
 pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query ([Errno 60] Operation timed out)')
+2025-07-22 12:19:20,850 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:19:20,880 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:19:20,880 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 12:19:20,947 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:19:20,995 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:19:20,995 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 12:32:45,781 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:32:45,833 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:32:45,834 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 12:32:45,871 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:32:45,926 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:32:45,926 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 12:32:52,810 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:32:52,837 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:32:52,837 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 12:32:52,895 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:32:52,920 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:32:52,921 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 12:34:43,591 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:34:43,614 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:34:43,615 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 12:34:43,638 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:34:43,690 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:34:43,690 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 12:36:10,055 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:36:10,113 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:36:10,113 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 12:36:10,153 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 12:36:10,204 - root - INFO - No data found for panel: Test Panel
+2025-07-22 12:36:10,204 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 13:08:56,899 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 13:08:56,927 - root - INFO - No data found for panel: Test Panel
+2025-07-22 13:08:56,927 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 13:08:56,982 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 13:08:57,004 - root - INFO - No data found for panel: Test Panel
+2025-07-22 13:08:57,004 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 14:50:10,892 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 14:50:10,913 - root - INFO - No data found for panel: Test Panel
+2025-07-22 14:50:10,987 - root - INFO - Processed 1385 users from panel: Test Panel 1
+2025-07-22 14:50:10,987 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 14:50:11,018 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 14:50:11,061 - root - INFO - No data found for panel: Test Panel
+2025-07-22 14:50:11,168 - root - INFO - Processed 1385 users from panel: Test Panel 1
+2025-07-22 14:50:11,168 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 14:57:12,820 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 14:57:12,851 - root - INFO - No data found for panel: Test Panel
+2025-07-22 14:57:12,910 - root - INFO - Processed 1385 users from panel: Test Panel 1
+2025-07-22 14:57:12,910 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 14:57:12,969 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 14:57:12,993 - root - INFO - No data found for panel: Test Panel
+2025-07-22 14:57:13,074 - root - INFO - Processed 1385 users from panel: Test Panel 1
+2025-07-22 14:57:13,075 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 15:01:37,606 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 15:01:37,816 - root - INFO - No data found for panel: Test Panel
+2025-07-22 15:01:37,916 - root - INFO - Processed 1385 users from panel: Test Panel 1
+2025-07-22 15:01:37,916 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 15:01:37,987 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 15:01:38,039 - root - INFO - No data found for panel: Test Panel
+2025-07-22 15:01:38,178 - root - INFO - Processed 1385 users from panel: Test Panel 1
+2025-07-22 15:01:38,178 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 15:02:25,703 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 15:02:25,726 - root - INFO - No data found for panel: Test Panel
+2025-07-22 15:02:25,813 - root - INFO - Processed 1385 users from panel: Test Panel 1
+2025-07-22 15:02:25,813 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-22 15:02:25,835 - root - INFO - No data found for panel: Seller Panel
+2025-07-22 15:02:25,895 - root - INFO - No data found for panel: Test Panel
+2025-07-22 15:02:25,983 - root - INFO - Processed 1385 users from panel: Test Panel 1
+2025-07-22 15:02:25,984 - root - INFO - User-wise summary completed. Total users: 0

@@ -49,5 +49,86 @@
       "found_inactive": 7,
       "not_found": 1832
     }
+  },
+  {
+    "recon_id": "RCN_c45da9bf",
+    "panelname": "Test Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "failed",
+    "upload_date": "2025-07-21T12:28:55.025982",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-22",
+    "performed_by": "demo",
+    "error": "Reconciliation process failed",
+    "summary": {
+      "panel_name": "Test Panel",
+      "total_panel_users": 0,
+      "internal_users": 0,
+      "not_found_users": 0,
+      "users_to_reconcile": 0,
+      "other_users": 0,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 0,
+      "found_active": 0,
+      "found_inactive": 0,
+      "not_found": 0,
+      "errors": 1
+    }
+  },
+  {
+    "recon_id": "RCN_fcc02fd6",
+    "panelname": "Test Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "failed",
+    "upload_date": "2025-07-21T12:28:55.025982",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-22",
+    "performed_by": "demo",
+    "error": "Reconciliation process failed",
+    "summary": {
+      "panel_name": "Test Panel",
+      "total_panel_users": 0,
+      "internal_users": 0,
+      "not_found_users": 0,
+      "users_to_reconcile": 0,
+      "other_users": 0,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 0,
+      "found_active": 0,
+      "found_inactive": 0,
+      "not_found": 0,
+      "errors": 1
+    }
+  },
+  {
+    "recon_id": "RCN_3785b2df",
+    "panelname": "Test Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "failed",
+    "upload_date": "2025-07-21T12:28:55.025982",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-22",
+    "performed_by": "demo",
+    "error": "Reconciliation process failed",
+    "summary": {
+      "panel_name": "Test Panel",
+      "total_panel_users": 0,
+      "internal_users": 0,
+      "not_found_users": 0,
+      "users_to_reconcile": 0,
+      "other_users": 0,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 0,
+      "found_active": 0,
+      "found_inactive": 0,
+      "not_found": 0,
+      "errors": 1
+    }
   }
 ]

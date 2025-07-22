@@ -252,23 +252,45 @@ def list_sot_uploads():
 
 @app.get("/sot/list")
 def list_sots_from_config():
+    """
+    Get list of available SOTs from database tables and configuration.
+    Returns all SOT tables that exist in the database.
+    """
+    # Check which SOT tables actually exist in the database
+    available_sots = []
+    default_sots = [
+        "hr_data",
+        "service_users", 
+        "internal_users",
+        "thirdparty_users"
+    ]
+    
+    for sot in default_sots:
+        try:
+            # Check if table exists by trying to get headers
+            headers = get_panel_headers_from_db(sot)
+            if headers:  # If table exists and has columns
+                available_sots.append(sot)
+        except Exception:
+            # Table doesn't exist, skip it
+            continue
+    
+    # Also include any SOTs that are configured in panels but might not be in default list
     db = load_db()
-    sots = set()
+    configured_sots = set()
     for panel in db.get("panels", []):
         key_mapping = panel.get("key_mapping", {})
-        sots.update(key_mapping.keys())
+        configured_sots.update(key_mapping.keys())
     
-    # If no SOTs found in config, provide default SOT types
-    if not sots:
-        default_sots = [
-            "hr_data",
-            "service_users", 
-            "internal_users",
-            "thirdparty_users"
-        ]
-        sots.update(default_sots)
+    # Combine available SOTs from database and configured SOTs
+    all_sots = set(available_sots)
+    all_sots.update(configured_sots)
     
-    return {"sots": sorted(list(sots))}
+    # If no SOTs found at all, provide the default list
+    if not all_sots:
+        all_sots = set(default_sots)
+    
+    return {"sots": sorted(list(all_sots))}
 
 @app.post("/recon/upload")
 def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):

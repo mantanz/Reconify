@@ -15,6 +15,14 @@
           "domain": "Cust_id"
         }
       }
+    },
+    {
+      "name": "Test Panel 1",
+      "key_mapping": {
+        "hr_data": {
+          "email": "User_email"
+        }
+      }
     }
   ]
 }
