@@ -86,15 +86,22 @@ def add_panel(panel: PanelConfig):
 
 @app.put("/panels/modify")
 def modify_panel(update: PanelUpdate):
+    logging.info(f"Received modify request for panel: {update.name}")
+    logging.info(f"Update payload: {update.dict()}")
+    
     db = load_db()
     for panel in db["panels"]:
         if panel["name"] == update.name:
             if update.key_mapping is not None:
+                logging.info(f"Updating key_mapping from {panel['key_mapping']} to {update.key_mapping}")
                 panel["key_mapping"] = update.key_mapping
             if update.panel_headers is not None:
                 panel["panel_headers"] = update.panel_headers
             save_db(db)
+            logging.info(f"Panel '{update.name}' updated successfully")
             return {"message": "Panel updated"}
+    
+    logging.error(f"Panel '{update.name}' not found")
     raise HTTPException(status_code=404, detail="Panel not found")
 
 @app.delete("/panels/delete")
@@ -331,7 +338,7 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
         return {"error": f"Error processing file: {str(e)}", "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": 0, "uploadedby": uploaded_by, "status": "failed"}
     
     # Determine status based on actual success/failure
-    status = "uploaded"
+    status = "Ready to Recon"  # Changed from "uploaded" to "Ready to Recon"
     error_message = None
     
     # Check if we have data to process
@@ -691,6 +698,22 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
         
         logging.info(f"HR reconciliation completed for panel '{panel_name}'. Status: {status}, Summary: {summary}")
         
+        # Update panel status in history
+        try:
+            if os.path.exists(RECON_HISTORY_PATH):
+                with open(RECON_HISTORY_PATH, "r+") as f:
+                    panel_history = json.load(f)
+                    # Update the most recent record for this panel
+                    for i in reversed(range(len(panel_history))):
+                        if panel_history[i].get("panelname") == panel_name:
+                            panel_history[i]["status"] = "Recon Finished" if status == "complete" else "Recon Failed"
+                            break
+                    f.seek(0)
+                    json.dump(panel_history, f, indent=2)
+                    f.truncate()
+        except Exception as e:
+            logging.error(f"Failed to update panel status: {e}")
+        
         return {
             "recon_id": recon_id,
             "summary": summary,
@@ -928,9 +951,9 @@ def categorize_users(panel_name: str = Form(...)):
             if 'panel_field' in mapping and 'sot_field' in mapping:
                 return mapping['panel_field'], mapping['sot_field']
             
-            # Handle old format: {'panel_field': 'sot_field'}
+            # Handle old format: {'sot_field': 'panel_field'}
             if len(mapping) == 1:
-                panel_field, sot_field = list(mapping.items())[0]
+                sot_field, panel_field = list(mapping.items())[0]  # Fixed: sot_field is key, panel_field is value
                 return panel_field, sot_field
             
             return None, None
@@ -1250,6 +1273,22 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
             raise HTTPException(status_code=500, detail=f"Database update failed: {error_msg}")
         
         logging.info(f"User recategorization completed for panel '{panel_name}'. Summary: {summary}")
+        
+        # Update panel status in history to 'Completed'
+        try:
+            if os.path.exists(RECON_HISTORY_PATH):
+                with open(RECON_HISTORY_PATH, "r+") as f:
+                    panel_history = json.load(f)
+                    # Update the most recent record for this panel
+                    for i in reversed(range(len(panel_history))):
+                        if panel_history[i].get("panelname") == panel_name:
+                            panel_history[i]["status"] = "Completed"
+                            break
+                    f.seek(0)
+                    json.dump(panel_history, f, indent=2)
+                    f.truncate()
+        except Exception as e:
+            logging.error(f"Failed to update panel status: {e}")
         
         return {
             "message": "User recategorization complete",

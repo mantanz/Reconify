@@ -11,8 +11,11 @@
     {
       "name": "Test Panel",
       "key_mapping": {
+        "hr_data": {
+          "User_email": "email"
+        },
         "internal_users": {
-          "domain": "Cust_id"
+          "User_email": "domain"
         }
       }
     },
