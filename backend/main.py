@@ -313,6 +313,8 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
         if filename.endswith(".xlsx") or filename.endswith(".xls"):
             import io
             df = pd.read_excel(io.BytesIO(contents))
+            # Keep original header case to match table structure created during panel configuration
+            df.columns = [col.strip() for col in df.columns]
             rows = df.to_dict(orient="records")
             total_records = len(df)
         else:
@@ -332,7 +334,9 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
             
             import csv
             reader = csv.DictReader(lines)
-            rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
+            # Keep original header case to match table structure created during panel configuration
+            reader.fieldnames = [h.strip() for h in reader.fieldnames]
+            rows = [dict((k.strip(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
             total_records = max(len(lines) - 1, 0)  # Exclude header
     except Exception as e:
         return {"error": f"Error processing file: {str(e)}", "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": 0, "uploadedby": uploaded_by, "status": "failed"}
@@ -495,12 +499,26 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
         if not key_mapping:
             raise HTTPException(status_code=400, detail="No HR data key mapping found for this panel")
         
-        panel_key, hr_key = list(key_mapping.items())[0]
+        panel_key_lowercase, hr_key = list(key_mapping.items())[0]
         
         # Fetch panel data
         panel_rows = fetch_all_rows(panel_name)
         if not panel_rows:
             raise HTTPException(status_code=404, detail="No panel data found")
+        
+        # Get actual column names from the panel data and resolve the correct column name
+        actual_columns = list(panel_rows[0].keys()) if panel_rows else []
+        panel_key = None
+        
+        # Find the actual column name that matches (case-insensitive)
+        for col in actual_columns:
+            if col.lower() == panel_key_lowercase.lower():
+                panel_key = col  # Use the actual column name from the table
+                logging.info(f"Resolved panel key from config '{panel_key_lowercase}' to actual column '{panel_key}'")
+                break
+        
+        if not panel_key:
+            raise HTTPException(status_code=400, detail=f"Panel key field '{panel_key_lowercase}' not found in table. Available columns: {actual_columns}")
         
         # Categorize users based on initial_status
         users_to_reconcile = []  # Internal users + not found users
@@ -916,6 +934,17 @@ def categorize_users(panel_name: str = Form(...)):
         logging.info(f"Configured SOTs for categorization: {configured_sots}")
         logging.debug(f"Key mapping configuration: {key_mapping}")
         
+        # First fetch panel data to get actual column names
+        try:
+            panel_rows = fetch_all_rows(panel_name)
+            logging.info(f"Fetched {len(panel_rows)} rows from panel: {panel_name}")
+        except Exception as e:
+            logging.error(f"Failed to fetch panel data: {e}")
+            raise HTTPException(status_code=500, detail=f"Failed to fetch panel data: {str(e)}")
+
+        # Get actual column names from the panel data
+        actual_columns = list(panel_rows[0].keys()) if panel_rows else []
+
         # Fetch data for all configured SOTs
         sot_data = {}
         for sot in configured_sots:
@@ -925,14 +954,6 @@ def categorize_users(panel_name: str = Form(...)):
             except Exception as e:
                 logging.error(f"Failed to fetch data from SOT '{sot}': {e}")
                 sot_data[sot] = []
-        
-        # Fetch panel data
-        try:
-            panel_rows = fetch_all_rows(panel_name)
-            logging.info(f"Fetched {len(panel_rows)} rows from panel: {panel_name}")
-        except Exception as e:
-            logging.error(f"Failed to fetch panel data: {e}")
-            raise HTTPException(status_code=500, detail=f"Failed to fetch panel data: {str(e)}")
         
         # Initialize summary dynamically
         summary = {sot: 0 for sot in configured_sots}
@@ -951,9 +972,9 @@ def categorize_users(panel_name: str = Form(...)):
             if 'panel_field' in mapping and 'sot_field' in mapping:
                 return mapping['panel_field'], mapping['sot_field']
             
-            # Handle old format: {'sot_field': 'panel_field'}
+            # Handle corrected format: {'panel_field': 'sot_field'}
             if len(mapping) == 1:
-                sot_field, panel_field = list(mapping.items())[0]  # Fixed: sot_field is key, panel_field is value
+                panel_field, sot_field = list(mapping.items())[0]  # panel_field is key, sot_field is value
                 return panel_field, sot_field
             
             return None, None
@@ -969,11 +990,16 @@ def categorize_users(panel_name: str = Form(...)):
         for sot in priority_sots:
             if sot in configured_sots:
                 mapping = key_mapping.get(sot, {})
-                panel_field, _ = extract_mapping_fields(mapping)
-                if panel_field:
-                    match_field = panel_field
-                    logging.info(f"Using '{match_field}' as primary key field (from {sot})")
-                    break
+                panel_field_lowercase, _ = extract_mapping_fields(mapping)
+                if panel_field_lowercase:
+                    # The mapping stores lowercase panel field names, find the actual table column
+                    for col in actual_columns:
+                        if col.lower() == panel_field_lowercase.lower():
+                            match_field = col  # Use the actual column name from the table
+                            logging.info(f"Using '{match_field}' as primary key field (mapped from lowercase '{panel_field_lowercase}' in {sot})")
+                            break
+                    if match_field:
+                        break
         
         if not match_field:
             raise HTTPException(

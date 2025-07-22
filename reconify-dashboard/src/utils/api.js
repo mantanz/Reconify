@@ -41,12 +41,15 @@ export async function getPanels() {
 }
 
 export async function modifyPanelConfig(data) {
+  console.log('DEBUG: modifyPanelConfig called with data:', data);
   const res = await fetch(`${API_BASE}/panels/modify`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-  return res.json();
+  const result = await res.json();
+  console.log('DEBUG: modifyPanelConfig response:', result);
+  return result;
 }
 
 export async function deletePanelByName(name) {
@@ -76,6 +79,39 @@ export async function getSOTFields(sotType) {
 
 export async function getSOTList() {
   const res = await fetch(`${API_BASE}/sot/list`);
+  return res.json();
+}
+
+// Upload SOT file
+export async function uploadSOTFile(file, sotType = 'hr_data') {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('sot_type', sotType);
+  const res = await fetch(`${API_BASE}/sot/upload`, {
+    method: 'POST',
+    body: formData,
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to upload SOT file: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+// Get SOT upload history
+export async function getSOTUploads() {
+  const res = await fetch(`${API_BASE}/sot/uploads`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch SOT uploads: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+// Get SOT table info (debug endpoint)
+export async function getSOTInfo(sotName) {
+  const res = await fetch(`${API_BASE}/debug/sot/${sotName}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch SOT info: ${res.statusText}`);
+  }
   return res.json();
 }
 
@@ -116,7 +152,15 @@ export async function getAllReconHistory() {
 
 // Fetch all reconciliation summaries (excluding details)
 export async function getReconSummaries() {
-  const res = await fetch(`${API_BASE}/recon/summary`);
+  // Add cache busting parameter to force fresh data
+  const timestamp = new Date().getTime();
+  const res = await fetch(`${API_BASE}/recon/summary?_t=${timestamp}`, {
+    cache: 'no-cache',
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
+    }
+  });
   return res.json();
 }
 

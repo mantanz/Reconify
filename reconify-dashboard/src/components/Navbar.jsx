@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FiGrid } from 'react-icons/fi';
 import logo from '../assets/reconfiy_logo.png';
+import paytmLogo from '../assets/Paytm_Logo_(standalone).svg';
 
 const navItems = [
   { name: 'Home', path: '/home' },
@@ -33,6 +34,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 flex-shrink-0">
             <img src={logo} alt="Reconify Logo" className="h-10 w-10 object-contain" />
             <span className="text-xl font-semibold">Reconify</span>
+            <img src={paytmLogo} alt="Paytm Logo" className="h-5 w-18 object-contain ml-4" />
           </div>
 
           {/* Links */}

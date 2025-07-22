@@ -3,27 +3,68 @@
     {
       "name": "Seller Panel",
       "key_mapping": {
-        "internal_users": {
-          "domain": "User_email"
-        }
-      }
-    },
-    {
-      "name": "Test Panel",
-      "key_mapping": {
         "hr_data": {
-          "User_email": "email"
+          "user_email": "email"
         },
         "internal_users": {
-          "User_email": "domain"
+          "user_email": "domain"
+        },
+        "service_users": {
+          "user_email": "email"
+        },
+        "thirdparty_users": {
+          "user_email": "domain"
         }
       }
     },
     {
-      "name": "Test Panel 1",
+      "name": "OE Panel",
       "key_mapping": {
         "hr_data": {
-          "email": "User_email"
+          "email": "email"
+        },
+        "internal_users": {
+          "email": "domain"
+        },
+        "service_users": {
+          "email": "email"
+        },
+        "thirdparty_users": {
+          "email": "domain"
+        }
+      }
+    },
+    {
+      "name": "OE PANEL 1",
+      "key_mapping": {
+        "hr_data": {
+          "email": "email"
+        },
+        "internal_users": {
+          "email": "domain"
+        },
+        "service_users": {
+          "email": "email"
+        },
+        "thirdparty_users": {
+          "email": "domain"
+        }
+      }
+    },
+    {
+      "name": "OE PANEL 2",
+      "key_mapping": {
+        "hr_data": {
+          "email": "email"
+        },
+        "internal_users": {
+          "email": "domain"
+        },
+        "service_users": {
+          "email": "email"
+        },
+        "thirdparty_users": {
+          "email": "domain"
         }
       }
     }

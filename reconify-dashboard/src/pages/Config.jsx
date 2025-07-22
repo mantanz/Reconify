@@ -8,11 +8,9 @@ import {
   uploadPanelFile,
   uploadPanelFileWithHistory,
   getPanelConfig,
-  getSOTFields,
-  getAllReconHistory
+  getSOTFields
 } from '../utils/api';
-
-// Real data will be loaded from backend
+import '../styles/tables.css';
 
 export default function Config() {
   const [func, setFunc] = useState('');
@@ -37,7 +35,6 @@ export default function Config() {
   const [sots, setSots] = useState([]);
   const [sotFields, setSotFields] = useState({});
   const [mappings, setMappings] = useState([]);
-  const [uploadHistory, setUploadHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -51,11 +48,10 @@ export default function Config() {
       setLoading(true);
       setError('');
       
-      // Load panels, SOTs, mappings, and upload history from backend
-      const [panelsData, sotsData, historyData] = await Promise.all([
+      // Load panels, SOTs, and mappings from backend
+      const [panelsData, sotsData] = await Promise.all([
         getPanels(),
-        getSOTList(),
-        getAllReconHistory()
+        getSOTList()
       ]);
 
       setPanels(panelsData || []);
@@ -63,7 +59,6 @@ export default function Config() {
       const sotsArray = sotsData?.sots || sotsData || [];
       setSots(sotsArray);
       setMappings([]); // Mappings will be loaded per panel when needed
-      setUploadHistory(historyData || []);
     } catch (err) {
       setError('Failed to load configuration data: ' + err.message);
       console.error('Error loading config data:', err);
@@ -122,14 +117,7 @@ export default function Config() {
     }
   };
 
-  const refreshUploadHistory = async () => {
-    try {
-      const historyData = await getAllReconHistory();
-      setUploadHistory(historyData || []);
-    } catch (err) {
-      console.error('Error refreshing upload history:', err);
-    }
-  };
+
 
   // Filter mappings for selected panel
   const panelMappings = func === 'modify' || func === 'delete'
@@ -161,6 +149,7 @@ export default function Config() {
       setMappings([]);
     }
   };
+
   const handlePanelChange = e => {
     const panelName = e.target.value;
     setSelectedPanel(panelName);
@@ -176,6 +165,7 @@ export default function Config() {
       loadPanelMappings(panelName);
     }
   };
+
   const handleMappingSelect = async id => {
     setSelectedMappings(prev =>
       prev.includes(id) ? prev.filter(mid => mid !== id) : [...prev, id]
@@ -190,6 +180,7 @@ export default function Config() {
       }
     }
   };
+
   const handleSelectAll = () => {
     if (selectAll) {
       setSelectedMappings([]);
@@ -199,12 +190,24 @@ export default function Config() {
     setSelectAll(!selectAll);
     setSubmitted(false);
   };
+
   const handleSotHeaderChange = (sot, val) => {
-    setSotHeaderSelections(prev => ({ ...prev, [sot]: val }));
+    console.log(`DEBUG: SOT Header changed - SOT: ${sot}, New Value: ${val}`);
+    setSotHeaderSelections(prev => {
+      const updated = { ...prev, [sot]: val };
+      console.log('DEBUG: Updated sotHeaderSelections:', updated);
+      return updated;
+    });
     setSubmitted(false);
   };
+
   const handlePanelHeaderChange = (mappingId, value) => {
-    setPanelHeaderSelections(prev => ({ ...prev, [mappingId]: value }));
+    console.log(`DEBUG: Panel Header changed - Mapping ID: ${mappingId}, New Value: ${value}`);
+    setPanelHeaderSelections(prev => {
+      const updated = { ...prev, [mappingId]: value };
+      console.log('DEBUG: Updated panelHeaderSelections:', updated);
+      return updated;
+    });
     setSubmitted(false);
   };
 
@@ -216,20 +219,8 @@ export default function Config() {
     setLoading(true);
     
     try {
-      // Upload file to backend and get headers
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await fetch('http://127.0.0.1:8000/panels/upload_file', {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Failed to upload file: ${response.statusText}`);
-      }
-      
-      const data = await response.json();
+      // Upload file to backend and get headers using the API function
+      const data = await uploadPanelFile(file);
       
       // Extract headers from the response and convert to proper case
       const headers = data.headers || [];
@@ -252,100 +243,129 @@ export default function Config() {
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow max-w-3xl mx-auto mt-10">
-      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Config</h2>
-      
-      {/* Loading and Error States */}
-      {loading && (
-        <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
-          <div className="flex items-center">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-            <span className="text-blue-800">Loading configuration data...</span>
-          </div>
-        </div>
-      )}
-      
-      {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-          <span className="text-red-800">{error}</span>
-        </div>
-      )}
-
-      {/* Function and Panel Row */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Function</label>
-          <select value={func} onChange={handleFuncChange} className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">-- Select --</option>
-            <option value="add">Add</option>
-            <option value="modify">Modify</option>
-            <option value="delete">Delete</option>
-          </select>
-        </div>
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Panel</label>
-          {func === 'add' ? (
-            <input
-              type="text"
-              value={newPanelName}
-              onChange={e => setNewPanelName(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter panel name"
-            />
-          ) : (
-            <select value={selectedPanel} onChange={handlePanelChange} className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">-- Select Panel --</option>
-              {panels.map(panel => (
-                <option key={panel.id || panel.name} value={panel.name}>{panel.name}</option>
-              ))}
-            </select>
-          )}
-        </div>
-      </div>
-
-      {/* File upload for add function */}
-      {func === 'add' && (
-        <>
-          <div className="mb-6 flex flex-col gap-2">
-            <div className="flex flex-col md:flex-row items-center gap-4 w-full">
-              <label className="text-base font-medium text-gray-700 whitespace-nowrap md:mb-0 mb-2" htmlFor="upload-doc">Upload Document</label>
-              <input
-                id="upload-doc"
-                type="file"
-                onChange={e => handleFileUpload(e.target.files[0])}
-                className="flex-1 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                style={{ maxWidth: '600px' }}
-              />
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-6xl mx-auto mt-8">
+        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+          Panel Configuration
+        </h2>
+        
+        {/* Loading and Error States */}
+        {loading && (
+          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+            <div className="flex items-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+              <span className="text-blue-800">Loading configuration data...</span>
             </div>
-            {uploadedFile && (
-              <div className="text-green-600 mt-1 text-center md:text-left">File selected: {uploadedFile.name}</div>
-            )}
           </div>
+        )}
+        
+        {error && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+            <span className="text-red-800">{error}</span>
+          </div>
+        )}
 
-          {/* Show mapping UI after headers detected */}
-          {detectedPanelHeaders.length > 0 && (
+        <form className="space-y-6">
+                                {/* Function and Panel Name Row */}
+                      <div className="flex items-end gap-8 mb-6">
+                        <div className="flex items-center gap-3 flex-1">
+                          <label className="text-sm font-semibold text-gray-700 whitespace-nowrap">
+                            Function
+                          </label>
+                          <select
+                            value={func}
+                            onChange={handleFuncChange}
+                            className="border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-[#00baf2] focus:outline-none flex-1 text-center"
+                          >
+                            <option value="">-- Select --</option>
+                            <option value="add">C - Create</option>
+                            <option value="modify">U - Update</option>
+                            <option value="delete">D - Delete</option>
+                          </select>
+                        </div>
+
+                        <div className="flex items-center gap-3 flex-1">
+                          <label className="text-sm font-semibold text-gray-700 whitespace-nowrap">
+                            Panel Name
+                          </label>
+                          {func === 'add' ? (
+                            <input
+                              type="text"
+                              value={newPanelName}
+                              onChange={e => setNewPanelName(e.target.value)}
+                              placeholder="Enter panel name"
+                              className="border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-[#00baf2] focus:outline-none flex-1"
+                            />
+                          ) : (
+                            <select
+                              value={selectedPanel}
+                              onChange={handlePanelChange}
+                              className="border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-[#00baf2] focus:outline-none flex-1 text-center"
+                            >
+                              <option value="">-- Select Panel --</option>
+                              {panels.map(panel => (
+                                <option key={panel.id || panel.name} value={panel.name}>{panel.name}</option>
+                              ))}
+                            </select>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Upload Document Row (only for add function) */}
+                      {func === 'add' && (
+                        <div className="mb-6">
+                          <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 hover:border-[#00baf2] transition-colors duration-200">
+                            <div className="flex items-center justify-center">
+                              <input
+                                type="file"
+                                onChange={e => handleFileUpload(e.target.files[0])}
+                                className="hidden"
+                                id="file-upload"
+                              />
+                              <label
+                                htmlFor="file-upload"
+                                className="flex items-center gap-3 cursor-pointer text-gray-600 hover:text-[#00baf2] transition-colors duration-200"
+                              >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                                <span className="text-sm font-medium">
+                                  {uploadedFile ? (
+                                    <span className="text-green-600">✓ {uploadedFile.name}</span>
+                                  ) : (
+                                    "Click to browse or drag and drop files here"
+                                  )}
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+          
+
+                                {/* Show mapping UI after file upload and headers detected - only for Create function */}
+                      {func === 'add' && uploadedFile && detectedPanelHeaders.length > 0 && (
             <div className="mb-8">
               {/* Add mapping row */}
               <div className="flex flex-col md:flex-row gap-4 items-end mb-6">
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Panel Header</label>
                   <select
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-[#00baf2] focus:outline-none"
                     value={selectedPanelHeader}
                     onChange={e => setSelectedPanelHeader(e.target.value)}
                   >
                     <option value="">-- Select Panel Header --</option>
-                    {detectedPanelHeaders
-                      .filter(h => !addedMappings.some(m => m.panelField === h))
-                      .map(h => (
-                        <option key={h} value={h}>{h}</option>
-                      ))}
+                    {detectedPanelHeaders.map(h => (
+                      <option key={h} value={h}>{h}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">SOT</label>
                   <select
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-[#00baf2] focus:outline-none"
                     value={selectedSot}
                     onChange={e => {
                       const sotName = e.target.value;
@@ -366,7 +386,7 @@ export default function Config() {
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">SOT Header</label>
                   <select
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-[#00baf2] focus:outline-none"
                     value={selectedSotHeader}
                     onChange={e => setSelectedSotHeader(e.target.value)}
                     disabled={!selectedSot}
@@ -379,12 +399,9 @@ export default function Config() {
                 </div>
                 <button
                   type="button"
-                  className="mt-6 ml-2 p-1 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="mt-6 ml-2 p-1 rounded-full bg-[#00baf2] hover:bg-[#00a4d6] text-white shadow disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                   style={{ width: '28px', height: '28px' }}
-                  disabled={
-                    !selectedPanelHeader || !selectedSot || !selectedSotHeader ||
-                    addedMappings.some(m => m.panelField === selectedPanelHeader)
-                  }
+                  disabled={!selectedPanelHeader || !selectedSot || !selectedSotHeader}
                   onClick={() => {
                     setAddedMappings(prev => [
                       ...prev,
@@ -402,196 +419,211 @@ export default function Config() {
                   </svg>
                 </button>
               </div>
-              {/* Mapping Table */}
-              <div className="overflow-x-auto">
-                <table className="min-w-full text-sm border rounded">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="px-3 py-2 border">Panel Field</th>
-                      <th className="px-3 py-2 border">SOT</th>
-                      <th className="px-3 py-2 border">SOT Field</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {addedMappings.map((mapping, idx) => (
-                      <tr key={mapping.panelField + mapping.sot + mapping.sotField + idx}>
-                        <td className="px-3 py-2 border">{mapping.panelField}</td>
-                        <td className="px-3 py-2 border">{mapping.sot}</td>
-                        <td className="px-3 py-2 border">{mapping.sotField}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                                        {/* Mapping Table */}
+                          <div className="table-container">
+                            <table className="mapping-table">
+                              <thead className="mapping-table-header">
+                                <tr>
+                                  <th className="mapping-table-th">Panel Field</th>
+                                  <th className="mapping-table-th">SOT</th>
+                                  <th className="mapping-table-th">SOT Field</th>
+                                </tr>
+                              </thead>
+                              <tbody className="mapping-table-body">
+                                {addedMappings.map((mapping, idx) => (
+                                  <tr key={mapping.panelField + mapping.sot + mapping.sotField + idx} className="mapping-table-row">
+                                    <td className="mapping-table-cell">{mapping.panelField}</td>
+                                    <td className="mapping-table-cell">{mapping.sot}</td>
+                                    <td className="mapping-table-cell">{mapping.sotField}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+          )}
+
+          {/* Mapping Table for Modify/Delete */}
+          {(func === 'modify' || func === 'delete') && selectedPanel && panelMappings.length > 0 && (
+            <div className="mb-6">
+              {func === 'delete' && (
+                <div className="flex items-center mb-2">
+                  <input type="checkbox" checked={selectAll} onChange={handleSelectAll} className="mr-2" />
+                  <span className="text-sm font-medium">Select All</span>
+                </div>
+              )}
+                                        <div className="table-container">
+                                          <table className="mapping-table">
+                            <thead className="mapping-table-header">
+                              <tr>
+                                <th className="mapping-table-cell-small">Select</th>
+                                <th className="mapping-table-th">Panel Field</th>
+                                <th className="mapping-table-th">SOT</th>
+                                <th className="mapping-table-th">SOT Field</th>
+                              </tr>
+                            </thead>
+                            <tbody className="mapping-table-body">
+                              {panelMappings.map(m => (
+                                <tr key={m.id} className="mapping-table-row">
+                                  <td className="mapping-table-cell-small">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedMappings.includes(m.id)}
+                                      onChange={async () => {
+                                        if (func === 'modify') {
+                                          const newSelection = selectedMappings.includes(m.id) ? [] : [m.id];
+                                          setSelectedMappings(newSelection);
+
+                                          // Load SOT fields for the selected mapping
+                                          if (newSelection.length > 0) {
+                                            await loadSotFields(m.sot);
+                                          }
+                                        } else {
+                                          handleMappingSelect(m.id);
+                                        }
+                                      }}
+                                      disabled={func === 'modify' && selectedMappings.length === 1 && !selectedMappings.includes(m.id)}
+                                    />
+                                  </td>
+                                  <td className="mapping-table-cell">{m.panelField}</td>
+                                  <td className="mapping-table-cell">{m.sot}</td>
+                                  <td className="mapping-table-cell">{m.sotField}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+            </div>
+          )}
+
+          {/* Dynamic Panel Header, SOT, and SOT Header dropdowns for selected mappings (only for modify) */}
+          {func === 'modify' && selectedPanel && selectedMappings.length > 0 && (
+            <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Panel header dropdowns on the left */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Panel Headers</label>
+                {panelMappings
+                  .filter(m => selectedMappings.includes(m.id))
+                  .map(m => {
+                    // Get all unique panel headers for the selected panel
+                    const uniquePanelHeaders = Array.from(new Set(panelMappings.map(pm => pm.panelField)));
+                    // Initial value: either from state or the mapping's panelField
+                    const selectedValue = panelHeaderSelections[m.id] || m.panelField;
+                    return (
+                      <div key={m.id} className="mb-2">
+                        <label className="block text-xs text-gray-500 mb-1">{selectedPanel}</label>
+                        <select
+                          value={selectedValue}
+                          onChange={e => handlePanelHeaderChange(m.id, e.target.value)}
+                          className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-[#00baf2] focus:outline-none"
+                        >
+                          {uniquePanelHeaders.map(h => (
+                            <option key={h} value={h}>{h}</option>
+                          ))}
+                        </select>
+                      </div>
+                    );
+                  })}
+              </div>
+              
+              {/* SOT dropdowns in the middle */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">SOT</label>
+                {panelMappings
+                  .filter(m => selectedMappings.includes(m.id))
+                  .map(m => {
+                    // Initial value: either from state or the mapping's sot
+                    const selectedValue = sotSelections[m.id] || m.sot;
+                    return (
+                      <div key={m.id} className="mb-2">
+                        <label className="block text-xs text-gray-500 mb-1">Source of Truth</label>
+                        <select
+                          value={selectedValue}
+                          onChange={async (e) => {
+                            const newSot = e.target.value;
+                            setSotSelections(prev => ({ ...prev, [m.id]: newSot }));
+                            // Load SOT fields for the newly selected SOT
+                            if (newSot) {
+                              await loadSotFields(newSot);
+                            }
+                            // Reset SOT header selection when SOT changes
+                            setSotHeaderSelections(prev => ({ ...prev, [newSot]: '' }));
+                          }}
+                          className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-[#00baf2] focus:outline-none"
+                        >
+                          {sots.map(sot => (
+                            <option key={sot} value={sot}>{sot}</option>
+                          ))}
+                        </select>
+                      </div>
+                    );
+                  })}
+              </div>
+              
+              {/* SOT header dropdowns on the right */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">SOT Headers</label>
+                {panelMappings
+                  .filter(m => selectedMappings.includes(m.id))
+                  .map(m => {
+                    // Get the current SOT (either selected or original)
+                    const currentSot = sotSelections[m.id] || m.sot;
+                    // Initial value: either from state or the mapping's sotField
+                    const selectedValue = sotHeaderSelections[currentSot] || m.sotField;
+                    return (
+                      <div key={m.id} className="mb-2">
+                        <label className="block text-xs text-gray-500 mb-1">{currentSot}</label>
+                        <select
+                          value={selectedValue}
+                          onChange={e => handleSotHeaderChange(currentSot, e.target.value)}
+                          className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-[#00baf2] focus:outline-none"
+                        >
+                          {sotFields[currentSot]?.map(h => (
+                            <option key={h} value={h}>{h}</option>
+                          )) || []}
+                        </select>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           )}
-        </>
-      )}
 
-      {/* Mapping Table for Modify/Delete */}
-      {(func === 'modify' || func === 'delete') && selectedPanel && panelMappings.length > 0 && (
-        <div className="mb-6">
-          {func === 'delete' && (
-            <div className="flex items-center mb-2">
-              <input type="checkbox" checked={selectAll} onChange={handleSelectAll} className="mr-2" />
-              <span className="text-sm font-medium">Select All</span>
-            </div>
-          )}
-          <table className="min-w-full text-sm border rounded">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-1 py-2 border w-8">Select</th>
-                <th className="px-3 py-2 border">Panel Field</th>
-                <th className="px-3 py-2 border">SOT</th>
-                <th className="px-3 py-2 border">SOT Field</th>
-              </tr>
-            </thead>
-            <tbody>
-              {panelMappings.map(m => (
-                <tr key={m.id}>
-                  <td className="px-1 py-2 border text-center w-8">
-                    <input
-                      type="checkbox"
-                      checked={selectedMappings.includes(m.id)}
-                      onChange={async () => {
-                        if (func === 'modify') {
-                          const newSelection = selectedMappings.includes(m.id) ? [] : [m.id];
-                          setSelectedMappings(newSelection);
-                          
-                          // Load SOT fields for the selected mapping
-                          if (newSelection.length > 0) {
-                            await loadSotFields(m.sot);
-                          }
-                        } else {
-                          handleMappingSelect(m.id);
-                        }
-                      }}
-                      disabled={func === 'modify' && selectedMappings.length === 1 && !selectedMappings.includes(m.id)}
-                    />
-                  </td>
-                  <td className="px-3 py-2 border">{m.panelField}</td>
-                  <td className="px-3 py-2 border">{m.sot}</td>
-                  <td className="px-3 py-2 border">{m.sotField}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
 
-      {/* Dynamic Panel and SOT header dropdowns for selected mappings (only for modify) */}
-      {func === 'modify' && selectedPanel && selectedMappings.length > 0 && (
-        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Panel header dropdowns on the left */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Panel Headers</label>
-            {panelMappings
-              .filter(m => selectedMappings.includes(m.id))
-              .map(m => {
-                // Get all unique panel headers for the selected panel
-                const uniquePanelHeaders = Array.from(new Set(panelMappings.map(pm => pm.panelField)));
-                // Initial value: either from state or the mapping's panelField
-                const selectedValue = panelHeaderSelections[m.id] || m.panelField;
-                return (
-                  <div key={m.id} className="mb-2">
-                    <label className="block text-xs text-gray-500 mb-1">{selectedPanel}</label>
-                    <select
-                      value={selectedValue}
-                      onChange={e => handlePanelHeaderChange(m.id, e.target.value)}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      {uniquePanelHeaders.map(h => (
-                        <option key={h} value={h}>{h}</option>
-                      ))}
-                    </select>
-                  </div>
-                );
-              })}
+
+          {/* Submit Button */}
+          <div className="md:col-span-2">
+            <ConfigSubmit
+              func={func}
+              newPanelName={newPanelName}
+              uploadedFile={uploadedFile}
+              addedMappings={addedMappings}
+              selectedPanel={selectedPanel}
+              selectedMappings={selectedMappings}
+              detectedPanelHeaders={detectedPanelHeaders}
+              panelMappings={panelMappings}
+              sotHeaderSelections={sotHeaderSelections}
+              panelHeaderSelections={panelHeaderSelections}
+              sotSelections={sotSelections}
+            />
           </div>
-          {/* SOT header dropdowns on the right */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">SOT Headers</label>
-            {panelMappings
-              .filter(m => selectedMappings.includes(m.id))
-              .map(m => {
-                // Initial value: either from state or the mapping's sotField
-                const selectedValue = sotHeaderSelections[m.sot] || m.sotField;
-                return (
-                  <div key={m.id} className="mb-2">
-                    <label className="block text-xs text-gray-500 mb-1">{m.sot}</label>
-                    <select
-                      value={selectedValue}
-                      onChange={e => handleSotHeaderChange(m.sot, e.target.value)}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      {sotFields[m.sot]?.map(h => (
-                        <option key={h} value={h}>{h}</option>
-                      )) || []}
-                    </select>
-                  </div>
-                );
-              })}
-          </div>
-        </div>
-      )}
-
-      {/* Upload History Table */}
-      {uploadHistory.length > 0 && (
-        <div className="mb-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Upload History</h3>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm border rounded">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-3 py-2 border">Panel Name</th>
-                  <th className="px-3 py-2 border">DateTime</th>
-                  <th className="px-3 py-2 border">Author</th>
-                  <th className="px-3 py-2 border">#Rows</th>
-                  <th className="px-3 py-2 border">Uploaded</th>
-                  <th className="px-3 py-2 border">Status</th>
-                  <th className="px-3 py-2 border">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {uploadHistory.map((item, index) => (
-                  <tr key={index}>
-                    <td className="px-3 py-2 border">{item.panel_name || 'Unknown'}</td>
-                    <td className="px-3 py-2 border">{item.upload_date || 'Unknown'}</td>
-                    <td className="px-3 py-2 border">{item.uploaded_by || 'Unknown'}</td>
-                    <td className="px-3 py-2 border">{item.row_count || 0}</td>
-                    <td className="px-3 py-2 border">100%</td>
-                    <td className="px-3 py-2 border">{item.status || 'Uploaded'}</td>
-                    <td className="px-3 py-2 border">
-                      <button className="text-blue-600 hover:text-blue-800">View</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {/* Submit and validation for all modes */}
-      <ConfigSubmit
-        func={func}
-        newPanelName={newPanelName}
-        uploadedFile={uploadedFile}
-        addedMappings={addedMappings}
-        selectedPanel={selectedPanel}
-        selectedMappings={selectedMappings}
-        detectedPanelHeaders={detectedPanelHeaders}
-        onSuccess={refreshUploadHistory}
-      />
+        </form>
+      </div>
     </div>
   );
 }
 
 // ConfigSubmit: Handles validation and submit for all config modes
-function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selectedPanel, selectedMappings, detectedPanelHeaders, onSuccess }) {
+function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selectedPanel, selectedMappings, detectedPanelHeaders, panelMappings, sotHeaderSelections, panelHeaderSelections, sotSelections }) {
   const [submitted, setSubmitted] = useState(false);
   const [warning, setWarning] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Reset submitted and warning states when function changes
+  useEffect(() => {
+    setSubmitted(false);
+    setWarning('');
+  }, [func]);
 
   const validFuncs = ['add', 'modify', 'delete'];
   const handleSubmit = async e => {
@@ -626,7 +658,7 @@ function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selecte
             if (!acc[mapping.sot]) {
               acc[mapping.sot] = {};
             }
-            acc[mapping.sot][mapping.sotField] = mapping.panelField;
+            acc[mapping.sot][mapping.panelField.toLowerCase()] = mapping.sotField.toLowerCase();
             return acc;
           }, {}),
           panel_headers: detectedPanelHeaders
@@ -648,10 +680,64 @@ function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selecte
           return;
         }
 
-        // Modify panel config
+        // Get the selected mapping
+        const selectedMapping = panelMappings.find(m => selectedMappings.includes(m.id));
+        if (!selectedMapping) {
+          setWarning('Selected mapping not found.');
+          setSubmitted(false);
+          return;
+        }
+
+        // Get the updated values from the dropdowns
+        const updatedPanelField = panelHeaderSelections[selectedMapping.id] || selectedMapping.panelField;
+        const updatedSot = sotSelections[selectedMapping.id] || selectedMapping.sot;
+        const updatedSotField = sotHeaderSelections[updatedSot] || selectedMapping.sotField;
+
+        console.log('DEBUG: Modify mapping values:');
+        console.log('- selectedMapping:', selectedMapping);
+        console.log('- panelHeaderSelections:', panelHeaderSelections);
+        console.log('- sotSelections:', sotSelections);
+        console.log('- sotHeaderSelections:', sotHeaderSelections);
+        console.log('- updatedPanelField:', updatedPanelField);
+        console.log('- updatedSot:', updatedSot);
+        console.log('- updatedSotField:', updatedSotField);
+
+        // Build the complete key_mapping for this panel with the updated values
+        const allMappings = panelMappings.map(m => {
+          if (m.id === selectedMapping.id) {
+            // This is the mapping being modified
+            return {
+              panelField: updatedPanelField,
+              sot: updatedSot,
+              sotField: updatedSotField
+            };
+          } else {
+            // Keep other mappings unchanged
+            return {
+              panelField: m.panelField,
+              sot: m.sot,
+              sotField: m.sotField
+            };
+          }
+        });
+
+        // Convert to backend format: { sot_name: { panel_field: sot_field } }
+        const key_mapping = {};
+        allMappings.forEach(mapping => {
+          if (!key_mapping[mapping.sot]) {
+            key_mapping[mapping.sot] = {};
+          }
+          key_mapping[mapping.sot][mapping.panelField.toLowerCase()] = mapping.sotField.toLowerCase();
+        });
+
+        console.log('DEBUG: Final payload to backend:');
+        console.log('- allMappings:', allMappings);
+        console.log('- key_mapping:', key_mapping);
+
+        // Call modify API with complete updated configuration
         await modifyPanelConfig({
-          panelName: selectedPanel,
-          mappingId: selectedMappings[0]
+          name: selectedPanel,
+          key_mapping: key_mapping
         });
       }
       // Delete
@@ -673,7 +759,6 @@ function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selecte
 
       setWarning('');
       setSubmitted(true);
-      if (onSuccess) onSuccess();
     } catch (err) {
       setWarning('Operation failed: ' + err.message);
       setSubmitted(false);
@@ -697,20 +782,23 @@ function ConfigSubmit({ func, newPanelName, uploadedFile, addedMappings, selecte
 
   return (
     <>
-      <button
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md shadow mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-        onClick={handleSubmit}
-        disabled={isDisabled || loading}
-      >
-        {loading ? (
-          <>
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-            Processing...
-          </>
-        ) : (
-          'Submit'
-        )}
-      </button>
+      <div className="flex justify-center mt-8">
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          disabled={isDisabled || loading}
+          className="px-8 py-3 bg-[#00baf2] hover:bg-[#00a4d6] text-white font-semibold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
+        >
+          {loading ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              Processing...
+            </>
+          ) : (
+            'Submit'
+          )}
+        </button>
+      </div>
       {warning && (
         <div className="text-red-600 text-center mt-2 font-medium">{warning}</div>
       )}

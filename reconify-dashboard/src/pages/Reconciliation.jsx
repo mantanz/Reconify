@@ -7,11 +7,15 @@ import Tooltip from '../components/Tooltip.jsx';
 import { 
   getPanels, 
   uploadPanelFile, 
+  uploadPanelFileWithHistory,
+  categorizeUsers,
   reconcilePanelWithHR, 
   recategorizeUsers, 
   getAllReconHistory,
   getReconSummaries 
 } from '../utils/api';
+import { formatDateTime } from '../utils/dateTime';
+import '../styles/tables.css';
 
 // Real data structure for reconciliation history
 
@@ -61,11 +65,11 @@ export default function Reconciliation() {
 
       // Combine and format the data
       const formattedRows = historyData.map(item => ({
-        userName: item.uploaded_by || 'Unknown',
-        dateTime: item.upload_date || new Date().toISOString(),
-        panelName: item.panel_name || 'Unknown Panel',
-        docId: item.id || `DOC${Math.random().toString(36).substr(2, 9)}`,
-        rows: item.row_count || 0,
+        userName: item.uploadedby || item.uploaded_by || 'Unknown',
+        dateTime: item.timestamp || item.upload_date || new Date().toISOString(),
+        panelName: item.panelname || item.panel_name || 'Unknown Panel',
+        docId: item.docid || item.id || `DOC${Math.random().toString(36).substr(2, 9)}`,
+        rows: item.total_records || item.row_count || 0,
         uploaded: 100, // Assuming uploaded files are complete
         status: item.status || 'Ready to Recon',
         reconReady: item.status === 'Ready to Recon',
@@ -145,9 +149,9 @@ export default function Reconciliation() {
     try {
       setLoading(true);
       
-      // Upload each file to the backend
+      // Upload each file to the backend with history tracking
       for (const file of files) {
-        await uploadPanelFile(file);
+        await uploadPanelFileWithHistory(panel, file);
       }
 
       // Reload the data to show the new uploads
@@ -173,13 +177,15 @@ export default function Reconciliation() {
     try {
       setLoading(true);
       
-      // Call backend reconciliation API
+      // Step 1: Categorize users first
+      await categorizeUsers(row.panelName);
+      
+      // Step 2: Call backend reconciliation API
       await reconcilePanelWithHR(row.panelName);
       
       // Reload data to get updated status
       await loadReconciliationData();
       
-      alert('Reconciliation process started successfully!');
     } catch (err) {
       setError('Failed to start reconciliation: ' + err.message);
       console.error('Error starting reconciliation:', err);
@@ -216,7 +222,6 @@ export default function Reconciliation() {
       setRecategoriseDragActive(false);
       setSelectedRowIndex(null);
       
-      alert('Recategorisation completed successfully!');
     } catch (err) {
       setError('Failed to recategorise: ' + err.message);
       console.error('Error recategorising:', err);
@@ -311,29 +316,29 @@ export default function Reconciliation() {
 
 
           {/* Table */}
-          <div className="mt-10 overflow-x-auto max-h-[60vh] overflow-y-auto rounded-md border border-gray-100">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-gray-100 text-gray-700">
+          <div className="table-container mt-10 max-h-[60vh] overflow-y-auto">
+            <table className="data-table">
+              <thead className="table-header">
                 <tr>
-                  <th className="px-4 py-3 font-medium">Panel Name</th>
-                  <th className="px-4 py-3 font-medium">DateTime</th>
-                  <th className="px-4 py-3 font-medium">Author</th>
-                  <th className="px-4 py-3 font-medium">#Rows</th>
-                  <th className="px-4 py-3 font-medium">Uploaded</th>
-                  <th className="px-4 py-3 font-medium">Status</th>
-                  <th className="px-4 py-3 font-medium">Actions</th>
+                  <th className="table-header th">Panel Name</th>
+                  <th className="table-header th">DateTime</th>
+                  <th className="table-header th">Author</th>
+                  <th className="table-header th">#Rows</th>
+                  <th className="table-header th">Uploaded</th>
+                  <th className="table-header th">Status</th>
+                  <th className="table-header th">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="table-body">
                 {rows.map((row,idx)=>(
-                  <tr key={idx} className="whitespace-nowrap">
-                    <td className="px-4 py-3"><Link to={`/documents/${row.docId}`} className="text-primary underline hover:text-primary-dark">{row.panelName}</Link></td>
-                    <td className="px-4 py-3">{row.dateTime}</td>
-                    <td className="px-4 py-3">{row.userName}</td>
-                    <td className="px-4 py-3">{row.rows}</td>
-                    <td className="px-4 py-3"><Progress percent={row.uploaded} /></td>
-                    <td className="px-4 py-3">{row.status}</td>
-                    <td className="px-4 py-3"><div className="flex items-center space-x-2">
+                  <tr key={idx} className="table-row whitespace-nowrap">
+                    <td className="table-cell"><Link to={`/documents/${row.docId}`} className="text-primary underline hover:text-primary-dark">{row.panelName}</Link></td>
+                    <td className="table-cell">{formatDateTime(row.dateTime)}</td>
+                    <td className="table-cell">{row.userName}</td>
+                    <td className="table-cell">{row.rows}</td>
+                    <td className="table-cell"><Progress percent={row.uploaded} /></td>
+                    <td className="table-cell">{row.status}</td>
+                    <td className="table-cell"><div className="flex items-center space-x-2">
                       <Tooltip label="Recon">
                         <button disabled={!row.reconReady} onClick={()=>handleRecon(idx)} className={`w-8 h-8 flex items-center justify-center rounded-md ${row.reconReady?'bg-primary text-white hover:bg-primary-dark':'bg-gray-400 text-white cursor-not-allowed'}`}>
                           <BsBinocularsFill className="w-4 h-4" />

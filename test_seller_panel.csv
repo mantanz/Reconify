@@ -1,0 +1,4 @@
+User_email,Cust_id,Role_name,User_status
+john.doe@paytm.com,CUST001,Admin,Active
+jane.smith@paytm.com,CUST002,Manager,Active
+bob.wilson@paytm.com,CUST003,User,Inactive
