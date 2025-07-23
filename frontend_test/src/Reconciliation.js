@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getPanels, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, recategorizeUsers } from "./api";
 import { parseISTTimestamp } from "./utils";
+import { validateMultipleFiles, validateSingleFile } from "./fileValidation";
 import { FiUpload, FiSettings } from 'react-icons/fi';
 import { HiOutlineUpload } from 'react-icons/hi';
 import { BsBinocularsFill, BsCheckCircle, BsCheckCircleFill, BsCheck2All } from 'react-icons/bs';
@@ -77,16 +78,14 @@ export default function Reconciliation() {
   // File validation and handling
   function validateAndSet(selected) {
     if (!selected?.length) return;
-    if (selected.length > MAX_FILES) {
-      alert(`Please select no more than ${MAX_FILES} files.`);
+    
+    const validation = validateMultipleFiles(selected, MAX_FILES);
+    if (!validation.isValid) {
+      alert(validation.errors.join('\n'));
       return;
     }
-    const oversize = Array.from(selected).find((f) => f.size / (1024 * 1024) > MAX_SIZE_MB);
-    if (oversize) {
-      alert(`File "${oversize.name}" exceeds ${MAX_SIZE_MB} MB.`);
-      return;
-    }
-    setFiles(Array.from(selected));
+    
+    setFiles(validation.validFiles);
   }
 
   function handleFilesChange(e) {
@@ -112,12 +111,14 @@ export default function Reconciliation() {
   // Recategorization file handling
   function validateAndSetRecategorise(selected) {
     if (!selected?.length) return;
+    
     const file = selected[0]; // Take only first file
-    const oversize = file.size / (1024 * 1024) > MAX_SIZE_MB;
-    if (oversize) {
-      alert(`File "${file.name}" exceeds ${MAX_SIZE_MB} MB.`);
+    const validation = validateSingleFile(file);
+    if (!validation.isValid) {
+      alert(validation.errors.join('\n'));
       return;
     }
+    
     setRecategorizationFile(file);
   }
 
@@ -479,6 +480,7 @@ export default function Reconciliation() {
                     id="dropzone-file" 
                     type="file" 
                     multiple 
+                    accept=".xlsx,.csv,.xlsb,.xls"
                     onChange={handleFilesChange} 
                     style={{ display: 'none' }} 
                     disabled={selectedPanel === ' -- Select -- '} 
@@ -808,10 +810,11 @@ export default function Reconciliation() {
                   <p style={{ fontSize: '14px', color: '#4b5563', margin: 0 }}>
                     <span style={{ fontWeight: '500' }}>Click to upload</span> or drag and drop
                   </p>
-                  <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', margin: 0 }}>CSV, Excel files up to 50MB</p>
+                  <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', margin: 0 }}>Excel (.xlsx, .xls, .xlsb) or CSV files up to 50MB</p>
                   <input 
                     id="recategorise-dropzone-file" 
                     type="file" 
+                    accept=".xlsx,.csv,.xlsb,.xls"
                     onChange={handleRecategoriseFilesChange} 
                     style={{ display: 'none' }} 
                   />
