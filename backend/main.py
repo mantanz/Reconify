@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Path
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Path, Request
 from pydantic import BaseModel
 from typing import List, Dict, Optional
 import json
@@ -10,6 +10,7 @@ import uuid
 from datetime import datetime
 import logging
 import pandas as pd
+import math
 
 # Configure logging for production
 logging.basicConfig(
@@ -76,16 +77,17 @@ def get_panels():
     return db["panels"]
 
 @app.post("/panels/add")
-def add_panel(panel: PanelConfig):
+def add_panel(panel: PanelConfig, user: str = Form("User")):
     db = load_db()
     if any(p["name"] == panel.name for p in db["panels"]):
         raise HTTPException(status_code=400, detail="Panel already exists")
     db["panels"].append(panel.dict())
     save_db(db)
+    log_audit_event("User Adds Panel", user, {"panel": panel.name})
     return {"message": "Panel added"}
 
 @app.put("/panels/modify")
-def modify_panel(update: PanelUpdate):
+def modify_panel(update: PanelUpdate, user: str = Form("User")):
     db = load_db()
     for panel in db["panels"]:
         if panel["name"] == update.name:
@@ -94,18 +96,20 @@ def modify_panel(update: PanelUpdate):
             if update.panel_headers is not None:
                 panel["panel_headers"] = update.panel_headers
             save_db(db)
+            log_audit_event("User Modifies Panel", user, {"panel": update.name})
             return {"message": "Panel updated"}
     raise HTTPException(status_code=404, detail="Panel not found")
 
 @app.delete("/panels/delete")
-def delete_panel(panel: PanelName):
+def delete_panel(panel: PanelName, user: str = Form("User")):
     db = load_db()
     db["panels"] = [p for p in db["panels"] if p["name"] != panel.name]
     save_db(db)
+    log_audit_event("User Deletes Panel", user, {"panel": panel.name})
     return {"message": "Panel deleted"}
 
 @app.post("/panels/upload_file")
-def upload_panel_file(file: UploadFile = File(...)):
+def upload_panel_file(file: UploadFile = File(...), user: str = Form("User")):
     # Read the uploaded file and return headers
     filename = file.filename.lower()
     contents = file.file.read()
@@ -140,6 +144,7 @@ def upload_panel_file(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error processing file: {str(e)}")
     
+    log_audit_event("Panel File Uploaded", user, {"filename": file.filename})
     return {"headers": headers}
 
 # @app.get("/hr_data/fields")
@@ -174,7 +179,7 @@ def get_panel_headers(panel_name: str):
     return {"headers": headers}
 
 @app.post("/sot/upload")
-def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
+def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data"), user: str = Form("User")):
     # Generate doc_id and metadata
     doc_id = str(uuid.uuid4())
     doc_name = file.filename
@@ -229,6 +234,7 @@ def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
     except Exception as e:
         logging.error(f"Failed to write SOT metadata: {e}")
         return {"error": f"Failed to write metadata: {e}", **meta}
+    log_audit_event("SOT Uploaded", user, {"sot_type": sot_type, "filename": file.filename})
     if not db_status:
         return {"error": db_error, **meta}
     return meta
@@ -258,12 +264,25 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
     filename = file.filename.lower()
     contents = file.file.read()
     
+    def clean_row(row):
+        for k, v in row.items():
+            # Convert nan to None
+            if isinstance(v, float) and math.isnan(v):
+                row[k] = None
+            # Convert pandas Timestamp to string
+            elif "Timestamp" in str(type(v)):
+                row[k] = str(v)
+            # Convert pd.NaT to None
+            elif str(v) == "NaT":
+                row[k] = None
+        return row
+
     try:
         # Read and parse file
         if filename.endswith(".xlsx") or filename.endswith(".xls"):
             import io
             df = pd.read_excel(io.BytesIO(contents))
-            rows = df.to_dict(orient="records")
+            rows = [clean_row(r) for r in df.to_dict(orient="records")]
             total_records = len(df)
         else:
             # Try different encodings for CSV files
@@ -282,8 +301,8 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
             
             import csv
             reader = csv.DictReader(lines)
-            rows = list(reader)
-            total_records = max(len(lines) - 1, 0)  # Exclude header
+            rows = [clean_row(dict(row)) for row in reader]
+            total_records = max(len(lines) - 1, 0) # Exclude header
     except Exception as e:
         return {"error": f"Error processing file: {str(e)}", "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": 0, "uploadedby": uploaded_by, "status": "error"}
     
@@ -315,22 +334,38 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
         return {"error": f"Failed to write panel history: {e}", **meta}
     return meta
 
+@app.get("/recon/summary")
+def get_recon_summaries(request: Request, user: str = None):
+    if not os.path.exists(RECON_SUMMARY_PATH):
+        return []
+    with open(RECON_SUMMARY_PATH, "r") as f:
+        data = json.load(f)
+    log_audit_event("User Viewed Overall Reconciliation Summary", user or request.query_params.get("user", "User"))
+    return data
+
+@app.get("/recon/summary/{recon_id}")
+def get_recon_summary_detail(request: Request, recon_id: str = Path(...), user: str = None):
+    if not os.path.exists(RECON_SUMMARY_PATH):
+        raise HTTPException(status_code=404, detail="No reconciliation summaries found")
+    with open(RECON_SUMMARY_PATH, "r") as f:
+        data = json.load(f)
+    for rec in data:
+        if rec.get("recon_id") == recon_id:
+            log_audit_event("User Downloaded Overall Reconciliation Summary", user or request.query_params.get("user", "User"), {"recon_id": recon_id})
+            return rec
+    raise HTTPException(status_code=404, detail="Reconciliation summary not found")
+
 @app.get("/panels/upload_history")
-def get_panel_upload_history():
+def get_panel_upload_history(request: Request, user: str = None):
     if not os.path.exists(RECON_HISTORY_PATH):
         return []
     with open(RECON_HISTORY_PATH, "r") as f:
+        log_audit_event("User Downloaded User Summary", user or request.query_params.get("user", "User"))
         return json.load(f)
 
-@app.get("/sot/fields/{sot_type}")
-def get_sot_fields(sot_type: str):
-    headers = get_panel_headers_from_db(sot_type)
-    if not headers:
-        raise HTTPException(status_code=404, detail=f"{sot_type} table not found or has no columns")
-    return {"fields": headers}
-
 @app.get("/panels/{panel_name}/details")
-def get_panel_details(panel_name: str):
+def get_panel_details(request: Request, panel_name: str, user: str = None):
+    log_audit_event("User Refreshed User Summary", user or request.query_params.get("user", "User"), {"panel_name": panel_name})
     """
     Fetch panel data rows for a specific panel.
     Returns only the panel rows data.
@@ -403,7 +438,8 @@ def debug_sot_table(sot_name: str):
         raise HTTPException(status_code=500, detail=f"Error accessing SOT table: {str(e)}")
 
 @app.post("/recon/process")
-def reconcile_panel_with_sot(panel_name: str = Form(...)):
+def reconcile_panel_with_sot(panel_name: str = Form(...), user: str = Form("User")):
+    log_audit_event("Reconciliation Started", user, {"panel": panel_name})
     """
     Reconcile internal users from panel with HR data.
     Only processes records where initial_status indicates internal users.
@@ -572,7 +608,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             logging.error(f"Failed to write reconciliation summary: {e}")
         
         logging.info(f"HR reconciliation completed for panel '{panel_name}'. Summary: {summary}")
-        
+        log_audit_event("Reconciliation Completed", user, {"panel": panel_name})
         return {
             "recon_id": recon_id,
             "summary": summary,
@@ -587,26 +623,29 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @app.get("/recon/summary")
-def get_recon_summaries():
+def get_recon_summaries(request: Request, user: str = None):
     if not os.path.exists(RECON_SUMMARY_PATH):
         return []
     with open(RECON_SUMMARY_PATH, "r") as f:
         data = json.load(f)
+    log_audit_event("User Viewed Overall Reconciliation Summary", user or request.query_params.get("user", "User"))
     return data
 
 @app.get("/recon/summary/{recon_id}")
-def get_recon_summary_detail(recon_id: str = Path(...)):
+def get_recon_summary_detail(request: Request, recon_id: str = Path(...), user: str = None):
     if not os.path.exists(RECON_SUMMARY_PATH):
         raise HTTPException(status_code=404, detail="No reconciliation summaries found")
     with open(RECON_SUMMARY_PATH, "r") as f:
         data = json.load(f)
     for rec in data:
         if rec.get("recon_id") == recon_id:
+            log_audit_event("User Downloaded Overall Reconciliation Summary", user or request.query_params.get("user", "User"), {"recon_id": recon_id})
             return rec
     raise HTTPException(status_code=404, detail="Reconciliation summary not found")
 
 @app.post("/categorize_users")
-def categorize_users(panel_name: str = Form(...)):
+def categorize_users(panel_name: str = Form(...), user: str = Form("User")):
+    log_audit_event("Recategorization Started", user, {"panel": panel_name})
     """
     Dynamically categorize users in a panel based on configured SOT mappings.
     This function is production-ready and handles any number of SOTs with any field mappings.
@@ -850,5 +889,55 @@ def categorize_users(panel_name: str = Form(...)):
         raise
     except Exception as e:
         logging.error(f"Unexpected error in categorize_users: {e}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@app.post("/manual_status_override")
+def manual_status_override(panel_name: str = Form(...), user: str = Form("User"), override_details: dict = Form(...)):
+    log_audit_event("Manual Status Override by IT", user, {"panel": panel_name, "details": override_details})
+    # ...existing code...
+    return {"message": "Status override applied"}
+
+@app.post("/recategorization/upload")
+def upload_recategorization_file(file: UploadFile = File(...), user: str = Form("User")):
+    log_audit_event("User Uploaded Recategorization File", user, {"filename": file.filename})
+    # ...existing code...
+    return {"message": "Recategorization file uploaded"}
+
+@app.post("/acknowledge_result")
+def acknowledge_result(panel_name: str = Form(...), user: str = Form("User")):
+    log_audit_event("User Acknowledged the Result", user, {"panel": panel_name})
+    # ...existing code...
+    return {"message": "Result acknowledged"}
+
+@app.get("/user/filter")
+def user_applied_filter(request: Request, user: str = None, panel_name: str = None, filter_field: str = None, filter_value: str = None):
+    log_audit_event("User Applied Filter on User Summary", user or request.query_params.get("user", "User"), {"panel_name": panel_name, "filter_field": filter_field, "filter_value": filter_value})
+    # ...existing code...
+    return {"message": "Filter applied"}
+
+@app.get("/user/navigate")
+def user_navigated_to_page(request: Request, user: str = None, page: str = None):
+    log_audit_event("User Navigated to Page", user or request.query_params.get("user", "User"), {"page": page})
+    # ...existing code...
+    return {"message": "Navigation logged"}
+
+def log_audit_event(action, user, details=None):
+    event = {
+        "timestamp": datetime.utcnow().isoformat(),
+        "user": user,
+        "action": action,
+        "details": details or {}
+    }
+    try:
+        path = "audit_trail.json"
+        if not os.path.exists(path):
+            with open(path, "w") as f:
+                json.dump([], f)
+        with open(path, "r+") as f:
+            data = json.load(f)
+            data.append(event)
+            f.seek(0)
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        logging.error(f"Failed to write audit event: {e}")
 

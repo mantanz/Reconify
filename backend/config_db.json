@@ -4,18 +4,13 @@
       "name": "Seller Panel",
       "key_mapping": {
         "hr_data": {
-          "user_email": "email"
-        },
-        "service_users": {
-          "user_email": "email"
-        },
-        "internal_users": {
-          "user_email": "domain"
-        },
-        "thirdparty_users": {
-          "user_email": "domain"
+          "email": "email"
         }
       }
+    },
+    {
+      "name": "SellerPanel",
+      "key_mapping": {}
     }
   ]
 }
