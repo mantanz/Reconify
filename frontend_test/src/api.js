@@ -70,7 +70,7 @@ export async function getSOTList() {
 
 // Fetch panel config by name
 export async function getPanelConfig(panelName) {
-  const res = await fetch(`http://localhost:8000/panels`);
+  const res = await fetch(`${API_BASE}/panels`);
   const panels = await res.json();
   return panels.find(p => p.name === panelName);
 }
@@ -90,7 +90,7 @@ export async function categorizeUsers(panelName) {
 export async function reconcilePanelWithHR(panelName) {
   const formData = new FormData();
   formData.append("panel_name", panelName);
-  const res = await fetch(`http://localhost:8000/recon/process`, {
+  const res = await fetch(`${API_BASE}/recon/process`, {
     method: "POST",
     body: formData,
   });

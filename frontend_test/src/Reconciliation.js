@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getPanels, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, recategorizeUsers } from "./api";
+import { parseISTTimestamp } from "./utils";
 
 export default function Reconciliation() {
   const [panels, setPanels] = useState([]);
@@ -189,43 +190,7 @@ export default function Reconciliation() {
     return item.status && item.status.toLowerCase() === "uploaded";
   };
 
-  // Helper function to parse IST timestamp format (dd-mm-yyyy hh:mm:ss)
-  const parseISTTimestamp = (timestamp) => {
-    if (!timestamp) return "Invalid Date";
-    
-    try {
-      // Check if it's already a valid date (for backward compatibility)
-      const jsDate = new Date(timestamp);
-      if (!isNaN(jsDate.getTime())) {
-        return jsDate.toLocaleString();
-      }
-      
-      // Parse IST format: dd-mm-yyyy hh:mm:ss
-      const parts = timestamp.split(' ');
-      if (parts.length !== 2) return timestamp; // Return as-is if format is unexpected
-      
-      const datePart = parts[0]; // dd-mm-yyyy
-      const timePart = parts[1]; // hh:mm:ss
-      
-      const dateParts = datePart.split('-');
-      const timeParts = timePart.split(':');
-      
-      if (dateParts.length !== 3 || timeParts.length !== 3) return timestamp;
-      
-      const day = parseInt(dateParts[0], 10);
-      const month = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed in JavaScript
-      const year = parseInt(dateParts[2], 10);
-      const hour = parseInt(timeParts[0], 10);
-      const minute = parseInt(timeParts[1], 10);
-      const second = parseInt(timeParts[2], 10);
-      
-      const parsedDate = new Date(year, month, day, hour, minute, second);
-      return parsedDate.toLocaleString();
-    } catch (error) {
-      console.error("Error parsing timestamp:", timestamp, error);
-      return timestamp; // Return original if parsing fails
-    }
-  };
+
 
   return (
     <div style={{ 

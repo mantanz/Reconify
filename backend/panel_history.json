@@ -1,28 +1,10 @@
 [
   {
-    "panelname": "OE_ODS_PANEL_PMMS",
-    "docid": "501226f2-b6c7-4b1b-9058-f60598670ea6",
-    "docname": "6. OE_ODS_PANEL_PMMS.csv",
-    "timestamp": "2025-07-21T12:59:02.125161",
-    "total_records": 111,
-    "uploadedby": "demo",
-    "status": "complete"
-  },
-  {
     "panelname": "Seller Panel",
-    "docid": "f5948ddf-bcd3-4e46-9858-67c672dc647c",
+    "docid": "2cc94447-5afc-479c-b869-17bfdfec1b5d",
     "docname": "1. Seller Panel Users List with Assigned Roles.csv",
-    "timestamp": "2025-07-22T10:30:36.127015",
+    "timestamp": "23-07-2025 12:39:42",
     "total_records": 1385,
-    "uploadedby": "demo",
-    "status": "complete"
-  },
-  {
-    "panelname": "OE Panel",
-    "docid": "50908307-a885-4022-8e7b-6eb68b6307fd",
-    "docname": "5. OE_PANEL.csv",
-    "timestamp": "23-07-2025 00:48:12",
-    "total_records": 3029,
     "uploadedby": "demo",
     "status": "complete"
   }

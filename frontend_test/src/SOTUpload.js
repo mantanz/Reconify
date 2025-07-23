@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { parseISTTimestamp } from "./utils";
+import { FiUpload, FiRefreshCw } from 'react-icons/fi';
+import "./tables.css";
 
 export default function SOTUpload() {
   const [uploading, setUploading] = useState(false);
@@ -8,6 +11,7 @@ export default function SOTUpload() {
   const [sotList, setSotList] = useState([]);
   const [sotMetadata, setSotMetadata] = useState({});
   const [uploadingSot, setUploadingSot] = useState("");
+  const [sotStatus, setSotStatus] = useState({}); // Track current status for each SOT
 
   useEffect(() => {
     // Fetch SOT list from backend
@@ -64,19 +68,7 @@ export default function SOTUpload() {
     }
   };
 
-  const getStatusColor = (status) => {
-    if (!status) return "#6c757d"; // Default gray
-    
-    const statusLower = status.toLowerCase();
-    
-    // Success statuses
-    if (statusLower === "complete" || statusLower === "uploaded") return "#27ae60"; // Green
-    
-    // Failed statuses
-    if (statusLower === "failed") return "#e74c3c"; // Red
-    
-    return "#6c757d"; // Default gray
-  };
+
 
   const handleUpload = async (sotType, file) => {
     if (!file) {
@@ -97,10 +89,19 @@ export default function SOTUpload() {
       });
       const data = await res.json();
       setResult(data);
-      if (data.error) setError(data.error);
+      
+      // Update SOT status based on upload result
+      if (data.error) {
+        setError(data.error);
+        setSotStatus(prev => ({ ...prev, [sotType]: "failed" }));
+      } else {
+        setSotStatus(prev => ({ ...prev, [sotType]: "uploaded" }));
+      }
+      
       fetchHistory();
     } catch (err) {
       setError("Upload failed. Please try again.");
+      setSotStatus(prev => ({ ...prev, [sotType]: "failed" }));
     } finally {
       setUploading(false);
       setUploadingSot("");
@@ -108,13 +109,7 @@ export default function SOTUpload() {
   };
 
   const formatDateTime = (timestamp) => {
-    if (!timestamp) return "-";
-    const date = new Date(timestamp);
-    return date.toLocaleDateString('en-GB') + ', ' + date.toLocaleTimeString('en-GB', { 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      second: '2-digit' 
-    });
+    return parseISTTimestamp(timestamp);
   };
 
   const getSotDisplayName = (sot) => {
@@ -123,6 +118,51 @@ export default function SOTUpload() {
            sot === "internal_users" ? "Internal Users" :
            sot === "thirdparty_users" ? "Third Party Users" :
            sot.toUpperCase();
+  };
+
+  const getStatusBadge = (sot, metadata) => {
+    // Check current upload status first, then fall back to metadata
+    const currentStatus = sotStatus[sot];
+    const status = currentStatus || (metadata.latestUpload ? metadata.latestUpload.status : null);
+    
+    if (!status) {
+      return <span style={{ color: "#6c757d" }}>-</span>;
+    }
+
+    const isUploaded = status === "uploaded";
+    const isFailed = status === "failed";
+
+    if (isFailed) {
+      return (
+        <span style={{
+          background: "#fecaca",
+          color: "#991b1b",
+          padding: "4px 12px",
+          borderRadius: "12px",
+          fontSize: "12px",
+          fontWeight: "600"
+        }}>
+          failed
+        </span>
+      );
+    }
+
+    if (isUploaded) {
+      return (
+        <span style={{
+          background: "#bbf7d0",
+          color: "#166534",
+          padding: "4px 12px",
+          borderRadius: "12px",
+          fontSize: "12px",
+          fontWeight: "600"
+        }}>
+          uploaded
+        </span>
+      );
+    }
+
+    return <span style={{ color: "#6c757d" }}>-</span>;
   };
 
   return (
@@ -138,37 +178,26 @@ export default function SOTUpload() {
     }}>
       <h2 style={{ textAlign: "center", color: "#343a40", marginBottom: 24 }}>Source of Truth</h2>
       
-      {/* Error and Result Messages */}
+      {/* Error Messages */}
       {error && <div style={{ marginBottom: 16, color: "#e74c3c", fontWeight: 500, background: "#fdf2f2", padding: 12, borderRadius: 6 }}>{error}</div>}
-      {result && (
-        <div style={{ marginBottom: 16, background: result.status === "failed" ? "#fdf2f2" : "#eafaf1", borderRadius: 6, padding: 16, color: result.status === "failed" ? "#991b1b" : "#145a32" }}>
-          <div><strong>{result.status === "failed" ? "Upload Failed!" : "File Uploaded!"}</strong></div>
-          <div><strong>Doc ID:</strong> {result.doc_id}</div>
-          <div><strong>File Name:</strong> {result.doc_name}</div>
-          <div><strong>Uploaded By:</strong> {result.uploaded_by}</div>
-          <div><strong>Timestamp:</strong> {result.timestamp}</div>
-          <div><strong>Status:</strong> {result.status}</div>
-          <div><strong>SOT Type:</strong> {result.sot_type}</div>
-          {result.error && <div><strong>Error:</strong> {result.error}</div>}
-        </div>
-      )}
 
       {/* SOT Table */}
-      <div style={{ background: "#fff", borderRadius: 6, boxShadow: "0 1px 4px rgba(0,0,0,0.04)", overflow: "hidden" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ background: "#e9ecef" }}>
-              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>SOT</th>
-              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>#Rows</th>
-              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Last Refreshed DateTime</th>
-              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Uploaded By</th>
-              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Upload</th>
+      <div className="table-container">
+        <table className="data-table">
+          <thead className="table-header">
+            <tr>
+              <th style={{ textAlign: "left" }}>SOT</th>
+              <th style={{ textAlign: "center" }}>#Rows</th>
+              <th style={{ textAlign: "center" }}>Last Refreshed DateTime</th>
+              <th style={{ textAlign: "center" }}>Uploaded By</th>
+              <th style={{ textAlign: "center" }}>Status</th>
+              <th style={{ textAlign: "center" }}>Upload</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="table-body">
             {sotList.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ textAlign: "center", color: "#adb5bd", padding: 24 }}>
+                <td colSpan={6} className="table-cell-center" style={{ color: "#adb5bd" }}>
                   No SOTs configured. Please configure SOT mappings in panel settings first.
                 </td>
               </tr>
@@ -187,6 +216,7 @@ export default function SOTUpload() {
                     onUpload={handleUpload}
                     getSotDisplayName={getSotDisplayName}
                     formatDateTime={formatDateTime}
+                    getStatusBadge={getStatusBadge}
                   />
                 );
               })
@@ -195,52 +225,13 @@ export default function SOTUpload() {
         </table>
       </div>
 
-      {/* Upload History Section (Collapsible) */}
-      <div style={{ marginTop: 24 }}>
-        <details style={{ background: "#fff", borderRadius: 6, padding: 16, border: "1px solid #dee2e6" }}>
-          <summary style={{ fontWeight: 600, color: "#495057", cursor: "pointer", fontSize: 16 }}>
-            📋 Upload History
-          </summary>
-          <div style={{ marginTop: 16 }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 6 }}>
-              <thead>
-                <tr style={{ background: "#e9ecef" }}>
-                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Doc ID</th>
-                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>File Name</th>
-                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Uploaded By</th>
-                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Timestamp</th>
-                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Status</th>
-                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Error</th>
-                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>SOT Type</th>
-                </tr>
-              </thead>
-              <tbody>
-                {history.length === 0 ? (
-                  <tr><td colSpan={7} style={{ textAlign: "center", color: "#adb5bd", padding: 16 }}>No uploads yet.</td></tr>
-                ) : (
-                  history.map((item, idx) => (
-                    <tr key={item.doc_id || idx} style={{ borderBottom: "1px solid #f1f3f5" }}>
-                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.doc_id}</td>
-                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.doc_name}</td>
-                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.uploaded_by}</td>
-                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{formatDateTime(item.timestamp)}</td>
-                      <td style={{ padding: "8px 12px", fontSize: 14, color: getStatusColor(item.status), fontWeight: 600 }}>{item.status}</td>
-                      <td style={{ padding: "8px 12px", fontSize: 14, color: "#e74c3c" }}>{item.error || "-"}</td>
-                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{getSotDisplayName(item.sot_type || "hr_data")}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </details>
-      </div>
+
     </div>
   );
 }
 
 // Separate component for SOT row with integrated file upload
-function SOTRow({ sot, metadata, isUploading, uploading, onUpload, getSotDisplayName, formatDateTime }) {
+function SOTRow({ sot, metadata, isUploading, uploading, onUpload, getSotDisplayName, formatDateTime, getStatusBadge }) {
   const fileInputRef = React.useRef(null);
 
   const handleUploadClick = () => {
@@ -259,49 +250,55 @@ function SOTRow({ sot, metadata, isUploading, uploading, onUpload, getSotDisplay
   };
 
   return (
-    <tr style={{ borderBottom: "1px solid #f1f3f5" }}>
-      <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 500 }}>
+    <tr className="table-row">
+      <td className="table-cell-medium" style={{ verticalAlign: "middle" }}>
         {getSotDisplayName(sot)}
       </td>
-      <td style={{ padding: "12px 16px", fontSize: 14 }}>
+      <td className="table-cell-center" style={{ verticalAlign: "middle" }}>
         {metadata.rowCount || 0}
       </td>
-      <td style={{ padding: "12px 16px", fontSize: 14 }}>
+      <td className="table-cell-center" style={{ verticalAlign: "middle" }}>
         {formatDateTime(metadata.lastRefreshed)}
       </td>
-      <td style={{ padding: "12px 16px", fontSize: 14 }}>
+      <td className="table-cell-center" style={{ verticalAlign: "middle" }}>
         {metadata.uploadedBy || "-"}
       </td>
-      <td style={{ padding: "12px 16px", fontSize: 14 }}>
+      <td className="table-cell-center" style={{ verticalAlign: "middle" }}>
+        {getStatusBadge(sot, metadata)}
+      </td>
+      <td className="table-cell-center" style={{ 
+        display: "flex", 
+        justifyContent: "center", 
+        alignItems: "center",
+        height: "100%"
+      }}>
         <button
           onClick={handleUploadClick}
-          disabled={uploading}
+          disabled={isUploading}
+          className="action-button"
           style={{
-            padding: "8px 12px",
-            background: uploading ? "#adb5bd" : "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            fontSize: 12,
-            cursor: uploading ? "not-allowed" : "pointer",
-            fontWeight: 600,
-            display: "flex",
+            background: isUploading ? "#adb5bd" : "#00BAF2",
+            cursor: isUploading ? "not-allowed" : "pointer",
+            fontSize: 16,
+            width: "40px",
+            height: "40px",
+            justifyContent: "center",
             alignItems: "center",
-            gap: "4px",
-            minWidth: "80px",
-            justifyContent: "center"
+            display: "flex",
+            borderRadius: "6px",
+            border: "none"
           }}
+          title={isUploading ? "Uploading..." : "Upload File"}
         >
           {isUploading ? (
-            <>
-              <span>🔄</span>
-              <span>Uploading...</span>
-            </>
+            <FiRefreshCw 
+              style={{ 
+                animation: "spin 1s linear infinite",
+                fontSize: "18px"
+              }} 
+            />
           ) : (
-            <>
-              <span>⬆️</span>
-              <span>Upload</span>
-            </>
+            <FiUpload style={{ fontSize: "18px" }} />
           )}
         </button>
         <input

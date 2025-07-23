@@ -12,14 +12,16 @@ import Reconsummary from "./Reconsummary";
 const NAV_ITEMS = [
   { key: "home", label: "Home", component: null },
   { key: "config", label: "Config", component: null },
-  { key: "sot_upload", label: "SOT Upload", component: <SOTUpload /> },
-  { key: "user_summary", label: "Reports", component: (
+  { key: "sot", label: "SOT", component: <SOTUpload /> },
+  { key: "reconciliation", label: "Reconciliation", component: <Reconciliation /> },
+  { key: "recertification", label: "Recertification", component: null },
+  { key: "reports", label: "Reports", component: (
     <div>
       <Reconsummary />
       <UserSummary />
     </div>
   ) },
-  { key: "reconciliation", label: "Reconciliation", component: <Reconciliation /> },
+  { key: "audit_trails", label: "Audit Trails", component: null },
 ];
 
 function App() {
@@ -323,7 +325,7 @@ function App() {
       {/* Navigation Bar - Modern Paytm-inspired design */}
       <nav style={{ 
         background: "linear-gradient(135deg, #002e6e 0%, #0056b6 100%)", 
-        padding: "12px 15px", 
+        padding: "11px 15px", 
         boxShadow: "0 8px 32px rgba(0, 46, 110, 0.15)",
         position: "sticky",
         top: 0,
@@ -333,16 +335,26 @@ function App() {
           {/* Left Section - Brand/Logo */}
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <div style={{ 
-              width: 40, 
-              height: 40, 
+              width: 36, 
+              height: 36, 
               background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)", 
-              borderRadius: "12px", 
+              borderRadius: "8px", 
               display: "flex", 
               alignItems: "center", 
               justifyContent: "center",
-              boxShadow: "0 4px 16px rgba(0, 180, 216, 0.3)"
+              boxShadow: "0 4px 16px rgba(0, 180, 216, 0.3)",
+              padding: "4px"
             }}>
-              <span style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>✓</span>
+              <img 
+                src="/reconfiy_logo.png" 
+                alt="Reconify Logo" 
+                style={{ 
+                  width: "45px", 
+                  height: "50px", 
+                  objectFit: "contain",
+                  filter: "brightness(0) invert(1)" // Makes the logo white to match the design
+                }} 
+              />
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1 }}>
               <h1 style={{ margin: 0, color: "#fff", fontSize: 28, fontWeight: 800 }}>Reconify</h1>
@@ -364,7 +376,7 @@ function App() {
           </div>
 
           {/* Center Section - Navigation Links */}
-          <div style={{ display: "flex", alignItems: "center", gap: 40, marginLeft: "auto" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 24, marginLeft: "auto" }}>
             {NAV_ITEMS.map(item => (
               <button
                 key={item.key}

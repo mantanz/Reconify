@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>PREVIEW:{{fontName}}</title>
+  <link rel="stylesheet" href="./font.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<style>
+		body {
+			font-family: sans-serif;
+			margin: 0;
+			padding: 10px 20px;
+		}
+
+		.preview-container{
+			column-count: 4;
+		}
+
+		.preview {
+			line-height: 2em;
+		}
+
+		.preview__icon {
+			display: inline-block;
+			width: 32px;
+			text-align: center;
+		}
+		
+	</style>
+</head>
+<body>
+	
+	<h1>{{fontName}}</h1>
+	<hr/>
+	<a href="#inline">View Inline Preview</a>
+	<hr/>
+	<div class="preview-container">
+		{{#each names}}
+
+		<div class="preview">
+			<span class="preview__icon">
+				<span class="{{removePeriods ../baseSelector}} {{../classPrefix}}{{this}}"></span>
+			</span>
+			<span>{{this}}</span>
+		</div>
+		{{/each}}
+	</div>
+	<hr/>
+
+	<h1 id="inline">{{fontName}} - Inline</h1>
+
+	<hr/>
+
+	{{#each names}}
+
+	<span class="preview-inline">
+		<span class="preview__icon_text">
+			<span class="{{removePeriods ../baseSelector}} {{../classPrefix}}{{this}}"></span>
+		</span>
+		<span>{{this}}</span>
+	</span>
+	{{/each}}
+</body>
+</html>
