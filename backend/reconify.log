@@ -4601,3 +4601,88 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-23 15:43:55,580 - root - INFO - User-wise summary completed. Total users: 2770
 2025-07-23 15:43:59,102 - root - INFO - Fetched 2770 rows for panel 'Seller Panel'
 2025-07-23 15:44:01,634 - root - INFO - Fetched 2770 rows for panel 'Seller Panel'
+2025-07-23 15:55:06,172 - root - INFO - No data found for panel: OE Panel
+2025-07-23 15:55:06,172 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 15:55:06,214 - root - INFO - No data found for panel: OE Panel
+2025-07-23 15:55:06,214 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 15:55:26,715 - root - INFO - No data found for panel: OE Panel
+2025-07-23 15:55:26,715 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 16:05:22,635 - root - INFO - No data found for panel: OE Panel
+2025-07-23 16:05:22,636 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 16:05:22,677 - root - INFO - No data found for panel: OE Panel
+2025-07-23 16:05:22,677 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 16:18:13,577 - root - INFO - No data found for panel: OE Panel
+2025-07-23 16:18:13,578 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 16:18:13,626 - root - INFO - No data found for panel: OE Panel
+2025-07-23 16:18:13,627 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 16:42:23,299 - root - INFO - No data found for panel: OE Panel
+2025-07-23 16:42:23,299 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 16:42:23,346 - root - INFO - No data found for panel: OE Panel
+2025-07-23 16:42:23,347 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 17:06:16,031 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:06:16,031 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 17:06:16,114 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:06:16,114 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-23 17:16:32,635 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-23 17:16:32,636 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-23 17:16:32,660 - root - INFO - Updating final_status for table 'seller_panel' with 2770 records using match_field 'user_email'
+2025-07-23 17:17:17,329 - root - INFO - Final status bulk update completed: 5540 records updated, 0 errors
+2025-07-23 17:17:17,332 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 2770, 'matched': 20, 'not_found': 2750, 'errors': 0}
+2025-07-23 17:17:22,543 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:17:22,662 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:17:22,663 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:17:22,737 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:17:22,830 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:17:22,831 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:18:28,182 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:18:28,264 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:18:28,265 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:18:28,334 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:18:28,422 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:18:28,423 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:20:05,064 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:20:05,185 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:20:05,186 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:20:05,260 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:20:05,343 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:20:05,344 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:20:26,073 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:20:26,181 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:20:26,182 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:20:26,252 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:20:26,380 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:20:26,381 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:20:46,217 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:20:46,334 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:20:46,335 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:20:46,416 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:20:46,527 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:20:46,528 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:22:42,934 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:22:43,010 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:22:43,011 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:22:43,078 - root - INFO - No data found for panel: OE Panel
+2025-07-23 17:22:43,173 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:22:43,174 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 17:31:17,632 - root - INFO - Starting user categorization for panel: OE Panel
+2025-07-23 17:31:17,633 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-23 17:31:17,685 - root - INFO - Fetched 60 rows from SOT: internal_users
+2025-07-23 17:31:17,803 - root - INFO - Fetched 7496 rows from SOT: service_users
+2025-07-23 17:31:17,830 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-23 17:31:17,994 - root - INFO - Fetched 3029 rows from panel: OE Panel
+2025-07-23 17:31:17,994 - root - INFO - Using 'email' as primary key field (from service_users)
+2025-07-23 17:31:17,994 - root - INFO - SOT internal_users: panel_field='email', sot_field='domain'
+2025-07-23 17:31:17,994 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-23 17:31:17,994 - root - INFO - SOT service_users: panel_field='email', sot_field='email'
+2025-07-23 17:31:17,997 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-23 17:31:17,997 - root - INFO - SOT thirdparty_users: panel_field='email', sot_field='domain'
+2025-07-23 17:31:17,997 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-23 17:31:18,073 - root - INFO - Updating table 'oe_panel' with 3029 records using match_field 'email'
+2025-07-23 17:31:25,383 - root - WARNING - Update 387: match_value is None or empty
+2025-07-23 17:31:38,952 - root - WARNING - Update 1131: match_value is None or empty
+2025-07-23 17:32:15,626 - root - INFO - Bulk update completed: 3033 records updated, 2 errors
+2025-07-23 17:32:15,627 - root - WARNING - Database update completed with warnings: Update completed with 2 errors out of 3029 records
+2025-07-23 17:32:15,628 - root - INFO - Successfully updated 3029 rows in panel 'OE Panel'
+2025-07-23 17:32:15,628 - root - INFO - User categorization completed for panel 'OE Panel'. Summary: {'internal_users': 1927, 'service_users': 0, 'thirdparty_users': 1100, 'not_found': 2, 'total': 3029, 'errors': 0}
+2025-07-23 17:32:15,879 - root - INFO - Found 1927 users to reconcile (1927 internal + 0 not found) and 1102 other users out of 3029 total panel users
+2025-07-23 17:32:15,984 - root - INFO - Updating table 'oe_panel' with 1927 records using match_field 'email'

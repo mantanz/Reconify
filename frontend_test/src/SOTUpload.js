@@ -25,8 +25,10 @@ export default function SOTUpload() {
 
   const fetchHistory = async () => {
     try {
+      console.log("Fetching SOT upload history...");
       const res = await fetch("http://127.0.0.1:8000/sot/uploads");
       const data = await res.json();
+      console.log("Fetched SOT upload data:", data);
       setHistory(Array.isArray(data) ? data : []);
       
       // Process history to create SOT metadata
@@ -43,7 +45,16 @@ export default function SOTUpload() {
         }
         
         // Update with latest upload info
-        if (!metadata[sot].latestUpload || new Date(item.timestamp) > new Date(metadata[sot].latestUpload.timestamp)) {
+        // Convert dd-mm-yyyy hh:mm:ss to proper Date format for comparison
+        const parseBackendTimestamp = (timestamp) => {
+          if (!timestamp) return new Date(0);
+          // Convert "dd-mm-yyyy hh:mm:ss" to "yyyy-mm-dd hh:mm:ss"
+          const [datePart, timePart] = timestamp.split(' ');
+          const [day, month, year] = datePart.split('-');
+          return new Date(`${year}-${month}-${day} ${timePart}`);
+        };
+        
+        if (!metadata[sot].latestUpload || parseBackendTimestamp(item.timestamp) > parseBackendTimestamp(metadata[sot].latestUpload.timestamp)) {
           metadata[sot].latestUpload = item;
           metadata[sot].lastRefreshed = item.timestamp;
           metadata[sot].uploadedBy = item.uploaded_by;
@@ -62,7 +73,13 @@ export default function SOTUpload() {
       }
       
       setSotMetadata(metadata);
-    } catch {
+      console.log("Updated SOT metadata:", metadata);
+      
+      // Clear temporary upload status since we now have real data from backend
+      setSotStatus({});
+      console.log("Cleared temporary upload status");
+    } catch (e) {
+      console.error("Failed to fetch SOT upload history:", e);
       setHistory([]);
       setSotMetadata({});
     }
@@ -98,7 +115,10 @@ export default function SOTUpload() {
         setSotStatus(prev => ({ ...prev, [sotType]: "uploaded" }));
       }
       
-      fetchHistory();
+      // Small delay to ensure backend has finished saving
+      setTimeout(() => {
+        fetchHistory();
+      }, 500);
     } catch (err) {
       setError("Upload failed. Please try again.");
       setSotStatus(prev => ({ ...prev, [sotType]: "failed" }));
@@ -121,9 +141,10 @@ export default function SOTUpload() {
   };
 
   const getStatusBadge = (sot, metadata) => {
-    // Check current upload status first, then fall back to metadata
+    // Prioritize backend metadata (source of truth), then fall back to current upload status
+    const backendStatus = metadata.latestUpload ? metadata.latestUpload.status : null;
     const currentStatus = sotStatus[sot];
-    const status = currentStatus || (metadata.latestUpload ? metadata.latestUpload.status : null);
+    const status = backendStatus || currentStatus;
     
     if (!status) {
       return <span style={{ color: "#6c757d" }}>-</span>;

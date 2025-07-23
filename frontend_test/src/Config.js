@@ -12,7 +12,7 @@ import {
 import "./tables.css";
 
 export default function Config() {
-  const [selectedFunction, setSelectedFunction] = useState("C");
+  const [selectedFunction, setSelectedFunction] = useState("");
   const [panels, setPanels] = useState([]);
   const [selectedPanel, setSelectedPanel] = useState(null);
   const [panelName, setPanelName] = useState("");
@@ -158,6 +158,11 @@ export default function Config() {
 
 
   const handleSubmit = async () => {
+    if (!selectedFunction) {
+      setMessage("Please select a function.");
+      return;
+    }
+
     setLoading(true);
     
     try {
@@ -259,7 +264,7 @@ export default function Config() {
 
 
 
-  const showMappingSection = selectedFunction !== "D" && 
+  const showMappingSection = selectedFunction && selectedFunction !== "D" && 
     ((selectedFunction === "C" && panelName && panelHeaders.length > 0) ||
      (selectedFunction === "U" && selectedPanel && panelHeaders.length > 0));
 
@@ -278,7 +283,7 @@ export default function Config() {
         color: "#002e6e",
         marginBottom: 40,
         fontSize: 32,
-        fontWeight: 800,
+        fontWeight: 600,
         background: "linear-gradient(135deg, #002e6e 0%, #0056b3 100%)",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
@@ -288,19 +293,22 @@ export default function Config() {
       </h2>
 
       <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 40,
-        marginBottom: 32
+        display: "flex",
+        alignItems: "center",
+        gap: 48,
+        marginBottom: 32,
+        flexWrap: "wrap"
       }}>
-        {/* Left Side - Function Selection */}
-        <div>
+        {/* Function Section */}
+        <div style={{ display: "flex", alignItems: "center" }}>
           <label style={{
-            display: "block",
-            marginBottom: 12,
             color: "#002e6e",
             fontWeight: 600,
-            fontSize: 16
+            fontSize: 16,
+            width: "110px",
+            textAlign: "left",
+            display: "inline-block",
+            marginRight: "12px"
           }}>
             Function
           </label>
@@ -309,27 +317,29 @@ export default function Config() {
               value={selectedFunction}
               onChange={(e) => handleFunctionChange(e.target.value)}
               style={{
-                width: "100%",
+                margin: 0,
                 padding: "16px 20px",
                 border: "2px solid #e8ecff",
                 borderRadius: 12,
                 fontSize: 16,
                 backgroundColor: "#fff",
-                color: "#002e6e",
+                color: selectedFunction ? "#002e6e" : "#6c757d",
                 cursor: "pointer",
                 outline: "none",
                 transition: "all 0.3s ease",
                 boxShadow: "0 4px 12px rgba(0, 123, 255, 0.08)",
-                appearance: "none"
+                appearance: "none",
+                minWidth: "400px"
               }}
             >
-              <option value="C">C - Create</option>
+              <option value="">-- Select --</option>
+              <option value="C">C - Create</option> 
               <option value="U">U - Update</option>
               <option value="D">D - Delete</option>
             </select>
             <div style={{
               position: "absolute",
-              right: "16px",
+              right: "24px",
               top: "50%",
               transform: "translateY(-50%)",
               pointerEvents: "none",
@@ -340,44 +350,50 @@ export default function Config() {
           </div>
         </div>
 
-        {/* Right Side - Panel Name */}
-        <div>
-          <label style={{
-            display: "block",
-            marginBottom: 12,
-            color: "#002e6e",
-            fontWeight: 600,
-            fontSize: 16
-          }}>
-            Panel Name
-          </label>
-          
-          {selectedFunction === "C" ? (
-            <input
-              type="text"
-              value={panelName}
-              onChange={(e) => handlePanelSelect(e.target.value)}
-              placeholder="Enter panel name"
-              style={{
-                width: "100%",
-                padding: "16px 20px",
-                border: "2px solid #e8ecff",
-                borderRadius: 12,
-                fontSize: 16,
-                backgroundColor: "#fff",
-                color: "#002e6e",
-                outline: "none",
-                transition: "all 0.3s ease",
-                boxShadow: "0 4px 12px rgba(0, 123, 255, 0.08)"
-              }}
-            />
+        {/* Panel Name Section */}
+        {selectedFunction && (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <label style={{
+              color: "#002e6e",
+              fontWeight: 600,
+              fontSize: 16,
+              width: "110px",
+              textAlign: "left",
+              display: "inline-block",
+              marginRight: "12px"
+            }}>
+              Panel Name
+            </label>
+            
+            {selectedFunction === "C" ? (
+            <div style={{ position: "relative" }}>
+              <input
+                type="text"
+                value={panelName}
+                onChange={(e) => handlePanelSelect(e.target.value)}
+                placeholder="Enter panel name"
+                style={{
+                  margin: 0,
+                  padding: "16px 20px",
+                  border: "2px solid #e8ecff",
+                  borderRadius: 12,
+                  fontSize: 16,
+                  backgroundColor: "#fff",
+                  color: "#002e6e",
+                  outline: "none",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 4px 12px rgba(0, 123, 255, 0.08)",
+                  minWidth: "400px"
+                }}
+              />
+            </div>
           ) : (
             <div style={{ position: "relative" }}>
               <select
                 value={selectedPanel?.name || ""}
                 onChange={(e) => handlePanelSelect(e.target.value)}
                 style={{
-                  width: "100%",
+                  margin: 0,
                   padding: "16px 20px",
                   border: "2px solid #e8ecff",
                   borderRadius: 12,
@@ -388,7 +404,8 @@ export default function Config() {
                   outline: "none",
                   transition: "all 0.3s ease",
                   boxShadow: "0 4px 12px rgba(0, 123, 255, 0.08)",
-                  appearance: "none"
+                  appearance: "none",
+                  minWidth: "400px"
                 }}
               >
                 <option value="">-- Select Panel --</option>
@@ -400,7 +417,7 @@ export default function Config() {
               </select>
               <div style={{
                 position: "absolute",
-                right: "16px",
+                right: "24px",
                 top: "50%",
                 transform: "translateY(-50%)",
                 pointerEvents: "none",
@@ -410,24 +427,25 @@ export default function Config() {
               </div>
             </div>
           )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* File Upload Section - Only for Create */}
       {selectedFunction === "C" && (
         <div style={{
-          marginBottom: 32,
-          padding: 32,
+          marginBottom: 24,
+          padding: 16,
           border: panelFile ? "2px solid #28a745" : "2px dashed #e8ecff",
-          borderRadius: 16,
+          borderRadius: 12,
           textAlign: "center",
           backgroundColor: panelFile ? "#f8fff9" : "#fafbff"
         }}>
           {panelFile ? (
             <div>
               <div style={{ 
-                fontSize: 24, 
-                marginBottom: 8, 
+                fontSize: 18, 
+                marginBottom: 6, 
                 color: "#28a745" 
               }}>
                 ✓
@@ -435,7 +453,7 @@ export default function Config() {
               <div style={{ 
                 fontWeight: 600, 
                 color: "#28a745",
-                fontSize: 16
+                fontSize: 14
               }}>
                 {panelFile.name}
               </div>
@@ -471,24 +489,28 @@ export default function Config() {
               <label
                 htmlFor="panel-file-upload"
                 style={{
-                  display: "block",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   cursor: "pointer",
                   color: "#6c757d",
-                  fontSize: 16
+                  fontSize: 16,
+                  gap: 12
                 }}
               >
                 <div style={{ 
-                  fontSize: 48, 
-                  marginBottom: 16, 
+                  fontSize: 32, 
                   color: "#00b4d8" 
                 }}>
                   📤
                 </div>
-                <div style={{ fontWeight: 600, marginBottom: 8 }}>
-                  Click to browse or drag and drop files here
-                </div>
-                <div style={{ fontSize: 14 }}>
-                  Supported formats: CSV, XLSX, XLS
+                <div>
+                  <div style={{ fontWeight: 600, marginBottom: 4, fontSize: 14 }}>
+                    Click to browse or drag and drop files here
+                  </div>
+                  <div style={{ fontSize: 12 }}>
+                    Supported formats: CSV, XLSX, XLS
+                  </div>
                 </div>
               </label>
             </>
@@ -652,7 +674,7 @@ export default function Config() {
                     <th>PANEL FIELD</th>
                     <th>SOT</th>
                     <th>SOT FIELD</th>
-                    <th>Action</th>
+                    <th className="table-header-action"></th>
                   </tr>
                 </thead>
                 <tbody className="table-body">
@@ -667,20 +689,34 @@ export default function Config() {
                          row.sot}
                       </td>
                       <td className="table-cell">{row.sotField}</td>
-                      <td className="table-cell">
+                      <td className="table-cell-action">
                         <button
                           onClick={() => removeMappingRow(row.id)}
                           style={{
-                            background: "#dc3545",
-                            color: "#fff",
+                            background: "transparent",
+                            color: "#dc3545",
                             border: "none",
-                            padding: "4px 8px",
-                            borderRadius: 4,
-                            fontSize: 12,
-                            cursor: "pointer"
+                            padding: "0",
+                            borderRadius: "50%",
+                            fontSize: "16px",
+                            cursor: "pointer",
+                            width: "24px",
+                            height: "24px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "background-color 0.2s",
+                            margin: "0 auto",
+                            lineHeight: "1"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = "#fecaca";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = "transparent";
                           }}
                         >
-                          Remove
+                          ×
                         </button>
                       </td>
                     </tr>
@@ -724,7 +760,8 @@ export default function Config() {
       )}
 
       {/* Submit Button */}
-      <div style={{ textAlign: "center", marginBottom: 24 }}>
+      {selectedFunction && (
+        <div style={{ textAlign: "center", marginBottom: 24 }}>
         <button
           onClick={handleSubmit}
           disabled={loading}
@@ -749,7 +786,8 @@ export default function Config() {
            selectedFunction === "U" ? "Update Panel" :
            "Delete Panel"}
         </button>
-      </div>
+        </div>
+      )}
 
       {/* Message Display */}
       {message && (

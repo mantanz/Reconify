@@ -22,6 +22,7 @@
 
 .table-header th {
   padding: 1rem 1.5rem;
+  text-align: center;
 }
 
 .table-body {
@@ -38,6 +39,7 @@
 
 .table-cell {
   padding: 1rem 1.5rem;
+  text-align: center;
 }
 
 .table-cell-medium {
@@ -48,6 +50,19 @@
 .table-cell-center {
   padding: 1rem 1.5rem;
   text-align: center;
+}
+
+.table-cell-action {
+  padding: 0.5rem;
+  text-align: center;
+  width: 20px;
+  max-width: 20px;
+}
+
+.table-header-action {
+  padding: 0.5rem;
+  width: 20px;
+  max-width: 50px;
 }
 
 .action-button {
