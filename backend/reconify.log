@@ -4686,3 +4686,108 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-23 17:32:15,628 - root - INFO - User categorization completed for panel 'OE Panel'. Summary: {'internal_users': 1927, 'service_users': 0, 'thirdparty_users': 1100, 'not_found': 2, 'total': 3029, 'errors': 0}
 2025-07-23 17:32:15,879 - root - INFO - Found 1927 users to reconcile (1927 internal + 0 not found) and 1102 other users out of 3029 total panel users
 2025-07-23 17:32:15,984 - root - INFO - Updating table 'oe_panel' with 1927 records using match_field 'email'
+2025-07-23 17:32:51,144 - root - INFO - Bulk update completed: 1931 records updated, 0 errors
+2025-07-23 17:32:51,147 - root - INFO - HR reconciliation completed for panel 'OE Panel'. Status: complete, Summary: {'panel_name': 'OE Panel', 'total_panel_users': 3029, 'internal_users': 1927, 'not_found_users': 0, 'users_to_reconcile': 1927, 'other_users': 1102, 'service_users': 0, 'thirdparty_users': 0, 'matched': 95, 'found_active': 88, 'found_inactive': 7, 'not_found': 1832}
+2025-07-23 17:32:51,148 - root - INFO - Updated upload history status for panel 'OE Panel' to 'complete'
+2025-07-23 17:35:43,828 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-23 17:35:43,828 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-23 17:35:43,845 - root - INFO - Updating final_status for table 'seller_panel' with 2770 records using match_field 'user_email'
+2025-07-23 17:36:25,783 - root - INFO - Final status bulk update completed: 5540 records updated, 0 errors
+2025-07-23 17:36:25,784 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 2770, 'matched': 20, 'not_found': 2750, 'errors': 0}
+2025-07-23 17:36:30,271 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:36:30,412 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:36:30,415 - root - INFO - User-wise summary completed. Total users: 5797
+2025-07-23 17:36:30,605 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:36:30,694 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:36:30,696 - root - INFO - User-wise summary completed. Total users: 5797
+2025-07-23 17:36:35,667 - root - INFO - Fetched 3029 rows for panel 'OE Panel'
+2025-07-23 17:41:39,406 - root - INFO - Starting user categorization for panel: OE Panel
+2025-07-23 17:41:39,407 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-23 17:41:39,458 - root - INFO - Fetched 60 rows from SOT: internal_users
+2025-07-23 17:41:39,616 - root - INFO - Fetched 7496 rows from SOT: service_users
+2025-07-23 17:41:39,668 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-23 17:41:39,973 - root - INFO - Fetched 6058 rows from panel: OE Panel
+2025-07-23 17:41:39,973 - root - INFO - Using 'email' as primary key field (from service_users)
+2025-07-23 17:41:39,973 - root - INFO - SOT internal_users: panel_field='email', sot_field='domain'
+2025-07-23 17:41:39,973 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-23 17:41:39,973 - root - INFO - SOT service_users: panel_field='email', sot_field='email'
+2025-07-23 17:41:39,976 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-23 17:41:39,976 - root - INFO - SOT thirdparty_users: panel_field='email', sot_field='domain'
+2025-07-23 17:41:39,976 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-23 17:41:40,027 - root - INFO - Updating table 'oe_panel' with 6058 records using match_field 'email'
+2025-07-23 17:41:48,846 - root - WARNING - Update 387: match_value is None or empty
+2025-07-23 17:42:05,134 - root - WARNING - Update 1131: match_value is None or empty
+2025-07-23 17:42:58,923 - root - WARNING - Update 3416: match_value is None or empty
+2025-07-23 17:43:17,902 - root - WARNING - Update 4160: match_value is None or empty
+2025-07-23 17:44:01,975 - root - INFO - Bulk update completed: 12132 records updated, 4 errors
+2025-07-23 17:44:01,977 - root - WARNING - Database update completed with warnings: Update completed with 4 errors out of 6058 records
+2025-07-23 17:44:01,977 - root - INFO - Successfully updated 6058 rows in panel 'OE Panel'
+2025-07-23 17:44:01,977 - root - INFO - User categorization completed for panel 'OE Panel'. Summary: {'internal_users': 3854, 'service_users': 0, 'thirdparty_users': 2200, 'not_found': 4, 'total': 6058, 'errors': 0}
+2025-07-23 17:44:02,227 - root - INFO - Found 3854 users to reconcile (3854 internal + 0 not found) and 2204 other users out of 6058 total panel users
+2025-07-23 17:44:02,280 - root - INFO - Updating table 'oe_panel' with 3854 records using match_field 'email'
+2025-07-23 17:45:08,156 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-23 17:45:08,226 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:45:08,229 - root - INFO - User-wise summary completed. Total users: 8824
+2025-07-23 17:45:08,484 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-23 17:45:08,545 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:45:08,548 - root - INFO - User-wise summary completed. Total users: 8824
+2025-07-23 17:45:12,559 - root - INFO - Starting user categorization for panel: OE Panel
+2025-07-23 17:45:12,560 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-23 17:45:12,595 - root - INFO - Fetched 60 rows from SOT: internal_users
+2025-07-23 17:45:12,702 - root - INFO - Fetched 7496 rows from SOT: service_users
+2025-07-23 17:45:12,725 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-23 17:45:12,847 - root - INFO - Fetched 6058 rows from panel: OE Panel
+2025-07-23 17:45:12,848 - root - INFO - Using 'email' as primary key field (from service_users)
+2025-07-23 17:45:12,848 - root - INFO - SOT internal_users: panel_field='email', sot_field='domain'
+2025-07-23 17:45:12,848 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-23 17:45:12,848 - root - INFO - SOT service_users: panel_field='email', sot_field='email'
+2025-07-23 17:45:12,851 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-23 17:45:12,851 - root - INFO - SOT thirdparty_users: panel_field='email', sot_field='domain'
+2025-07-23 17:45:12,851 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-23 17:45:12,900 - root - INFO - Updating table 'oe_panel' with 6058 records using match_field 'email'
+2025-07-23 17:45:30,995 - root - INFO - Bulk update completed: 7724 records updated, 0 errors
+2025-07-23 17:45:30,999 - root - INFO - HR reconciliation completed for panel 'OE Panel'. Status: complete, Summary: {'panel_name': 'OE Panel', 'total_panel_users': 6058, 'internal_users': 3854, 'not_found_users': 0, 'users_to_reconcile': 3854, 'other_users': 2204, 'service_users': 0, 'thirdparty_users': 0, 'matched': 190, 'found_active': 176, 'found_inactive': 14, 'not_found': 3664}
+2025-07-23 17:45:31,001 - root - INFO - Updated upload history status for panel 'OE Panel' to 'complete'
+2025-07-23 17:45:39,497 - root - WARNING - Update 387: match_value is None or empty
+2025-07-23 17:45:56,362 - root - WARNING - Update 1131: match_value is None or empty
+2025-07-23 17:46:46,108 - root - WARNING - Update 3416: match_value is None or empty
+2025-07-23 17:47:02,477 - root - WARNING - Update 4160: match_value is None or empty
+2025-07-23 17:47:35,746 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-23 17:47:35,821 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:47:35,824 - root - INFO - User-wise summary completed. Total users: 8824
+2025-07-23 17:47:36,080 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-23 17:47:36,162 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 17:47:36,165 - root - INFO - User-wise summary completed. Total users: 8824
+2025-07-23 17:47:39,790 - root - INFO - Fetched 6058 rows for panel 'OE Panel'
+2025-07-23 17:47:43,225 - root - INFO - Bulk update completed: 12132 records updated, 4 errors
+2025-07-23 17:47:43,226 - root - WARNING - Database update completed with warnings: Update completed with 4 errors out of 6058 records
+2025-07-23 17:47:43,226 - root - INFO - Successfully updated 6058 rows in panel 'OE Panel'
+2025-07-23 17:47:43,227 - root - INFO - User categorization completed for panel 'OE Panel'. Summary: {'internal_users': 3854, 'service_users': 0, 'thirdparty_users': 2200, 'not_found': 4, 'total': 6058, 'errors': 0}
+2025-07-23 17:48:12,952 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-23 17:48:12,953 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-23 17:48:12,999 - root - INFO - Fetched 60 rows from SOT: internal_users
+2025-07-23 17:48:13,112 - root - INFO - Fetched 7496 rows from SOT: service_users
+2025-07-23 17:48:13,137 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-23 17:48:13,309 - root - INFO - Fetched 4155 rows from panel: Seller Panel
+2025-07-23 17:48:13,310 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-23 17:48:13,310 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-23 17:48:13,310 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-23 17:48:13,310 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-23 17:48:13,312 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-23 17:48:13,312 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-23 17:48:13,312 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-23 17:48:13,351 - root - INFO - Updating table 'seller_panel' with 4155 records using match_field 'user_email'
+2025-07-23 17:49:28,857 - root - INFO - Bulk update completed: 12465 records updated, 0 errors
+2025-07-23 17:49:28,860 - root - INFO - Successfully updated 4155 rows in panel 'Seller Panel'
+2025-07-23 17:49:28,860 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'internal_users': 2952, 'service_users': 396, 'thirdparty_users': 807, 'not_found': 0, 'total': 4155, 'errors': 0}
+2025-07-23 17:49:29,090 - root - INFO - Found 2952 users to reconcile (2952 internal + 0 not found) and 1203 other users out of 4155 total panel users
+2025-07-23 17:49:29,146 - root - INFO - Updating table 'seller_panel' with 2952 records using match_field 'user_email'
+2025-07-23 17:50:24,201 - root - INFO - Bulk update completed: 8856 records updated, 0 errors
+2025-07-23 17:50:24,208 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Status: complete, Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 4155, 'internal_users': 2952, 'not_found_users': 0, 'users_to_reconcile': 2952, 'other_users': 1203, 'service_users': 0, 'thirdparty_users': 0, 'matched': 1107, 'found_active': 990, 'found_inactive': 117, 'not_found': 1845}
+2025-07-23 17:50:24,209 - root - INFO - Updated upload history status for panel 'Seller Panel' to 'complete'
+2025-07-23 18:00:11,076 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-23 18:00:11,182 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:00:11,185 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:00:11,508 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-23 18:00:11,692 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:00:11,696 - root - INFO - User-wise summary completed. Total users: 10209

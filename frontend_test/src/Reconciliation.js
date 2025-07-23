@@ -1,11 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { getPanels, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, recategorizeUsers } from "./api";
 import { parseISTTimestamp } from "./utils";
+import { FiUpload, FiSettings } from 'react-icons/fi';
+import { HiOutlineUpload } from 'react-icons/hi';
+import { BsBinocularsFill, BsCheckCircle, BsCheckCircleFill, BsCheck2All } from 'react-icons/bs';
+import "./tables.css";
+
+// Progress component for upload percentage
+function Progress({ percent }) {
+  return (
+    <div style={{ width: '96px' }}>
+      <div style={{ 
+        width: '100%', 
+        backgroundColor: '#e5e7eb', 
+        borderRadius: '9999px', 
+        height: '10px',
+        overflow: 'hidden'
+      }}>
+        <div 
+          style={{ 
+            backgroundColor: '#00baf2', 
+            height: '10px', 
+            borderRadius: '9999px',
+            width: `${percent}%`,
+            transition: 'width 0.3s ease'
+          }} 
+        />
+      </div>
+      <span style={{ fontSize: '12px', marginLeft: '4px' }}>{percent}%</span>
+    </div>
+  );
+}
+
+// Tooltip component
+function Tooltip({ label, children }) {
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }} title={label}>
+      {children}
+    </div>
+  );
+}
 
 export default function Reconciliation() {
   const [panels, setPanels] = useState([]);
-  const [selectedPanel, setSelectedPanel] = useState("");
-  const [file, setFile] = useState(null);
+  const [selectedPanel, setSelectedPanel] = useState(" -- Select -- ");
+  const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
@@ -15,7 +54,13 @@ export default function Reconciliation() {
   const [currentStep, setCurrentStep] = useState({});
   const [recategorizationFile, setRecategorizationFile] = useState(null);
   const [recategorizationLoading, setRecategorizationLoading] = useState({});
-  const [showRecategorization, setShowRecategorization] = useState({});
+  const [showRecategorization, setShowRecategorization] = useState(false);
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [recategoriseDragActive, setRecategoriseDragActive] = useState(false);
+
+  const MAX_FILES = 10;
+  const MAX_SIZE_MB = 50;
 
   useEffect(() => {
     getPanels().then(setPanels);
@@ -26,63 +71,92 @@ export default function Reconciliation() {
     setSelectedPanel(e.target.value);
     setResult(null);
     setError("");
-    setFile(null);
+    setFiles([]);
   };
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    setResult(null);
-    setError("");
-  };
-
-  const handleRecategorizationFileChange = (e) => {
-    setRecategorizationFile(e.target.files[0]);
-  };
-
-  const handleShowRecategorization = (reconId) => {
-    setShowRecategorization(s => ({ ...s, [reconId]: !s[reconId] }));
-    setRecategorizationFile(null); // Clear any previous file
-  };
-
-  const handleUserRecategorization = async (panelName, reconId) => {
-    if (!recategorizationFile) {
-      alert("Please select a recategorization file first.");
+  // File validation and handling
+  function validateAndSet(selected) {
+    if (!selected?.length) return;
+    if (selected.length > MAX_FILES) {
+      alert(`Please select no more than ${MAX_FILES} files.`);
       return;
     }
-
-    setRecategorizationLoading(l => ({ ...l, [reconId]: true }));
-    
-    try {
-      const result = await recategorizeUsers(panelName, recategorizationFile);
-      alert(`Recategorization completed!\n\nSummary:\n- Total users: ${result.summary.total_panel_users}\n- Matched: ${result.summary.matched}\n- Not found: ${result.summary.not_found}\n- Errors: ${result.summary.errors}`);
-      
-      // Clear the file and hide recategorization interface
-      setRecategorizationFile(null);
-      setShowRecategorization(s => ({ ...s, [reconId]: false }));
-    } catch (error) {
-      console.error("Recategorization failed:", error);
-      alert(`Recategorization failed: ${error.message || "Unknown error"}`);
-    } finally {
-      setRecategorizationLoading(l => ({ ...l, [reconId]: false }));
+    const oversize = Array.from(selected).find((f) => f.size / (1024 * 1024) > MAX_SIZE_MB);
+    if (oversize) {
+      alert(`File "${oversize.name}" exceeds ${MAX_SIZE_MB} MB.`);
+      return;
     }
-  };
+    setFiles(Array.from(selected));
+  }
+
+  function handleFilesChange(e) {
+    validateAndSet(e.target.files);
+  }
+
+  function handleDragOver(e) { 
+    e.preventDefault(); 
+    setDragActive(true);
+  }
+
+  function handleDragLeave(e) { 
+    e.preventDefault(); 
+    setDragActive(false);
+  }
+
+  function handleDrop(e) { 
+    e.preventDefault(); 
+    setDragActive(false); 
+    validateAndSet(e.dataTransfer.files);
+  }
+
+  // Recategorization file handling
+  function validateAndSetRecategorise(selected) {
+    if (!selected?.length) return;
+    const file = selected[0]; // Take only first file
+    const oversize = file.size / (1024 * 1024) > MAX_SIZE_MB;
+    if (oversize) {
+      alert(`File "${file.name}" exceeds ${MAX_SIZE_MB} MB.`);
+      return;
+    }
+    setRecategorizationFile(file);
+  }
+
+  function handleRecategoriseFilesChange(e) {
+    validateAndSetRecategorise(e.target.files);
+  }
+
+  function handleRecategoriseDragOver(e) { 
+    e.preventDefault(); 
+    setRecategoriseDragActive(true);
+  }
+
+  function handleRecategoriseDragLeave(e) { 
+    e.preventDefault(); 
+    setRecategoriseDragActive(false);
+  }
+
+  function handleRecategoriseDrop(e) { 
+    e.preventDefault(); 
+    setRecategoriseDragActive(false); 
+    validateAndSetRecategorise(e.dataTransfer.files);
+  }
 
   const handleUpload = async () => {
-    if (!selectedPanel) {
-      setError("Please select a panel.");
+    if (!files.length) return;
+    if (selectedPanel === " -- Select -- ") {
+      alert('Please select a panel before uploading.');
       return;
     }
-    if (!file) {
-      setError("Please select a file to upload.");
-      return;
-    }
+
     setUploading(true);
     setError("");
     setResult(null);
-    const formData = new FormData();
-    formData.append("panel_name", selectedPanel);
-    formData.append("file", file);
+    
     try {
+      const formData = new FormData();
+      formData.append("panel_name", selectedPanel);
+      formData.append("file", files[0]); // Upload first file
+
       const res = await fetch("http://127.0.0.1:8000/recon/upload", {
         method: "POST",
         body: formData,
@@ -90,7 +164,14 @@ export default function Reconciliation() {
       const data = await res.json();
       setResult(data);
       if (data.error) setError(data.error);
+      
+      // Reload history
       getAllReconHistory().then(setHistory);
+      
+      // Clear files
+      setFiles([]);
+      document.getElementById('dropzone-file').value = '';
+      
     } catch (err) {
       setError("Upload failed. Please try again.");
     } finally {
@@ -98,7 +179,10 @@ export default function Reconciliation() {
     }
   };
 
-  const handleReconcile = async (upload) => {
+  const handleReconcile = async (index) => {
+    const upload = history[index];
+    if (!upload) return;
+
     const uploadId = upload.docid || upload.doc_id;
     setLoading(l => ({ ...l, [uploadId]: true }));
     setCurrentStep(s => ({ ...s, [uploadId]: "Starting..." }));
@@ -106,15 +190,11 @@ export default function Reconciliation() {
     try {
       // Step 1: Categorize users
       setCurrentStep(s => ({ ...s, [uploadId]: "Categorizing users..." }));
-      console.log("Starting user categorization...");
       const categorizationResult = await categorizeUsers(upload.panelname);
-      console.log("User categorization completed:", categorizationResult);
       
       // Step 2: Reconcile with HR data
       setCurrentStep(s => ({ ...s, [uploadId]: "Reconciling with HR..." }));
-      console.log("Starting HR reconciliation...");
       const reconciliationResult = await reconcilePanelWithHR(upload.panelname);
-      console.log("HR reconciliation completed:", reconciliationResult);
       
       // Store both results
       setReconResults(r => ({ 
@@ -154,35 +234,72 @@ export default function Reconciliation() {
     }
   };
 
+  const handleRecategorise = (index) => {
+    setSelectedRowIndex(index);
+    setShowRecategorization(true);
+    setRecategorizationFile(null);
+  };
+
+  const handleRecategoriseUpload = async () => {
+    if (!recategorizationFile) {
+      alert("Please select a recategorization file first.");
+      return;
+    }
+
+    const upload = history[selectedRowIndex];
+    if (!upload) return;
+
+    const reconId = upload.docid || upload.doc_id;
+    setRecategorizationLoading(l => ({ ...l, [reconId]: true }));
+    
+    try {
+      const result = await recategorizeUsers(upload.panelname, recategorizationFile);
+      alert(`Recategorization completed!\n\nSummary:\n- Total users: ${result.summary.total_panel_users}\n- Matched: ${result.summary.matched}\n- Not found: ${result.summary.not_found}\n- Errors: ${result.summary.errors}`);
+      
+      // Clear the file and hide recategorization interface
+      setRecategorizationFile(null);
+      setShowRecategorization(false);
+      setSelectedRowIndex(null);
+      
+      // Reload history
+      getAllReconHistory().then(setHistory);
+      
+    } catch (error) {
+      console.error("Recategorization failed:", error);
+      alert(`Recategorization failed: ${error.message || "Unknown error"}`);
+    } finally {
+      setRecategorizationLoading(l => ({ ...l, [reconId]: false }));
+    }
+  };
+
+  const handleRecategoriseCancel = () => {
+    setShowRecategorization(false);
+    setRecategorizationFile(null);
+    setRecategoriseDragActive(false);
+    setSelectedRowIndex(null);
+  };
+
+  // Handle escape key to close modal
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape' && showRecategorization) {
+      handleRecategoriseCancel();
+    }
+  };
+
   const getStatusColor = (status) => {
-    if (!status) return "#6c757d"; // Default gray
-    
+    if (!status) return "#6c757d";
     const statusLower = status.toLowerCase();
-    
-    // Success statuses
-    if (statusLower === "complete" || statusLower === "uploaded" || statusLower === "ready to recon" || statusLower === "recon finished") return "#27ae60"; // Green
-    
-    // Failed statuses
-    if (statusLower === "failed") return "#e74c3c"; // Red
-    
-    return "#6c757d"; // Default gray
+    if (statusLower === "complete" || statusLower === "uploaded" || statusLower === "ready to recon" || statusLower === "recon finished") return "#27ae60";
+    if (statusLower === "failed") return "#e74c3c";
+    return "#6c757d";
   };
 
   const getDisplayStatus = (item) => {
     if (!item.status) return "Unknown";
-    
     const statusLower = item.status.toLowerCase();
-    
-    // If upload failed, show "Failed"
     if (statusLower === "failed") return "Failed";
-    
-    // If reconciliation is complete, show "Recon Finished"
     if (statusLower === "complete") return "Recon Finished";
-    
-    // If upload was successful but no reconciliation yet, show "Ready to Recon"
     if (statusLower === "uploaded") return "Ready to Recon";
-    
-    // Default fallback
     return item.status;
   };
 
@@ -190,599 +307,591 @@ export default function Reconciliation() {
     return item.status && item.status.toLowerCase() === "uploaded";
   };
 
+  const isReconciliationComplete = (item) => {
+    return item.status && item.status.toLowerCase() === "complete";
+  };
 
+  const canRecategorize = (item) => {
+    return item.status && item.status.toLowerCase() === "complete";
+  };
+
+  const isEntireProcessComplete = (item) => {
+    return item.status && (item.status.toLowerCase() === "recategorised" || item.status.toLowerCase() === "completed");
+  };
+
+  const isAlreadyMarkedComplete = (item) => {
+    return item.status && item.status.toLowerCase() === "completed";
+  };
+
+  const handleCancel = (index) => {
+    setHistory(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleMarkCompleted = (index) => {
+    const upload = history[index];
+    if (!upload) return;
+
+    // Update the status to completed
+    setHistory(prevHistory => 
+      prevHistory.map((item, i) => 
+        i === index 
+          ? { ...item, status: "completed" }
+          : item
+      )
+    );
+    
+    alert(`Process marked as completed for ${upload.panelname}`);
+  };
 
   return (
-    <div style={{ 
-      maxWidth: 1200, 
-      margin: "40px auto", 
-      padding: "0 20px"
-    }}>
-      {/* Header Section */}
-      <div style={{ 
-        background: "#fff", 
-        borderRadius: 12, 
-        padding: 32, 
-        boxShadow: "0 8px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08)", 
-        marginBottom: 24,
-        border: "1px solid rgba(0,0,0,0.05)"
-      }}>
-        <h2 style={{ 
-          textAlign: "center", 
-          color: "#343a40", 
-          marginBottom: 32, 
-          fontSize: 28, 
-          fontWeight: 700 
-        }}>
-          📊 Data Reconciliation
-        </h2>
-        
-        {/* Upload Section */}
+    <div style={{ backgroundColor: '#f9fafb', minHeight: '100vh', paddingTop: '56px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 12px 24px 12px' }}>
         <div style={{ 
-          background: "linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)", 
-          borderRadius: 12, 
-          padding: 24, 
-          border: "1px solid #dee2e6",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-          marginBottom: 24
+          width: '100%', 
+          backgroundColor: 'white', 
+          padding: '24px', 
+          borderRadius: '8px', 
+          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)' 
         }}>
-          <h3 style={{ 
-            color: "#495057", 
-            fontSize: 18, 
-            fontWeight: 600
-          }}>
-            🚀 Upload Panel Data
-          </h3>
           
+          {/* Loading and Error States */}
+          {(uploading || Object.values(loading).some(l => l)) && (
+            <div style={{ 
+              marginBottom: '16px', 
+              padding: '16px', 
+              backgroundColor: '#eff6ff', 
+              border: '1px solid #dbeafe', 
+              borderRadius: '6px' 
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ 
+                  animation: 'spin 1s linear infinite',
+                  borderRadius: '50%',
+                  height: '16px',
+                  width: '16px',
+                  borderTop: '2px solid #2563eb',
+                  borderRight: '2px solid transparent',
+                  marginRight: '8px'
+                }}></div>
+                <span style={{ color: '#1e40af' }}>
+                  {uploading ? 'Uploading...' : 'Processing...'}
+                </span>
+              </div>
+            </div>
+          )}
+          
+          {error && (
+            <div style={{ 
+              marginBottom: '16px', 
+              padding: '16px', 
+              backgroundColor: '#fef2f2', 
+              border: '1px solid #fecaca', 
+              borderRadius: '6px' 
+            }}>
+              <span style={{ color: '#991b1b' }}>{error}</span>
+            </div>
+          )}
+
+          {/* Upload section */}
           <div style={{ 
-            display: "flex", 
-            alignItems: "center", 
-            justifyContent: "space-between", 
-            gap: 16,
-            background: "#fff",
-            borderRadius: 8,
-            padding: "20px 24px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            border: "1px solid #e9ecef",
-            marginTop: 16
+            display: 'grid', 
+            gridTemplateColumns: '1fr 2fr',
+            gap: '64px 16px',
+            alignItems: 'center',
+            marginBottom: '24px'
           }}>
-            {/* Panel Selection */}
-            <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1 }}>
-              <label style={{ 
-                color: "#495057", 
-                fontWeight: 600, 
-                fontSize: 14,
-                whiteSpace: "nowrap"
+            {/* Panel selector */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ 
+                fontSize: '14px', 
+                fontWeight: '600', 
+                color: '#374151',
+                whiteSpace: 'nowrap' 
               }}>
-                Panel:
-              </label>
-              <select
-                value={selectedPanel}
+                Panel
+              </span>
+              <select 
+                value={selectedPanel} 
                 onChange={handlePanelChange}
                 style={{
-                  padding: "12px 16px",
-                  border: "2px solid #e9ecef",
-                  borderRadius: 8,
-                  fontSize: 14,
-                  background: "#fff",
-                  color: selectedPanel ? "#495057" : "#6c757d",
-                  cursor: "pointer",
-                  outline: "none",
-                  transition: "all 0.3s ease",
-                  width: "100%",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-                  fontWeight: selectedPanel ? "500" : "400"
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = "#007bff";
-                  e.target.style.boxShadow = "0 0 0 3px rgba(0,123,255,0.1)";
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = "#e9ecef";
-                  e.target.style.boxShadow = "0 2px 4px rgba(0,0,0,0.05)";
+                  border: '1px solid #d1d5db',
+                  backgroundColor: 'white',
+                  borderRadius: '6px',
+                  padding: '8px',
+                  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                  outline: 'none',
+                  flex: 1
                 }}
               >
-                <option value="">-- Select Panel --</option>
-                {panels.map(p => (
-                  <option key={p.name} value={p.name}>{p.name}</option>
+                <option> -- Select -- </option>
+                {panels.map((panel) => (
+                  <option key={panel.name} value={panel.name}>{panel.name}</option>
                 ))}
               </select>
             </div>
 
-            {/* File Upload */}
-            <div 
-              style={{ 
-                border: file ? "2px solid #28a745" : "2px dashed #007bff",
-                borderRadius: 8,
-                padding: "12px 20px",
-                background: file ? "#f8fff9" : "#f8f9ff",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 10,
-                transition: "all 0.3s ease",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-                flex: 1
-              }}
-              onClick={() => document.getElementById("fileInput").click()}
-              onMouseEnter={(e) => {
-                e.target.style.borderColor = file ? "#1e7e34" : "#0056b3";
-                e.target.style.background = file ? "#e8f5e8" : "#e6f3ff";
-                e.target.style.transform = "translateY(-1px)";
-                e.target.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.borderColor = file ? "#28a745" : "#007bff";
-                e.target.style.background = file ? "#f8fff9" : "#f8f9ff";
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = "0 2px 4px rgba(0,0,0,0.05)";
-              }}
-            >
-              <span style={{ fontSize: 18 }}>{file ? "📄" : "📁"}</span>
+            {/* File selector */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ 
-                fontSize: 14, 
-                fontWeight: file ? 600 : 500,
-                color: file ? "#28a745" : "#007bff",
-                textAlign: "center",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap"
+                fontSize: '14px', 
+                fontWeight: '600', 
+                color: '#374151',
+                whiteSpace: 'nowrap' 
               }}>
-                {file ? file.name : "Choose file..."}
+                File
               </span>
-              <input
-                id="fileInput"
-                type="file"
-                onChange={handleFileChange}
-                accept=".xlsx,.xls,.csv,.xlsb"
-                style={{ display: "none" }}
-              />
-            </div>
-
-            {/* Upload Button */}
-            <button
-              onClick={file ? handleUpload : () => document.getElementById("fileInput").click()}
-              disabled={uploading || (!selectedPanel && file)}
-              style={{
-                borderRadius: 8,
-                padding: "12px",
-                width: "48px",
-                height: "48px",
-                border: "none",
-                fontSize: 18,
-                fontWeight: 600,
-                cursor: uploading || (!selectedPanel && file) ? "not-allowed" : "pointer",
-                background: file ? 
-                  "linear-gradient(135deg, #28a745 0%, #20c997 100%)" : 
-                  "linear-gradient(135deg, #007bff 0%, #17a2b8 100%)",
-                color: "#fff",
-                boxShadow: file ? 
-                  "0 4px 12px rgba(40, 167, 69, 0.3)" : 
-                  "0 4px 12px rgba(0, 123, 255, 0.3)",
-                transition: "all 0.3s ease",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                opacity: uploading || (!selectedPanel && file) ? 0.6 : 1,
-                flexShrink: 0
-              }}
-              onMouseEnter={(e) => {
-                if (!uploading && (selectedPanel || !file)) {
-                  e.target.style.transform = "scale(1.1) translateY(-2px)";
-                  e.target.style.boxShadow = file ? 
-                    "0 6px 16px rgba(40, 167, 69, 0.4)" : 
-                    "0 6px 16px rgba(0, 123, 255, 0.4)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = "scale(1)";
-                e.target.style.boxShadow = file ? 
-                  "0 4px 12px rgba(40, 167, 69, 0.3)" : 
-                  "0 4px 12px rgba(0, 123, 255, 0.3)";
-              }}
-              title={file ? "Upload File" : "Select File"}
-            >
-              {uploading ? "⏳" : file ? "📤" : "📂"}
-            </button>
-          </div>
-          
-          {error && (
-            <div style={{ 
-              marginTop: 16, 
-              background: "#fdf2f2", 
-              borderRadius: 8, 
-              padding: 16, 
-              color: "#991b1b",
-              border: "1px solid #fecaca",
-              fontSize: 14,
-              fontWeight: 500
-            }}>
-              ❌ {error}
-            </div>
-          )}
-          
-          {result && (
-            <div style={{ 
-              marginTop: 16, 
-              background: result.status === "failed" ? "#fdf2f2" : "#eafaf1", 
-              borderRadius: 8, 
-              padding: 16, 
-              color: result.status === "failed" ? "#991b1b" : "#145a32",
-              border: `1px solid ${result.status === "failed" ? "#fecaca" : "#bbf7d0"}`
-            }}>
-              <div style={{ fontWeight: 600, marginBottom: 8, fontSize: 16 }}>
-                {result.status === "failed" ? "❌ Upload Failed!" : "✅ File Uploaded Successfully!"}
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, fontSize: 14 }}>
-                <div><strong>Panel:</strong> {result.panelname}</div>
-                <div><strong>File:</strong> {result.docname}</div>
-                <div><strong>Records:</strong> {result.total_records}</div>
-                <div><strong>Status:</strong> 
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+                <label
+                  htmlFor="dropzone-file"
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '40px',
+                    border: files.length > 0 ? '2px solid #059669' : 
+                            dragActive ? '2px dashed #00baf2' : '2px dashed #d1d5db',
+                    borderRadius: '6px',
+                    cursor: selectedPanel === ' -- Select -- ' ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s',
+                    fontSize: '14px',
+                    gap: '8px',
+                    backgroundColor: files.length > 0 ? 'rgba(5, 150, 105, 0.05)' :
+                                   dragActive ? 'rgba(0, 186, 242, 0.1)' : '#f9fafb',
+                    opacity: selectedPanel === ' -- Select -- ' ? 0.5 : 1
+                  }}
+                >
+                  <HiOutlineUpload style={{ 
+                    color: files.length > 0 ? '#059669' : '#6b7280', 
+                    width: '20px', 
+                    height: '20px' 
+                  }} />
                   <span style={{ 
-                    color: getStatusColor(result.status),
-                    fontWeight: 600,
-                    marginLeft: 4
+                    color: files.length > 0 ? '#059669' : '#4b5563',
+                    fontWeight: files.length > 0 ? '500' : 'normal'
                   }}>
-                    {result.status}
+                    {files.length > 0 ? files[0].name : 'Browse files'}
                   </span>
-                </div>
-                <div><strong>Uploaded By:</strong> {result.uploadedby}</div>
-                <div><strong>Timestamp:</strong> {parseISTTimestamp(result.timestamp)}</div>
+                  <input 
+                    id="dropzone-file" 
+                    type="file" 
+                    multiple 
+                    onChange={handleFilesChange} 
+                    style={{ display: 'none' }} 
+                    disabled={selectedPanel === ' -- Select -- '} 
+                  />
+                </label>
+                
+                {/* Upload button */}
+                <button
+                  onClick={handleUpload}
+                  disabled={!files.length || selectedPanel === ' -- Select -- ' || uploading}
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#00baf2',
+                    color: 'white',
+                    borderRadius: '6px',
+                    border: 'none',
+                    cursor: (!files.length || selectedPanel === ' -- Select -- ' || uploading) ? 'not-allowed' : 'pointer',
+                    opacity: (!files.length || selectedPanel === ' -- Select -- ' || uploading) ? 0.5 : 1
+                  }}
+                >
+                  <FiUpload style={{ width: '20px', height: '20px' }} />
+                </button>
               </div>
-              {result.error && (
-                <div style={{ marginTop: 12, padding: 8, background: "rgba(0,0,0,0.05)", borderRadius: 4 }}>
-                  <strong>Error:</strong> {result.error}
-                </div>
-              )}
             </div>
-          )}
-        </div>
-        
-        {/* Upload History Section */}
-        <div style={{ 
-          background: "linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)", 
-          borderRadius: 12, 
-          padding: 24, 
-          border: "1px solid #dee2e6",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
-        }}>
-          <h3 style={{ 
-            color: "#495057", 
-            marginBottom: 24, 
-            fontSize: 18, 
-            fontWeight: 600,
-            display: "flex",
-            alignItems: "center",
-            gap: 8
-          }}>
-            📋 Panel Upload History
-          </h3>
-          
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ 
-              width: "100%", 
-              borderCollapse: "collapse", 
-              background: "#fff", 
-              borderRadius: 8, 
-              overflow: "hidden",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.04)"
-            }}>
-              <thead>
-                <tr style={{ background: "#002e6e" }}>
-                  <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, fontSize: 14, color: "#ffffff" }}>Panel</th>
-                  <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, fontSize: 14, color: "#ffffff" }}>File Name</th>
-                  <th style={{ padding: "12px 0px", textAlign: "left", fontWeight: 600, fontSize: 14, color: "#ffffff" }}>Records</th>
-                  <th style={{ padding: "12px 4px", textAlign: "left", fontWeight: 600, fontSize: 14, color: "#ffffff" }}>Uploaded By</th>
-                  <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, fontSize: 14, color: "#ffffff" }}>Date</th>
-                  <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, fontSize: 14, color: "#ffffff" }}>Status</th>
-                  <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, fontSize: 14, color: "#ffffff" }}>Action</th>
+          </div>
+
+
+
+
+
+          {/* Table */}
+          <div className="table-container" style={{ marginTop: '40px', maxHeight: '60vh', overflowY: 'auto' }}>
+            <table className="data-table">
+              <thead className="table-header">
+                <tr>
+                  <th style={{ padding: '12px 16px', textAlign: 'left' }}>Panel Name</th>
+                  <th style={{ padding: '12px 16px', textAlign: 'left' }}>DateTime</th>
+                  <th style={{ padding: '12px 16px', textAlign: 'left' }}>Author</th>
+                  <th style={{ padding: '12px 16px', textAlign: 'left' }}>#Rows</th>
+                  <th style={{ padding: '12px 16px', textAlign: 'left' }}>Uploaded</th>
+                  <th style={{ padding: '12px 16px', textAlign: 'left' }}>Status</th>
+                  <th style={{ padding: '12px 16px', textAlign: 'left' }}>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {history.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} style={{ 
-                      textAlign: "center", 
-                      color: "#adb5bd", 
-                      padding: 32,
-                      fontSize: 14
-                    }}>
-                      📭 No uploads yet. Start by uploading panel data above.
+              <tbody className="table-body">
+                {history.map((item, idx) => (
+                  <tr key={idx} className="table-row" style={{ whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '14px', fontWeight: '500', color: '#343a40' }}>
+                      {item.panelname}
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: '14px', color: '#495057' }}>
+                      {parseISTTimestamp(item.timestamp)}
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: '14px', color: '#495057' }}>
+                      {item.uploadedby}
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: '14px', color: '#495057' }}>
+                      <span style={{ 
+                        background: '#e3f2fd', 
+                        color: '#1976d2', 
+                        padding: '4px 8px', 
+                        borderRadius: '4px',
+                        fontWeight: '600',
+                        fontSize: '12px'
+                      }}>
+                        {item.total_records}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: '14px', color: '#495057' }}>
+                      <Progress percent={100} />
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: '14px' }}>
+                      <span style={{ 
+                        color: getStatusColor(item.status), 
+                        fontWeight: '600',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        background: item.status === "complete" || item.status === "uploaded" ? "#e8f5e8" : 
+                                   item.status === "failed" ? "#ffeaea" : "#f8f9fa"
+                      }}>
+                        {getDisplayStatus(item)}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: '14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {/* Reconciliation Button */}
+                        <Tooltip label={
+                          loading[item.docid || item.doc_id] ? 
+                          `Processing: ${currentStep[item.docid || item.doc_id] || "Starting..."}` :
+                          canStartReconciliation(item) ? "Start Reconciliation" :
+                          isReconciliationComplete(item) ? "Reconciliation Completed" :
+                          "Reconciliation Not Available"
+                        }>
+                          <button
+                            onClick={() => handleReconcile(idx)}
+                            disabled={loading[item.docid || item.doc_id] || (!canStartReconciliation(item) && !isReconciliationComplete(item))}
+                            style={{
+                              width: '32px',
+                              height: '32px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              border: 'none',
+                              borderRadius: '6px',
+                              background: canStartReconciliation(item) ? '#00baf2' : 
+                                         isReconciliationComplete(item) ? '#059669' : '#6c757d',
+                              color: '#fff',
+                              fontSize: '14px',
+                              cursor: (loading[item.docid || item.doc_id] || (!canStartReconciliation(item) && !isReconciliationComplete(item))) ? 'not-allowed' : 'default',
+                              transition: 'all 0.2s ease',
+                              opacity: (canStartReconciliation(item) || isReconciliationComplete(item)) ? 1 : 0.6
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!loading[item.docid || item.doc_id] && canStartReconciliation(item)) {
+                                e.target.style.transform = "scale(1.1)";
+                                e.target.style.boxShadow = "0 2px 8px rgba(0,123,255,0.3)";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = "scale(1)";
+                              e.target.style.boxShadow = "none";
+                            }}
+                          >
+                            {loading[item.docid || item.doc_id] ? "⏳" : 
+                             isReconciliationComplete(item) ? <BsCheckCircleFill style={{ width: '16px', height: '16px' }} /> :
+                             <BsBinocularsFill style={{ width: '16px', height: '16px' }} />}
+                          </button>
+                        </Tooltip>
+                        
+                        {/* Recategorization Button */}
+                        <Tooltip label="Recategorise">
+                          <button
+                            onClick={() => handleRecategorise(idx)}
+                            disabled={!canRecategorize(item)}
+                            style={{
+                              width: '32px',
+                              height: '32px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              border: 'none',
+                              borderRadius: '6px',
+                              background: canRecategorize(item) ? '#2563eb' : '#6c757d',
+                              color: '#fff',
+                              fontSize: '14px',
+                              cursor: canRecategorize(item) ? 'pointer' : 'not-allowed',
+                              transition: 'all 0.2s ease',
+                              opacity: canRecategorize(item) ? 1 : 0.6
+                            }}
+                            onMouseEnter={(e) => {
+                              if (canRecategorize(item)) {
+                                e.target.style.transform = "scale(1.1)";
+                                e.target.style.boxShadow = "0 2px 8px rgba(37,99,235,0.3)";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = "scale(1)";
+                              e.target.style.boxShadow = "none";
+                            }}
+                          >
+                            <FiSettings style={{ width: '16px', height: '16px' }} />
+                          </button>
+                        </Tooltip>
+                        
+                        {/* Cancel Button */}
+                        <Tooltip label="Cancel">
+                          <button 
+                            onClick={() => handleCancel(idx)} 
+                            style={{
+                              width: '32px',
+                              height: '32px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              border: '1px solid #d1d5db',
+                              borderRadius: '6px',
+                              background: 'white',
+                              color: '#dc2626',
+                              fontSize: '18px',
+                              cursor: 'pointer',
+                              transition: 'background-color 0.2s'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.backgroundColor = "#f3f4f6";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.backgroundColor = "white";
+                            }}
+                          >
+                            ×
+                          </button>
+                        </Tooltip>
+                        
+                        {/* Complete Process Button */}
+                        <Tooltip label={
+                          isAlreadyMarkedComplete(item) ? "Process Completed" : 
+                          isEntireProcessComplete(item) ? "Mark as Completed" : 
+                          "Complete Process (Available after Recategorization)"
+                        }>
+                          <button
+                            onClick={() => handleMarkCompleted(idx)}
+                            disabled={!isEntireProcessComplete(item) || isAlreadyMarkedComplete(item)}
+                            style={{
+                              width: '32px',
+                              height: '32px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              border: 'none',
+                              borderRadius: '6px',
+                              background: isAlreadyMarkedComplete(item) ? '#16a34a' : 
+                                         isEntireProcessComplete(item) ? '#7c3aed' : '#6c757d',
+                              color: '#fff',
+                              fontSize: '14px',
+                              cursor: (isEntireProcessComplete(item) && !isAlreadyMarkedComplete(item)) ? 'pointer' : 'not-allowed',
+                              transition: 'all 0.2s ease',
+                              opacity: (isEntireProcessComplete(item) || isAlreadyMarkedComplete(item)) ? 1 : 0.6
+                            }}
+                            onMouseEnter={(e) => {
+                              if (isEntireProcessComplete(item) && !isAlreadyMarkedComplete(item)) {
+                                e.target.style.transform = "scale(1.1)";
+                                e.target.style.boxShadow = "0 2px 8px rgba(124,58,237,0.3)";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = "scale(1)";
+                              e.target.style.boxShadow = "none";
+                            }}
+                          >
+                            <BsCheck2All style={{ width: '16px', height: '16px' }} />
+                          </button>
+                        </Tooltip>
+                      </div>
                     </td>
                   </tr>
-                ) : (
-                  history.map((item, idx) => (
-                    <React.Fragment key={item.docid || idx}>
-                      <tr style={{ borderBottom: "1px solid #f1f3f5" }}>
-                        <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 500, color: "#343a40" }}>
-                          {item.panelname}
-                        </td>
-                        <td style={{ padding: "12px 16px", fontSize: 14, color: "#495057" }}>
-                          {item.docname}
-                        </td>
-                        <td style={{ padding: "12px 16px", fontSize: 14, color: "#495057" }}>
-                          <span style={{ 
-                            background: "#e3f2fd", 
-                            color: "#1976d2", 
-                            padding: "4px 8px", 
-                            borderRadius: 4,
-                            fontWeight: 600,
-                            fontSize: 12
-                          }}>
-                            {item.total_records}
-                          </span>
-                        </td>
-                        <td style={{ padding: "12px 16px", fontSize: 14, color: "#495057" }}>
-                          {item.uploadedby}
-                        </td>
-                        <td style={{ padding: "12px 16px", fontSize: 14, color: "#495057" }}>
-                          {parseISTTimestamp(item.timestamp)}
-                        </td>
-                        <td style={{ padding: "12px 16px", fontSize: 14 }}>
-                          <span style={{ 
-                            color: getStatusColor(item.status), 
-                            fontWeight: 600,
-                            padding: "4px 8px",
-                            borderRadius: 4,
-                            background: item.status === "complete" || item.status === "uploaded" ? "#e8f5e8" : 
-                                       item.status === "failed" ? "#ffeaea" : "#f8f9fa"
-                          }}>
-                            {getDisplayStatus(item)}
-                          </span>
-                        </td>
-                        <td style={{ padding: "12px 16px", fontSize: 14 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            {/* Reconciliation Button */}
-                            <button
-                              onClick={() => handleReconcile(item)}
-                              disabled={loading[item.docid || item.doc_id] || !canStartReconciliation(item)}
-                              style={{
-                                width: "32px",
-                                height: "32px",
-                                border: "none",
-                                borderRadius: "6px",
-                                background: loading[item.docid || item.doc_id] ? "#6c757d" : 
-                                           canStartReconciliation(item) ? "#007bff" : 
-                                           getDisplayStatus(item) === "Recon Finished" ? "#28a745" : "#6c757d",
-                                color: "#fff",
-                                fontSize: "14px",
-                                cursor: loading[item.docid || item.doc_id] || !canStartReconciliation(item) ? "not-allowed" : "pointer",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                transition: "all 0.2s ease",
-                                opacity: loading[item.docid || item.doc_id] || !canStartReconciliation(item) ? 0.6 : 1,
-                                position: "relative"
-                              }}
-                              title={
-                                loading[item.docid || item.doc_id] ? 
-                                `Processing: ${currentStep[item.docid || item.doc_id] || "Starting..."}` :
-                                canStartReconciliation(item) ? "Start Reconciliation" :
-                                getDisplayStatus(item) === "Recon Finished" ? "Reconciliation Completed" :
-                                "Reconciliation Not Available"
-                              }
-                              onMouseEnter={(e) => {
-                                if (!loading[item.docid || item.doc_id] && canStartReconciliation(item)) {
-                                  e.target.style.transform = "scale(1.1)";
-                                  e.target.style.boxShadow = "0 2px 8px rgba(0,123,255,0.3)";
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                e.target.style.transform = "scale(1)";
-                                e.target.style.boxShadow = "none";
-                              }}
-                            >
-                              {loading[item.docid || item.doc_id] ? "⏳" : 
-                               canStartReconciliation(item) ? "🔄" :
-                               getDisplayStatus(item) === "Recon Finished" ? "✅" : "🔄"}
-                            </button>
-                            
-                            {/* Recategorization Button */}
-                            <button
-                              onClick={() => handleShowRecategorization(item.docid || item.doc_id)}
-                              disabled={getDisplayStatus(item) !== "Recon Finished"}
-                              style={{
-                                width: "32px",
-                                height: "32px",
-                                border: "none",
-                                borderRadius: "6px",
-                                background: getDisplayStatus(item) === "Recon Finished" ? "#17a2b8" : "#6c757d",
-                                color: "#fff",
-                                fontSize: "14px",
-                                cursor: getDisplayStatus(item) === "Recon Finished" ? "pointer" : "not-allowed",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                transition: "all 0.2s ease",
-                                opacity: getDisplayStatus(item) === "Recon Finished" ? 1 : 0.6,
-                                position: "relative"
-                              }}
-                              title={
-                                getDisplayStatus(item) === "Recon Finished" ? 
-                                "User Recategorization" : 
-                                "Recategorization Available After Reconciliation"
-                              }
-                              onMouseEnter={(e) => {
-                                if (getDisplayStatus(item) === "Recon Finished") {
-                                  e.target.style.transform = "scale(1.1)";
-                                  e.target.style.boxShadow = "0 2px 8px rgba(23,162,184,0.3)";
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                e.target.style.transform = "scale(1)";
-                                e.target.style.boxShadow = "none";
-                              }}
-                            >
-                              👥
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      {reconResults[item.docid || item.doc_id] && (
-                        <tr>
-                          <td colSpan={7} style={{ padding: 0 }}>
-                            <div style={{ 
-                              background: "#f8f9fa", 
-                              padding: 20, 
-                              borderTop: "1px solid #e9ecef"
-                            }}>
-                              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-                                {/* User Categorization Results */}
-                                <div style={{ 
-                                  background: "#fff", 
-                                  padding: 16, 
-                                  borderRadius: 8, 
-                                  border: "1px solid #e9ecef"
-                                }}>
-                                  <h4 style={{ 
-                                    color: "#495057", 
-                                    marginBottom: 12, 
-                                    fontSize: 16, 
-                                    fontWeight: 600,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 8
-                                  }}>
-                                    👥 User Categorization
-                                  </h4>
-                                  <div style={{ 
-                                    background: "#f8f9fa", 
-                                    padding: 12, 
-                                    borderRadius: 6, 
-                                    fontSize: 13,
-                                    fontFamily: "monospace"
-                                  }}>
-                                    {JSON.stringify(reconResults[item.docid || item.doc_id].categorization?.summary, null, 2)}
-                                  </div>
-                                </div>
-                                
-                                {/* HR Reconciliation Results */}
-                                <div style={{ 
-                                  background: "#fff", 
-                                  padding: 16, 
-                                  borderRadius: 8, 
-                                  border: "1px solid #e9ecef"
-                                }}>
-                                  <h4 style={{ 
-                                    color: "#495057", 
-                                    marginBottom: 12, 
-                                    fontSize: 16, 
-                                    fontWeight: 600,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 8
-                                  }}>
-                                    🏢 HR Reconciliation
-                                  </h4>
-                                  <div style={{ 
-                                    background: "#f8f9fa", 
-                                    padding: 12, 
-                                    borderRadius: 6, 
-                                    fontSize: 13,
-                                    fontFamily: "monospace"
-                                  }}>
-                                    {JSON.stringify(reconResults[item.docid || item.doc_id].hr_data?.summary, null, 2)}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                      
-                      {/* Recategorization Interface */}
-                      {showRecategorization[item.docid || item.doc_id] && (
-                        <tr>
-                          <td colSpan={7} style={{ padding: 0 }}>
-                            <div style={{ 
-                              background: "#f8f9fa", 
-                              padding: 20, 
-                              borderTop: "1px solid #e9ecef"
-                            }}>
-                              <div style={{ 
-                                background: "#fff", 
-                                borderRadius: 8, 
-                                padding: 20, 
-                                border: "1px solid #e9ecef" 
-                              }}>
-                                <div style={{ marginBottom: 16 }}>
-                                  <h4 style={{ 
-                                    color: "#495057", 
-                                    marginBottom: 8, 
-                                    fontSize: 16, 
-                                    fontWeight: 600 
-                                  }}>
-                                    📋 Recategorization Instructions
-                                  </h4>
-                                  <div style={{ 
-                                    fontSize: 13, 
-                                    color: "#6c757d", 
-                                    background: "#f8f9fa",
-                                    padding: 12,
-                                    borderRadius: 6,
-                                    border: "1px solid #e9ecef"
-                                  }}>
-                                    <strong>File Requirements:</strong>
-                                    <ul style={{ margin: "8px 0", paddingLeft: 20 }}>
-                                      <li>Must contain a match column (email, user_email, domain, id, user_id, employee_id)</li>
-                                      <li>Must contain a type column (type, user_type, status, category, final_status, classification)</li>
-                                      <li>Match column values will be compared with panel data</li>
-                                      <li>Type column values will be used as the new final_status</li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                
-                                <div style={{ 
-                                  display: "flex", 
-                                  alignItems: "center", 
-                                  gap: 16, 
-                                  marginBottom: 16 
-                                }}>
-                                  <input
-                                    type="file"
-                                    onChange={handleRecategorizationFileChange}
-                                    accept=".xlsx,.xls,.csv"
-                                    style={{
-                                      flex: 1,
-                                      padding: "10px",
-                                      border: "2px solid #e9ecef",
-                                      borderRadius: 6,
-                                      fontSize: 14
-                                    }}
-                                  />
-                                  <button
-                                    onClick={() => handleUserRecategorization(item.panelname, item.docid || item.doc_id)}
-                                    disabled={recategorizationLoading[item.docid || item.doc_id] || !recategorizationFile}
-                                    style={{
-                                      padding: "10px 20px",
-                                      background: "#17a2b8",
-                                      color: "#fff",
-                                      border: "none",
-                                      borderRadius: 6,
-                                      fontSize: 14,
-                                      fontWeight: 600,
-                                      cursor: recategorizationLoading[item.docid || item.doc_id] || !recategorizationFile ? "not-allowed" : "pointer",
-                                      opacity: recategorizationLoading[item.docid || item.doc_id] || !recategorizationFile ? 0.6 : 1,
-                                      minWidth: 120
-                                    }}
-                                  >
-                                    {recategorizationLoading[item.docid || item.doc_id] ? "Processing..." : "Recategorize"}
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  ))
-                )}
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
+
+      {/* Recategorise Modal */}
+      {showRecategorization && (
+        <div 
+          style={{ 
+            position: 'fixed', 
+            inset: 0, 
+            backdropFilter: 'blur(4px)', 
+            backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            zIndex: 50 
+          }} 
+          onKeyDown={handleKeyDown} 
+          tabIndex={0}
+        >
+          <div style={{ 
+            backgroundColor: 'white', 
+            borderRadius: '8px', 
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', 
+            maxWidth: '448px', 
+            width: '100%', 
+            margin: '16px', 
+            padding: '24px' 
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#111827' }}>Recategorise Document</h3>
+              <button
+                onClick={handleRecategoriseCancel}
+                style={{
+                  color: '#9ca3af',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  border: 'none',
+                  background: 'none',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => e.target.style.color = '#4b5563'}
+                onMouseLeave={(e) => e.target.style.color = '#9ca3af'}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div style={{ marginBottom: '16px' }}>
+              <p style={{ fontSize: '14px', color: '#4b5563', marginBottom: '12px' }}>
+                Upload a new document to recategorise the data for <strong>{history[selectedRowIndex]?.panelname}</strong>
+              </p>
+              
+              <div style={{ marginBottom: '12px' }}>
+                <label
+                  htmlFor="recategorise-dropzone-file"
+                  onDragOver={handleRecategoriseDragOver}
+                  onDragLeave={handleRecategoriseDragLeave}
+                  onDrop={handleRecategoriseDrop}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '128px',
+                    border: `2px dashed ${recategoriseDragActive ? '#2563eb' : '#d1d5db'}`,
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    transition: 'colors 0.2s',
+                    backgroundColor: recategoriseDragActive ? '#eff6ff' : '#f9fafb'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!recategoriseDragActive) {
+                      e.target.style.backgroundColor = '#f3f4f6';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!recategoriseDragActive) {
+                      e.target.style.backgroundColor = '#f9fafb';
+                    }
+                  }}
+                >
+                  <HiOutlineUpload style={{ width: '32px', height: '32px', color: '#9ca3af', marginBottom: '8px' }} />
+                  <p style={{ fontSize: '14px', color: '#4b5563', margin: 0 }}>
+                    <span style={{ fontWeight: '500' }}>Click to upload</span> or drag and drop
+                  </p>
+                  <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', margin: 0 }}>CSV, Excel files up to 50MB</p>
+                  <input 
+                    id="recategorise-dropzone-file" 
+                    type="file" 
+                    onChange={handleRecategoriseFilesChange} 
+                    style={{ display: 'none' }} 
+                  />
+                </label>
+                
+                {recategorizationFile && (
+                  <div style={{ 
+                    backgroundColor: '#f0fdf4', 
+                    border: '1px solid #bbf7d0', 
+                    borderRadius: '6px', 
+                    padding: '12px',
+                    marginTop: '12px'
+                  }}>
+                    <p style={{ fontSize: '14px', color: '#166534', fontWeight: '500', margin: 0 }}>
+                      File selected
+                    </p>
+                    <p style={{ fontSize: '12px', color: '#15803d', marginTop: '4px', margin: 0 }}>
+                      • {recategorizationFile.name}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button
+                onClick={handleRecategoriseCancel}
+                style={{
+                  flex: 1,
+                  padding: '8px 16px',
+                  border: '1px solid #d1d5db',
+                  color: '#374151',
+                  borderRadius: '6px',
+                  backgroundColor: 'white',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#f9fafb'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRecategoriseUpload}
+                disabled={!recategorizationFile || recategorizationLoading[history[selectedRowIndex]?.docid]}
+                style={{
+                  flex: 1,
+                  padding: '8px 16px',
+                  backgroundColor: '#2563eb',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: (!recategorizationFile || recategorizationLoading[history[selectedRowIndex]?.docid]) ? 'not-allowed' : 'pointer',
+                  opacity: (!recategorizationFile || recategorizationLoading[history[selectedRowIndex]?.docid]) ? 0.5 : 1,
+                  fontSize: '14px'
+                }}
+                onMouseEnter={(e) => {
+                  if (recategorizationFile && !recategorizationLoading[history[selectedRowIndex]?.docid]) {
+                    e.target.style.backgroundColor = '#1d4ed8';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (recategorizationFile && !recategorizationLoading[history[selectedRowIndex]?.docid]) {
+                    e.target.style.backgroundColor = '#2563eb';
+                  }
+                }}
+              >
+                {recategorizationLoading[history[selectedRowIndex]?.docid] ? "Processing..." : "Upload & Recategorise"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 } 

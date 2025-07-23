@@ -50,5 +50,83 @@
       "found_inactive": 78,
       "not_found": 1230
     }
+  },
+  {
+    "recon_id": "RCN_431c01c5",
+    "panelname": "OE Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "upload_date": "23-07-2025 17:31:11",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-23",
+    "performed_by": "demo",
+    "error": null,
+    "summary": {
+      "panel_name": "OE Panel",
+      "total_panel_users": 3029,
+      "internal_users": 1927,
+      "not_found_users": 0,
+      "users_to_reconcile": 1927,
+      "other_users": 1102,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 95,
+      "found_active": 88,
+      "found_inactive": 7,
+      "not_found": 1832
+    }
+  },
+  {
+    "recon_id": "RCN_03b4a6eb",
+    "panelname": "OE Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "upload_date": "23-07-2025 17:39:43",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-23",
+    "performed_by": "demo",
+    "error": null,
+    "summary": {
+      "panel_name": "OE Panel",
+      "total_panel_users": 6058,
+      "internal_users": 3854,
+      "not_found_users": 0,
+      "users_to_reconcile": 3854,
+      "other_users": 2204,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 190,
+      "found_active": 176,
+      "found_inactive": 14,
+      "not_found": 3664
+    }
+  },
+  {
+    "recon_id": "RCN_520bdaf4",
+    "panelname": "Seller Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "upload_date": "23-07-2025 17:48:08",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-23",
+    "performed_by": "demo",
+    "error": null,
+    "summary": {
+      "panel_name": "Seller Panel",
+      "total_panel_users": 4155,
+      "internal_users": 2952,
+      "not_found_users": 0,
+      "users_to_reconcile": 2952,
+      "other_users": 1203,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 1107,
+      "found_active": 990,
+      "found_inactive": 117,
+      "not_found": 1845
+    }
   }
 ]
