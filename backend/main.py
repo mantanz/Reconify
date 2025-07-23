@@ -7,7 +7,7 @@ import csv
 from fastapi.middleware.cors import CORSMiddleware
 from db.mysql_utils import create_panel_table, get_panel_headers_from_db, insert_panel_data_rows, insert_sot_data_rows, fetch_all_rows
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import logging
 import pandas as pd
 
@@ -27,6 +27,15 @@ HR_DATA_SAMPLE_PATH = os.path.join("db", "HR_data_sample.csv")
 SOT_UPLOADS_PATH = "sot_uploads.json"
 RECON_HISTORY_PATH = "panel_history.json"
 RECON_SUMMARY_PATH = "reconciliation_summary.json"
+
+# Helper function to get IST timestamp in dd-mm-yyyy hh:mm:ss format
+def get_ist_timestamp():
+    """Get current timestamp in Indian Standard Time (IST) format: dd-mm-yyyy hh:mm:ss"""
+    # IST is UTC+5:30
+    ist_offset = timedelta(hours=5, minutes=30)
+    utc_now = datetime.now(timezone.utc)
+    ist_time = utc_now.astimezone(timezone(ist_offset))
+    return ist_time.strftime("%d-%m-%Y %H:%M:%S")
 
 # Models
 class PanelConfig(BaseModel):
@@ -59,6 +68,35 @@ def save_db(data):
     with open(DB_PATH, "w") as f:
         json.dump(data, f, indent=2)
 
+def update_upload_history_status(panel_name: str, new_status: str):
+    """
+    Update the status of the most recent upload for a panel in the upload history.
+    """
+    try:
+        if not os.path.exists(RECON_HISTORY_PATH):
+            return False
+        
+        with open(RECON_HISTORY_PATH, "r") as f:
+            panel_history = json.load(f)
+        
+        # Find the most recent upload for this panel and update its status
+        updated = False
+        for entry in reversed(panel_history):
+            if entry.get("panelname") == panel_name:
+                entry["status"] = new_status
+                updated = True
+                break
+        
+        if updated:
+            with open(RECON_HISTORY_PATH, "w") as f:
+                json.dump(panel_history, f, indent=2)
+            logging.info(f"Updated upload history status for panel '{panel_name}' to '{new_status}'")
+            return True
+        
+        return False
+    except Exception as e:
+        logging.error(f"Failed to update upload history status: {e}")
+        return False
 
 # API Endpoints
 
@@ -112,11 +150,23 @@ def upload_panel_file(file: UploadFile = File(...)):
     headers = []
     
     try:
-        if filename.endswith(".xlsx") or filename.endswith(".xls"):
+        if filename.endswith(".xlsx") or filename.endswith(".xls") or filename.endswith(".xlsb"):
             import io
-            df = pd.read_excel(io.BytesIO(contents))
+            try:
+                df = pd.read_excel(io.BytesIO(contents))
+            except ImportError as e:
+                if "pyxlsb" in str(e) and filename.endswith(".xlsb"):
+                    raise HTTPException(
+                        status_code=400, 
+                        detail="Missing optional dependency 'pyxlsb' for .xlsb files. Please install it using: pip install pyxlsb"
+                    )
+                else:
+                    raise e
             # Convert headers to lowercase
             df.columns = [col.strip().lower() for col in df.columns]
+            # Clean NaN values - replace with None for database compatibility
+            df = df.replace({pd.NA: None, pd.NaT: None})
+            df = df.where(pd.notnull(df), None)
             headers = list(df.columns)
         else:
             # Try different encodings for CSV files
@@ -179,18 +229,30 @@ def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
     doc_id = str(uuid.uuid4())
     doc_name = file.filename
     uploaded_by = "demo"
-    timestamp = datetime.utcnow().isoformat()
+    timestamp = get_ist_timestamp()
     status = "uploaded"
     filename = file.filename.lower()
     contents = file.file.read()
     
     try:
         # Read and parse file
-        if filename.endswith(".xlsx") or filename.endswith(".xls"):
+        if filename.endswith(".xlsx") or filename.endswith(".xls") or filename.endswith(".xlsb"):
             import io
-            df = pd.read_excel(io.BytesIO(contents))
+            try:
+                df = pd.read_excel(io.BytesIO(contents))
+            except ImportError as e:
+                if "pyxlsb" in str(e) and filename.endswith(".xlsb"):
+                    raise HTTPException(
+                        status_code=400, 
+                        detail="Missing optional dependency 'pyxlsb' for .xlsb files. Please install it using: pip install pyxlsb"
+                    )
+                else:
+                    raise e
             # Convert headers to lowercase
             df.columns = [col.strip().lower() for col in df.columns]
+            # Clean NaN values - replace with None for database compatibility
+            df = df.replace({pd.NA: None, pd.NaT: None})
+            df = df.where(pd.notnull(df), None)
             rows = df.to_dict(orient="records")
         else:
             # Try different encodings for CSV files
@@ -275,15 +337,18 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
     doc_id = str(uuid.uuid4())
     doc_name = file.filename
     uploaded_by = "demo"
-    timestamp = datetime.utcnow().isoformat()
+    timestamp = get_ist_timestamp()
     filename = file.filename.lower()
     contents = file.file.read()
     
     try:
         # Read and parse file
-        if filename.endswith(".xlsx") or filename.endswith(".xls"):
+        if filename.endswith(".xlsx") or filename.endswith(".xls") or filename.endswith(".xlsb"):
             import io
             df = pd.read_excel(io.BytesIO(contents))
+            # Clean NaN values - replace with None for database compatibility
+            df = df.replace({pd.NA: None, pd.NaT: None})
+            df = df.where(pd.notnull(df), None)
             rows = df.to_dict(orient="records")
             total_records = len(df)
         else:
@@ -603,7 +668,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             raise HTTPException(status_code=500, detail=f"Failed to update panel data: {error_msg}")
         
         # Create reconciliation record
-        now = datetime.utcnow()
+        now = datetime.now(timezone(timedelta(hours=5, minutes=30)))  # IST timezone
         recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
         recon_month = now.strftime("%b'%y")
         start_date = now.strftime("%Y-%m-%d")
@@ -669,6 +734,10 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
         
         logging.info(f"HR reconciliation completed for panel '{panel_name}'. Status: {status}, Summary: {summary}")
         
+        # Update upload history status to reflect completion
+        if status == "complete":
+            update_upload_history_status(panel_name, "complete")
+        
         return {
             "recon_id": recon_id,
             "summary": summary,
@@ -679,7 +748,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
     except HTTPException:
         # Create failed reconciliation record for HTTP exceptions
         try:
-            now = datetime.utcnow()
+            now = datetime.now(timezone(timedelta(hours=5, minutes=30)))  # IST timezone
             recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
             recon_month = now.strftime("%b'%y")
             start_date = now.strftime("%Y-%m-%d")
@@ -737,13 +806,16 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
         except Exception as e:
             logging.error(f"Failed to write failed reconciliation record: {e}")
         
+        # Update upload history status to reflect failure
+        update_upload_history_status(panel_name, "failed")
+        
         raise
     except Exception as e:
         logging.error(f"Unexpected error in HR reconciliation: {e}")
         
         # Create failed reconciliation record for unexpected exceptions
         try:
-            now = datetime.utcnow()
+            now = datetime.now(timezone(timedelta(hours=5, minutes=30)))  # IST timezone
             recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
             recon_month = now.strftime("%b'%y")
             start_date = now.strftime("%Y-%m-%d")
@@ -800,6 +872,9 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
                 json.dump(data, f, indent=2)
         except Exception as save_error:
             logging.error(f"Failed to write failed reconciliation record: {save_error}")
+        
+        # Update upload history status to reflect failure
+        update_upload_history_status(panel_name, "failed")
         
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
@@ -1089,11 +1164,14 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
         
         try:
             # Read and parse file
-            if filename.endswith(".xlsx") or filename.endswith(".xls"):
+            if filename.endswith(".xlsx") or filename.endswith(".xls") or filename.endswith(".xlsb"):
                 import io
                 df = pd.read_excel(io.BytesIO(contents))
                 # Convert headers to lowercase
                 df.columns = [col.strip().lower() for col in df.columns]
+                # Clean NaN values - replace with None for database compatibility
+                df = df.replace({pd.NA: None, pd.NaT: None})
+                df = df.where(pd.notnull(df), None)
                 recategorization_data = df.to_dict(orient="records")
             else:
                 # Try different encodings for CSV files

@@ -159,20 +159,38 @@ export default function ModifyPanel() {
   };
 
   return (
-    <div style={{ background: "#f4f6fb", borderRadius: 8, padding: 24, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", marginBottom: 16 }}>
-      <div style={{ marginBottom: 18 }}>
-        <label style={{ fontWeight: 600, color: "#495057" }}>Select Panel:</label>
+    <div style={{ 
+      background: "transparent", 
+      borderRadius: 8, 
+      padding: 0,
+      marginBottom: 0,
+      boxShadow: "none",
+      border: "none"
+    }}>
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ 
+          display: "block", 
+          marginBottom: 8, 
+          color: "#343a40", 
+          fontWeight: 500, 
+          fontSize: 14 
+        }}>
+          Select Panel:
+        </label>
         <select
           value={selectedPanel ? selectedPanel.name : ""}
           onChange={handlePanelSelect}
           style={{
             width: "100%",
-            padding: "8px 12px",
-            border: "1.5px solid #ced4da",
-            borderRadius: 4,
-            marginTop: 6,
-            fontSize: 15,
-            background: "#fff"
+            padding: "12px 16px",
+            border: "2px solid #e9ecef",
+            borderRadius: 8,
+            fontSize: 14,
+            background: "#fff",
+            color: "#343a40",
+            cursor: "pointer",
+            outline: "none",
+            transition: "all 0.2s ease"
           }}
         >
           <option value="">Select panel</option>
@@ -181,57 +199,120 @@ export default function ModifyPanel() {
           ))}
         </select>
       </div>
+      
       {selectedPanel && (
         <>
-          {panelHeaders.length > 0 ? (
+          {renderExistingMappings()}
+          
+          {panelExists ? (
             <>
-              {renderExistingMappings()}
-              <div style={{ marginTop: 16, marginBottom: 18 }}>
-                <label style={{ fontWeight: 600, color: "#495057" }}>Select SOT for Mapping:</label>
+              <div style={{ marginBottom: 20 }}>
+                <label style={{ 
+                  display: "block", 
+                  marginBottom: 8, 
+                  color: "#343a40", 
+                  fontWeight: 500, 
+                  fontSize: 14 
+                }}>
+                  Select SOT for Mapping:
+                </label>
                 <select
                   value={sotType}
                   onChange={handleSotTypeChange}
-                  style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #ced4da", borderRadius: 4, fontSize: 15, marginBottom: 10 }}
+                  style={{ 
+                    width: "100%", 
+                    padding: "12px 16px", 
+                    border: "2px solid #e9ecef", 
+                    borderRadius: 8, 
+                    fontSize: 14, 
+                    marginBottom: 16,
+                    background: "#fff",
+                    color: "#343a40",
+                    cursor: "pointer",
+                    outline: "none",
+                    transition: "all 0.2s ease"
+                  }}
                 >
-                  {selectedPanel && selectedPanel.key_mapping
-                    ? Object.keys(selectedPanel.key_mapping).map(sot => (
-                        <option key={sot} value={sot}>
-                          {sot === "hr_data" ? "HR Data" : 
-                           sot === "service_users" ? "Service Users" :
-                           sot === "internal_users" ? "Internal Users" :
-                           sot === "thirdparty_users" ? "Third Party Users" :
-                           sot.toUpperCase()}
-                        </option>
-                      ))
-                    : null}
+                  {availableSOTs.map(sot => (
+                    <option key={sot} value={sot}>
+                      {sot === "hr_data" ? "HR Data" : 
+                       sot === "service_users" ? "Service Users" :
+                       sot === "internal_users" ? "Internal Users" :
+                       sot === "thirdparty_users" ? "Third Party Users" :
+                       sot.toUpperCase()}
+                    </option>
+                  ))}
                 </select>
+                
                 {hrFields.length === 0 ? (
-                  <div style={{ color: "#e74c3c", marginTop: 10, fontWeight: 500 }}>
-                    No fields found for this SOT. Please upload SOT data first.
+                  <div style={{ 
+                    color: "#e74c3c", 
+                    padding: 12,
+                    background: "#fdf2f2",
+                    borderRadius: 6,
+                    fontSize: 14, 
+                    fontWeight: 500,
+                    border: "1px solid #fecaca"
+                  }}>
+                    ⚠️ No fields found for this SOT. Please upload SOT data first.
                   </div>
                 ) : (
                   <>
-                    <label style={{ fontWeight: 600, color: "#495057" }}>Key Mapping for {sotType === "hr_data" ? "HR Data" : 
-                      sotType === "service_users" ? "Service Users" :
-                      sotType === "internal_users" ? "Internal Users" :
-                      sotType === "thirdparty_users" ? "Third Party Users" :
-                      sotType.toUpperCase()}:</label>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
+                    <label style={{ 
+                      display: "block", 
+                      marginBottom: 8, 
+                      color: "#343a40", 
+                      fontWeight: 500, 
+                      fontSize: 14 
+                    }}>
+                      Key Mapping for {sotType === "hr_data" ? "HR Data" : 
+                        sotType === "service_users" ? "Service Users" :
+                        sotType === "internal_users" ? "Internal Users" :
+                        sotType === "thirdparty_users" ? "Third Party Users" :
+                        sotType.toUpperCase()}:
+                    </label>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8 }}>
                       <select
                         value={keyMappings[sotType]?.panel || ""}
                         onChange={e => handleKeyMappingChange("panel", e.target.value)}
-                        style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #ced4da", borderRadius: 4, fontSize: 15 }}
+                        style={{ 
+                          flex: 1, 
+                          padding: "12px 16px", 
+                          border: "2px solid #e9ecef", 
+                          borderRadius: 8, 
+                          fontSize: 14,
+                          background: "#fff",
+                          color: "#343a40",
+                          cursor: "pointer",
+                          outline: "none",
+                          transition: "all 0.2s ease"
+                        }}
                       >
                         <option value="">Select panel field</option>
                         {panelHeaders.map(h => (
                           <option key={h} value={h}>{h}</option>
                         ))}
                       </select>
-                      <span style={{ fontWeight: 600, color: "#adb5bd" }}>→</span>
+                      <span style={{ 
+                        fontWeight: 600, 
+                        color: "#6c757d",
+                        fontSize: 16 
+                      }}>→</span>
                       <select
                         value={keyMappings[sotType]?.hr || ""}
                         onChange={e => handleKeyMappingChange("hr", e.target.value)}
-                        style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #ced4da", borderRadius: 4, fontSize: 15 }}
+                        style={{ 
+                          flex: 1, 
+                          padding: "12px 16px", 
+                          border: "2px solid #e9ecef", 
+                          borderRadius: 8, 
+                          fontSize: 14,
+                          background: "#fff",
+                          color: "#343a40",
+                          cursor: "pointer",
+                          outline: "none",
+                          transition: "all 0.2s ease"
+                        }}
                       >
                         <option value="">Select HR field</option>
                         {hrFields.map(h => (
@@ -242,38 +323,66 @@ export default function ModifyPanel() {
                   </>
                 )}
               </div>
+              
               <button
                 style={{
                   width: "100%",
-                  background: hrFields.length === 0 ? "#e74c3c" : "#007bff",
+                  background: hrFields.length === 0 ? "#adb5bd" : "#6c5ce7",
                   color: "#fff",
                   border: "none",
-                  borderRadius: 4,
-                  padding: "10px 0",
+                  borderRadius: 8,
+                  padding: "14px 32px",
                   fontWeight: 600,
                   fontSize: 16,
                   cursor: hrFields.length === 0 ? "not-allowed" : "pointer",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                  transition: "background 0.2s"
+                  boxShadow: hrFields.length === 0 ? "none" : "0 2px 8px rgba(108, 92, 231, 0.3)",
+                  transition: "all 0.2s ease"
                 }}
                 onClick={handleSave}
                 disabled={hrFields.length === 0}
+                onMouseEnter={(e) => {
+                  if (hrFields.length > 0) {
+                    e.target.style.background = "#5a4fd8";
+                    e.target.style.boxShadow = "0 4px 12px rgba(108, 92, 231, 0.4)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (hrFields.length > 0) {
+                    e.target.style.background = "#6c5ce7";
+                    e.target.style.boxShadow = "0 2px 8px rgba(108, 92, 231, 0.3)";
+                  }
+                }}
               >
-                Save
+                Save Changes
               </button>
+
+              {message && (
+                <div style={{ 
+                  marginTop: 16, 
+                  padding: 12, 
+                  borderRadius: 6, 
+                  background: message.includes("⚠️") || message.includes("Error") || message.includes("select") ? "#fdf2f2" : "#eafaf1",
+                  color: message.includes("⚠️") || message.includes("Error") || message.includes("select") ? "#991b1b" : "#145a32", 
+                  fontWeight: 500,
+                  fontSize: 14,
+                  border: `1px solid ${message.includes("⚠️") || message.includes("Error") || message.includes("select") ? "#fecaca" : "#bbf7d0"}`
+                }}>
+                  {message}
+                </div>
+              )}
             </>
           ) : (
             <div style={{ 
               background: "#fff3cd", 
               border: "1px solid #ffeaa7", 
-              borderRadius: 6, 
+              borderRadius: 8, 
               padding: 16, 
               marginTop: 16,
               color: "#856404"
             }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>⚠️ Panel Configuration Issue</div>
-              <div>This panel exists in configuration but has no database table. To modify this panel, you need to:</div>
-              <ol style={{ margin: "8px 0 0 20px", padding: 0 }}>
+              <div style={{ fontWeight: 600, marginBottom: 8, fontSize: 14 }}>⚠️ Panel Configuration Issue</div>
+              <div style={{ fontSize: 14, lineHeight: 1.5 }}>This panel exists in configuration but has no database table. To modify this panel, you need to:</div>
+              <ol style={{ margin: "8px 0 0 20px", padding: 0, fontSize: 14, lineHeight: 1.5 }}>
                 <li>Go to the "Reconciliation" section</li>
                 <li>Upload panel data for "{selectedPanel.name}"</li>
                 <li>Then return here to modify the configuration</li>
@@ -281,19 +390,6 @@ export default function ModifyPanel() {
             </div>
           )}
         </>
-      )}
-      {message && (
-        <div style={{ 
-          marginTop: 14, 
-          color: message.includes("⚠️") || message.includes("Error") || message.includes("select") ? "#e74c3c" : "#27ae60", 
-          fontWeight: 500,
-          background: message.includes("⚠️") ? "#fff3cd" : "transparent",
-          border: message.includes("⚠️") ? "1px solid #ffeaa7" : "none",
-          borderRadius: message.includes("⚠️") ? 6 : 0,
-          padding: message.includes("⚠️") ? 12 : 0
-        }}>
-          {message}
-        </div>
       )}
     </div>
   );

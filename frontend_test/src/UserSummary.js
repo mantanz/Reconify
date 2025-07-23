@@ -299,16 +299,18 @@ export default function UserSummary() {
 
         {/* User Data Table */}
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 6, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 8, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
             <thead>
-              <tr style={{ background: "#e9ecef" }}>
+              <tr style={{ background: "#002e6e" }}>
                 <th 
                   style={{ 
                     padding: "12px 8px", 
-                    textAlign: "left", 
+                    textAlign: "left",  
                     fontWeight: 600, 
+                    fontSize: 14,
                     cursor: "pointer",
-                    borderBottom: "2px solid #dee2e6"
+                    borderBottom: "2px solid #dee2e6",
+                    color: "#ffffff"
                   }}
                   onClick={() => handleSort("email_id")}
                 >
@@ -319,8 +321,10 @@ export default function UserSummary() {
                     padding: "12px 8px", 
                     textAlign: "left", 
                     fontWeight: 600, 
+                    fontSize: 14, 
                     cursor: "pointer",
-                    borderBottom: "2px solid #dee2e6"
+                    borderBottom: "2px solid #dee2e6",
+                    color: "#ffffff"
                   }}
                   onClick={() => handleSort("panel_name")}
                 >
@@ -331,8 +335,10 @@ export default function UserSummary() {
                     padding: "12px 8px", 
                     textAlign: "left", 
                     fontWeight: 600, 
+                    fontSize: 14,
                     cursor: "pointer",
-                    borderBottom: "2px solid #dee2e6"
+                    borderBottom: "2px solid #dee2e6",
+                    color: "#ffffff"
                   }}
                   onClick={() => handleSort("recon_id")}
                 >
@@ -343,8 +349,10 @@ export default function UserSummary() {
                     padding: "12px 8px", 
                     textAlign: "left", 
                     fontWeight: 600, 
+                    fontSize: 14,
                     cursor: "pointer",
-                    borderBottom: "2px solid #dee2e6"
+                    borderBottom: "2px solid #dee2e6",
+                    color: "#ffffff"
                   }}
                   onClick={() => handleSort("recon_month")}
                 >
@@ -355,8 +363,10 @@ export default function UserSummary() {
                     padding: "12px 8px", 
                     textAlign: "left", 
                     fontWeight: 600, 
+                    fontSize: 14,
                     cursor: "pointer",
-                    borderBottom: "2px solid #dee2e6"
+                    borderBottom: "2px solid #dee2e6",
+                    color: "#ffffff"
                   }}
                   onClick={() => handleSort("initial_status")}
                 >
@@ -367,8 +377,10 @@ export default function UserSummary() {
                     padding: "12px 8px", 
                     textAlign: "left", 
                     fontWeight: 600, 
+                    fontSize: 14,
                     cursor: "pointer",
-                    borderBottom: "2px solid #dee2e6"
+                    borderBottom: "2px solid #dee2e6",
+                    color: "#ffffff"
                   }}
                   onClick={() => handleSort("final_status")}
                 >
