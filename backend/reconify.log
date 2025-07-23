@@ -4791,3 +4791,40 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-23 18:00:11,508 - root - INFO - Processed 6058 users from panel: OE Panel
 2025-07-23 18:00:11,692 - root - INFO - Processed 4155 users from panel: Seller Panel
 2025-07-23 18:00:11,696 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:15:59,453 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:15:59,554 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:15:59,558 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:15:59,860 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:15:59,969 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:15:59,972 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:16:03,303 - root - INFO - Fetched 4155 rows for panel 'Seller Panel'
+2025-07-23 18:17:41,463 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:17:41,553 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:17:41,556 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:17:41,821 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:17:41,944 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:17:41,948 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:20:56,254 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:20:56,362 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:20:56,365 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:20:56,665 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:20:56,780 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:20:56,783 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:21:31,255 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:21:31,376 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:21:31,379 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:21:31,689 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:21:31,806 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:21:31,809 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:23:43,310 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:23:43,437 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:23:43,441 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:23:43,797 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:23:43,914 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:23:43,918 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:30:17,279 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:30:17,372 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:30:17,375 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 18:30:17,687 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 18:30:17,785 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 18:30:17,788 - root - INFO - User-wise summary completed. Total users: 10209

@@ -344,7 +344,7 @@ export default function Reconciliation() {
   };
 
   return (
-    <div style={{ backgroundColor: '#f9fafb', minHeight: '100vh', paddingTop: '56px' }}>
+    <div style={{ backgroundColor: '#f0f4ff', minHeight: '100vh', paddingTop: '56px' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 12px 24px 12px' }}>
         <div style={{ 
           width: '100%', 
