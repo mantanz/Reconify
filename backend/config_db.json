@@ -1,6 +1,23 @@
 {
   "panels": [
     {
+      "name": "OE_ODS_PANEL_PMMS",
+      "key_mapping": {
+        "hr_data": {
+          "email": "email"
+        },
+        "internal_users": {
+          "email": "domain"
+        },
+        "service_users": {
+          "email": "email"
+        },
+        "thirdparty_users": {
+          "email": "domain"
+        }
+      }
+    },
+    {
       "name": "Seller Panel",
       "key_mapping": {
         "hr_data": {

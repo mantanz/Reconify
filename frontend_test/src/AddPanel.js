@@ -143,50 +143,109 @@ export default function AddPanel() {
   };
 
   return (
-    <div style={{ background: "#f4f6fb", borderRadius: 8, padding: 24, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", marginBottom: 16 }}>
-      <div style={{ marginBottom: 18 }}>
-        <label style={{ fontWeight: 600, color: "#495057" }}>Panel Name:</label>
+    <div style={{ 
+      background: "transparent", 
+      borderRadius: 8, 
+      padding: 0,
+      marginBottom: 0,
+      boxShadow: "none",
+      border: "none"
+    }}>
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ 
+          display: "block", 
+          marginBottom: 8, 
+          color: "#343a40", 
+          fontWeight: 500, 
+          fontSize: 14 
+        }}>
+          Panel Name:
+        </label>
         <input
+          type="text"
+          placeholder="Enter panel name"
           value={panelName}
           onChange={handlePanelNameChange}
           style={{
             width: "100%",
-            padding: "8px 12px",
-            border: panelExists ? "1.5px solid #e74c3c" : "1.5px solid #ced4da",
-            borderRadius: 4,
-            marginTop: 6,
+            padding: "12px 16px",
+            border: panelExists ? "2px solid #e74c3c" : "2px solid #e9ecef",
+            borderRadius: 8,
             outline: "none",
-            fontSize: 15,
+            fontSize: 14,
             background: panelExists ? "#fff6f6" : "#fff",
-            transition: "border 0.2s"
+            color: "#343a40",
+            transition: "all 0.2s ease"
           }}
         />
         {panelExists && (
-          <div style={{ color: "#e74c3c", marginTop: 6, fontSize: 14 }}>Panel already exists</div>
+          <div style={{ 
+            color: "#e74c3c", 
+            marginTop: 6, 
+            fontSize: 12,
+            fontWeight: 500 
+          }}>
+            ⚠️ Panel already exists
+          </div>
         )}
       </div>
-      <div style={{ marginBottom: 18 }}>
-        <label style={{ fontWeight: 600, color: "#495057" }}>Upload Panel File:</label>
+      
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ 
+          display: "block", 
+          marginBottom: 8, 
+          color: "#343a40", 
+          fontWeight: 500, 
+          fontSize: 14 
+        }}>
+          Upload Panel File:
+        </label>
         <input
           type="file"
+          accept=".csv, .xlsx, .xls, .xlsb"
           onChange={handleFileUpload}
           disabled={panelExists}
           style={{
             width: "100%",
-            padding: "8px 0",
-            marginTop: 6,
-            fontSize: 15,
-            background: panelExists ? "#f1f1f1" : "#fff"
+            padding: "12px 16px",
+            border: "2px solid #e9ecef",
+            borderRadius: 8,
+            fontSize: 14,
+            background: panelExists ? "#f8f9fa" : "#fff",
+            color: "#6c757d",
+            cursor: panelExists ? "not-allowed" : "pointer",
+            transition: "all 0.2s ease"
           }}
         />
       </div>
+      
       {panelHeaders.length > 0 && !panelExists && (
-        <div style={{ marginBottom: 18 }}>
-          <label style={{ fontWeight: 600, color: "#495057" }}>Select SOT for Mapping:</label>
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ 
+            display: "block", 
+            marginBottom: 8, 
+            color: "#343a40", 
+            fontWeight: 500, 
+            fontSize: 14 
+          }}>
+            Select SOT for Mapping:
+          </label>
           <select
             value={sotType}
             onChange={handleSotTypeChange}
-            style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #ced4da", borderRadius: 4, fontSize: 15, marginBottom: 10 }}
+            style={{ 
+              width: "100%", 
+              padding: "12px 16px", 
+              border: "2px solid #e9ecef", 
+              borderRadius: 8, 
+              fontSize: 14, 
+              marginBottom: 16,
+              background: "#fff",
+              color: "#343a40",
+              cursor: "pointer",
+              outline: "none",
+              transition: "all 0.2s ease"
+            }}
           >
             {availableSOTs.map(sot => (
               <option key={sot} value={sot}>
@@ -198,33 +257,76 @@ export default function AddPanel() {
               </option>
             ))}
           </select>
+          
           {hrFields.length === 0 ? (
-            <div style={{ color: "#e74c3c", marginTop: 10, fontWeight: 500 }}>
-              No fields found for this SOT. Please upload SOT data first.
+            <div style={{ 
+              color: "#e74c3c", 
+              padding: 12,
+              background: "#fdf2f2",
+              borderRadius: 6,
+              fontSize: 14, 
+              fontWeight: 500,
+              border: "1px solid #fecaca"
+            }}>
+              ⚠️ No fields found for this SOT. Please upload SOT data first.
             </div>
           ) : (
             <>
-              <label style={{ fontWeight: 600, color: "#495057" }}>Key Mapping for {sotType === "hr_data" ? "HR Data" : 
-                sotType === "service_users" ? "Service Users" :
-                sotType === "internal_users" ? "Internal Users" :
-                sotType === "thirdparty_users" ? "Third Party Users" :
-                sotType.toUpperCase()}:</label>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
+              <label style={{ 
+                display: "block", 
+                marginBottom: 8, 
+                color: "#343a40", 
+                fontWeight: 500, 
+                fontSize: 14 
+              }}>
+                Key Mapping for {sotType === "hr_data" ? "HR Data" : 
+                  sotType === "service_users" ? "Service Users" :
+                  sotType === "internal_users" ? "Internal Users" :
+                  sotType === "thirdparty_users" ? "Third Party Users" :
+                  sotType.toUpperCase()}:
+              </label>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8 }}>
                 <select
                   value={keyMappings[sotType].panel}
                   onChange={e => handleKeyMappingChange("panel", e.target.value)}
-                  style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #ced4da", borderRadius: 4, fontSize: 15 }}
+                  style={{ 
+                    flex: 1, 
+                    padding: "12px 16px", 
+                    border: "2px solid #e9ecef", 
+                    borderRadius: 8, 
+                    fontSize: 14,
+                    background: "#fff",
+                    color: "#343a40",
+                    cursor: "pointer",
+                    outline: "none",
+                    transition: "all 0.2s ease"
+                  }}
                 >
                   <option value="">Select panel field</option>
                   {panelHeaders.map(h => (
                     <option key={h} value={h}>{h}</option>
                   ))}
                 </select>
-                <span style={{ fontWeight: 600, color: "#adb5bd" }}>→</span>
+                <span style={{ 
+                  fontWeight: 600, 
+                  color: "#6c757d",
+                  fontSize: 16 
+                }}>→</span>
                 <select
                   value={keyMappings[sotType].hr}
                   onChange={e => handleKeyMappingChange("hr", e.target.value)}
-                  style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #ced4da", borderRadius: 4, fontSize: 15 }}
+                  style={{ 
+                    flex: 1, 
+                    padding: "12px 16px", 
+                    border: "2px solid #e9ecef", 
+                    borderRadius: 8, 
+                    fontSize: 14,
+                    background: "#fff",
+                    color: "#343a40",
+                    cursor: "pointer",
+                    outline: "none",
+                    transition: "all 0.2s ease"
+                  }}
                 >
                   <option value="">Select HR field</option>
                   {hrFields.map(h => (
@@ -236,26 +338,53 @@ export default function AddPanel() {
           )}
         </div>
       )}
+      
       <button
         onClick={handleSave}
         disabled={panelExists || hrFields.length === 0}
         style={{
           width: "100%",
-          background: panelExists || hrFields.length === 0 ? "#e74c3c" : "#007bff",
+          background: panelExists || hrFields.length === 0 ? "#adb5bd" : "#6c5ce7",
           color: "#fff",
           border: "none",
-          borderRadius: 4,
-          padding: "10px 0",
+          borderRadius: 8,
+          padding: "14px 32px",
           fontWeight: 600,
           fontSize: 16,
           cursor: panelExists || hrFields.length === 0 ? "not-allowed" : "pointer",
-          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-          transition: "background 0.2s"
+          boxShadow: panelExists || hrFields.length === 0 ? "none" : "0 2px 8px rgba(108, 92, 231, 0.3)",
+          transition: "all 0.2s ease"
+        }}
+        onMouseEnter={(e) => {
+          if (!panelExists && hrFields.length > 0) {
+            e.target.style.background = "#5a4fd8";
+            e.target.style.boxShadow = "0 4px 12px rgba(108, 92, 231, 0.4)";
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!panelExists && hrFields.length > 0) {
+            e.target.style.background = "#6c5ce7";
+            e.target.style.boxShadow = "0 2px 8px rgba(108, 92, 231, 0.3)";
+          }
         }}
       >
-        Save
+        Save Panel
       </button>
-      {message && <div style={{ marginTop: 14, color: message.includes("exist") ? "#e74c3c" : "#27ae60", fontWeight: 500 }}>{message}</div>}
+
+      {message && (
+        <div style={{ 
+          marginTop: 16, 
+          padding: 12, 
+          borderRadius: 6, 
+          background: message.includes("exist") || message.includes("Error") ? "#fdf2f2" : "#eafaf1",
+          color: message.includes("exist") || message.includes("Error") ? "#991b1b" : "#145a32", 
+          fontWeight: 500,
+          fontSize: 14,
+          border: `1px solid ${message.includes("exist") || message.includes("Error") ? "#fecaca" : "#bbf7d0"}`
+        }}>
+          {message}
+        </div>
+      )}
     </div>
   );
 } 

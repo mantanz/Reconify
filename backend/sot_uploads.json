@@ -1,65 +1,42 @@
 [
   {
-    "doc_id": "a6138921-019b-459b-a07b-2b4f185ebad1",
-    "doc_name": "HR_data_sample.csv",
+    "doc_id": "d25b6d4b-9ed9-4b18-8a25-ea37849a0a95",
+    "doc_name": "Sample_hr_recon - Sheet1.csv",
     "uploaded_by": "demo",
-    "timestamp": "2025-07-06T12:05:41.690579",
-    "status": "success"
+    "timestamp": "2025-07-21T12:49:03.217763",
+    "status": "uploaded",
+    "sot_type": "hr_data"
   },
   {
-    "doc_id": "caf1822f-d8ff-4e71-8a05-11383ae80cb1",
-    "doc_name": "SOT2_sample.csv",
-    "uploaded_by": "demo",
-    "timestamp": "2025-07-07T18:28:20.650475",
-    "status": "error: Table for panel 'sot2' does not exist. Please add the panel first.",
-    "sot_type": "sot2"
-  },
-  {
-    "doc_id": "379c96e4-5d2a-44ca-a71f-436674655d9e",
-    "doc_name": "SOT2_sample.csv",
-    "uploaded_by": "demo",
-    "timestamp": "2025-07-07T18:48:04.325698",
-    "status": "error: Table for panel 'sot2' does not exist. Please add the panel first.",
-    "sot_type": "sot2"
-  },
-  {
-    "doc_id": "f76b2e38-affd-42c0-8aff-031e7fc9fbac",
-    "doc_name": "SOT2_sample.csv",
-    "uploaded_by": "demo",
-    "timestamp": "2025-07-07T19:04:16.544781",
-    "status": "success",
-    "sot_type": "sot2"
-  },
-  {
-    "doc_id": "eb6ae570-1b7d-4cd3-aeb5-efe234dea055",
+    "doc_id": "0fa5e819-8cf4-4e70-96cd-5f4a7cc6a16e",
     "doc_name": "internal_user.csv",
     "uploaded_by": "demo",
-    "timestamp": "2025-07-14T14:05:33.015595",
-    "status": "success",
+    "timestamp": "2025-07-21T12:50:02.514162",
+    "status": "uploaded",
     "sot_type": "internal_users"
   },
   {
-    "doc_id": "e9980b4e-e9c3-4df3-ab51-60323a2b63e3",
+    "doc_id": "b75da7b1-b241-4745-aced-7189d7d14d81",
     "doc_name": "service_user.csv",
     "uploaded_by": "demo",
-    "timestamp": "2025-07-14T14:08:37.873918",
-    "status": "success",
+    "timestamp": "2025-07-21T12:50:11.525123",
+    "status": "uploaded",
     "sot_type": "service_users"
   },
   {
-    "doc_id": "29c31979-96c4-4623-89fb-6436f79cebcf",
+    "doc_id": "26db9573-298e-4e75-b7a9-ac0609d30587",
     "doc_name": "thirdpartyuser.csv",
     "uploaded_by": "demo",
-    "timestamp": "2025-07-14T14:08:47.284243",
-    "status": "success",
+    "timestamp": "2025-07-21T12:50:19.146900",
+    "status": "uploaded",
     "sot_type": "thirdparty_users"
   },
   {
-    "doc_id": "e3321571-95d4-4287-9199-41a3f4c9b79a",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
+    "doc_id": "01d32ab1-700d-4b08-a2ec-b6d92317acd3",
+    "doc_name": "internal_user.csv",
     "uploaded_by": "demo",
-    "timestamp": "2025-07-18T08:05:41.698602",
-    "status": "success",
-    "sot_type": "hr_data"
+    "timestamp": "2025-07-21T17:40:00.257242",
+    "status": "uploaded",
+    "sot_type": "internal_users"
   }
 ]

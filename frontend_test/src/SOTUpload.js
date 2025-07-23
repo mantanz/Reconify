@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 export default function SOTUpload() {
-  const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [history, setHistory] = useState([]);
-  const [sotType, setSotType] = useState("");
   const [sotList, setSotList] = useState([]);
+  const [sotMetadata, setSotMetadata] = useState({});
+  const [uploadingSot, setUploadingSot] = useState("");
 
   useEffect(() => {
     // Fetch SOT list from backend
@@ -15,7 +15,6 @@ export default function SOTUpload() {
       .then(res => res.json())
       .then(data => {
         setSotList(data.sots || []);
-        if ((data.sots || []).length > 0) setSotType(data.sots[0]);
       });
     fetchHistory();
   }, []);
@@ -24,23 +23,45 @@ export default function SOTUpload() {
     try {
       const res = await fetch("http://127.0.0.1:8000/sot/uploads");
       const data = await res.json();
-      setHistory(Array.isArray(data) ? data.reverse() : []);
+      setHistory(Array.isArray(data) ? data : []);
+      
+      // Process history to create SOT metadata
+      const metadata = {};
+      data.forEach(item => {
+        const sot = item.sot_type || "hr_data";
+        if (!metadata[sot]) {
+          metadata[sot] = {
+            rowCount: 0,
+            lastRefreshed: null,
+            uploadedBy: null,
+            latestUpload: null
+          };
+        }
+        
+        // Update with latest upload info
+        if (!metadata[sot].latestUpload || new Date(item.timestamp) > new Date(metadata[sot].latestUpload.timestamp)) {
+          metadata[sot].latestUpload = item;
+          metadata[sot].lastRefreshed = item.timestamp;
+          metadata[sot].uploadedBy = item.uploaded_by;
+        }
+      });
+      
+      // Get row counts for each SOT
+      for (const sot of Object.keys(metadata)) {
+        try {
+          const res = await fetch(`http://127.0.0.1:8000/debug/sot/${sot}`);
+          const sotData = await res.json();
+          metadata[sot].rowCount = sotData.row_count || 0;
+        } catch (e) {
+          metadata[sot].rowCount = 0;
+        }
+      }
+      
+      setSotMetadata(metadata);
     } catch {
       setHistory([]);
+      setSotMetadata({});
     }
-  };
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    setResult(null);
-    setError("");
-  };
-
-  const handleSotTypeChange = (e) => {
-    setSotType(e.target.value);
-    setFile(null);
-    setResult(null);
-    setError("");
   };
 
   const getStatusColor = (status) => {
@@ -57,12 +78,13 @@ export default function SOTUpload() {
     return "#6c757d"; // Default gray
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (sotType, file) => {
     if (!file) {
       setError("Please select a file to upload.");
       return;
     }
     setUploading(true);
+    setUploadingSot(sotType);
     setError("");
     setResult(null);
     const formData = new FormData();
@@ -81,73 +103,45 @@ export default function SOTUpload() {
       setError("Upload failed. Please try again.");
     } finally {
       setUploading(false);
+      setUploadingSot("");
     }
   };
 
+  const formatDateTime = (timestamp) => {
+    if (!timestamp) return "-";
+    const date = new Date(timestamp);
+    return date.toLocaleDateString('en-GB') + ', ' + date.toLocaleTimeString('en-GB', { 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit' 
+    });
+  };
+
+  const getSotDisplayName = (sot) => {
+    return sot === "hr_data" ? "HR Data" : 
+           sot === "service_users" ? "Service Users" :
+           sot === "internal_users" ? "Internal Users" :
+           sot === "thirdparty_users" ? "Third Party Users" :
+           sot.toUpperCase();
+  };
+
   return (
-    <div style={{ background: "#f4f6fb", borderRadius: 8, padding: 24, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", marginBottom: 16, maxWidth: 700, margin: "40px auto" }}>
-      <h2 style={{ textAlign: "center", color: "#343a40", marginBottom: 24 }}>Source of Truth Upload</h2>
-      <div style={{ marginBottom: 18 }}>
-        <label style={{ fontWeight: 600, color: "#495057" }}>Select SOT:</label>
-        <select
-          value={sotType}
-          onChange={handleSotTypeChange}
-          style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #ced4da", borderRadius: 4, marginTop: 6, fontSize: 15 }}
-        >
-          {sotList.map(sot => (
-            <option key={sot} value={sot}>
-              {sot === "hr_data" ? "HR Data" : 
-               sot === "service_users" ? "Service Users" :
-               sot === "internal_users" ? "Internal Users" :
-               sot === "thirdparty_users" ? "Third Party Users" :
-               sot.toUpperCase()}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div style={{ marginBottom: 18 }}>
-        <label style={{ fontWeight: 600, color: "#495057" }}>
-          Upload {sotType === "hr_data" ? "HR Data" : 
-                  sotType === "service_users" ? "Service Users" :
-                  sotType === "internal_users" ? "Internal Users" :
-                  sotType === "thirdparty_users" ? "Third Party Users" :
-                  sotType.toUpperCase()} (CSV or Excel):
-        </label>
-        <input
-          type="file"
-          accept=".csv, .xlsx, .xls"
-          onChange={handleFileChange}
-          style={{
-            width: "100%",
-            padding: "8px 0",
-            marginTop: 6,
-            fontSize: 15,
-            background: "#fff"
-          }}
-        />
-      </div>
-      <button
-        onClick={handleUpload}
-        disabled={uploading || !file}
-        style={{
-          width: "100%",
-          background: uploading ? "#adb5bd" : "#007bff",
-          color: "#fff",
-          border: "none",
-          borderRadius: 4,
-          padding: "10px 0",
-          fontWeight: 600,
-          fontSize: 16,
-          cursor: uploading ? "not-allowed" : "pointer",
-          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-          transition: "background 0.2s"
-        }}
-      >
-        {uploading ? "Uploading..." : "Upload"}
-      </button>
-      {error && <div style={{ marginTop: 14, color: "#e74c3c", fontWeight: 500 }}>{error}</div>}
+    <div style={{ 
+      background: "#fff", 
+      borderRadius: 12, 
+      padding: 32, 
+      boxShadow: "0 8px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08)", 
+      marginBottom: 16, 
+      maxWidth: 1200, 
+      margin: "40px auto",
+      border: "1px solid rgba(0,0,0,0.05)"
+    }}>
+      <h2 style={{ textAlign: "center", color: "#343a40", marginBottom: 24 }}>Source of Truth</h2>
+      
+      {/* Error and Result Messages */}
+      {error && <div style={{ marginBottom: 16, color: "#e74c3c", fontWeight: 500, background: "#fdf2f2", padding: 12, borderRadius: 6 }}>{error}</div>}
       {result && (
-        <div style={{ marginTop: 18, background: result.status === "failed" ? "#fdf2f2" : "#eafaf1", borderRadius: 6, padding: 16, color: result.status === "failed" ? "#991b1b" : "#145a32" }}>
+        <div style={{ marginBottom: 16, background: result.status === "failed" ? "#fdf2f2" : "#eafaf1", borderRadius: 6, padding: 16, color: result.status === "failed" ? "#991b1b" : "#145a32" }}>
           <div><strong>{result.status === "failed" ? "Upload Failed!" : "File Uploaded!"}</strong></div>
           <div><strong>Doc ID:</strong> {result.doc_id}</div>
           <div><strong>File Name:</strong> {result.doc_name}</div>
@@ -158,39 +152,166 @@ export default function SOTUpload() {
           {result.error && <div><strong>Error:</strong> {result.error}</div>}
         </div>
       )}
-      <h3 style={{ marginTop: 36, color: "#343a40", fontWeight: 700, fontSize: 20 }}>Upload History</h3>
-      <div style={{ overflowX: "auto", marginTop: 12 }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 6, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
+
+      {/* SOT Table */}
+      <div style={{ background: "#fff", borderRadius: 6, boxShadow: "0 1px 4px rgba(0,0,0,0.04)", overflow: "hidden" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr style={{ background: "#e9ecef" }}>
-              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Doc ID</th>
-              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>File Name</th>
-              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Uploaded By</th>
-              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Timestamp</th>
-              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Status</th>
-              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Error</th>
-              <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>SOT Type</th>
+              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>SOT</th>
+              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>#Rows</th>
+              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Last Refreshed DateTime</th>
+              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Uploaded By</th>
+              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Upload</th>
             </tr>
           </thead>
           <tbody>
-            {history.length === 0 ? (
-              <tr><td colSpan={7} style={{ textAlign: "center", color: "#adb5bd", padding: 16 }}>No uploads yet.</td></tr>
+            {sotList.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ textAlign: "center", color: "#adb5bd", padding: 24 }}>
+                  No SOTs configured. Please configure SOT mappings in panel settings first.
+                </td>
+              </tr>
             ) : (
-              history.map((item, idx) => (
-                <tr key={item.doc_id || idx} style={{ borderBottom: "1px solid #f1f3f5" }}>
-                  <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.doc_id}</td>
-                  <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.doc_name}</td>
-                  <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.uploaded_by}</td>
-                  <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.timestamp}</td>
-                  <td style={{ padding: "8px 12px", fontSize: 14, color: getStatusColor(item.status), fontWeight: 600 }}>{item.status}</td>
-                  <td style={{ padding: "8px 12px", fontSize: 14, color: "#e74c3c" }}>{item.error || "-"}</td>
-                  <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.sot_type || "hr_data"}</td>
-                </tr>
-              ))
+              sotList.map((sot, idx) => {
+                const metadata = sotMetadata[sot] || {};
+                const isUploading = uploadingSot === sot;
+                
+                return (
+                  <SOTRow 
+                    key={sot}
+                    sot={sot}
+                    metadata={metadata}
+                    isUploading={isUploading}
+                    uploading={uploading}
+                    onUpload={handleUpload}
+                    getSotDisplayName={getSotDisplayName}
+                    formatDateTime={formatDateTime}
+                  />
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Upload History Section (Collapsible) */}
+      <div style={{ marginTop: 24 }}>
+        <details style={{ background: "#fff", borderRadius: 6, padding: 16, border: "1px solid #dee2e6" }}>
+          <summary style={{ fontWeight: 600, color: "#495057", cursor: "pointer", fontSize: 16 }}>
+            📋 Upload History
+          </summary>
+          <div style={{ marginTop: 16 }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 6 }}>
+              <thead>
+                <tr style={{ background: "#e9ecef" }}>
+                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Doc ID</th>
+                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>File Name</th>
+                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Uploaded By</th>
+                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Timestamp</th>
+                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Status</th>
+                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>Error</th>
+                  <th style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600 }}>SOT Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {history.length === 0 ? (
+                  <tr><td colSpan={7} style={{ textAlign: "center", color: "#adb5bd", padding: 16 }}>No uploads yet.</td></tr>
+                ) : (
+                  history.map((item, idx) => (
+                    <tr key={item.doc_id || idx} style={{ borderBottom: "1px solid #f1f3f5" }}>
+                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.doc_id}</td>
+                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.doc_name}</td>
+                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{item.uploaded_by}</td>
+                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{formatDateTime(item.timestamp)}</td>
+                      <td style={{ padding: "8px 12px", fontSize: 14, color: getStatusColor(item.status), fontWeight: 600 }}>{item.status}</td>
+                      <td style={{ padding: "8px 12px", fontSize: 14, color: "#e74c3c" }}>{item.error || "-"}</td>
+                      <td style={{ padding: "8px 12px", fontSize: 14 }}>{getSotDisplayName(item.sot_type || "hr_data")}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
     </div>
+  );
+}
+
+// Separate component for SOT row with integrated file upload
+function SOTRow({ sot, metadata, isUploading, uploading, onUpload, getSotDisplayName, formatDateTime }) {
+  const fileInputRef = React.useRef(null);
+
+  const handleUploadClick = () => {
+    if (!uploading) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      onUpload(sot, selectedFile);
+      // Reset the file input
+      e.target.value = '';
+    }
+  };
+
+  return (
+    <tr style={{ borderBottom: "1px solid #f1f3f5" }}>
+      <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 500 }}>
+        {getSotDisplayName(sot)}
+      </td>
+      <td style={{ padding: "12px 16px", fontSize: 14 }}>
+        {metadata.rowCount || 0}
+      </td>
+      <td style={{ padding: "12px 16px", fontSize: 14 }}>
+        {formatDateTime(metadata.lastRefreshed)}
+      </td>
+      <td style={{ padding: "12px 16px", fontSize: 14 }}>
+        {metadata.uploadedBy || "-"}
+      </td>
+      <td style={{ padding: "12px 16px", fontSize: 14 }}>
+        <button
+          onClick={handleUploadClick}
+          disabled={uploading}
+          style={{
+            padding: "8px 12px",
+            background: uploading ? "#adb5bd" : "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: 4,
+            fontSize: 12,
+            cursor: uploading ? "not-allowed" : "pointer",
+            fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            minWidth: "80px",
+            justifyContent: "center"
+          }}
+        >
+          {isUploading ? (
+            <>
+              <span>🔄</span>
+              <span>Uploading...</span>
+            </>
+          ) : (
+            <>
+              <span>⬆️</span>
+              <span>Upload</span>
+            </>
+          )}
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".csv, .xlsx, .xls, .xlsb"
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
+      </td>
+    </tr>
   );
 } 

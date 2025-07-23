@@ -52,20 +52,38 @@ export default function DeletePanel() {
   };
 
   return (
-    <div style={{ background: "#f4f6fb", borderRadius: 8, padding: 24, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", marginBottom: 16 }}>
-      <div style={{ marginBottom: 18 }}>
-        <label style={{ fontWeight: 600, color: "#495057" }}>Select Panel:</label>
+    <div style={{ 
+      background: "transparent", 
+      borderRadius: 8, 
+      padding: 0,
+      marginBottom: 0,
+      boxShadow: "none",
+      border: "none"
+    }}>
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ 
+          display: "block", 
+          marginBottom: 8, 
+          color: "#343a40", 
+          fontWeight: 500, 
+          fontSize: 14 
+        }}>
+          Select Panel:
+        </label>
         <select
           value={selectedPanel ? selectedPanel.name : ""}
           onChange={handlePanelSelect}
           style={{
             width: "100%",
-            padding: "8px 12px",
-            border: "1.5px solid #ced4da",
-            borderRadius: 4,
-            marginTop: 6,
-            fontSize: 15,
-            background: "#fff"
+            padding: "12px 16px",
+            border: "2px solid #e9ecef",
+            borderRadius: 8,
+            fontSize: 14,
+            background: "#fff",
+            color: "#343a40",
+            cursor: "pointer",
+            outline: "none",
+            transition: "all 0.2s ease"
           }}
         >
           <option value="">Select panel</option>
@@ -74,49 +92,119 @@ export default function DeletePanel() {
           ))}
         </select>
       </div>
+      
       {selectedPanel && (
         <>
           {renderExistingMappings()}
+          
           <button
             style={{
               width: "100%",
               background: "#e74c3c",
               color: "#fff",
               border: "none",
-              borderRadius: 4,
-              padding: "10px 0",
+              borderRadius: 8,
+              padding: "14px 32px",
               fontWeight: 600,
               fontSize: 16,
               cursor: "pointer",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-              transition: "background 0.2s"
+              boxShadow: "0 2px 8px rgba(231, 76, 60, 0.3)",
+              transition: "all 0.2s ease"
             }}
             onClick={handleDelete}
+            onMouseEnter={(e) => {
+              e.target.style.background = "#c0392b";
+              e.target.style.boxShadow = "0 4px 12px rgba(231, 76, 60, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "#e74c3c";
+              e.target.style.boxShadow = "0 2px 8px rgba(231, 76, 60, 0.3)";
+            }}
           >
-            Delete
+            Delete Panel
           </button>
+
+          {message && (
+            <div style={{ 
+              marginTop: 16, 
+              padding: 12, 
+              borderRadius: 6, 
+              background: message.includes("Deleted") ? "#eafaf1" : "#fdf2f2",
+              color: message.includes("Deleted") ? "#145a32" : "#991b1b", 
+              fontWeight: 500,
+              fontSize: 14,
+              border: `1px solid ${message.includes("Deleted") ? "#bbf7d0" : "#fecaca"}`
+            }}>
+              {message}
+            </div>
+          )}
         </>
       )}
+      
       {showConfirm && (
-        <div style={{ marginTop: 16, background: "#f9e79f", padding: 10, borderRadius: 4 }}>
-          <div style={{ marginBottom: 8 }}>Are you sure you want to delete this panel?</div>
-          <div style={{ display: "flex", gap: 10 }}>
+        <div style={{ 
+          marginTop: 20, 
+          background: "#fff3cd", 
+          padding: 16, 
+          borderRadius: 8,
+          border: "1px solid #ffeaa7"
+        }}>
+          <div style={{ 
+            marginBottom: 12, 
+            color: "#856404",
+            fontWeight: 600,
+            fontSize: 14 
+          }}>
+            ⚠️ Are you sure you want to delete this panel?
+          </div>
+          <div style={{ display: "flex", gap: 12 }}>
             <button
-              style={{ background: "#e74c3c", color: "#fff", border: "none", borderRadius: 4, padding: "8px 18px", fontWeight: 600, cursor: "pointer" }}
+              style={{ 
+                background: "#e74c3c", 
+                color: "#fff", 
+                border: "none", 
+                borderRadius: 6, 
+                padding: "10px 20px", 
+                fontWeight: 600, 
+                cursor: "pointer",
+                fontSize: 14,
+                transition: "all 0.2s ease"
+              }}
               onClick={confirmDelete}
+              onMouseEnter={(e) => {
+                e.target.style.background = "#c0392b";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "#e74c3c";
+              }}
             >
-              Yes
+              Yes, Delete
             </button>
             <button
-              style={{ background: "#fff", color: "#343a40", border: "1.5px solid #ced4da", borderRadius: 4, padding: "8px 18px", fontWeight: 600, cursor: "pointer" }}
+              style={{ 
+                background: "#fff", 
+                color: "#343a40", 
+                border: "2px solid #e9ecef", 
+                borderRadius: 6, 
+                padding: "10px 20px", 
+                fontWeight: 600, 
+                cursor: "pointer",
+                fontSize: 14,
+                transition: "all 0.2s ease"
+              }}
               onClick={() => setShowConfirm(false)}
+              onMouseEnter={(e) => {
+                e.target.style.background = "#f8f9fa";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "#fff";
+              }}
             >
-              No
+              Cancel
             </button>
           </div>
         </div>
       )}
-      {message && <div style={{ marginTop: 14, color: message.includes("Deleted") ? "#27ae60" : "#e74c3c", fontWeight: 500 }}>{message}</div>}
     </div>
   );
 } 

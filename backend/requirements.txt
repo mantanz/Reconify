@@ -3,4 +3,5 @@ uvicorn
 sqlalchemy
 pymysql
 pandas
-openpyxl 
+openpyxl
+pyxlsb 
