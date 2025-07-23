@@ -4564,3 +4564,40 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-23 13:05:21,226 - root - INFO - User-wise summary completed. Total users: 1385
 2025-07-23 13:05:21,385 - root - INFO - Processed 1385 users from panel: Seller Panel
 2025-07-23 13:05:21,386 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-23 15:39:41,825 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-23 15:39:41,826 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-23 15:39:41,886 - root - INFO - Fetched 60 rows from SOT: internal_users
+2025-07-23 15:39:42,032 - root - INFO - Fetched 7496 rows from SOT: service_users
+2025-07-23 15:39:42,076 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-23 15:39:42,204 - root - INFO - Fetched 2770 rows from panel: Seller Panel
+2025-07-23 15:39:42,204 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-23 15:39:42,204 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-23 15:39:42,204 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-23 15:39:42,204 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-23 15:39:42,207 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-23 15:39:42,207 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-23 15:39:42,207 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-23 15:39:42,244 - root - INFO - Updating table 'seller_panel' with 2770 records using match_field 'user_email'
+2025-07-23 15:40:35,877 - root - INFO - Bulk update completed: 5540 records updated, 0 errors
+2025-07-23 15:40:35,879 - root - INFO - Successfully updated 2770 rows in panel 'Seller Panel'
+2025-07-23 15:40:35,880 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'internal_users': 1968, 'service_users': 264, 'thirdparty_users': 538, 'not_found': 0, 'total': 2770, 'errors': 0}
+2025-07-23 15:40:36,119 - root - INFO - Found 1968 users to reconcile (1968 internal + 0 not found) and 802 other users out of 2770 total panel users
+2025-07-23 15:40:36,207 - root - INFO - Updating table 'seller_panel' with 1968 records using match_field 'user_email'
+2025-07-23 15:41:17,221 - root - INFO - Bulk update completed: 3936 records updated, 0 errors
+2025-07-23 15:41:17,226 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Status: complete, Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 2770, 'internal_users': 1968, 'not_found_users': 0, 'users_to_reconcile': 1968, 'other_users': 802, 'service_users': 0, 'thirdparty_users': 0, 'matched': 738, 'found_active': 660, 'found_inactive': 78, 'not_found': 1230}
+2025-07-23 15:41:17,227 - root - INFO - Updated upload history status for panel 'Seller Panel' to 'complete'
+2025-07-23 15:42:14,381 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 15:42:14,443 - root - INFO - No data found for panel: OE Panel
+2025-07-23 15:42:14,445 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 15:42:14,616 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 15:42:14,687 - root - INFO - No data found for panel: OE Panel
+2025-07-23 15:42:14,689 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 15:42:19,255 - root - INFO - Fetched 2770 rows for panel 'Seller Panel'
+2025-07-23 15:43:55,361 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 15:43:55,387 - root - INFO - No data found for panel: OE Panel
+2025-07-23 15:43:55,389 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 15:43:55,550 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-23 15:43:55,578 - root - INFO - No data found for panel: OE Panel
+2025-07-23 15:43:55,580 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-23 15:43:59,102 - root - INFO - Fetched 2770 rows for panel 'Seller Panel'
+2025-07-23 15:44:01,634 - root - INFO - Fetched 2770 rows for panel 'Seller Panel'

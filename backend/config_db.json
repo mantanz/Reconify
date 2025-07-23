@@ -1,19 +1,19 @@
 {
   "panels": [
     {
-      "name": "Seller Panel",
+      "name": "OE Panel",
       "key_mapping": {
         "hr_data": {
-          "user_email": "email"
+          "email": "email"
         },
         "internal_users": {
-          "user_email": "domain"
+          "email": "domain"
         },
         "service_users": {
-          "user_email": "email"
+          "email": "email"
         },
         "thirdparty_users": {
-          "user_email": "domain"
+          "email": "domain"
         }
       }
     }

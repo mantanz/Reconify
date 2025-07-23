@@ -24,5 +24,31 @@
       "found_inactive": 39,
       "not_found": 615
     }
+  },
+  {
+    "recon_id": "RCN_93fbc9f2",
+    "panelname": "Seller Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "upload_date": "23-07-2025 15:39:33",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-23",
+    "performed_by": "demo",
+    "error": null,
+    "summary": {
+      "panel_name": "Seller Panel",
+      "total_panel_users": 2770,
+      "internal_users": 1968,
+      "not_found_users": 0,
+      "users_to_reconcile": 1968,
+      "other_users": 802,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 738,
+      "found_active": 660,
+      "found_inactive": 78,
+      "not_found": 1230
+    }
   }
 ]

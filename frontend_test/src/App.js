@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import AddPanel from "./AddPanel";
-import ModifyPanel from "./ModifyPanel";
-import DeletePanel from "./DeletePanel";
+import Config from "./Config";
 import SOTUpload from "./SOTUpload";
 import Reconciliation from "./Reconciliation";
 import UserSummary from "./UserSummary";
@@ -11,7 +9,7 @@ import Reconsummary from "./Reconsummary";
 // Available navigation items based on current functionality
 const NAV_ITEMS = [
   { key: "home", label: "Home", component: null },
-  { key: "config", label: "Config", component: null },
+  { key: "config", label: "Config", component: <Config /> },
   { key: "sot", label: "SOT", component: <SOTUpload /> },
   { key: "reconciliation", label: "Reconciliation", component: <Reconciliation /> },
   { key: "recertification", label: "Recertification", component: null },
@@ -27,16 +25,13 @@ const NAV_ITEMS = [
 function App() {
   const [selected, setSelected] = useState("home");
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedFunction, setSelectedFunction] = useState("");
 
   const handleNavClick = (key) => {
     setSelected(key);
     setShowDropdown(false);
   };
 
-  const handleFunctionChange = (e) => {
-    setSelectedFunction(e.target.value);
-  };
+
 
   const handleLinkClick = (link) => {
     console.log(`Navigating to: ${link.name}`);
@@ -58,44 +53,7 @@ function App() {
     }
   }, [showDropdown]);
 
-  const renderPanelComponent = () => {
-    if (!selectedFunction) return null;
 
-    const componentStyle = {
-      background: "linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)",
-      padding: 32,
-      borderRadius: 16,
-      marginTop: 24,
-      border: "1px solid #e8ecff",
-      boxShadow: "0 8px 32px rgba(0, 123, 255, 0.08), 0 4px 16px rgba(0, 123, 255, 0.04)"
-    };
-
-    switch (selectedFunction) {
-      case "add":
-        return (
-          <div style={componentStyle}>
-            <h3 style={{ color: "#002e6e", marginBottom: 16, fontSize: 20, fontWeight: 700 }}>Add Panel</h3>
-            <AddPanel />
-          </div>
-        );
-      case "modify":
-        return (
-          <div style={componentStyle}>
-            <h3 style={{ color: "#002e6e", marginBottom: 16, fontSize: 20, fontWeight: 700 }}>Modify Panel</h3>
-            <ModifyPanel />
-          </div>
-        );
-      case "delete":
-        return (
-          <div style={componentStyle}>
-            <h3 style={{ color: "#002e6e", marginBottom: 16, fontSize: 20, fontWeight: 700 }}>Delete Panel</h3>
-            <DeletePanel />
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
 
   const renderContent = () => {
     const selectedItem = NAV_ITEMS.find(item => item.key === selected);
@@ -245,70 +203,7 @@ function App() {
             </div>
           </div>
         );
-      case "config":
-        return (
-          <div style={{ 
-            maxWidth: 900, 
-            margin: "40px auto", 
-            background: "linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)", 
-            borderRadius: 20, 
-            boxShadow: "0 20px 60px rgba(0, 123, 255, 0.1), 0 8px 32px rgba(0, 123, 255, 0.05)", 
-            padding: "10px 20px", 
-            border: "1px solid #e8ecff" 
-          }}>
-            <h2 style={{ 
-              textAlign: "center", 
-              color: "#002e6e", 
-              marginBottom: 40, 
-              fontSize: 28, 
-              fontWeight: 800,
-              // background: "linear-gradient(135deg, #002e6e 0%, #0056b6 100%)",
-              // WebkitBackgroundClip: "text",
-              // WebkitTextFillColor: "transparent",
-              backgroundClip: "text"
-            }}>Configuration Panel</h2>
-            
-            <div style={{ marginBottom: 40 }}>
-              {/* Function Dropdown */}
-              <div style={{ maxWidth: 400, margin: "0 auto" }}>
-                <label style={{ 
-                  display: "block", 
-                  marginBottom: 12, 
-                  color: "#002e6e", 
-                  fontWeight: 600, 
-                  fontSize: 16 
-                }}>
-                  Select Function:
-                </label>
-                <select 
-                  value={selectedFunction}
-                  onChange={handleFunctionChange}
-                  style={{
-                    width: "100%",
-                    padding: "16px 20px",
-                    border: selectedFunction ? "2px solid #00b4d8" : "2px solid #e8ecff",
-                    borderRadius: 12,
-                    fontSize: 16,
-                    backgroundColor: "#fff",
-                    color: selectedFunction ? "#002e6e" : "#4a5568",
-                    cursor: "pointer",
-                    outline: "none",
-                    transition: "all 0.3s ease",
-                    boxShadow: "0 4px 12px rgba(0, 123, 255, 0.08)"
-                  }}
-                >
-                  <option value="">-- Select Function --</option>
-                  <option value="add">Add Panel</option>
-                  <option value="modify">Modify Panel</option>
-                  <option value="delete">Delete Panel</option>
-                </select>
-              </div>
-            </div>
 
-            {/* Panel Component */}
-            {renderPanelComponent()}
-          </div>
-        );
       default:
         return null;
     }
