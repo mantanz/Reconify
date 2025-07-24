@@ -190,14 +190,26 @@ export default function SOTUpload() {
     <div style={{ 
       background: "#fff", 
       borderRadius: 12, 
-      padding: 32, 
+      padding: 28, 
       boxShadow: "0 8px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08)", 
       marginBottom: 16, 
-      maxWidth: 1200, 
+      maxWidth: 1300, 
       margin: "40px auto",
       border: "1px solid rgba(0,0,0,0.05)"
     }}>
-      <h2 style={{ textAlign: "center", color: "#343a40", marginBottom: 24 }}>Source of Truth</h2>
+      <h2 style={{
+        textAlign: "center",
+        color: "#002e6e",
+        marginBottom: 24,
+        fontSize: 24,
+        fontWeight: 600,
+        background: "linear-gradient(135deg, #002e6e 0%, #0056b3 100%)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text"
+      }}>
+        Source of Truth
+      </h2>
       
       {/* Error Messages */}
       {error && <div style={{ marginBottom: 16, color: "#e74c3c", fontWeight: 500, background: "#fdf2f2", padding: 12, borderRadius: 6 }}>{error}</div>}

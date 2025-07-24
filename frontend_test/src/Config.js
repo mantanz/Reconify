@@ -270,19 +270,19 @@ export default function Config() {
 
   return (
     <div style={{
-      maxWidth: 1400,
+      maxWidth: 1300,
       margin: "40px auto",
       background: "linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)",
-      borderRadius: 20,
+      borderRadius: 12,
       boxShadow: "0 20px 60px rgba(0, 123, 255, 0.1), 0 8px 32px rgba(0, 123, 255, 0.05)",
-      padding: 48,
+      padding: 28,
       border: "1px solid #e8ecff"
     }}>
       <h2 style={{
         textAlign: "center",
         color: "#002e6e",
-        marginBottom: 40,
-        fontSize: 32,
+        marginBottom: 24,
+        fontSize: 24,
         fontWeight: 600,
         background: "linear-gradient(135deg, #002e6e 0%, #0056b3 100%)",
         WebkitBackgroundClip: "text",
@@ -738,7 +738,7 @@ export default function Config() {
           borderRadius: 12,
           color: "#856404"
         }}>
-          <h4 style={{ marginBottom: 12, fontSize: 16, fontWeight: 600 }}>
+          <h4 style={{ marginBottom: 12, fontSize: 14, fontWeight: 600 }}>
             ⚠️ Delete Panel: {selectedPanel.name}
           </h4>
           <p style={{ marginBottom: 16, fontSize: 14, lineHeight: 1.5 }}>

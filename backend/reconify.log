@@ -4950,3 +4950,30 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-24 12:04:03,448 - root - INFO - User-wise summary completed. Total users: 1385
 2025-07-24 12:04:03,657 - root - INFO - Processed 1385 users from panel: Seller Panel
 2025-07-24 12:04:03,658 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:41:30,992 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:41:30,994 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:41:31,122 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:41:31,123 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 13:02:18,097 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 13:02:18,098 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 13:02:18,427 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 13:02:18,429 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 13:06:06,367 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 13:06:06,369 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 13:06:06,519 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 13:06:06,520 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 13:19:44,473 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-24 13:19:44,473 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-24 13:19:44,497 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 13:20:11,232 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-24 13:20:11,233 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-24 13:26:33,677 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-24 13:26:33,679 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-24 13:26:33,703 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 13:26:55,894 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-24 13:26:55,895 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-24 14:31:28,160 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-24 14:31:28,162 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-24 14:31:28,225 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 14:32:01,496 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-24 14:32:01,497 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}

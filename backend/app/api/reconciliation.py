@@ -7,7 +7,7 @@ import pandas as pd
 import uuid
 from datetime import datetime, timezone, timedelta
 
-from app.utils.datetime import get_ist_timestamp
+from app.utils.datetime import get_ist_timestamp, format_ist_timestamp
 from app.utils.database import load_db
 from app.utils.history import update_upload_history_status
 from app.config.paths import RECON_HISTORY_PATH, RECON_SUMMARY_PATH
@@ -293,7 +293,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
         now = datetime.now(timezone(timedelta(hours=5, minutes=30)))  # IST timezone
         recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
         recon_month = now.strftime("%b'%y")
-        start_date = now.strftime("%Y-%m-%d")
+        start_date = now.strftime("%Y-%m-%d")  # Keep ISO format for internal use
         performed_by = "demo"
         
         # Find upload info from panel history
@@ -373,7 +373,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             now = datetime.now(timezone(timedelta(hours=5, minutes=30)))  # IST timezone
             recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
             recon_month = now.strftime("%b'%y")
-            start_date = now.strftime("%Y-%m-%d")
+            start_date = now.strftime("%Y-%m-%d")  # Keep ISO format for internal use
             performed_by = "demo"
             
             # Find upload info from panel history
@@ -440,7 +440,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             now = datetime.now(timezone(timedelta(hours=5, minutes=30)))  # IST timezone
             recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
             recon_month = now.strftime("%b'%y")
-            start_date = now.strftime("%Y-%m-%d")
+            start_date = now.strftime("%Y-%m-%d")  # Keep ISO format for internal use
             performed_by = "demo"
             
             # Find upload info from panel history

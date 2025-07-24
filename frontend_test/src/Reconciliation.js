@@ -55,6 +55,7 @@ export default function Reconciliation() {
   const [currentStep, setCurrentStep] = useState({});
   const [recategorizationFile, setRecategorizationFile] = useState(null);
   const [recategorizationLoading, setRecategorizationLoading] = useState({});
+  const [recategorizationCompleted, setRecategorizationCompleted] = useState({});
   const [showRecategorization, setShowRecategorization] = useState(false);
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [dragActive, setDragActive] = useState(false);
@@ -118,7 +119,7 @@ export default function Reconciliation() {
       alert(validation.errors.join('\n'));
       return;
     }
-    
+
     setRecategorizationFile(file);
   }
 
@@ -140,7 +141,7 @@ export default function Reconciliation() {
     e.preventDefault(); 
     setRecategoriseDragActive(false); 
     validateAndSetRecategorise(e.dataTransfer.files);
-  }
+    }
 
   const handleUpload = async () => {
     if (!files.length) return;
@@ -154,8 +155,8 @@ export default function Reconciliation() {
     setResult(null);
     
     try {
-      const formData = new FormData();
-      formData.append("panel_name", selectedPanel);
+    const formData = new FormData();
+    formData.append("panel_name", selectedPanel);
       formData.append("file", files[0]); // Upload first file
 
       const res = await fetch("http://127.0.0.1:8000/recon/upload", {
@@ -257,6 +258,9 @@ export default function Reconciliation() {
       const result = await recategorizeUsers(upload.panelname, recategorizationFile);
       alert(`Recategorization completed!\n\nSummary:\n- Total users: ${result.summary.total_panel_users}\n- Matched: ${result.summary.matched}\n- Not found: ${result.summary.not_found}\n- Errors: ${result.summary.errors}`);
       
+      // Mark recategorization as completed for this upload
+      setRecategorizationCompleted(c => ({ ...c, [reconId]: true }));
+      
       // Clear the file and hide recategorization interface
       setRecategorizationFile(null);
       setShowRecategorization(false);
@@ -309,15 +313,20 @@ export default function Reconciliation() {
   };
 
   const isReconciliationComplete = (item) => {
-    return item.status && item.status.toLowerCase() === "complete";
+    return item.status && (item.status.toLowerCase() === "complete" || item.status.toLowerCase() === "completed");
   };
 
   const canRecategorize = (item) => {
     return item.status && item.status.toLowerCase() === "complete";
   };
 
+  const isRecategorizationComplete = (item) => {
+    const reconId = item.docid || item.doc_id;
+    return recategorizationCompleted[reconId] === true;
+  };
+
   const isEntireProcessComplete = (item) => {
-    return item.status && (item.status.toLowerCase() === "recategorised" || item.status.toLowerCase() === "completed");
+    return item.status && (item.status.toLowerCase() === "recategorised" || item.status.toLowerCase() === "completed") || isRecategorizationComplete(item);
   };
 
   const isAlreadyMarkedComplete = (item) => {
@@ -347,23 +356,23 @@ export default function Reconciliation() {
   return (
     <div style={{ backgroundColor: '#f0f4ff', minHeight: '100vh', paddingTop: '56px' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 12px 24px 12px' }}>
-        <div style={{ 
+    <div style={{ 
           width: '100%', 
           backgroundColor: 'white', 
           padding: '24px', 
           borderRadius: '8px', 
           boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)' 
-        }}>
+    }}>
           
           {/* Loading and Error States */}
           {(uploading || Object.values(loading).some(l => l)) && (
-            <div style={{ 
+      <div style={{ 
               marginBottom: '16px', 
               padding: '16px', 
               backgroundColor: '#eff6ff', 
               border: '1px solid #dbeafe', 
               borderRadius: '6px' 
-            }}>
+      }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{ 
                   animation: 'spin 1s linear infinite',
@@ -382,13 +391,13 @@ export default function Reconciliation() {
           )}
           
           {error && (
-            <div style={{ 
+        <div style={{ 
               marginBottom: '16px', 
               padding: '16px', 
               backgroundColor: '#fef2f2', 
               border: '1px solid #fecaca', 
               borderRadius: '6px' 
-            }}>
+        }}>
               <span style={{ color: '#991b1b' }}>{error}</span>
             </div>
           )}
@@ -411,8 +420,8 @@ export default function Reconciliation() {
               }}>
                 Panel
               </span>
-              <select 
-                value={selectedPanel} 
+              <select
+                value={selectedPanel}
                 onChange={handlePanelChange}
                 style={{
                   border: '1px solid #d1d5db',
@@ -447,7 +456,7 @@ export default function Reconciliation() {
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
-                  style={{
+              style={{ 
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -463,35 +472,35 @@ export default function Reconciliation() {
                     backgroundColor: files.length > 0 ? 'rgba(5, 150, 105, 0.05)' :
                                    dragActive ? 'rgba(0, 186, 242, 0.1)' : '#f9fafb',
                     opacity: selectedPanel === ' -- Select -- ' ? 0.5 : 1
-                  }}
-                >
+              }}
+            >
                   <HiOutlineUpload style={{ 
                     color: files.length > 0 ? '#059669' : '#6b7280', 
                     width: '20px', 
                     height: '20px' 
                   }} />
-                  <span style={{ 
+              <span style={{ 
                     color: files.length > 0 ? '#059669' : '#4b5563',
                     fontWeight: files.length > 0 ? '500' : 'normal'
-                  }}>
+              }}>
                     {files.length > 0 ? files[0].name : 'Browse files'}
-                  </span>
-                  <input 
+              </span>
+              <input
                     id="dropzone-file" 
-                    type="file" 
+                type="file"
                     multiple 
                     accept=".xlsx,.csv,.xlsb,.xls"
                     onChange={handleFilesChange} 
                     style={{ display: 'none' }} 
                     disabled={selectedPanel === ' -- Select -- '} 
-                  />
+              />
                 </label>
-                
+
                 {/* Upload button */}
-                <button
+            <button
                   onClick={handleUpload}
                   disabled={!files.length || selectedPanel === ' -- Select -- ' || uploading}
-                  style={{
+              style={{
                     width: '40px',
                     height: '40px',
                     display: 'flex',
@@ -506,11 +515,11 @@ export default function Reconciliation() {
                   }}
                 >
                   <FiUpload style={{ width: '20px', height: '20px' }} />
-                </button>
-              </div>
-            </div>
+            </button>
           </div>
-
+            </div>
+        </div>
+        
 
 
 
@@ -527,56 +536,56 @@ export default function Reconciliation() {
                   <th style={{ padding: '12px 16px', textAlign: 'left' }}>Uploaded</th>
                   <th style={{ padding: '12px 16px', textAlign: 'left' }}>Status</th>
                   <th style={{ padding: '12px 16px', textAlign: 'left' }}>Actions</th>
-                </tr>
+                  </tr>
               </thead>
               <tbody className="table-body">
                 {history.map((item, idx) => (
                   <tr key={idx} className="table-row" style={{ whiteSpace: 'nowrap' }}>
                     <td style={{ padding: '12px 16px', fontSize: '14px', fontWeight: '500', color: '#343a40' }}>
-                      {item.panelname}
-                    </td>
+                          {item.panelname}
+                        </td>
                     <td style={{ padding: '12px 16px', fontSize: '14px', color: '#495057' }}>
                       {parseISTTimestamp(item.timestamp)}
-                    </td>
+                        </td>
                     <td style={{ padding: '12px 16px', fontSize: '14px', color: '#495057' }}>
                       {item.uploadedby}
                     </td>
                     <td style={{ padding: '12px 16px', fontSize: '14px', color: '#495057' }}>
-                      <span style={{ 
+                          <span style={{ 
                         background: '#e3f2fd', 
                         color: '#1976d2', 
                         padding: '4px 8px', 
                         borderRadius: '4px',
                         fontWeight: '600',
                         fontSize: '12px'
-                      }}>
-                        {item.total_records}
-                      </span>
-                    </td>
+                          }}>
+                            {item.total_records}
+                          </span>
+                        </td>
                     <td style={{ padding: '12px 16px', fontSize: '14px', color: '#495057' }}>
                       <Progress percent={100} />
-                    </td>
+                        </td>
                     <td style={{ padding: '12px 16px', fontSize: '14px' }}>
-                      <span style={{ 
-                        color: getStatusColor(item.status), 
+                          <span style={{ 
+                            color: getStatusColor(item.status), 
                         fontWeight: '600',
                         padding: '4px 8px',
                         borderRadius: '4px',
-                        background: item.status === "complete" || item.status === "uploaded" ? "#e8f5e8" : 
-                                   item.status === "failed" ? "#ffeaea" : "#f8f9fa"
-                      }}>
-                        {getDisplayStatus(item)}
-                      </span>
-                    </td>
+                            background: item.status === "complete" || item.status === "uploaded" ? "#e8f5e8" : 
+                                       item.status === "failed" ? "#ffeaea" : "#f8f9fa"
+                          }}>
+                            {getDisplayStatus(item)}
+                          </span>
+                        </td>
                     <td style={{ padding: '12px 16px', fontSize: '14px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        {/* Reconciliation Button */}
+                            {/* Reconciliation Button */}
                         <Tooltip label={
-                          loading[item.docid || item.doc_id] ? 
-                          `Processing: ${currentStep[item.docid || item.doc_id] || "Starting..."}` :
-                          canStartReconciliation(item) ? "Start Reconciliation" :
+                                loading[item.docid || item.doc_id] ? 
+                                `Processing: ${currentStep[item.docid || item.doc_id] || "Starting..."}` :
+                                canStartReconciliation(item) ? "Start Reconciliation" :
                           isReconciliationComplete(item) ? "Reconciliation Completed" :
-                          "Reconciliation Not Available"
+                                "Reconciliation Not Available"
                         }>
                           <button
                             onClick={() => handleReconcile(idx)}
@@ -597,29 +606,33 @@ export default function Reconciliation() {
                               transition: 'all 0.2s ease',
                               opacity: (canStartReconciliation(item) || isReconciliationComplete(item)) ? 1 : 0.6
                             }}
-                            onMouseEnter={(e) => {
-                              if (!loading[item.docid || item.doc_id] && canStartReconciliation(item)) {
-                                e.target.style.transform = "scale(1.1)";
-                                e.target.style.boxShadow = "0 2px 8px rgba(0,123,255,0.3)";
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              e.target.style.transform = "scale(1)";
-                              e.target.style.boxShadow = "none";
-                            }}
-                          >
-                            {loading[item.docid || item.doc_id] ? "⏳" : 
-                             isReconciliationComplete(item) ? <BsCheckCircleFill style={{ width: '16px', height: '16px' }} /> :
+                              onMouseEnter={(e) => {
+                                if (!loading[item.docid || item.doc_id] && (canStartReconciliation(item) || isReconciliationComplete(item))) {
+                                  e.target.style.transform = "scale(1.1)";
+                                  e.target.style.boxShadow = "0 2px 8px rgba(0,123,255,0.3)";
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.transform = "scale(1)";
+                                e.target.style.boxShadow = "none";
+                              }}
+                            >
+                              {loading[item.docid || item.doc_id] ? "⏳" : 
+                             isReconciliationComplete(item) ? <BsCheckCircleFill style={{ width: '16px', height: '16px', display: 'block' }} /> :
                              <BsBinocularsFill style={{ width: '16px', height: '16px' }} />}
-                          </button>
+                            </button>
                         </Tooltip>
-                        
-                        {/* Recategorization Button */}
-                        <Tooltip label="Recategorise">
-                          <button
+                            
+                            {/* Recategorization Button */}
+                        <Tooltip label={
+                          isRecategorizationComplete(item) ? "Recategorization Completed" :
+                          recategorizationLoading[item.docid || item.doc_id] ? "Processing Recategorization..." :
+                          "Recategorise"
+                        }>
+                            <button
                             onClick={() => handleRecategorise(idx)}
-                            disabled={!canRecategorize(item)}
-                            style={{
+                            disabled={!canRecategorize(item) || recategorizationLoading[item.docid || item.doc_id]}
+                              style={{
                               width: '32px',
                               height: '32px',
                               display: 'flex',
@@ -627,15 +640,16 @@ export default function Reconciliation() {
                               justifyContent: 'center',
                               border: 'none',
                               borderRadius: '6px',
-                              background: canRecategorize(item) ? '#2563eb' : '#6c757d',
+                              background: isRecategorizationComplete(item) ? '#059669' : 
+                                         canRecategorize(item) ? '#2563eb' : '#6c757d',
                               color: '#fff',
                               fontSize: '14px',
-                              cursor: canRecategorize(item) ? 'pointer' : 'not-allowed',
+                              cursor: (canRecategorize(item) && !recategorizationLoading[item.docid || item.doc_id]) ? 'pointer' : 'not-allowed',
                               transition: 'all 0.2s ease',
-                              opacity: canRecategorize(item) ? 1 : 0.6
+                              opacity: (canRecategorize(item) || isRecategorizationComplete(item)) ? 1 : 0.6
                             }}
                             onMouseEnter={(e) => {
-                              if (canRecategorize(item)) {
+                              if (canRecategorize(item) && !recategorizationLoading[item.docid || item.doc_id]) {
                                 e.target.style.transform = "scale(1.1)";
                                 e.target.style.boxShadow = "0 2px 8px rgba(37,99,235,0.3)";
                               }
@@ -645,7 +659,9 @@ export default function Reconciliation() {
                               e.target.style.boxShadow = "none";
                             }}
                           >
-                            <FiSettings style={{ width: '16px', height: '16px' }} />
+                            {recategorizationLoading[item.docid || item.doc_id] ? "⏳" : 
+                             isRecategorizationComplete(item) ? <BsCheckCircleFill style={{ width: '16px', height: '16px', display: 'block' }} /> :
+                             <FiSettings style={{ width: '16px', height: '16px' }} />}
                           </button>
                         </Tooltip>
                         
@@ -667,7 +683,7 @@ export default function Reconciliation() {
                               cursor: 'pointer',
                               transition: 'background-color 0.2s'
                             }}
-                            onMouseEnter={(e) => {
+                              onMouseEnter={(e) => {
                               e.target.style.backgroundColor = "#f3f4f6";
                             }}
                             onMouseLeave={(e) => {
@@ -696,7 +712,7 @@ export default function Reconciliation() {
                               border: 'none',
                               borderRadius: '6px',
                               background: isAlreadyMarkedComplete(item) ? '#16a34a' : 
-                                         isEntireProcessComplete(item) ? '#7c3aed' : '#6c757d',
+                                         isEntireProcessComplete(item) ? '#00baf2' : '#6c757d',
                               color: '#fff',
                               fontSize: '14px',
                               cursor: (isEntireProcessComplete(item) && !isAlreadyMarkedComplete(item)) ? 'pointer' : 'not-allowed',
@@ -705,28 +721,28 @@ export default function Reconciliation() {
                             }}
                             onMouseEnter={(e) => {
                               if (isEntireProcessComplete(item) && !isAlreadyMarkedComplete(item)) {
-                                e.target.style.transform = "scale(1.1)";
-                                e.target.style.boxShadow = "0 2px 8px rgba(124,58,237,0.3)";
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              e.target.style.transform = "scale(1)";
-                              e.target.style.boxShadow = "none";
-                            }}
-                          >
+                                  e.target.style.transform = "scale(1.1)";
+                                e.target.style.boxShadow = "0 2px 8px rgba(0,186,242,0.3)";
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.transform = "scale(1)";
+                                e.target.style.boxShadow = "none";
+                              }}
+                            >
                             <BsCheck2All style={{ width: '16px', height: '16px' }} />
-                          </button>
+                            </button>
                         </Tooltip>
-                      </div>
-                    </td>
-                  </tr>
+                          </div>
+                        </td>
+                      </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
-
+                                  </div>
+                                </div>
+                                
       {/* Recategorise Modal */}
       {showRecategorization && (
         <div 
@@ -743,7 +759,7 @@ export default function Reconciliation() {
           onKeyDown={handleKeyDown} 
           tabIndex={0}
         >
-          <div style={{ 
+                                <div style={{ 
             backgroundColor: 'white', 
             borderRadius: '8px', 
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', 
@@ -751,7 +767,7 @@ export default function Reconciliation() {
             width: '100%', 
             margin: '16px', 
             padding: '24px' 
-          }}>
+                                }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#111827' }}>Recategorise Document</h3>
               <button
@@ -769,7 +785,7 @@ export default function Reconciliation() {
               >
                 ×
               </button>
-            </div>
+                                  </div>
             
             <div style={{ marginBottom: '16px' }}>
               <p style={{ fontSize: '14px', color: '#4b5563', marginBottom: '12px' }}>
@@ -821,13 +837,13 @@ export default function Reconciliation() {
                 </label>
                 
                 {recategorizationFile && (
-                  <div style={{ 
+                            <div style={{ 
                     backgroundColor: '#f0fdf4', 
                     border: '1px solid #bbf7d0', 
                     borderRadius: '6px', 
                     padding: '12px',
                     marginTop: '12px'
-                  }}>
+                              }}>
                     <p style={{ fontSize: '14px', color: '#166534', fontWeight: '500', margin: 0 }}>
                       File selected
                     </p>
@@ -836,14 +852,14 @@ export default function Reconciliation() {
                     </p>
                   </div>
                 )}
-              </div>
-            </div>
-            
+                                  </div>
+                                </div>
+                                
             <div style={{ display: 'flex', gap: '12px' }}>
               <button
                 onClick={handleRecategoriseCancel}
-                style={{
-                  flex: 1,
+                                    style={{
+                                      flex: 1,
                   padding: '8px 16px',
                   border: '1px solid #d1d5db',
                   color: '#374151',
@@ -851,16 +867,16 @@ export default function Reconciliation() {
                   backgroundColor: 'white',
                   cursor: 'pointer',
                   fontSize: '14px'
-                }}
+                                    }}
                 onMouseEnter={(e) => e.target.style.backgroundColor = '#f9fafb'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
               >
                 Cancel
               </button>
-              <button
+                                  <button
                 onClick={handleRecategoriseUpload}
                 disabled={!recategorizationFile || recategorizationLoading[history[selectedRowIndex]?.docid]}
-                style={{
+                                    style={{
                   flex: 1,
                   padding: '8px 16px',
                   backgroundColor: '#2563eb',
@@ -880,13 +896,13 @@ export default function Reconciliation() {
                   if (recategorizationFile && !recategorizationLoading[history[selectedRowIndex]?.docid]) {
                     e.target.style.backgroundColor = '#2563eb';
                   }
-                }}
-              >
+                                    }}
+                                  >
                 {recategorizationLoading[history[selectedRowIndex]?.docid] ? "Processing..." : "Upload & Recategorise"}
-              </button>
-            </div>
-          </div>
-        </div>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
       )}
 
       <style>{`
