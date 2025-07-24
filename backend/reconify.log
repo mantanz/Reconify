@@ -4524,3 +4524,601 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-23 11:15:38,372 - root - INFO - Processed 3029 users from panel: OE Panel
 2025-07-23 11:15:38,373 - root - INFO - User-wise summary completed. Total users: 4523
 2025-07-23 11:15:40,200 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 11:48:14,703 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 11:48:14,737 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 11:48:14,805 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 11:48:14,806 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 11:48:14,853 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 11:48:14,869 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 11:48:14,911 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 11:48:14,912 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 11:48:25,711 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 12:27:40,878 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 12:27:40,910 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 12:27:40,974 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 12:27:40,976 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 12:27:41,032 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 12:27:41,055 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 12:27:41,233 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 12:27:41,235 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 12:28:00,760 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 12:34:40,659 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 12:34:40,701 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 12:34:40,779 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 12:34:40,781 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 12:34:40,834 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 12:34:40,857 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 12:34:40,965 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 12:34:40,967 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 12:46:59,564 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 12:46:59,593 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 12:46:59,660 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 12:46:59,661 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 12:46:59,711 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 12:46:59,740 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 12:46:59,788 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 12:46:59,790 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 12:53:21,218 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 12:53:21,267 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 12:53:21,361 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 12:53:21,366 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 12:53:21,423 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 12:53:21,448 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 12:53:21,512 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 12:53:21,513 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 12:53:48,701 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 13:05:07,948 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:05:07,994 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:05:08,042 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:05:08,043 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:05:40,135 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:05:40,176 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:05:40,243 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:05:40,247 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:05:40,294 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:05:40,316 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:05:40,373 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:05:40,375 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:09:58,471 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:09:58,501 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:09:58,576 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:09:58,579 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:09:58,635 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:09:58,661 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:09:58,708 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:09:58,709 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:10:09,269 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:10:09,308 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:10:09,415 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:10:09,416 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:10:09,469 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:10:09,501 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:10:09,551 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:10:09,552 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:10:17,226 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 13:16:37,919 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:16:37,960 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:16:38,039 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:16:38,044 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:16:38,102 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:16:38,131 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:16:38,303 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:16:38,304 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:16:45,318 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 13:16:56,155 - root - INFO - Fetched 3029 rows for panel 'OE Panel'
+2025-07-23 13:17:42,576 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-23 13:18:08,604 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 13:19:51,625 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:19:51,655 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:19:51,726 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:19:51,729 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:19:51,778 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:19:51,808 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:19:51,864 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:19:51,865 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:24:54,044 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 13:25:03,849 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-23 13:25:06,185 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 13:29:29,838 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:29:29,890 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:29:29,964 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:29:29,966 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:29:30,013 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:29:30,034 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:29:30,090 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:29:30,092 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:30:21,524 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 13:39:11,269 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:39:11,310 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:39:11,372 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:39:11,374 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:39:11,422 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:39:11,447 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:39:11,500 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:39:11,502 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:41:33,885 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:41:33,908 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:41:33,965 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:41:33,967 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:41:34,014 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:41:34,036 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:41:34,098 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:41:34,100 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:45:33,820 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 13:55:05,912 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:55:06,009 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:55:06,074 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:55:06,077 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:55:06,124 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 13:55:06,148 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 13:55:06,199 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 13:55:06,200 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 13:59:14,311 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 14:01:42,031 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 14:01:42,078 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 14:01:42,244 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 14:01:42,246 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 14:01:42,298 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 14:01:42,324 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 14:01:42,366 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 14:01:42,368 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 14:01:52,814 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 14:01:52,854 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 14:01:52,925 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 14:01:52,927 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 14:01:52,975 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 14:01:53,006 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 14:01:53,091 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 14:01:53,093 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:13:49,166 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:13:49,234 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:13:49,390 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:13:49,411 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:13:49,490 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:13:49,514 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:13:49,565 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:13:49,571 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:18:42,832 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 15:26:11,900 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:26:11,934 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:26:12,004 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:26:12,006 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:26:12,050 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:26:12,071 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:26:12,165 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:26:12,166 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:27:41,537 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:27:41,574 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:27:41,641 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:27:41,643 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:27:41,696 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:27:41,720 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:27:41,776 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:27:41,778 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:28:05,395 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:28:05,435 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:28:05,568 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:28:05,569 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:28:05,612 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:28:05,643 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:28:05,706 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:28:05,708 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:30:09,122 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:30:09,147 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:30:09,219 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:30:09,221 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:30:09,270 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:30:09,296 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:30:09,349 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:30:09,351 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:30:36,851 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:30:36,885 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:30:36,968 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:30:36,970 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:30:37,020 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:30:37,045 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:30:37,092 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:30:37,093 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:47:52,494 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 15:52:17,229 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:52:17,267 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:52:17,402 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:52:17,403 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:52:17,453 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:52:17,479 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:52:17,537 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:52:17,539 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:52:18,544 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 15:57:04,834 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:57:04,867 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:57:04,911 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:57:04,913 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:57:05,553 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:57:05,586 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:57:05,628 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:57:05,630 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:57:05,694 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:57:05,705 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:57:05,738 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:57:05,739 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:57:05,885 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:57:05,902 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:57:05,935 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:57:05,937 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:57:06,010 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:57:06,095 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:57:06,122 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:57:06,123 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 15:57:06,278 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 15:57:06,298 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 15:57:06,336 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 15:57:06,338 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 16:01:26,814 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 16:01:26,843 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 16:01:26,918 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 16:01:26,921 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 16:01:26,966 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 16:01:26,989 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 16:01:27,046 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 16:01:27,048 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 16:01:28,295 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 16:04:12,341 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 16:06:51,173 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-23 16:13:07,522 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 16:13:07,551 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 16:13:07,709 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 16:13:07,710 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 16:13:07,759 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 16:13:07,791 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 16:13:07,828 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 16:13:07,829 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 16:13:09,266 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 16:13:17,544 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-23 16:13:26,278 - root - INFO - Fetched 3029 rows for panel 'OE Panel'
+2025-07-23 16:15:06,287 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 16:26:12,689 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 16:26:12,715 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 16:26:12,964 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 16:26:12,966 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 16:26:13,012 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 16:26:13,033 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 16:26:13,088 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 16:26:13,089 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 16:26:13,611 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 16:54:39,513 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-23 17:07:37,377 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:07:37,410 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:07:37,504 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:07:37,506 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:07:37,567 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:07:37,600 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:07:37,646 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:07:37,647 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:07:42,125 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:07:42,304 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:07:42,360 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:07:42,362 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:07:42,411 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:07:42,433 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:07:42,490 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:07:42,491 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:07:43,655 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:07:43,688 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:07:43,756 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:07:43,759 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:07:43,825 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:07:43,861 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:07:43,944 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:07:43,945 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:07:49,186 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:07:49,232 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:07:49,351 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:07:49,356 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:07:49,403 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:07:49,435 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:07:49,492 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:07:49,494 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:21:52,004 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 17:22:10,656 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-23 17:34:28,903 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 17:37:55,159 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:37:55,200 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:37:55,283 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:37:55,285 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:37:55,335 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:37:55,358 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:37:55,414 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:37:55,416 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:44:10,720 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:44:10,904 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:44:10,962 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:44:10,964 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:44:11,012 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:44:11,039 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:44:11,085 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:44:11,086 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:47:19,619 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:47:19,643 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:47:19,705 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:47:19,707 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:47:19,754 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:47:19,777 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:47:19,922 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:47:19,925 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:50:59,583 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:50:59,607 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:50:59,646 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:50:59,649 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:50:59,694 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:50:59,705 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:50:59,837 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:50:59,838 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:57:42,558 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:57:42,586 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:57:42,642 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:57:42,643 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 17:57:42,694 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 17:57:42,717 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 17:57:42,773 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 17:57:42,774 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:11:06,084 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:11:06,127 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:11:06,206 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:11:06,207 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:11:06,250 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:11:06,272 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:11:06,328 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:11:06,330 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:11:13,699 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:11:13,738 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:11:13,807 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:11:13,809 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:11:13,851 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:11:13,872 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:11:13,933 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:11:13,935 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:11:59,725 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:11:59,755 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:11:59,884 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:11:59,886 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:11:59,938 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:11:59,956 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:12:00,003 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:12:00,005 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:12:39,198 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:12:39,235 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:12:39,302 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:12:39,305 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:12:39,346 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:12:39,364 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:12:39,416 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:12:39,418 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:13:42,074 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:13:42,115 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:13:42,192 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:13:42,193 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:13:42,236 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:13:42,258 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:13:42,317 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:13:42,318 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:24:46,477 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:24:46,524 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:24:46,595 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:24:46,597 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:24:46,640 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:24:46,665 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:24:46,717 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:24:46,718 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:30:45,355 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:30:45,401 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:30:45,583 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:30:45,586 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 18:30:45,632 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 18:30:45,655 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 18:30:45,707 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 18:30:45,708 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 19:16:09,239 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-23 21:00:12,083 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-23 21:01:28,377 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-23 21:02:41,197 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:02:41,228 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:02:41,363 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:02:41,364 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:02:41,416 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:02:41,438 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:02:41,517 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:02:41,522 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:05:29,008 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:05:29,032 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:05:29,083 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:05:29,085 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:05:29,134 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:05:29,156 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:05:29,269 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:05:29,271 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:05:47,322 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-23 21:05:47,476 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-23 21:08:04,274 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:08:04,306 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:08:04,376 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:08:04,379 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:08:04,420 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:08:04,444 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:08:04,500 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:08:04,501 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:09:11,300 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-23 21:11:43,091 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-23 21:16:52,610 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-23 21:17:28,238 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:17:28,285 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:17:28,407 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:17:28,408 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:17:28,452 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:17:28,471 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:17:28,527 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:17:28,532 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:17:51,153 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:17:51,187 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:17:51,255 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:17:51,257 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:17:51,300 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 21:17:51,326 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 21:17:51,383 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 21:17:51,384 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 21:17:55,520 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-23 23:15:09,932 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 23:15:09,976 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 23:15:10,069 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 23:15:10,071 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 23:15:10,125 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 23:15:10,170 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 23:15:10,222 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 23:15:10,223 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 23:15:33,504 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 23:15:33,529 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 23:15:33,756 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 23:15:33,758 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 23:15:33,807 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 23:15:33,830 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 23:15:33,888 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 23:15:33,889 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 23:19:40,146 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-23 23:19:40,248 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-23 23:19:40,462 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-23 23:25:40,135 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-23 23:25:40,385 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-23 23:26:15,954 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 23:26:15,994 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 23:26:16,150 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 23:26:16,151 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-23 23:26:16,202 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-23 23:26:16,233 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-23 23:26:16,281 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-23 23:26:16,283 - root - INFO - User-wise summary completed. Total users: 4523
+2025-07-24 01:25:28,473 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 01:25:28,634 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 01:25:28,697 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 01:25:28,700 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 01:25:28,792 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 01:25:28,909 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 01:25:28,956 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 01:25:28,958 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 01:25:32,450 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-24 09:52:57,840 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-24 09:53:04,758 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 09:53:04,958 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-24 09:53:05,176 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 09:53:11,794 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 09:53:12,034 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 09:53:12,107 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 09:53:12,110 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 09:53:12,204 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 09:53:12,326 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 09:53:12,368 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 09:53:12,370 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 09:53:26,388 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-24 11:06:06,458 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-24 11:06:14,773 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 11:06:15,153 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-24 11:06:15,400 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 11:06:28,100 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 11:06:28,116 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 11:06:49,892 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 11:06:49,903 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 11:06:52,747 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 11:06:53,796 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 11:11:51,629 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:11:51,775 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:11:51,841 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 11:11:51,844 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 11:11:51,936 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:11:52,238 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:11:52,285 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 11:11:52,288 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 11:11:56,766 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-24 11:22:55,303 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:22:55,444 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:22:55,500 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 11:22:55,503 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 11:22:55,599 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:22:55,721 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:22:55,778 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 11:22:55,781 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 11:23:09,994 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-24 11:23:14,134 - root - INFO - Fetched 6926 rows for panel 'Seller Panel'
+2025-07-24 11:31:21,646 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:31:21,789 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:31:21,900 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 11:31:21,903 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 11:31:21,991 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:31:22,087 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:31:22,125 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-24 11:31:22,127 - root - INFO - User-wise summary completed. Total users: 10064
+2025-07-24 11:31:38,587 - root - INFO - Fetched 111 rows for panel 'OE_ODS_PANEL_PMMS'
+2025-07-24 11:32:00,037 - root - INFO - Starting user categorization for panel: OE Panel
+2025-07-24 11:32:00,037 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-24 11:32:00,042 - root - INFO - Fetched 40 rows from SOT: internal_users
+2025-07-24 11:32:00,065 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-24 11:32:00,070 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-24 11:32:00,164 - root - INFO - Fetched 6058 rows from panel: OE Panel
+2025-07-24 11:32:00,164 - root - INFO - Using 'email' as primary key field (from service_users)
+2025-07-24 11:32:00,164 - root - INFO - SOT internal_users: panel_field='email', sot_field='domain'
+2025-07-24 11:32:00,164 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-24 11:32:00,164 - root - INFO - SOT service_users: panel_field='email', sot_field='email'
+2025-07-24 11:32:00,164 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-24 11:32:00,164 - root - INFO - SOT thirdparty_users: panel_field='email', sot_field='domain'
+2025-07-24 11:32:00,164 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-24 11:32:00,187 - root - INFO - Updating table 'oe_panel' with 6058 records using match_field 'email'
+2025-07-24 11:32:02,079 - root - WARNING - Update 387: match_value is None or empty
+2025-07-24 11:32:05,729 - root - WARNING - Update 1131: match_value is None or empty
+2025-07-24 11:32:16,473 - root - WARNING - Update 3416: match_value is None or empty
+2025-07-24 11:32:19,941 - root - WARNING - Update 4160: match_value is None or empty
+2025-07-24 11:32:28,785 - root - INFO - Bulk update completed: 12132 records updated, 4 errors
+2025-07-24 11:32:28,786 - root - WARNING - Database update completed with warnings: Update completed with 4 errors out of 6058 records
+2025-07-24 11:32:28,786 - root - INFO - Successfully updated 6058 rows in panel 'OE Panel'
+2025-07-24 11:32:28,787 - root - INFO - User categorization completed for panel 'OE Panel'. Summary: {'internal_users': 3854, 'service_users': 0, 'thirdparty_users': 2200, 'not_found': 4, 'total': 6058, 'errors': 0}
+2025-07-24 11:32:28,939 - root - INFO - Found 3854 users to reconcile (3854 internal + 0 not found) and 2204 other users out of 6058 total panel users
+2025-07-24 11:32:28,952 - root - INFO - Updating table 'oe_panel' with 3854 records using match_field 'email'
+2025-07-24 11:32:46,923 - root - INFO - Bulk update completed: 7724 records updated, 0 errors
+2025-07-24 11:32:46,932 - root - INFO - HR reconciliation completed for panel 'OE Panel'. Status: complete, Summary: {'panel_name': 'OE Panel', 'total_panel_users': 6058, 'internal_users': 3854, 'not_found_users': 0, 'users_to_reconcile': 3854, 'other_users': 2204, 'service_users': 0, 'thirdparty_users': 0, 'matched': 190, 'found_active': 176, 'found_inactive': 14, 'not_found': 3664}
+2025-07-24 11:32:46,935 - root - INFO - Updated upload history status for panel 'OE Panel' to 'complete'
+2025-07-24 11:32:52,460 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:32:52,559 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:32:52,690 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:32:52,693 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 11:32:52,807 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:32:52,902 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:32:53,026 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:32:53,030 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 11:44:24,276 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:44:24,454 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:44:24,567 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:44:24,572 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 11:44:24,687 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:44:24,817 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:44:24,931 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:44:24,941 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 11:51:29,645 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:51:29,727 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:51:29,828 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:51:29,832 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 11:51:29,957 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:51:30,135 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:51:30,241 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:51:30,246 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 11:57:58,069 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:57:58,232 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:57:58,337 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:57:58,343 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 11:57:58,454 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:57:58,600 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:57:58,695 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:57:58,700 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 11:58:50,775 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:58:50,925 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:58:51,088 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:58:51,092 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 11:58:51,209 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 11:58:51,309 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 11:58:51,429 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 11:58:51,433 - root - INFO - User-wise summary completed. Total users: 13091

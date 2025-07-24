@@ -1,15 +1,18 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Path
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Path, Request
 from pydantic import BaseModel
 from typing import List, Dict, Optional
 import json
 import os
 import csv
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from db.mysql_utils import create_panel_table, get_panel_headers_from_db, insert_panel_data_rows, insert_sot_data_rows, fetch_all_rows
 import uuid
 from datetime import datetime, timezone, timedelta
 import logging
 import pandas as pd
+from auth.routes import router as auth_router, init_oauth
+from auth.auth_handler import verify_token
 
 # Configure logging for production
 logging.basicConfig(
@@ -22,6 +25,13 @@ logging.basicConfig(
 )
 
 app = FastAPI()
+
+# Add SessionMiddleware for OAuth
+app.add_middleware(SessionMiddleware, secret_key="your-secret-key-here")
+
+# Initialize OAuth
+init_oauth(app)
+
 DB_PATH = "config_db.json"
 HR_DATA_SAMPLE_PATH = os.path.join("db", "HR_data_sample.csv")
 SOT_UPLOADS_PATH = "sot_uploads.json"
@@ -36,6 +46,27 @@ def get_ist_timestamp():
     utc_now = datetime.now(timezone.utc)
     ist_time = utc_now.astimezone(timezone(ist_offset))
     return ist_time.strftime("%d-%m-%Y %H:%M:%S")
+
+def get_current_user(request):
+    """Get current user from JWT token"""
+    # Check for token in cookies first
+    token = request.cookies.get("access_token")
+    
+    # If no cookie, check for Authorization header (for cross-port requests)
+    if not token:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+    
+    if not token:
+        return "demo"  # Fallback to demo if no token
+    
+    payload = verify_token(token)
+    if not payload:
+        return "demo"  # Fallback to demo if invalid token
+    
+    # Return user name or email as fallback
+    return payload.get("name") or payload.get("sub") or "demo"
 
 # Models
 class PanelConfig(BaseModel):
@@ -107,6 +138,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
 @app.get("/panels", response_model=List[PanelConfig])
 def get_panels():
@@ -224,11 +257,11 @@ def get_panel_headers(panel_name: str):
     return {"headers": headers}
 
 @app.post("/sot/upload")
-def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
+def upload_sot(request: Request, file: UploadFile = File(...), sot_type: str = Form("hr_data")):
     # Generate doc_id and metadata
     doc_id = str(uuid.uuid4())
     doc_name = file.filename
-    uploaded_by = "demo"
+    uploaded_by = get_current_user(request)
     timestamp = get_ist_timestamp()
     status = "uploaded"
     filename = file.filename.lower()
@@ -333,10 +366,10 @@ def list_sots_from_config():
     return {"sots": sorted(list(sots))}
 
 @app.post("/recon/upload")
-def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
+def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile = File(...)):
     doc_id = str(uuid.uuid4())
     doc_name = file.filename
-    uploaded_by = "demo"
+    uploaded_by = get_current_user(request)
     timestamp = get_ist_timestamp()
     filename = file.filename.lower()
     contents = file.file.read()
@@ -514,7 +547,7 @@ def debug_sot_table(sot_name: str):
         raise HTTPException(status_code=500, detail=f"Error accessing SOT table: {str(e)}")
 
 @app.post("/recon/process")
-def reconcile_panel_with_sot(panel_name: str = Form(...)):
+def reconcile_panel_with_sot(request: Request, panel_name: str = Form(...)):
     """
     Reconcile internal users and not found users from panel with HR data.
     Processes records where initial_status indicates internal users or not found users.
@@ -672,19 +705,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
         recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
         recon_month = now.strftime("%b'%y")
         start_date = now.strftime("%Y-%m-%d")
-        performed_by = "demo"
-        
-        # Find upload info from panel history
-        upload_date = None
-        uploaded_by = None
-        if os.path.exists(RECON_HISTORY_PATH):
-            with open(RECON_HISTORY_PATH, "r") as f:
-                panel_history = json.load(f)
-            for entry in reversed(panel_history):
-                if entry.get("panelname") == panel_name:
-                    upload_date = entry.get("timestamp", None)
-                    uploaded_by = entry.get("uploadedby", None)
-                    break
+        performed_by = get_current_user(request)
         
         # Determine status based on actual success/failure
         status = "complete"
@@ -706,8 +727,6 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             "sot_type": "hr_data",
             "recon_month": recon_month,
             "status": status,
-            "upload_date": upload_date,
-            "uploaded_by": uploaded_by,
             "start_date": start_date,
             "performed_by": performed_by,
             "error": error,
@@ -752,19 +771,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
             recon_month = now.strftime("%b'%y")
             start_date = now.strftime("%Y-%m-%d")
-            performed_by = "demo"
-            
-            # Find upload info from panel history
-            upload_date = None
-            uploaded_by = None
-            if os.path.exists(RECON_HISTORY_PATH):
-                with open(RECON_HISTORY_PATH, "r") as f:
-                    panel_history = json.load(f)
-                for entry in reversed(panel_history):
-                    if entry.get("panelname") == panel_name:
-                        upload_date = entry.get("timestamp", None)
-                        uploaded_by = entry.get("uploadedby", None)
-                        break
+            performed_by = get_current_user(request)
             
             failed_record = {
                 "recon_id": recon_id,
@@ -772,8 +779,6 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
                 "sot_type": "hr_data",
                 "recon_month": recon_month,
                 "status": "failed",
-                "upload_date": upload_date,
-                "uploaded_by": uploaded_by,
                 "start_date": start_date,
                 "performed_by": performed_by,
                 "error": "Reconciliation process failed",
@@ -819,19 +824,7 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             recon_id = f"RCN_{uuid.uuid4().hex[:8]}"
             recon_month = now.strftime("%b'%y")
             start_date = now.strftime("%Y-%m-%d")
-            performed_by = "demo"
-            
-            # Find upload info from panel history
-            upload_date = None
-            uploaded_by = None
-            if os.path.exists(RECON_HISTORY_PATH):
-                with open(RECON_HISTORY_PATH, "r") as f:
-                    panel_history = json.load(f)
-                for entry in reversed(panel_history):
-                    if entry.get("panelname") == panel_name:
-                        upload_date = entry.get("timestamp", None)
-                        uploaded_by = entry.get("uploadedby", None)
-                        break
+            performed_by = get_current_user(request)
             
             failed_record = {
                 "recon_id": recon_id,
@@ -839,8 +832,6 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
                 "sot_type": "hr_data",
                 "recon_month": recon_month,
                 "status": "failed",
-                "upload_date": upload_date,
-                "uploaded_by": uploaded_by,
                 "start_date": start_date,
                 "performed_by": performed_by,
                 "error": f"Unexpected error: {str(e)}",
@@ -896,6 +887,173 @@ def get_recon_summary_detail(recon_id: str = Path(...)):
         if rec.get("recon_id") == recon_id:
             return rec
     raise HTTPException(status_code=404, detail="Reconciliation summary not found")
+
+@app.get("/recon/initialsummary")
+def get_initial_summary(status_type: str = "initial"):
+    """
+    Get status summary for all reconciliations.
+    status_type: "initial" for initial_status, "final" for final_status
+    """
+    try:
+        # Load reconciliation summaries
+        if not os.path.exists(RECON_SUMMARY_PATH):
+            return {"summaries": [], "columns": []}
+        
+        with open(RECON_SUMMARY_PATH, "r") as f:
+            recon_summaries = json.load(f)
+        
+        initial_summaries = []
+        all_status_values = set()  # Collect all unique status values across all panels
+        
+        for recon in recon_summaries:
+            try:
+                panel_name = recon.get("panelname")
+                if not panel_name:
+                    logging.warning(f"Reconciliation {recon.get('recon_id')} missing panel name")
+                    continue
+                
+                # Fetch panel data to get status counts
+                panel_rows = fetch_all_rows(panel_name)
+                if not panel_rows:
+                    logging.warning(f"No data found for panel: {panel_name}")
+                    continue
+                
+                # Determine which status field to use
+                status_field = "final_status" if status_type == "final" else "initial_status"
+                
+                # Count distinct status values
+                status_counts = {}
+                total_users = len(panel_rows)
+                
+                for row in panel_rows:
+                    status = row.get(status_field, "Unknown")
+                    if status is None:
+                        status = "Unknown"
+                    status_counts[status] = status_counts.get(status, 0) + 1
+                    all_status_values.add(status)  # Add to global set
+                
+                # Create summary entry
+                summary_entry = {
+                    "panel_name": panel_name,
+                    "recon_id": recon.get("recon_id"),
+                    "recon_month": recon.get("recon_month"),
+                    "total_users": total_users,
+                    "status_breakdown": status_counts,
+                    "upload_date": recon.get("upload_date"),
+                    "performed_by": recon.get("performed_by"),
+                    "status": recon.get("status")
+                }
+                
+                initial_summaries.append(summary_entry)
+                
+            except Exception as e:
+                logging.error(f"Error processing reconciliation {recon.get('recon_id')}: {e}")
+                continue
+        
+        # Convert set to sorted list for consistent ordering
+        # Prioritize specific status values at the beginning
+        priority_statuses = ["active", "inactive", "not found"]
+        other_statuses = sorted([status for status in all_status_values if status.lower() not in [ps.lower() for ps in priority_statuses]])
+        
+        # Build final column order: priority statuses first, then others
+        dynamic_columns = []
+        for priority_status in priority_statuses:
+            # Find matching status (case-insensitive)
+            matching_status = next((status for status in all_status_values if status.lower() == priority_status.lower()), None)
+            if matching_status:
+                dynamic_columns.append(matching_status)
+        
+        # Add remaining statuses in alphabetical order
+        dynamic_columns.extend(other_statuses)
+        
+        return {
+            "summaries": initial_summaries,
+            "columns": dynamic_columns,
+            "status_type": status_type
+        }
+        
+    except Exception as e:
+        logging.error(f"Error in get_initial_summary: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@app.get("/recon/initialsummary/{recon_id}")
+def get_initial_summary_detail(recon_id: str = Path(...), status_type: str = "initial"):
+    """
+    Get status summary for a specific reconciliation.
+    status_type: "initial" for initial_status, "final" for final_status
+    """
+    try:
+        # Load reconciliation summaries
+        if not os.path.exists(RECON_SUMMARY_PATH):
+            raise HTTPException(status_code=404, detail="No reconciliation summaries found")
+        
+        with open(RECON_SUMMARY_PATH, "r") as f:
+            recon_summaries = json.load(f)
+        
+        # Find the specific reconciliation
+        recon = None
+        for r in recon_summaries:
+            if r.get("recon_id") == recon_id:
+                recon = r
+                break
+        
+        if not recon:
+            raise HTTPException(status_code=404, detail="Reconciliation summary not found")
+        
+        panel_name = recon.get("panelname")
+        if not panel_name:
+            raise HTTPException(status_code=400, detail="Panel name not found in reconciliation")
+        
+        # Fetch panel data to get status counts
+        panel_rows = fetch_all_rows(panel_name)
+        if not panel_rows:
+            raise HTTPException(status_code=404, detail=f"No data found for panel: {panel_name}")
+        
+        # Determine which status field to use
+        status_field = "final_status" if status_type == "final" else "initial_status"
+        
+        # Filter panel data based on status_type
+        if status_type == "initial":
+            # For initial summary, exclude final_status column
+            filtered_panel_rows = []
+            for row in panel_rows:
+                filtered_row = {k: v for k, v in row.items() if k != "final_status"}
+                filtered_panel_rows.append(filtered_row)
+        else:
+            # For final summary, include all columns
+            filtered_panel_rows = panel_rows
+        
+        # Count distinct status values
+        status_counts = {}
+        total_users = len(filtered_panel_rows)
+        
+        for row in filtered_panel_rows:
+            status = row.get(status_field, "Unknown")
+            if status is None:
+                status = "Unknown"
+            status_counts[status] = status_counts.get(status, 0) + 1
+        
+        # Create detailed summary
+        summary_detail = {
+            "panel_name": panel_name,
+            "recon_id": recon.get("recon_id"),
+            "recon_month": recon.get("recon_month"),
+            "total_users": total_users,
+            "status_breakdown": status_counts,
+            "upload_date": recon.get("upload_date"),
+            "performed_by": recon.get("performed_by"),
+            "status": recon.get("status"),
+            "panel_data": filtered_panel_rows,
+            "status_type": status_type
+        }
+        
+        return summary_detail
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error in get_initial_summary_detail: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @app.post("/categorize_users")
 def categorize_users(panel_name: str = Form(...)):

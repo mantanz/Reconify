@@ -5,8 +5,6 @@
     "sot_type": "hr_data",
     "recon_month": "Jul'25",
     "status": "complete",
-    "upload_date": "2025-07-21T12:59:02.125161",
-    "uploaded_by": "demo",
     "start_date": "2025-07-21",
     "performed_by": "demo",
     "error": null,
@@ -31,8 +29,6 @@
     "sot_type": "hr_data",
     "recon_month": "Jul'25",
     "status": "complete",
-    "upload_date": "2025-07-22T10:30:36.127015",
-    "uploaded_by": "demo",
     "start_date": "2025-07-22",
     "performed_by": "demo",
     "error": null,
@@ -57,8 +53,6 @@
     "sot_type": "hr_data",
     "recon_month": "Jul'25",
     "status": "complete",
-    "upload_date": "23-07-2025 00:48:12",
-    "uploaded_by": "demo",
     "start_date": "2025-07-23",
     "performed_by": "demo",
     "error": null,
@@ -75,6 +69,30 @@
       "found_active": 88,
       "found_inactive": 7,
       "not_found": 1832
+    }
+  },
+  {
+    "recon_id": "RCN_e93a9503",
+    "panelname": "OE Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "start_date": "2025-07-24",
+    "performed_by": "demo",
+    "error": null,
+    "summary": {
+      "panel_name": "OE Panel",
+      "total_panel_users": 6058,
+      "internal_users": 3854,
+      "not_found_users": 0,
+      "users_to_reconcile": 3854,
+      "other_users": 2204,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 190,
+      "found_active": 176,
+      "found_inactive": 14,
+      "not_found": 3664
     }
   }
 ]
