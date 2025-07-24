@@ -4840,3 +4840,66 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-23 18:44:13,972 - root - INFO - Processed 7443 users from panel: OE Panel
 2025-07-23 18:44:14,080 - root - INFO - Processed 4155 users from panel: Seller Panel
 2025-07-23 18:44:14,083 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 21:00:17,109 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 21:00:17,208 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 21:00:17,212 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-23 21:00:17,485 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-23 21:00:17,575 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-23 21:00:17,579 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-24 10:46:25,803 - sqlalchemy.pool.impl.QueuePool - ERROR - Exception during reset or similar
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 987, in _finalize_fairy
+    fairy._reset(
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 1433, in _reset
+    pool._dialect.do_rollback(self)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/engine/default.py", line 703, in do_rollback
+    dbapi_connection.rollback()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 493, in rollback
+    self._read_ok_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 453, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 744, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 798, in _read_bytes
+    raise err.OperationalError(
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
+2025-07-24 10:46:31,996 - sqlalchemy.pool.impl.QueuePool - ERROR - Exception during reset or similar
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 987, in _finalize_fairy
+    fairy._reset(
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 1433, in _reset
+    pool._dialect.do_rollback(self)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/engine/default.py", line 703, in do_rollback
+    dbapi_connection.rollback()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 493, in rollback
+    self._read_ok_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 453, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 744, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 798, in _read_bytes
+    raise err.OperationalError(
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
+2025-07-24 10:46:47,986 - sqlalchemy.pool.impl.QueuePool - ERROR - Exception during reset or similar
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 987, in _finalize_fairy
+    fairy._reset(
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 1433, in _reset
+    pool._dialect.do_rollback(self)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/engine/default.py", line 703, in do_rollback
+    dbapi_connection.rollback()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 493, in rollback
+    self._read_ok_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 453, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 744, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 798, in _read_bytes
+    raise err.OperationalError(
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
+2025-07-24 11:07:03,850 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-24 11:07:04,081 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-24 11:07:04,084 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-24 11:07:04,578 - root - INFO - Processed 7443 users from panel: OE Panel
+2025-07-24 11:07:04,843 - root - INFO - Processed 4155 users from panel: Seller Panel
+2025-07-24 11:07:04,847 - root - INFO - User-wise summary completed. Total users: 10209

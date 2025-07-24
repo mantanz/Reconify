@@ -1,196 +1,42 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Path
-from pydantic import BaseModel
-from typing import List, Dict, Optional
 import json
 import os
 import csv
-from fastapi.middleware.cors import CORSMiddleware
 from db.mysql_utils import create_panel_table, get_panel_headers_from_db, insert_panel_data_rows, insert_sot_data_rows, fetch_all_rows
 import uuid
-from datetime import datetime, timezone, timedelta
 import logging
 import pandas as pd
 
 # Configure logging for production
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('reconify.log'),
-        logging.StreamHandler()
-    ]
+from app.config.logging import configure_logging
+
+# Import file paths configuration
+from app.config.paths import (
+    DB_PATH,
+    HR_DATA_SAMPLE_PATH,
+    RECON_HISTORY_PATH,
+    RECON_SUMMARY_PATH
 )
+# Import datetime utilities
+from app.utils.datetime import get_ist_timestamp
+# Import database utilities
+from app.utils.database import load_db, save_db
+# Import history utilities
+from app.utils.history import update_upload_history_status
+# Import middleware configuration
+from app.core.middleware import configure_cors
+# Import API routers
+from app.api.panels import router as panels_router
+from app.api.sot import router as sot_router
 
 app = FastAPI()
-DB_PATH = "config_db.json"
-HR_DATA_SAMPLE_PATH = os.path.join("db", "HR_data_sample.csv")
-SOT_UPLOADS_PATH = "sot_uploads.json"
-RECON_HISTORY_PATH = "panel_history.json"
-RECON_SUMMARY_PATH = "reconciliation_summary.json"
 
-# Helper function to get IST timestamp in dd-mm-yyyy hh:mm:ss format
-def get_ist_timestamp():
-    """Get current timestamp in Indian Standard Time (IST) format: dd-mm-yyyy hh:mm:ss"""
-    # IST is UTC+5:30
-    ist_offset = timedelta(hours=5, minutes=30)
-    utc_now = datetime.now(timezone.utc)
-    ist_time = utc_now.astimezone(timezone(ist_offset))
-    return ist_time.strftime("%d-%m-%Y %H:%M:%S")
+# Configure middleware
+configure_cors(app)
 
-# Models
-class PanelConfig(BaseModel):
-    name: str
-    key_mapping: Dict[str, dict]
-    
-
-class PanelName(BaseModel):
-    name: str
-
-class PanelUpdate(BaseModel):
-    name: str
-    key_mapping: Optional[dict] = None
-    panel_headers: Optional[list] = None
-
-class PanelCreate(BaseModel):
-    name: str
-    key_mapping: dict
-    panel_headers: Optional[list] = None
-
-# Helper functions
-def load_db():
-    if not os.path.exists(DB_PATH):
-        with open(DB_PATH, "w") as f:
-            json.dump({"panels": []}, f)
-    with open(DB_PATH, "r") as f:
-        return json.load(f)
-
-def save_db(data):
-    with open(DB_PATH, "w") as f:
-        json.dump(data, f, indent=2)
-
-def update_upload_history_status(panel_name: str, new_status: str):
-    """
-    Update the status of the most recent upload for a panel in the upload history.
-    """
-    try:
-        if not os.path.exists(RECON_HISTORY_PATH):
-            return False
-        
-        with open(RECON_HISTORY_PATH, "r") as f:
-            panel_history = json.load(f)
-        
-        # Find the most recent upload for this panel and update its status
-        updated = False
-        for entry in reversed(panel_history):
-            if entry.get("panelname") == panel_name:
-                entry["status"] = new_status
-                updated = True
-                break
-        
-        if updated:
-            with open(RECON_HISTORY_PATH, "w") as f:
-                json.dump(panel_history, f, indent=2)
-            logging.info(f"Updated upload history status for panel '{panel_name}' to '{new_status}'")
-            return True
-        
-        return False
-    except Exception as e:
-        logging.error(f"Failed to update upload history status: {e}")
-        return False
-
-# API Endpoints
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/panels", response_model=List[PanelConfig])
-def get_panels():
-    db = load_db()
-    return db["panels"]
-
-@app.post("/panels/add")
-def add_panel(panel: PanelConfig):
-    db = load_db()
-    if any(p["name"] == panel.name for p in db["panels"]):
-        raise HTTPException(status_code=400, detail="Panel already exists")
-    db["panels"].append(panel.dict())
-    save_db(db)
-    return {"message": "Panel added"}
-
-@app.put("/panels/modify")
-def modify_panel(update: PanelUpdate):
-    db = load_db()
-    for panel in db["panels"]:
-        if panel["name"] == update.name:
-            if update.key_mapping is not None:
-                panel["key_mapping"] = update.key_mapping
-            if update.panel_headers is not None:
-                panel["panel_headers"] = update.panel_headers
-            save_db(db)
-            return {"message": "Panel updated"}
-    raise HTTPException(status_code=404, detail="Panel not found")
-
-@app.delete("/panels/delete")
-def delete_panel(panel: PanelName):
-    db = load_db()
-    db["panels"] = [p for p in db["panels"] if p["name"] != panel.name]
-    save_db(db)
-    return {"message": "Panel deleted"}
-
-@app.post("/panels/upload_file")
-def upload_panel_file(file: UploadFile = File(...)):
-    # Read the uploaded file and return headers
-    filename = file.filename.lower()
-    contents = file.file.read()
-    headers = []
-    
-    try:
-        if filename.endswith(".xlsx") or filename.endswith(".xls") or filename.endswith(".xlsb"):
-            import io
-            try:
-                df = pd.read_excel(io.BytesIO(contents))
-            except ImportError as e:
-                if "pyxlsb" in str(e) and filename.endswith(".xlsb"):
-                    raise HTTPException(
-                        status_code=400, 
-                        detail="Missing optional dependency 'pyxlsb' for .xlsb files. Please install it using: pip install pyxlsb"
-                    )
-                else:
-                    raise e
-            # Convert headers to lowercase
-            df.columns = [col.strip().lower() for col in df.columns]
-            # Clean NaN values - replace with None for database compatibility
-            df = df.replace({pd.NA: None, pd.NaT: None})
-            df = df.where(pd.notnull(df), None)
-            headers = list(df.columns)
-        else:
-            # Try different encodings for CSV files
-            encodings = ['utf-8', 'latin-1', 'cp1252', 'iso-8859-1']
-            lines = None
-            
-            for encoding in encodings:
-                try:
-                    lines = contents.decode(encoding).splitlines()
-                    break
-                except UnicodeDecodeError:
-                    continue
-            
-            if lines is None:
-                raise HTTPException(status_code=400, detail="Unable to decode file. Please ensure it's a valid CSV or Excel file.")
-            
-            import csv
-            reader = csv.reader(lines)
-            # Convert headers to lowercase
-            headers = [h.strip().lower() for h in next(reader)]
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error processing file: {str(e)}")
-    
-    return {"headers": headers}
+# Include API routers
+app.include_router(panels_router)
+app.include_router(sot_router)
 
 # @app.get("/hr_data/fields")
 # def get_hr_data_fields():
@@ -200,137 +46,7 @@ def upload_panel_file(file: UploadFile = File(...)):
 #         raise HTTPException(status_code=404, detail="hr_data table not found or has no columns")
 #     return {"fields": headers}
 
-@app.post("/panels/save")
-def save_panel(panel: PanelCreate):
-    db = load_db()
-    if any(p["name"] == panel.name for p in db["panels"]):
-        raise HTTPException(status_code=400, detail="Panel already exists")
-    db["panels"].append({
-        "name": panel.name,
-        "key_mapping": panel.key_mapping
-    })
-    save_db(db)
-    # Create table in MySQL
-    success, error = create_panel_table(panel.name, panel.panel_headers or [])
-    if not success:
-        raise HTTPException(status_code=500, detail=f"MySQL table creation failed: {error}")
-    return {"message": "Panel configuration saved and table created"}
 
-@app.get("/panels/{panel_name}/headers")
-def get_panel_headers(panel_name: str):
-    headers = get_panel_headers_from_db(panel_name)
-    if not headers:
-        raise HTTPException(status_code=404, detail="No headers found for this panel in the database")
-    return {"headers": headers}
-
-@app.post("/sot/upload")
-def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
-    # Generate doc_id and metadata
-    doc_id = str(uuid.uuid4())
-    doc_name = file.filename
-    uploaded_by = "demo"
-    timestamp = get_ist_timestamp()
-    status = "uploaded"
-    filename = file.filename.lower()
-    contents = file.file.read()
-    
-    try:
-        # Read and parse file
-        if filename.endswith(".xlsx") or filename.endswith(".xls") or filename.endswith(".xlsb"):
-            import io
-            try:
-                df = pd.read_excel(io.BytesIO(contents))
-            except ImportError as e:
-                if "pyxlsb" in str(e) and filename.endswith(".xlsb"):
-                    raise HTTPException(
-                        status_code=400, 
-                        detail="Missing optional dependency 'pyxlsb' for .xlsb files. Please install it using: pip install pyxlsb"
-                    )
-                else:
-                    raise e
-            # Convert headers to lowercase
-            df.columns = [col.strip().lower() for col in df.columns]
-            # Clean NaN values - replace with None for database compatibility
-            df = df.replace({pd.NA: None, pd.NaT: None})
-            df = df.where(pd.notnull(df), None)
-            rows = df.to_dict(orient="records")
-        else:
-            # Try different encodings for CSV files
-            encodings = ['utf-8', 'latin-1', 'cp1252', 'iso-8859-1']
-            lines = None
-            for encoding in encodings:
-                try:
-                    lines = contents.decode(encoding).splitlines()
-                    break
-                except UnicodeDecodeError:
-                    continue
-            if lines is None:
-                raise HTTPException(status_code=400, detail="Unable to decode file. Please ensure it's a valid CSV or Excel file.")
-            import csv
-            reader = csv.DictReader(lines)
-            # Convert headers to lowercase and clean data
-            reader.fieldnames = [h.strip().lower() for h in reader.fieldnames]
-            rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
-    except Exception as e:
-        return {"error": f"Error processing file: {str(e)}", "doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": "failed", "sot_type": sot_type}
-    
-    # Insert into the correct SOT table (auto-create if needed)
-    db_status, db_error = insert_sot_data_rows(sot_type, rows)
-    status = "uploaded" if db_status else "failed"
-    error_message = None if db_status else db_error
-    
-    # Store metadata in JSON
-    meta = {"doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": status, "sot_type": sot_type}
-    
-    # Add error message if there was an error
-    if error_message:
-        meta["error"] = error_message
-    
-    try:
-        if not os.path.exists(SOT_UPLOADS_PATH):
-            with open(SOT_UPLOADS_PATH, "w") as f:
-                json.dump([], f)
-        with open(SOT_UPLOADS_PATH, "r+") as f:
-            data = json.load(f)
-            data.append(meta)
-            f.seek(0)
-            json.dump(data, f, indent=2)
-    except Exception as e:
-        logging.error(f"Failed to write SOT metadata: {e}")
-        meta["status"] = "failed"
-        meta["error"] = f"Failed to write metadata: {e}"
-        return {"error": f"Failed to write metadata: {e}", **meta}
-    
-    if not db_status:
-        return {"error": db_error, **meta}
-    return meta
-
-@app.get("/sot/uploads")
-def list_sot_uploads():
-    if not os.path.exists(SOT_UPLOADS_PATH):
-        return []
-    with open(SOT_UPLOADS_PATH, "r") as f:
-        return json.load(f)
-
-@app.get("/sot/list")
-def list_sots_from_config():
-    db = load_db()
-    sots = set()
-    for panel in db.get("panels", []):
-        key_mapping = panel.get("key_mapping", {})
-        sots.update(key_mapping.keys())
-    
-    # If no SOTs found in config, provide default SOT types
-    if not sots:
-        default_sots = [
-            "hr_data",
-            "service_users", 
-            "internal_users",
-            "thirdparty_users"
-        ]
-        sots.update(default_sots)
-    
-    return {"sots": sorted(list(sots))}
 
 @app.post("/recon/upload")
 def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
@@ -425,60 +141,11 @@ def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
     
     return meta
 
-@app.get("/panels/upload_history")
-def get_panel_upload_history():
-    if not os.path.exists(RECON_HISTORY_PATH):
-        return []
-    with open(RECON_HISTORY_PATH, "r") as f:
-        return json.load(f)
 
-@app.get("/sot/fields/{sot_type}")
-def get_sot_fields(sot_type: str):
-    headers = get_panel_headers_from_db(sot_type)
-    if not headers:
-        # Return empty fields instead of 404 error for SOTs that don't exist yet
-        return {"fields": []}
-    return {"fields": headers}
 
-@app.get("/panels/{panel_name}/details")
-def get_panel_details(panel_name: str):
-    """
-    Fetch panel data rows for a specific panel.
-    Returns only the panel rows data.
-    """
-    try:
-        # Load panel configuration to verify panel exists
-        db = load_db()
-        panel = next((p for p in db["panels"] if p["name"] == panel_name), None)
-        if not panel:
-            raise HTTPException(status_code=404, detail="Panel not found")
-        
-        # Get panel headers from database
-        headers = get_panel_headers_from_db(panel_name)
-        if not headers:
-            raise HTTPException(status_code=404, detail="Panel table not found in database")
-        
-        # Fetch all panel data
-        try:
-            panel_rows = fetch_all_rows(panel_name)
-            if not panel_rows:
-                panel_rows = []
-        except Exception as e:
-            logging.error(f"Error fetching panel data: {e}")
-            raise HTTPException(status_code=500, detail=f"Error fetching panel data: {str(e)}")
-        
-        logging.info(f"Fetched {len(panel_rows)} rows for panel '{panel_name}'")
-        
-        return {
-            "panel_name": panel_name,
-            "rows": panel_rows
-        }
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        logging.error(f"Error fetching panel details for '{panel_name}': {e}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+
 
 @app.get("/debug/sot/{sot_name}")
 def debug_sot_table(sot_name: str):
