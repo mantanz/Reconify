@@ -4909,3 +4909,44 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-24 11:23:01,220 - root - INFO - Processed 7443 users from panel: OE Panel
 2025-07-24 11:23:01,439 - root - INFO - Processed 4155 users from panel: Seller Panel
 2025-07-24 11:23:01,442 - root - INFO - User-wise summary completed. Total users: 10209
+2025-07-24 11:52:29,492 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-24 11:52:29,492 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-24 11:52:29,568 - root - INFO - Fetched 20 rows from SOT: internal_users
+2025-07-24 11:52:29,667 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-24 11:52:29,700 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-24 11:52:29,807 - root - INFO - Fetched 1385 rows from panel: Seller Panel
+2025-07-24 11:52:29,807 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-24 11:52:29,807 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-24 11:52:29,807 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-24 11:52:29,807 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-24 11:52:29,809 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-24 11:52:29,809 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-24 11:52:29,809 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-24 11:52:29,888 - root - INFO - Updating table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 11:53:24,162 - root - INFO - Bulk update completed: 1385 records updated, 0 errors
+2025-07-24 11:53:24,163 - root - INFO - Successfully updated 1385 rows in panel 'Seller Panel'
+2025-07-24 11:53:24,164 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'internal_users': 984, 'service_users': 132, 'thirdparty_users': 269, 'not_found': 0, 'total': 1385, 'errors': 0}
+2025-07-24 11:53:24,536 - root - INFO - Found 984 users to reconcile (984 internal + 0 not found) and 401 other users out of 1385 total panel users
+2025-07-24 11:53:24,764 - root - INFO - Updating table 'seller_panel' with 984 records using match_field 'user_email'
+2025-07-24 11:54:02,660 - root - INFO - Bulk update completed: 984 records updated, 0 errors
+2025-07-24 11:54:02,664 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Status: complete, Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 1385, 'internal_users': 984, 'not_found_users': 0, 'users_to_reconcile': 984, 'other_users': 401, 'service_users': 0, 'thirdparty_users': 0, 'matched': 369, 'found_active': 330, 'found_inactive': 39, 'not_found': 615}
+2025-07-24 11:54:02,666 - root - INFO - Updated upload history status for panel 'Seller Panel' to 'complete'
+2025-07-24 11:54:10,357 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 11:54:10,359 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 11:54:10,856 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 11:54:10,857 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 11:54:13,484 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-24 11:54:38,657 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-24 11:54:38,658 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-24 11:54:38,868 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 11:55:29,050 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-24 11:55:29,051 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-24 11:55:37,362 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 11:55:37,364 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 11:55:37,533 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 11:55:37,534 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 11:55:41,818 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-24 12:04:03,446 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:04:03,448 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:04:03,657 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:04:03,658 - root - INFO - User-wise summary completed. Total users: 1385

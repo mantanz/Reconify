@@ -1,182 +1,34 @@
 [
   {
-    "doc_id": "28435168-fa5b-48c2-85fe-c6e179a2eff3",
+    "doc_id": "e2d014db-083a-47be-889e-b7b806f337f9",
     "doc_name": "Sample_hr_recon - Sheet1.csv",
     "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:13:12",
-    "status": "failed",
-    "sot_type": "hr_data",
-    "error": "(pymysql.err.OperationalError) (2003, \"Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)\")\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
-  },
-  {
-    "doc_id": "00d27ba4-d334-4daa-ab71-4188891fa651",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:13:34",
-    "status": "failed",
-    "sot_type": "hr_data",
-    "error": "(pymysql.err.OperationalError) (2003, \"Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)\")\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
-  },
-  {
-    "doc_id": "84572092-f659-4a91-a27b-59a0d3bcdde4",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:14:36",
-    "status": "failed",
-    "sot_type": "hr_data",
-    "error": "(pymysql.err.OperationalError) (2003, \"Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)\")\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
-  },
-  {
-    "doc_id": "26b74ee1-6f16-49a1-87ef-69f0342833e8",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:18:19",
-    "status": "failed",
-    "sot_type": "hr_data",
-    "error": "(pymysql.err.OperationalError) (2003, \"Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)\")\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
-  },
-  {
-    "doc_id": "254b3ad0-7bf9-4d5e-ad6f-2d4abc7517d7",
-    "doc_name": "HR_data_sample.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:22:43",
+    "timestamp": "24-07-2025 11:47:46",
     "status": "uploaded",
     "sot_type": "hr_data"
   },
   {
-    "doc_id": "ab6b86c2-941a-44b3-9389-ed4dca4a7ba5",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:23:16",
-    "status": "uploaded",
-    "sot_type": "hr_data"
-  },
-  {
-    "doc_id": "e499d901-aa5b-4433-a568-8999d5acfd06",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:32:28",
-    "status": "uploaded",
-    "sot_type": "hr_data"
-  },
-  {
-    "doc_id": "04c99f63-9384-431c-9034-d13211da3c47",
+    "doc_id": "796e54db-fdc3-4b8d-b4e9-5c70682515b0",
     "doc_name": "internal_user.csv",
     "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:33:17",
+    "timestamp": "24-07-2025 11:48:01",
     "status": "uploaded",
     "sot_type": "internal_users"
   },
   {
-    "doc_id": "7d0f907b-ad23-4e45-afeb-34e7fde6145c",
+    "doc_id": "e4ad2310-d981-46bc-9f9b-b7cbf5200c39",
     "doc_name": "service_user.csv",
     "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:33:25",
+    "timestamp": "24-07-2025 11:48:15",
     "status": "uploaded",
     "sot_type": "service_users"
   },
   {
-    "doc_id": "45f9677e-b179-4ae8-b41d-3d55450c18bf",
+    "doc_id": "346b236b-2fe0-4d62-900f-2729f0cb7b87",
     "doc_name": "thirdpartyuser.csv",
     "uploaded_by": "demo",
-    "timestamp": "23-07-2025 12:33:33",
+    "timestamp": "24-07-2025 11:48:25",
     "status": "uploaded",
     "sot_type": "thirdparty_users"
-  },
-  {
-    "doc_id": "a93793a6-5aec-4e06-a7d2-44ac9d8c515c",
-    "doc_name": "service_user.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 13:38:31",
-    "status": "uploaded",
-    "sot_type": "service_users"
-  },
-  {
-    "doc_id": "63d9c650-a5cf-43e9-b52b-f6db658383d1",
-    "doc_name": "service_user.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 13:40:06",
-    "status": "uploaded",
-    "sot_type": "service_users"
-  },
-  {
-    "doc_id": "20fc299f-e8e1-4bf7-9353-ad756607852f",
-    "doc_name": "internal_user.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 13:49:59",
-    "status": "uploaded",
-    "sot_type": "internal_users"
-  },
-  {
-    "doc_id": "dffee4a7-c958-4c76-b2b5-d4644aff4c54",
-    "doc_name": "internal_user.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 13:50:16",
-    "status": "uploaded",
-    "sot_type": "internal_users"
-  },
-  {
-    "doc_id": "18311434-11dd-4c72-b7be-c9e9adb4411c",
-    "doc_name": "service_user.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 13:50:28",
-    "status": "uploaded",
-    "sot_type": "service_users"
-  },
-  {
-    "doc_id": "b98f29f0-5423-4fad-b433-02c662d7bc3d",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 13:55:02",
-    "status": "uploaded",
-    "sot_type": "hr_data"
-  },
-  {
-    "doc_id": "931e251e-cd99-4ccc-84bc-a9d721f56aa4",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 13:57:19",
-    "status": "uploaded",
-    "sot_type": "hr_data"
-  },
-  {
-    "doc_id": "8e828621-a5ba-4e30-84c9-a97316592e12",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 15:14:10",
-    "status": "uploaded",
-    "sot_type": "hr_data"
-  },
-  {
-    "doc_id": "ae06784b-934b-4d8f-b0dc-c016cd269201",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 15:45:31",
-    "status": "uploaded",
-    "sot_type": "hr_data"
-  },
-  {
-    "doc_id": "914e6dc3-96e4-4cd4-8c23-c6587bff6fb4",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 16:46:26",
-    "status": "uploaded",
-    "sot_type": "hr_data"
-  },
-  {
-    "doc_id": "5cf81f3e-9807-42af-80a3-1f2f309b3f0e",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "23-07-2025 16:48:59",
-    "status": "uploaded",
-    "sot_type": "hr_data"
-  },
-  {
-    "doc_id": "9be1ef57-430b-403d-8321-16d4cc023a53",
-    "doc_name": "Sample_hr_recon - Sheet1.csv",
-    "uploaded_by": "demo",
-    "timestamp": "24-07-2025 10:46:30",
-    "status": "uploaded",
-    "sot_type": "hr_data"
   }
 ]

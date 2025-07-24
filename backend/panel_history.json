@@ -1,56 +1,11 @@
 [
   {
     "panelname": "Seller Panel",
-    "docid": "2cc94447-5afc-479c-b869-17bfdfec1b5d",
+    "docid": "902b861f-5085-4395-89b7-b8c85dfdb5d6",
     "docname": "1. Seller Panel Users List with Assigned Roles.csv",
-    "timestamp": "23-07-2025 12:39:42",
+    "timestamp": "24-07-2025 11:52:24",
     "total_records": 1385,
     "uploadedby": "demo",
     "status": "complete"
-  },
-  {
-    "panelname": "Seller Panel",
-    "docid": "0c8b8b09-51d8-4e38-91fe-c72398bcd170",
-    "docname": "1. Seller Panel Users List with Assigned Roles.csv",
-    "timestamp": "23-07-2025 15:39:33",
-    "total_records": 1385,
-    "uploadedby": "demo",
-    "status": "complete"
-  },
-  {
-    "panelname": "OE Panel",
-    "docid": "2806432b-3ffa-4e86-ae51-92cddd974ab8",
-    "docname": "5. OE_PANEL.csv",
-    "timestamp": "23-07-2025 17:31:11",
-    "total_records": 3029,
-    "uploadedby": "demo",
-    "status": "complete"
-  },
-  {
-    "panelname": "OE Panel",
-    "docid": "592b8cba-9920-412b-9da6-3b51e800d6b7",
-    "docname": "5. OE_PANEL.csv",
-    "timestamp": "23-07-2025 17:39:43",
-    "total_records": 3029,
-    "uploadedby": "demo",
-    "status": "complete"
-  },
-  {
-    "panelname": "Seller Panel",
-    "docid": "1f556bf2-26aa-4a2a-a911-ac05a3778382",
-    "docname": "1. Seller Panel Users List with Assigned Roles.csv",
-    "timestamp": "23-07-2025 17:48:08",
-    "total_records": 1385,
-    "uploadedby": "demo",
-    "status": "complete"
-  },
-  {
-    "panelname": "OE Panel",
-    "docid": "d2de1b2c-24b9-4934-b0e4-f0f8f39adda1",
-    "docname": "1. Seller Panel Users List with Assigned Roles.csv",
-    "timestamp": "23-07-2025 18:07:09",
-    "total_records": 1385,
-    "uploadedby": "demo",
-    "status": "uploaded"
   }
 ]
