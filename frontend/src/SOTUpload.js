@@ -45,13 +45,46 @@ export default function SOTUpload() {
         }
         
         // Update with latest upload info
-        // Convert dd-mm-yyyy hh:mm:ss to proper Date format for comparison
+        // Convert timestamp to proper Date format for comparison (handles both 24-hour and AM/PM formats)
         const parseBackendTimestamp = (timestamp) => {
           if (!timestamp) return new Date(0);
-          // Convert "dd-mm-yyyy hh:mm:ss" to "yyyy-mm-dd hh:mm:ss"
-          const [datePart, timePart] = timestamp.split(' ');
-          const [day, month, year] = datePart.split('-');
-          return new Date(`${year}-${month}-${day} ${timePart}`);
+          
+          try {
+            // Handle backend format: "dd-mm-yyyy hh:mm:ss" (24-hour) or "dd-mm-yyyy hh:mm AM/PM"
+            if (typeof timestamp === 'string' && timestamp.includes('-')) {
+              const parts = timestamp.split(' ');
+              const datePart = parts[0];
+              const timePart = parts[1] || '';
+              const [day, month, year] = datePart.split('-');
+              
+              // Check if time part has AM/PM format
+              if (timePart.includes('AM') || timePart.includes('PM')) {
+                // Parse AM/PM format
+                const timeMatch = timePart.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+                if (timeMatch) {
+                  const [_, hours, minutes, period] = timeMatch;
+                  let hour24 = parseInt(hours);
+                  if (period.toUpperCase() === 'PM' && hour24 !== 12) {
+                    hour24 += 12;
+                  } else if (period.toUpperCase() === 'AM' && hour24 === 12) {
+                    hour24 = 0;
+                  }
+                  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), hour24, parseInt(minutes));
+                }
+              } else {
+                // Handle 24-hour format: "hh:mm:ss" or "hh:mm"
+                const [hours, minutes, seconds = '00'] = timePart.split(':');
+                return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 
+                               parseInt(hours), parseInt(minutes), parseInt(seconds));
+              }
+            }
+            
+            // Fallback for other formats
+            return new Date(timestamp);
+          } catch (error) {
+            console.error('Error parsing timestamp:', timestamp, error);
+            return new Date(0);
+          }
         };
         
         if (!metadata[sot].latestUpload || parseBackendTimestamp(item.timestamp) > parseBackendTimestamp(metadata[sot].latestUpload.timestamp)) {

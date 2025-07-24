@@ -35,7 +35,7 @@
     "doc_id": "153c4188-aa69-4821-aa36-bd51b899834d",
     "doc_name": "Sample_hr_recon - Sheet1.csv",
     "uploaded_by": "demo",
-    "timestamp": "24-07-2025 04:03 PM",
+    "timestamp": "24-07-2025 16:03:00",
     "status": "uploaded",
     "sot_type": "hr_data"
   },
@@ -43,7 +43,15 @@
     "doc_id": "d0865b8d-e18e-4a8b-a17a-36d02e7ea30b",
     "doc_name": "internal_user.csv",
     "uploaded_by": "demo",
-    "timestamp": "24-07-2025 04:05 PM",
+    "timestamp": "24-07-2025 16:05:00",
+    "status": "uploaded",
+    "sot_type": "internal_users"
+  },
+  {
+    "doc_id": "fc63d6a9-919d-4f8a-a087-17fd2464c5f9",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "demo",
+    "timestamp": "24-07-2025 16:13:18",
     "status": "uploaded",
     "sot_type": "internal_users"
   }

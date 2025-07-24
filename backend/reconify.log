@@ -5019,3 +5019,119 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-24 15:31:48,911 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
 2025-07-24 15:48:56,397 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
 2025-07-24 15:48:56,925 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 16:14:29,324 - root - INFO - Processed 12465 users from panel: Seller Panel
+2025-07-24 16:14:29,329 - root - INFO - User-wise summary completed. Total users: 12465
+2025-07-24 16:14:30,086 - root - INFO - Processed 12465 users from panel: Seller Panel
+2025-07-24 16:14:30,090 - root - INFO - User-wise summary completed. Total users: 12465
+2025-07-24 16:14:33,786 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-24 16:14:33,786 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-24 16:14:33,827 - root - INFO - Fetched 60 rows from SOT: internal_users
+2025-07-24 16:14:33,928 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-24 16:14:33,977 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-24 16:14:34,387 - root - INFO - Fetched 12465 rows from panel: Seller Panel
+2025-07-24 16:14:34,387 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-24 16:14:34,387 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-24 16:14:34,387 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-24 16:14:34,387 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-24 16:14:34,388 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-24 16:14:34,388 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-24 16:14:34,388 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-24 16:14:34,471 - root - INFO - Updating table 'seller_panel' with 12465 records using match_field 'user_email'
+2025-07-24 16:16:25,222 - root - INFO - Processed 12465 users from panel: Seller Panel
+2025-07-24 16:16:25,227 - root - INFO - User-wise summary completed. Total users: 12465
+2025-07-24 16:16:25,977 - root - INFO - Processed 12465 users from panel: Seller Panel
+2025-07-24 16:16:25,981 - root - INFO - User-wise summary completed. Total users: 12465
+2025-07-24 16:16:33,167 - root - INFO - Processed 12465 users from panel: Seller Panel
+2025-07-24 16:16:33,172 - root - INFO - User-wise summary completed. Total users: 12465
+2025-07-24 16:16:33,745 - root - INFO - Processed 12465 users from panel: Seller Panel
+2025-07-24 16:16:33,749 - root - INFO - User-wise summary completed. Total users: 12465
+2025-07-24 16:16:45,925 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-24 16:16:45,925 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-24 16:16:46,001 - root - INFO - Fetched 60 rows from SOT: internal_users
+2025-07-24 16:16:46,168 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-24 16:16:46,272 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-24 16:16:46,698 - root - INFO - Fetched 12465 rows from panel: Seller Panel
+2025-07-24 16:16:46,698 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-24 16:16:46,698 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-24 16:16:46,698 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-24 16:16:46,698 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-24 16:16:46,699 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-24 16:16:46,699 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-24 16:16:46,699 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-24 16:16:46,819 - root - INFO - Updating table 'seller_panel' with 12465 records using match_field 'user_email'
+2025-07-24 16:17:36,950 - root - ERROR - Error updating record 0: (pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: UPDATE seller_panel SET initial_status=%(initial_status)s WHERE seller_panel.user_email = %(user_email_1)s]
+[parameters: {'initial_status': 'Internal', 'user_email_1': 'harjeet1.singh@paytm.com'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-24 16:18:26,970 - root - ERROR - Error updating record 1: (pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: UPDATE seller_panel SET initial_status=%(initial_status)s WHERE seller_panel.user_email = %(user_email_1)s]
+[parameters: {'initial_status': 'Service ID', 'user_email_1': 'paytmapp.bd001@paytm.com'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-24 16:19:16,994 - root - ERROR - Error updating record 2: (pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: UPDATE seller_panel SET initial_status=%(initial_status)s WHERE seller_panel.user_email = %(user_email_1)s]
+[parameters: {'initial_status': 'Service ID', 'user_email_1': 'paytmapp.bd002@paytm.com'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-24 16:20:07,025 - root - ERROR - Error updating record 3: (pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: UPDATE seller_panel SET initial_status=%(initial_status)s WHERE seller_panel.user_email = %(user_email_1)s]
+[parameters: {'initial_status': 'Service ID', 'user_email_1': 'paytmapp.bd003@paytm.com'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-24 16:20:57,054 - root - ERROR - Error updating record 4: (pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: UPDATE seller_panel SET initial_status=%(initial_status)s WHERE seller_panel.user_email = %(user_email_1)s]
+[parameters: {'initial_status': 'Service ID', 'user_email_1': 'paytmapp.bd004@paytm.com'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-24 16:21:47,117 - root - ERROR - Error updating record 5: (pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: UPDATE seller_panel SET initial_status=%(initial_status)s WHERE seller_panel.user_email = %(user_email_1)s]
+[parameters: {'initial_status': 'Service ID', 'user_email_1': 'paytmapp.bd005@paytm.com'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-24 16:22:37,156 - root - ERROR - Error updating record 6: (pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: UPDATE seller_panel SET initial_status=%(initial_status)s WHERE seller_panel.user_email = %(user_email_1)s]
+[parameters: {'initial_status': 'Internal', 'user_email_1': 'disha.bhartaria@paytm.com'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-24 16:23:27,179 - root - ERROR - Error updating record 7: (pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: UPDATE seller_panel SET initial_status=%(initial_status)s WHERE seller_panel.user_email = %(user_email_1)s]
+[parameters: {'initial_status': 'Internal', 'user_email_1': 'dheerendra.mishra@paytm.com'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-24 16:24:17,196 - root - ERROR - Error updating record 8: (pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: UPDATE seller_panel SET initial_status=%(initial_status)s WHERE seller_panel.user_email = %(user_email_1)s]
+[parameters: {'initial_status': 'Service ID', 'user_email_1': 'paytmapp.bd007@paytm.com'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-24 16:24:47,451 - root - INFO - Bulk update completed: 112185 records updated, 0 errors
+2025-07-24 16:24:47,452 - root - INFO - Successfully updated 12465 rows in panel 'Seller Panel'
+2025-07-24 16:24:47,452 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'internal_users': 8856, 'service_users': 1188, 'thirdparty_users': 2421, 'not_found': 0, 'total': 12465, 'errors': 0}
+2025-07-24 16:28:16,639 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-24 16:28:17,671 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 16:28:17,794 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-24 16:28:18,034 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 16:28:27,555 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 16:28:27,798 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 16:29:19,873 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-24 16:29:20,649 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 16:29:20,758 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-24 16:29:20,976 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 16:30:26,608 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-24 16:30:26,608 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-24 16:30:26,665 - root - INFO - Fetched 60 rows from SOT: internal_users
+2025-07-24 16:30:26,743 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-24 16:30:26,772 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-24 16:30:26,847 - root - INFO - Fetched 1385 rows from panel: Seller Panel
+2025-07-24 16:30:26,847 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-24 16:30:26,847 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-24 16:30:26,847 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-24 16:30:26,847 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-24 16:30:26,849 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-24 16:30:26,849 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-24 16:30:26,849 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-24 16:30:26,878 - root - INFO - Updating table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 16:30:49,280 - root - INFO - Bulk update completed: 1385 records updated, 0 errors
+2025-07-24 16:30:49,281 - root - INFO - Successfully updated 1385 rows in panel 'Seller Panel'
+2025-07-24 16:30:49,281 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'internal_users': 984, 'service_users': 132, 'thirdparty_users': 269, 'not_found': 0, 'total': 1385, 'errors': 0}
+2025-07-24 16:30:49,374 - root - INFO - Found 984 users to reconcile (984 internal + 0 not found) and 401 other users out of 1385 total panel users
+2025-07-24 16:30:49,437 - root - INFO - Updating table 'seller_panel' with 984 records using match_field 'user_email'
+2025-07-24 16:31:05,482 - root - INFO - Bulk update completed: 984 records updated, 0 errors
+2025-07-24 16:31:05,487 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Status: complete, Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 1385, 'internal_users': 984, 'not_found_users': 0, 'users_to_reconcile': 984, 'other_users': 401, 'service_users': 0, 'thirdparty_users': 0, 'matched': 369, 'found_active': 330, 'found_inactive': 39, 'not_found': 615}
+2025-07-24 16:31:05,489 - root - INFO - Updated upload history status for panel 'Seller Panel' to 'complete'
+2025-07-24 16:31:11,101 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 16:31:11,102 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 16:31:11,233 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 16:31:11,234 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 16:31:15,800 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'

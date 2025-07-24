@@ -3,18 +3,14 @@ export const parseISTTimestamp = (timestamp) => {
   if (!timestamp || timestamp === "-") return "-";
   
   try {
-    // Handle backend format: "dd-mm-yyyy hh:mm:ss" or "dd-mm-yyyy hh:mm" or "dd-mm-yyyy hh:mm AM/PM"
+    // Handle backend format: "dd-mm-yyyy hh:mm:ss" (24-hour format)
     if (typeof timestamp === 'string' && timestamp.includes('-')) {
-      const [datePart, timePart] = timestamp.split(' ');
+      const parts = timestamp.split(' ');
+      const datePart = parts[0];
+      const timePart = parts[1] || '';
       const [day, month, year] = datePart.split('-');
       
-      // Check if time part already has AM/PM format
-      if (timePart.includes('AM') || timePart.includes('PM')) {
-        // Already in the correct format, return as is
-        return timestamp;
-      }
-      
-      // Handle old format: "hh:mm:ss" or "hh:mm"
+      // Handle 24-hour format: "hh:mm:ss" or "hh:mm"
       const [hours, minutes, seconds = '00'] = timePart.split(':');
       
       // Create date object (month is 0-indexed in JavaScript)
