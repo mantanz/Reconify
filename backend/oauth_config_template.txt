@@ -1,0 +1,16 @@
+# Create a .env file in the backend directory with the following content:
+
+# Google OAuth Configuration
+GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+
+# JWT Configuration
+SECRET_KEY=your-super-secret-jwt-key-here-make-it-long-and-random
+
+# Instructions:
+# 1. Go to https://console.cloud.google.com/
+# 2. Create a new project or select existing one
+# 3. Enable Google+ API
+# 4. Go to Credentials > Create Credentials > OAuth 2.0 Client IDs
+# 5. Set authorized redirect URIs to: http://localhost:8000/auth/google/callback
+# 6. Copy the Client ID and Client Secret to this .env file 

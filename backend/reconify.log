@@ -4977,3 +4977,43 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-24 14:31:28,225 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
 2025-07-24 14:32:01,496 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
 2025-07-24 14:32:01,497 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-24 14:38:21,954 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-24 14:38:21,954 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-24 14:38:22,094 - root - INFO - Fetched 20 rows from SOT: internal_users
+2025-07-24 14:38:22,274 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-24 14:38:22,517 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-24 14:38:22,712 - root - INFO - Fetched 1385 rows from panel: Seller Panel
+2025-07-24 14:38:22,712 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-24 14:38:22,712 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-24 14:38:22,713 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-24 14:38:22,713 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-24 14:38:22,715 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-24 14:38:22,715 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-24 14:38:22,715 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-24 14:38:22,816 - root - INFO - Updating table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 14:38:48,523 - root - INFO - Bulk update completed: 1385 records updated, 0 errors
+2025-07-24 14:38:48,524 - root - INFO - Successfully updated 1385 rows in panel 'Seller Panel'
+2025-07-24 14:38:48,524 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'internal_users': 984, 'service_users': 132, 'thirdparty_users': 269, 'not_found': 0, 'total': 1385, 'errors': 0}
+2025-07-24 14:38:48,683 - root - INFO - Found 984 users to reconcile (984 internal + 0 not found) and 401 other users out of 1385 total panel users
+2025-07-24 14:38:48,741 - root - INFO - Updating table 'seller_panel' with 984 records using match_field 'user_email'
+2025-07-24 14:39:06,447 - root - INFO - Bulk update completed: 984 records updated, 0 errors
+2025-07-24 14:39:06,452 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Status: complete, Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 1385, 'internal_users': 984, 'not_found_users': 0, 'users_to_reconcile': 984, 'other_users': 401, 'service_users': 0, 'thirdparty_users': 0, 'matched': 369, 'found_active': 330, 'found_inactive': 39, 'not_found': 615}
+2025-07-24 14:39:06,454 - root - INFO - Updated upload history status for panel 'Seller Panel' to 'complete'
+2025-07-24 14:41:15,652 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-24 14:41:15,652 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-24 14:41:15,678 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 14:41:36,178 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-24 14:41:36,178 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-24 15:25:45,568 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-24 15:25:56,438 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 15:25:56,612 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-24 15:25:56,946 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 15:26:28,553 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 15:26:28,983 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 15:27:43,316 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 15:27:43,318 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 15:27:43,512 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 15:27:43,513 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 15:28:04,968 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-24 15:31:48,525 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 15:31:48,911 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"

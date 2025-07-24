@@ -4,4 +4,8 @@ sqlalchemy
 pymysql
 pandas
 openpyxl
-pyxlsb 
+pyxlsb
+python-jose[cryptography]
+authlib
+python-multipart
+python-dotenv 
