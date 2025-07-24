@@ -5,6 +5,8 @@ import Reconciliation from "./Reconciliation";
 import UserSummary from "./UserSummary";
 import AppLauncher from "./AppLauncher";
 import Reconsummary from "./Reconsummary";
+import { AuthProvider, useAuth } from "./auth/AuthContext";
+import Login from "./auth/Login";
 
 // Available navigation items based on current functionality
 const NAV_ITEMS = [
@@ -22,16 +24,15 @@ const NAV_ITEMS = [
   { key: "audit_trails", label: "Audit Trails", component: null },
 ];
 
-function App() {
+function AppContent() {
   const [selected, setSelected] = useState("home");
   const [showDropdown, setShowDropdown] = useState(false);
+  const { user, loading, logout } = useAuth();
 
   const handleNavClick = (key) => {
     setSelected(key);
     setShowDropdown(false);
   };
-
-
 
   const handleLinkClick = (link) => {
     console.log(`Navigating to: ${link.name}`);
@@ -53,7 +54,38 @@ function App() {
     }
   }, [showDropdown]);
 
+  // Show loading spinner while checking authentication
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          width: '40px',
+          height: '40px',
+          border: '4px solid #e8ecff',
+          borderTop: '4px solid #00baf2',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }}></div>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
+  // Show login page if not authenticated
+  if (!user) {
+    return <Login />;
+  }
 
   const renderContent = () => {
     const selectedItem = NAV_ITEMS.find(item => item.key === selected);
@@ -407,20 +439,93 @@ function App() {
                 }}></div>
               </div>
             </button>
+            {/* User Profile Section */}
             <div style={{
-              width: 44,
-              height: 44,
-              background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)",
-              borderRadius: "12px",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              color: "#fff",
-              fontWeight: "bold",
-              fontSize: 18,
-              boxShadow: "0 4px 16px rgba(0, 180, 216, 0.3)"
+              gap: 12,
+              background: "rgba(255,255,255,0.1)",
+              padding: "8px 12px",
+              borderRadius: "12px",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255,255,255,0.2)"
             }}>
-              U
+              {/* User Avatar */}
+              <div style={{
+                width: 32,
+                height: 32,
+                background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#fff",
+                fontWeight: "bold",
+                fontSize: 14,
+                boxShadow: "0 2px 8px rgba(0, 180, 216, 0.3)"
+              }}>
+                {user?.picture ? (
+                  <img 
+                    src={user.picture} 
+                    alt="Profile" 
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: "50%",
+                      objectFit: "cover"
+                    }}
+                  />
+                ) : (
+                  user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || "U"
+                )}
+              </div>
+              
+              {/* User Info */}
+              <div style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start"
+              }}>
+                <span style={{
+                  color: "#fff",
+                  fontSize: 12,
+                  fontWeight: "600",
+                  lineHeight: 1
+                }}>
+                  {user?.name || "User"}
+                </span>
+                <span style={{
+                  color: "rgba(255,255,255,0.7)",
+                  fontSize: 10,
+                  lineHeight: 1
+                }}>
+                  {user?.email}
+                </span>
+              </div>
+              
+              {/* Logout Button */}
+              <button
+                onClick={logout}
+                style={{
+                  background: "rgba(255,255,255,0.2)",
+                  border: "none",
+                  borderRadius: "6px",
+                  color: "#fff",
+                  cursor: "pointer",
+                  padding: "4px 8px",
+                  fontSize: 10,
+                  fontWeight: "600",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "rgba(255,255,255,0.3)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "rgba(255,255,255,0.2)";
+                }}
+              >
+                Logout
+              </button>
             </div>
           </div>
         </div>
@@ -512,6 +617,14 @@ function App() {
         `}
       </style>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

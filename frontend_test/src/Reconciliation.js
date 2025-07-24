@@ -589,7 +589,7 @@ export default function Reconciliation() {
                         }>
                           <button
                             onClick={() => handleReconcile(idx)}
-                            disabled={loading[item.docid || item.doc_id] || (!canStartReconciliation(item) && !isReconciliationComplete(item))}
+                            disabled={loading[item.docid || item.doc_id] || (!canStartReconciliation(item) && !isReconciliationComplete(item)) || isReconciliationComplete(item)}
                             style={{
                               width: '32px',
                               height: '32px',
@@ -602,12 +602,12 @@ export default function Reconciliation() {
                                          isReconciliationComplete(item) ? '#059669' : '#6c757d',
                               color: '#fff',
                               fontSize: '14px',
-                              cursor: (loading[item.docid || item.doc_id] || (!canStartReconciliation(item) && !isReconciliationComplete(item))) ? 'not-allowed' : 'default',
+                              cursor: (loading[item.docid || item.doc_id] || (!canStartReconciliation(item) && !isReconciliationComplete(item)) || isReconciliationComplete(item)) ? 'not-allowed' : 'default',
                               transition: 'all 0.2s ease',
                               opacity: (canStartReconciliation(item) || isReconciliationComplete(item)) ? 1 : 0.6
                             }}
                               onMouseEnter={(e) => {
-                                if (!loading[item.docid || item.doc_id] && (canStartReconciliation(item) || isReconciliationComplete(item))) {
+                                if (!loading[item.docid || item.doc_id] && canStartReconciliation(item) && !isReconciliationComplete(item)) {
                                   e.target.style.transform = "scale(1.1)";
                                   e.target.style.boxShadow = "0 2px 8px rgba(0,123,255,0.3)";
                                 }
@@ -631,7 +631,7 @@ export default function Reconciliation() {
                         }>
                             <button
                             onClick={() => handleRecategorise(idx)}
-                            disabled={!canRecategorize(item) || recategorizationLoading[item.docid || item.doc_id]}
+                            disabled={!canRecategorize(item) || recategorizationLoading[item.docid || item.doc_id] || isRecategorizationComplete(item)}
                               style={{
                               width: '32px',
                               height: '32px',
@@ -644,12 +644,12 @@ export default function Reconciliation() {
                                          canRecategorize(item) ? '#2563eb' : '#6c757d',
                               color: '#fff',
                               fontSize: '14px',
-                              cursor: (canRecategorize(item) && !recategorizationLoading[item.docid || item.doc_id]) ? 'pointer' : 'not-allowed',
+                              cursor: (canRecategorize(item) && !recategorizationLoading[item.docid || item.doc_id] && !isRecategorizationComplete(item)) ? 'pointer' : 'not-allowed',
                               transition: 'all 0.2s ease',
                               opacity: (canRecategorize(item) || isRecategorizationComplete(item)) ? 1 : 0.6
                             }}
                             onMouseEnter={(e) => {
-                              if (canRecategorize(item) && !recategorizationLoading[item.docid || item.doc_id]) {
+                              if (canRecategorize(item) && !recategorizationLoading[item.docid || item.doc_id] && !isRecategorizationComplete(item)) {
                                 e.target.style.transform = "scale(1.1)";
                                 e.target.style.boxShadow = "0 2px 8px rgba(37,99,235,0.3)";
                               }
