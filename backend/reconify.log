@@ -5122,3 +5122,99 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-24 11:58:51,309 - root - INFO - Processed 6926 users from panel: Seller Panel
 2025-07-24 11:58:51,429 - root - INFO - Processed 6058 users from panel: OE Panel
 2025-07-24 11:58:51,433 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 12:23:19,453 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 12:23:19,768 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 12:23:19,899 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 12:23:19,908 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 12:23:20,058 - root - INFO - Processed 111 users from panel: OE_ODS_PANEL_PMMS
+2025-07-24 12:23:20,186 - root - INFO - Processed 6926 users from panel: Seller Panel
+2025-07-24 12:23:20,296 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-24 12:23:20,300 - root - INFO - User-wise summary completed. Total users: 13091
+2025-07-24 12:28:17,772 - root - WARNING - No data found for panel: OE_ODS_PANEL_PMMS
+2025-07-24 12:28:17,776 - root - WARNING - No data found for panel: Seller Panel
+2025-07-24 12:28:17,784 - root - WARNING - No data found for panel: OE Panel
+2025-07-24 12:28:17,785 - root - INFO - No data found for panel: OE_ODS_PANEL_PMMS
+2025-07-24 12:28:17,789 - root - INFO - No data found for panel: Seller Panel
+2025-07-24 12:28:17,789 - root - WARNING - No data found for panel: OE Panel
+2025-07-24 12:28:17,797 - root - INFO - No data found for panel: OE Panel
+2025-07-24 12:28:17,798 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 12:28:17,806 - root - WARNING - No data found for panel: OE_ODS_PANEL_PMMS
+2025-07-24 12:28:17,815 - root - WARNING - No data found for panel: Seller Panel
+2025-07-24 12:28:17,816 - root - INFO - No data found for panel: OE_ODS_PANEL_PMMS
+2025-07-24 12:28:17,822 - root - WARNING - No data found for panel: OE Panel
+2025-07-24 12:28:17,822 - root - INFO - No data found for panel: Seller Panel
+2025-07-24 12:28:17,825 - root - WARNING - No data found for panel: OE Panel
+2025-07-24 12:28:17,826 - root - INFO - No data found for panel: OE Panel
+2025-07-24 12:28:17,827 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 12:29:27,291 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-24 12:29:34,460 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 12:29:34,607 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-24 12:29:34,878 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 12:29:41,973 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 12:29:41,980 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 12:33:54,852 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 12:33:54,858 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 12:34:17,687 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 12:34:17,692 - root - INFO - User-wise summary completed. Total users: 0
+2025-07-24 12:37:00,516 - root - INFO - Starting user categorization for panel: Seller Panel
+2025-07-24 12:37:00,518 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-24 12:37:00,531 - root - INFO - Fetched 20 rows from SOT: internal_users
+2025-07-24 12:37:00,542 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-24 12:37:00,544 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-24 12:37:00,556 - root - INFO - Fetched 1385 rows from panel: Seller Panel
+2025-07-24 12:37:00,557 - root - INFO - Using 'user_email' as primary key field (from service_users)
+2025-07-24 12:37:00,557 - root - INFO - SOT internal_users: panel_field='user_email', sot_field='domain'
+2025-07-24 12:37:00,557 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-24 12:37:00,557 - root - INFO - SOT service_users: panel_field='user_email', sot_field='email'
+2025-07-24 12:37:00,558 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-24 12:37:00,558 - root - INFO - SOT thirdparty_users: panel_field='user_email', sot_field='domain'
+2025-07-24 12:37:00,558 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-24 12:37:00,582 - root - INFO - Updating table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 12:37:04,465 - root - INFO - Bulk update completed: 1385 records updated, 0 errors
+2025-07-24 12:37:04,465 - root - INFO - Successfully updated 1385 rows in panel 'Seller Panel'
+2025-07-24 12:37:04,465 - root - INFO - User categorization completed for panel 'Seller Panel'. Summary: {'internal_users': 984, 'service_users': 132, 'thirdparty_users': 269, 'not_found': 0, 'total': 1385, 'errors': 0}
+2025-07-24 12:37:04,501 - root - INFO - Found 984 users to reconcile (984 internal + 0 not found) and 401 other users out of 1385 total panel users
+2025-07-24 12:37:04,510 - root - INFO - Updating table 'seller_panel' with 984 records using match_field 'user_email'
+2025-07-24 12:37:07,807 - root - INFO - Bulk update completed: 984 records updated, 0 errors
+2025-07-24 12:37:07,810 - root - INFO - HR reconciliation completed for panel 'Seller Panel'. Status: complete, Summary: {'panel_name': 'Seller Panel', 'total_panel_users': 1385, 'internal_users': 984, 'not_found_users': 0, 'users_to_reconcile': 984, 'other_users': 401, 'service_users': 0, 'thirdparty_users': 0, 'matched': 369, 'found_active': 330, 'found_inactive': 39, 'not_found': 615}
+2025-07-24 12:37:07,812 - root - INFO - Updated upload history status for panel 'Seller Panel' to 'complete'
+2025-07-24 12:37:13,248 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:37:13,250 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:37:13,290 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:37:13,290 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:37:53,153 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-24 12:37:53,155 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-24 12:37:53,214 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 12:37:55,105 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-24 12:37:55,106 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-24 12:37:55,109 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-24 12:37:56,843 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-24 12:37:56,843 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-24 12:38:01,187 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-24 12:38:01,189 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-24 12:38:04,009 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:38:04,010 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:38:04,075 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:38:04,075 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:38:30,509 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:38:30,512 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:38:30,600 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:38:30,601 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:38:52,617 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:38:52,619 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:38:52,678 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:38:52,679 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:39:39,973 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:39:39,976 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 12:39:40,019 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 12:39:40,020 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 13:26:16,652 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 13:26:16,655 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 13:26:16,697 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 13:26:16,698 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 14:33:00,776 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 14:33:00,779 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 14:33:00,829 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 14:33:00,830 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 14:45:52,612 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 14:45:52,955 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"

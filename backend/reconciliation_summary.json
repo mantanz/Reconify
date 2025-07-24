@@ -1,36 +1,12 @@
 [
   {
-    "recon_id": "RCN_997860e9",
-    "panelname": "OE_ODS_PANEL_PMMS",
-    "sot_type": "hr_data",
-    "recon_month": "Jul'25",
-    "status": "complete",
-    "start_date": "2025-07-21",
-    "performed_by": "demo",
-    "error": null,
-    "summary": {
-      "panel_name": "OE_ODS_PANEL_PMMS",
-      "total_panel_users": 111,
-      "internal_users": 111,
-      "not_found_users": 0,
-      "users_to_reconcile": 111,
-      "other_users": 0,
-      "service_users": 0,
-      "thirdparty_users": 0,
-      "matched": 5,
-      "found_active": 5,
-      "found_inactive": 0,
-      "not_found": 106
-    }
-  },
-  {
-    "recon_id": "RCN_193d05b3",
+    "recon_id": "RCN_c03b1a06",
     "panelname": "Seller Panel",
     "sot_type": "hr_data",
     "recon_month": "Jul'25",
     "status": "complete",
-    "start_date": "2025-07-22",
-    "performed_by": "demo",
+    "start_date": "2025-07-24",
+    "performed_by": "Charul Mauni",
     "error": null,
     "summary": {
       "panel_name": "Seller Panel",
@@ -45,54 +21,6 @@
       "found_active": 330,
       "found_inactive": 39,
       "not_found": 615
-    }
-  },
-  {
-    "recon_id": "RCN_ed528810",
-    "panelname": "OE Panel",
-    "sot_type": "hr_data",
-    "recon_month": "Jul'25",
-    "status": "complete",
-    "start_date": "2025-07-23",
-    "performed_by": "demo",
-    "error": null,
-    "summary": {
-      "panel_name": "OE Panel",
-      "total_panel_users": 3029,
-      "internal_users": 1927,
-      "not_found_users": 0,
-      "users_to_reconcile": 1927,
-      "other_users": 1102,
-      "service_users": 0,
-      "thirdparty_users": 0,
-      "matched": 95,
-      "found_active": 88,
-      "found_inactive": 7,
-      "not_found": 1832
-    }
-  },
-  {
-    "recon_id": "RCN_e93a9503",
-    "panelname": "OE Panel",
-    "sot_type": "hr_data",
-    "recon_month": "Jul'25",
-    "status": "complete",
-    "start_date": "2025-07-24",
-    "performed_by": "demo",
-    "error": null,
-    "summary": {
-      "panel_name": "OE Panel",
-      "total_panel_users": 6058,
-      "internal_users": 3854,
-      "not_found_users": 0,
-      "users_to_reconcile": 3854,
-      "other_users": 2204,
-      "service_users": 0,
-      "thirdparty_users": 0,
-      "matched": 190,
-      "found_active": 176,
-      "found_inactive": 14,
-      "not_found": 3664
     }
   }
 ]

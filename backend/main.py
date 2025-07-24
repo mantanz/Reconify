@@ -68,6 +68,27 @@ def get_current_user(request):
     # Return user name or email as fallback
     return payload.get("name") or payload.get("sub") or "demo"
 
+def validate_file_structure(sot_name, file_headers):
+    """Validate uploaded file structure against existing table structure"""
+    try:
+        existing_headers = get_panel_headers_from_db(sot_name)
+        if existing_headers:
+            missing_columns = set(existing_headers) - set(file_headers)
+            extra_columns = set(file_headers) - set(existing_headers)
+            
+            if missing_columns or extra_columns:
+                error_msg = f"File structure mismatch for '{sot_name}'. "
+                if missing_columns:
+                    error_msg += f"Missing required columns: {', '.join(sorted(missing_columns))}. "
+                if extra_columns:
+                    error_msg += f"Extra columns (will be ignored): {', '.join(sorted(extra_columns))}. "
+                error_msg += f"Expected columns: {', '.join(sorted(existing_headers))}"
+                return False, error_msg
+        return True, None
+    except Exception as e:
+        logging.error(f"Error validating file structure for {sot_name}: {e}")
+        return True, None  # Allow upload if validation fails
+
 # Models
 class PanelConfig(BaseModel):
     name: str
@@ -306,6 +327,13 @@ def upload_sot(request: Request, file: UploadFile = File(...), sot_type: str = F
             rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
     except Exception as e:
         return {"error": f"Error processing file: {str(e)}", "doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": "failed", "sot_type": sot_type}
+    
+    # Validate file structure against existing table (if table exists)
+    if rows:
+        file_headers = list(rows[0].keys())
+        is_valid, validation_error = validate_file_structure(sot_type, file_headers)
+        if not is_valid:
+            return {"error": validation_error, "doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": "failed", "sot_type": sot_type}
     
     # Insert into the correct SOT table (auto-create if needed)
     db_status, db_error = insert_sot_data_rows(sot_type, rows)

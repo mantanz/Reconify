@@ -86,7 +86,11 @@ export default function Reconsummary() {
       // Check if it's already a valid date (for backward compatibility)
       const jsDate = new Date(timestamp);
       if (!isNaN(jsDate.getTime())) {
-        return jsDate.toLocaleDateString();
+        return jsDate.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        }).replace(/\//g, '-');
       }
       
       // Parse IST format: dd-mm-yyyy hh:mm:ss
@@ -108,8 +112,23 @@ export default function Reconsummary() {
       const minute = parseInt(timeParts[1], 10);
       const second = parseInt(timeParts[2], 10);
       
+      // Validate the parsed values
+      if (isNaN(day) || isNaN(month) || isNaN(year) || isNaN(hour) || isNaN(minute) || isNaN(second)) {
+        return timestamp; // Return original if any value is invalid
+      }
+      
       const parsedDate = new Date(year, month, day, hour, minute, second);
-      return parsedDate.toLocaleDateString();
+      
+      // Check if the parsed date is valid
+      if (isNaN(parsedDate.getTime())) {
+        return timestamp; // Return original if parsing results in invalid date
+      }
+      
+      return parsedDate.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }).replace(/\//g, '-');
     } catch (error) {
       console.error("Error parsing timestamp:", timestamp, error);
       return timestamp; // Return original if parsing fails

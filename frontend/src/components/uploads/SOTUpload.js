@@ -112,12 +112,58 @@ export default function SOTUpload() {
 
   const formatDateTime = (timestamp) => {
     if (!timestamp) return "-";
-    const date = new Date(timestamp);
-    return date.toLocaleDateString('en-GB') + ', ' + date.toLocaleTimeString('en-GB', { 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      second: '2-digit' 
-    });
+    
+    try {
+      // Check if it's already a valid date (for backward compatibility)
+      const jsDate = new Date(timestamp);
+      if (!isNaN(jsDate.getTime())) {
+        return jsDate.toLocaleDateString('en-GB').replace(/\//g, '-') + ', ' + jsDate.toLocaleTimeString('en-GB', { 
+          hour: '2-digit', 
+          minute: '2-digit', 
+          second: '2-digit' 
+        });
+      }
+      
+      // Parse IST format: dd-mm-yyyy hh:mm:ss
+      const parts = timestamp.split(' ');
+      if (parts.length !== 2) return timestamp; // Return as-is if format is unexpected
+      
+      const datePart = parts[0]; // dd-mm-yyyy
+      const timePart = parts[1]; // hh:mm:ss
+      
+      const dateParts = datePart.split('-');
+      const timeParts = timePart.split(':');
+      
+      if (dateParts.length !== 3 || timeParts.length !== 3) return timestamp;
+      
+      const day = parseInt(dateParts[0], 10);
+      const month = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed in JavaScript
+      const year = parseInt(dateParts[2], 10);
+      const hour = parseInt(timeParts[0], 10);
+      const minute = parseInt(timeParts[1], 10);
+      const second = parseInt(timeParts[2], 10);
+      
+      // Validate the parsed values
+      if (isNaN(day) || isNaN(month) || isNaN(year) || isNaN(hour) || isNaN(minute) || isNaN(second)) {
+        return timestamp; // Return original if any value is invalid
+      }
+      
+      const parsedDate = new Date(year, month, day, hour, minute, second);
+      
+      // Check if the parsed date is valid
+      if (isNaN(parsedDate.getTime())) {
+        return timestamp; // Return original if parsing results in invalid date
+      }
+      
+      return parsedDate.toLocaleDateString('en-GB').replace(/\//g, '-') + ', ' + parsedDate.toLocaleTimeString('en-GB', { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+      });
+    } catch (error) {
+      console.error("Error parsing timestamp:", timestamp, error);
+      return timestamp; // Return original if parsing fails
+    }
   };
 
   const getSotDisplayName = (sot) => {
@@ -181,16 +227,17 @@ export default function SOTUpload() {
                 const isUploading = uploadingSot === sot;
                 
                 return (
-                  <SOTRow 
-                    key={sot}
-                    sot={sot}
-                    metadata={metadata}
-                    isUploading={isUploading}
-                    uploading={uploading}
-                    onUpload={handleUpload}
-                    getSotDisplayName={getSotDisplayName}
-                    formatDateTime={formatDateTime}
-                  />
+                  <React.Fragment key={sot}>
+                    <SOTRow 
+                      sot={sot}
+                      metadata={metadata}
+                      isUploading={isUploading}
+                      uploading={uploading}
+                      onUpload={handleUpload}
+                      getSotDisplayName={getSotDisplayName}
+                      formatDateTime={formatDateTime}
+                    />
+                  </React.Fragment>
                 );
               })
             )}

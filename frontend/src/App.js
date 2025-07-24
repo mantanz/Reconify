@@ -616,7 +616,7 @@ function App() {
               }
             `}
           </style>
-        </div>
+    </div>
       </ProtectedRoute>
     </AuthProvider>
   );
