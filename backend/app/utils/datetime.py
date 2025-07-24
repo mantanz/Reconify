@@ -2,16 +2,16 @@ from datetime import datetime, timezone, timedelta
 
 
 def get_ist_timestamp():
-    """Get current timestamp in Indian Standard Time (IST) format: dd-mm-yyyy hh:mm AM/PM"""
+    """Get current timestamp in Indian Standard Time (IST) format: dd-mm-yyyy hh:mm:ss (24-hour format)"""
     # IST is UTC+5:30
     ist_offset = timedelta(hours=5, minutes=30)
     utc_now = datetime.now(timezone.utc)
     ist_time = utc_now.astimezone(timezone(ist_offset))
-    return ist_time.strftime("%d-%m-%Y %I:%M %p")
+    return ist_time.strftime("%d-%m-%Y %H:%M:%S")
 
 
 def format_ist_timestamp(timestamp):
-    """Format any datetime object to IST format: dd-mm-yyyy hh:mm AM/PM"""
+    """Format any datetime object to IST format: dd-mm-yyyy hh:mm:ss (24-hour format)"""
     if isinstance(timestamp, str):
         # Try to parse the timestamp string
         try:
@@ -36,7 +36,7 @@ def format_ist_timestamp(timestamp):
         
         ist_offset = timedelta(hours=5, minutes=30)
         ist_time = timestamp.astimezone(timezone(ist_offset))
-        return ist_time.strftime("%d-%m-%Y %I:%M %p")
+        return ist_time.strftime("%d-%m-%Y %H:%M:%S")
     
     return "Invalid Date"
 
