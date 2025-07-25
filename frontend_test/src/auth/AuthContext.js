@@ -25,6 +25,51 @@ export function AuthProvider({ children }) {
     return localStorage.getItem('access_token');
   };
 
+  // Enhanced logout function that can be called from anywhere
+  const logout = () => {
+    localStorage.removeItem('access_token');
+    document.cookie = "access_token=; Max-Age=0; path=/;";
+    setUser(null);
+    // Redirect to login page instead of reloading
+    window.location.href = '/';
+  };
+
+  // Function to handle token expiration
+  const handleTokenExpiration = () => {
+    console.log('Token expired, logging out...');
+    logout();
+  };
+
+  // Function to validate token with backend
+  const validateToken = async () => {
+    const token = getToken();
+    if (!token) return false;
+
+    try {
+      const res = await fetch(`${API_BASE}/auth/me`, { 
+        credentials: "include",
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+        return true;
+      } else if (res.status === 401 || res.status === 403) {
+        // Token is expired or invalid
+        console.log('Token validation failed, logging out...');
+        logout();
+        return false;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error validating token:', error);
+      return false;
+    }
+  };
+
   // Fetch user info from backend
   useEffect(() => {
     async function fetchUser() {
@@ -47,12 +92,17 @@ export function AuthProvider({ children }) {
         if (res.ok) {
           const data = await res.json();
           setUser(data);
+        } else if (res.status === 401 || res.status === 403) {
+          // Token is expired or invalid
+          console.log('Token is expired or invalid, logging out...');
+          logout();
         } else {
-          // Token is invalid, remove it
+          // Other error, remove token and set user to null
           localStorage.removeItem('access_token');
           setUser(null);
         }
-      } catch {
+      } catch (error) {
+        console.error('Error fetching user:', error);
         localStorage.removeItem('access_token');
         setUser(null);
       } finally {
@@ -62,19 +112,31 @@ export function AuthProvider({ children }) {
     fetchUser();
   }, []);
 
+  // Set up periodic token validation (every 5 minutes)
+  useEffect(() => {
+    if (!user) return; // Only validate if user is logged in
+
+    const interval = setInterval(async () => {
+      await validateToken();
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(interval);
+  }, [user]);
+
   const login = () => {
     window.location.href = `${API_BASE}/auth/login/google`;
   };
 
-  const logout = () => {
-    localStorage.removeItem('access_token');
-    document.cookie = "access_token=; Max-Age=0; path=/;";
-    setUser(null);
-    window.location.reload();
-  };
-
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      login, 
+      logout, 
+      handleTokenExpiration,
+      getToken,
+      validateToken
+    }}>
       {children}
     </AuthContext.Provider>
   );

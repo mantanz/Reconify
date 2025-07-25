@@ -1,30 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { getPanels, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, recategorizeUsers } from "./api";
-import { parseISTTimestamp } from "./utils";
-import { validateMultipleFiles, validateSingleFile } from "./fileValidation";
+import { getPanels, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, recategorizeUsers } from "../../services/api";
+import { parseISTTimestamp, fetchWithAuth } from "../../utils/utils";
+import { validateMultipleFiles, validateSingleFile } from "../../utils/fileValidation";
 import { FiUpload, FiSettings } from 'react-icons/fi';
 import { HiOutlineUpload } from 'react-icons/hi';
 import { BsBinocularsFill, BsCheckCircle, BsCheckCircleFill, BsCheck2All } from 'react-icons/bs';
-import "./tables.css";
+import "../../styles/tables.css";
 
-// Helper function to get auth headers
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('access_token');
-  return token ? { 'Authorization': `Bearer ${token}` } : {};
-};
 
-// Helper function for fetch with auth
-const fetchWithAuth = async (url, options = {}) => {
-  const headers = {
-    ...getAuthHeaders(),
-    ...options.headers
-  };
-  
-  return fetch(url, {
-    ...options,
-    headers
-  });
-};
 
 // Progress component for upload percentage
 function Progress({ percent }) {
@@ -347,7 +330,7 @@ export default function Reconciliation() {
   const isEntireProcessComplete = (item) => {
     return item.status && (item.status.toLowerCase() === "recategorised" || item.status.toLowerCase() === "completed") || isRecategorizationComplete(item);
   };
-
+      
   const isAlreadyMarkedComplete = (item) => {
     return item.status && item.status.toLowerCase() === "completed";
   };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getUserWiseSummary } from "./api";
+import { getUserWiseSummary } from "../../services/api";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function UserSummary() {
   const [users, setUsers] = useState([]);
@@ -117,9 +118,11 @@ export default function UserSummary() {
   if (loading) {
     return (
       <div style={{ maxWidth: 1200, margin: "40px auto", padding: "0 20px" }}>
-        <div style={{ textAlign: "center", padding: "40px" }}>
-          <div style={{ fontSize: 18, color: "#6c757d" }}>Loading user summary...</div>
-        </div>
+        <LoadingSpinner 
+          fullScreen={false} 
+          message="Loading user summary..." 
+          size={32}
+        />
       </div>
     );
   }

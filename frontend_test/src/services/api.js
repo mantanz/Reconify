@@ -1,23 +1,6 @@
+import { fetchWithAuth } from '../utils/utils';
+
 const API_BASE = "http://127.0.0.1:8000";
-
-// Helper function to get auth headers
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('access_token');
-  return token ? { 'Authorization': `Bearer ${token}` } : {};
-};
-
-// Helper function for fetch with auth
-const fetchWithAuth = async (url, options = {}) => {
-  const headers = {
-    ...getAuthHeaders(),
-    ...options.headers
-  };
-  
-  return fetch(url, {
-    ...options,
-    headers
-  });
-};
 
 export async function uploadPanelFile(file) {
   const formData = new FormData();

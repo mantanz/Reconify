@@ -5279,3 +5279,194 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-25 12:59:29,371 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
 2025-07-25 12:59:29,389 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
 2025-07-25 12:59:29,390 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 13:23:48,152 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 13:23:48,154 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 13:23:48,328 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 13:23:48,329 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 13:25:01,900 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 13:25:01,902 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 13:25:02,212 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 13:25:02,214 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 13:25:09,238 - root - INFO - Fetched 2770 rows for panel 'Seller Panel'
+2025-07-25 14:19:28,220 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 14:19:28,221 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 14:19:28,345 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 14:19:28,346 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 14:19:31,134 - root - INFO - Fetched 2770 rows for panel 'Seller Panel'
+2025-07-25 14:31:49,990 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 14:31:49,991 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 14:31:50,110 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 14:31:50,111 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 14:34:15,058 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 14:34:15,059 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 14:34:15,351 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 14:34:15,353 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 14:43:30,517 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 14:43:30,538 - app.audit_trails.audit_utils - INFO - Audit event logged: PANEL_UPLOAD by demo - success
+2025-07-25 14:43:30,538 - app.utils.audit_logger - INFO - Audit logged: PANEL_UPLOAD by demo - success
+2025-07-25 14:44:02,982 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-25 14:44:03,888 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 14:44:04,003 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-25 14:44:04,330 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 14:44:04,390 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 14:44:04,426 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 14:44:04,426 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 14:44:13,449 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 14:44:13,469 - app.audit_trails.audit_utils - INFO - Audit event logged: PANEL_UPLOAD by Yash Priyadershi - success
+2025-07-25 14:44:13,469 - app.utils.audit_logger - INFO - Audit logged: PANEL_UPLOAD by Yash Priyadershi - success
+2025-07-25 14:56:00,070 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 14:56:00,093 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 14:56:00,093 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 14:58:23,399 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 14:58:23,436 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 14:58:23,437 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 15:02:30,165 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 15:02:30,195 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 15:02:30,196 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 15:08:27,453 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:08:27,455 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:08:27,678 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:08:27,679 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:10:08,054 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:10:08,057 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:10:08,324 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:10:08,326 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:13:04,536 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:13:04,538 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:13:04,762 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:13:04,764 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:13:16,769 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 15:13:16,788 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 15:13:16,789 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 15:15:04,027 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 15:15:04,092 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 15:15:04,093 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 15:25:15,967 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 15:25:16,220 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 15:25:16,239 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 15:25:16,264 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 15:25:16,265 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 15:25:27,328 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 15:25:27,345 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 15:25:27,345 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 15:28:39,959 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 15:28:40,005 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 15:28:40,005 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 15:29:02,419 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:29:02,421 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:29:02,637 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:29:02,639 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:29:33,514 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 15:29:33,686 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 15:29:33,718 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 15:29:33,741 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 15:29:33,741 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 15:29:44,142 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 15:29:44,337 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 15:29:44,362 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 15:29:44,382 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 15:29:44,382 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 15:33:32,576 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:33:32,578 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:33:32,785 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:33:32,786 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:37:21,238 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:37:21,241 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:37:21,491 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:37:21,492 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:39:37,735 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:39:37,737 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:39:37,982 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:39:37,984 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:40:21,903 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 15:40:22,127 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 15:40:22,163 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 15:40:22,180 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 15:40:22,181 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 15:40:27,510 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:40:27,512 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:40:27,700 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:40:27,702 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:44:30,308 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:44:30,311 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 15:44:30,597 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 15:44:30,599 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 16:38:54,435 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 16:38:54,737 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 16:38:54,790 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:38:54,819 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 16:38:54,819 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 16:39:14,962 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:39:15,026 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:39:15,027 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:39:39,598 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 16:39:39,774 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 16:39:39,803 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:39:39,852 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 16:39:39,853 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 16:49:07,262 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:49:07,296 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:49:07,297 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:49:14,212 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:49:14,234 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:49:14,235 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:49:31,538 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:49:31,557 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:49:31,557 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:49:43,768 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:49:43,810 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:49:43,811 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:51:20,672 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 16:51:20,712 - root - INFO - No data found for panel: OE Panel
+2025-07-25 16:51:20,715 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 16:51:20,957 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 16:51:21,017 - root - INFO - No data found for panel: OE Panel
+2025-07-25 16:51:21,020 - root - INFO - User-wise summary completed. Total users: 5540
+2025-07-25 16:51:41,001 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:51:41,036 - app.audit_trails.audit_utils - INFO - Audit event logged: PANEL_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:51:41,037 - app.utils.audit_logger - INFO - Audit logged: PANEL_UPLOAD by Yash Priyadershi - success
+2025-07-25 16:52:33,007 - root - INFO - Starting user categorization for panel: OE Panel
+2025-07-25 16:52:33,009 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-25 16:52:33,076 - root - INFO - Fetched 20 rows from SOT: internal_users
+2025-07-25 16:52:33,185 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-25 16:52:33,252 - root - INFO - Fetched 57 rows from SOT: thirdparty_users
+2025-07-25 16:52:33,403 - root - INFO - Fetched 3029 rows from panel: OE Panel
+2025-07-25 16:52:33,403 - root - INFO - Using 'email' as primary key field (from service_users)
+2025-07-25 16:52:33,403 - root - INFO - SOT internal_users: panel_field='email', sot_field='domain'
+2025-07-25 16:52:33,403 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-25 16:52:33,403 - root - INFO - SOT service_users: panel_field='email', sot_field='email'
+2025-07-25 16:52:33,404 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-25 16:52:33,404 - root - INFO - SOT thirdparty_users: panel_field='email', sot_field='domain'
+2025-07-25 16:52:33,404 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-25 16:52:33,475 - root - INFO - Updating table 'oe_panel' with 3029 records using match_field 'email'
+2025-07-25 16:52:41,594 - root - WARNING - Update 387: match_value is None or empty
+2025-07-25 16:52:57,858 - root - WARNING - Update 1131: match_value is None or empty
+2025-07-25 16:53:40,174 - root - INFO - Bulk update completed: 3033 records updated, 2 errors
+2025-07-25 16:53:40,175 - root - WARNING - Database update completed with warnings: Update completed with 2 errors out of 3029 records
+2025-07-25 16:53:40,175 - root - INFO - Successfully updated 3029 rows in panel 'OE Panel'
+2025-07-25 16:53:40,175 - root - INFO - User categorization completed for panel 'OE Panel'. Summary: {'internal_users': 1927, 'service_users': 0, 'thirdparty_users': 1100, 'not_found': 2, 'total': 3029, 'errors': 0}
+2025-07-25 16:53:40,426 - root - INFO - Found 1927 users to reconcile (1927 internal + 0 not found) and 1102 other users out of 3029 total panel users
+2025-07-25 16:53:40,476 - root - INFO - Updating table 'oe_panel' with 1927 records using match_field 'email'
+2025-07-25 16:54:22,540 - root - INFO - Bulk update completed: 1931 records updated, 0 errors
+2025-07-25 16:54:22,583 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:54:22,638 - app.audit_trails.audit_utils - INFO - Audit event logged: RECONCILIATION by Yash Priyadershi - success
+2025-07-25 16:54:22,638 - app.utils.audit_logger - INFO - Audit logged: RECONCILIATION by Yash Priyadershi - success
+2025-07-25 16:54:22,638 - root - INFO - HR reconciliation completed for panel 'OE Panel'. Status: complete, Summary: {'panel_name': 'OE Panel', 'total_panel_users': 3029, 'internal_users': 1927, 'not_found_users': 0, 'users_to_reconcile': 1927, 'other_users': 1102, 'service_users': 0, 'thirdparty_users': 0, 'matched': 95, 'found_active': 88, 'found_inactive': 7, 'not_found': 1832}
+2025-07-25 16:54:22,639 - root - INFO - Updated upload history status for panel 'OE Panel' to 'complete'
+2025-07-25 16:54:35,676 - root - INFO - Recategorization: panel_field='email', match_column='user_email', type_column='category'
+2025-07-25 16:54:35,676 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-25 16:54:35,677 - root - WARNING - Row 387: Missing panel field 'email'
+2025-07-25 16:54:35,678 - root - WARNING - Row 1131: Missing panel field 'email'
+2025-07-25 16:54:35,744 - root - INFO - Updating final_status for table 'oe_panel' with 3027 records using match_field 'email'
+2025-07-25 16:55:41,700 - root - INFO - Final status bulk update completed: 3033 records updated, 0 errors
+2025-07-25 16:55:41,731 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 16:55:41,781 - app.audit_trails.audit_utils - INFO - Audit event logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-25 16:55:41,782 - app.utils.audit_logger - INFO - Audit logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-25 16:55:41,782 - root - INFO - User recategorization completed for panel 'OE Panel'. Summary: {'total_panel_users': 3029, 'matched': 4, 'not_found': 3023, 'errors': 2}
+2025-07-25 16:56:27,653 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 16:56:27,797 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 16:56:27,800 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 16:56:28,109 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 16:56:28,263 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 16:56:28,267 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 16:56:33,366 - root - INFO - Fetched 3029 rows for panel 'OE Panel'

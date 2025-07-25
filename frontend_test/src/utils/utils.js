@@ -103,3 +103,37 @@ export const getCurrentISTDate = () => {
   const now = new Date();
   return parseISTDate(now);
 }; 
+
+// Centralized fetchWithAuth function that handles token expiration
+export const fetchWithAuth = async (url, options = {}) => {
+  const token = localStorage.getItem('access_token');
+  
+  const headers = {
+    ...options.headers,
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  };
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers
+    });
+    
+    // Handle token expiration
+    if (response.status === 401 || response.status === 403) {
+      console.log('Token expired, redirecting to login...');
+      localStorage.removeItem('access_token');
+      document.cookie = "access_token=; Max-Age=0; path=/;";
+      // Redirect to login page
+      window.location.href = '/';
+      throw new Error('Token expired');
+    }
+    
+    return response;
+  } catch (error) {
+    if (error.message === 'Token expired') {
+      throw error; // Re-throw to prevent further processing
+    }
+    throw error;
+  }
+}; 

@@ -10,7 +10,7 @@ from ..utils.datetime import get_ist_timestamp
 from ..config.paths import SOT_UPLOADS_PATH
 from ..auth.user_upload import get_current_user
 from ..utils.audit_logger import log_sot_upload
-from db.mysql_utils import insert_sot_data_rows
+from db.mysql_utils import insert_sot_data_rows, get_sot_headers_from_db
 
 router = APIRouter(prefix="/sot", tags=["source_of_truth"])
 
@@ -141,7 +141,7 @@ def list_sots_from_config():
 
 @router.get("/fields/{sot_type}")
 def get_sot_fields(sot_type: str):
-    headers = get_panel_headers_from_db(sot_type)
+    headers = get_sot_headers_from_db(sot_type)
     if not headers:
         # Return empty fields instead of 404 error for SOTs that don't exist yet
         return {"fields": []}

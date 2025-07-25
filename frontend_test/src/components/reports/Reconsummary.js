@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getReconSummaries, getReconSummaryDetail, getPanelDetails } from "./api";
-import { parseISTTimestamp } from "./utils";
+import { getReconSummaries, getReconSummaryDetail, getPanelDetails } from "../../services/api";
+import { parseISTTimestamp } from "../../utils/utils";
 
 export default function Reconsummary() {
   const [summaries, setSummaries] = useState([]);

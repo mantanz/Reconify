@@ -9,21 +9,12 @@
     "status": "complete"
   },
   {
-    "panelname": "Seller Panel",
-    "docid": "bbc576a7-91d9-4e0c-a820-3d7916c67e21",
-    "docname": "1. Seller Panel Users List with Assigned Roles.csv",
-    "timestamp": "24-07-2025 15:32:24",
-    "total_records": 1385,
-    "uploadedby": "demo",
-    "status": "uploaded"
-  },
-  {
-    "panelname": "Seller Panel",
-    "docid": "b5fbd7f9-3a82-4f10-9a77-d765b2d29880",
-    "docname": "1. Seller Panel Users List with Assigned Roles.csv",
-    "timestamp": "25-07-2025 11:28:29",
-    "total_records": 1385,
+    "panelname": "OE Panel",
+    "docid": "9137a29b-ca53-4f64-9048-d8598ad10d5c",
+    "docname": "5. OE_PANEL.csv",
+    "timestamp": "25-07-2025 16:51:40",
+    "total_records": 3029,
     "uploadedby": "Yash Priyadershi",
-    "status": "uploaded"
+    "status": "complete"
   }
 ]

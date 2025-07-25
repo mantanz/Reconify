@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getPanels, getHRFields, modifyPanelConfig, getPanelHeaders, getSOTFields, getSOTList } from "./api";
+import { getPanels, getHRFields, modifyPanelConfig, getPanelHeaders, getSOTFields, getSOTList } from "../../services/api";
 
 export default function ModifyPanel() {
   const [panels, setPanels] = useState([]);

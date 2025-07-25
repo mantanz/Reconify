@@ -37,6 +37,18 @@ def get_panel_headers_from_db(panel_name):
     except SQLAlchemyError as e:
         return []
 
+def get_sot_headers_from_db(sot_name):
+    """
+    Fetch column names for the given SOT table from the database.
+    SOT tables use their exact names without modification.
+    """
+    insp = inspect(engine)
+    try:
+        columns = insp.get_columns(sot_name)
+        return [col['name'] for col in columns]
+    except SQLAlchemyError as e:
+        return []
+
 # def create_hr_data_table(headers):
 #     """
 #     Create the hr_data table with columns from headers if it does not exist.

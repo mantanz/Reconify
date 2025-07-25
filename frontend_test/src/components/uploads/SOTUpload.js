@@ -1,26 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { parseISTTimestamp } from "./utils";
+import { parseISTTimestamp, fetchWithAuth } from "../../utils/utils";
 import { FiUpload, FiRefreshCw } from 'react-icons/fi';
-import "./tables.css";
-
-// Helper function to get auth headers
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('access_token');
-  return token ? { 'Authorization': `Bearer ${token}` } : {};
-};
-
-// Helper function for fetch with auth
-const fetchWithAuth = async (url, options = {}) => {
-  const headers = {
-    ...getAuthHeaders(),
-    ...options.headers
-  };
-  
-  return fetch(url, {
-    ...options,
-    headers
-  });
-};
+import "../../styles/tables.css";
 
 export default function SOTUpload() {
   const [uploading, setUploading] = useState(false);
@@ -38,6 +19,11 @@ export default function SOTUpload() {
       .then(res => res.json())
       .then(data => {
         setSotList(data.sots || []);
+      })
+      .catch(error => {
+        if (error.message !== 'Token expired') {
+          console.error('Error fetching SOT list:', error);
+        }
       });
     fetchHistory();
   }, []);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getPanels, deletePanelByName } from "./api";
+import { getPanels, deletePanelByName } from "../../services/api";
 
 export default function DeletePanel() {
   const [panels, setPanels] = useState([]);

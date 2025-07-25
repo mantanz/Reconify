@@ -1,21 +1,13 @@
 import React from "react";
 import { useAuth } from "./AuthContext";
 import Login from "./Login";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return (
-      <div style={{ 
-        textAlign: "center", 
-        marginTop: 80,
-        fontSize: 18,
-        color: "#666"
-      }}>
-        Loading authentication...
-      </div>
-    );
+    return <LoadingSpinner message="Loading authentication..." />;
   }
   
   // Show login page when not authenticated

@@ -76,5 +76,31 @@
       "found_inactive": 39,
       "not_found": 615
     }
+  },
+  {
+    "recon_id": "RCN_403aac85",
+    "panelname": "OE Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "upload_date": "25-07-2025 16:51:40",
+    "uploaded_by": "Yash Priyadershi",
+    "start_date": "2025-07-25",
+    "performed_by": "demo",
+    "error": null,
+    "summary": {
+      "panel_name": "OE Panel",
+      "total_panel_users": 3029,
+      "internal_users": 1927,
+      "not_found_users": 0,
+      "users_to_reconcile": 1927,
+      "other_users": 1102,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 95,
+      "found_active": 88,
+      "found_inactive": 7,
+      "not_found": 1832
+    }
   }
 ]

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import LoadingSpinner from "./LoadingSpinner";
 
 const API_BASE = "http://127.0.0.1:8000";
 
@@ -439,8 +440,12 @@ export default function AuditTrail() {
       {/* Audit Log Table */}
       <div style={{ background: "#fff", borderRadius: 6, boxShadow: "0 1px 4px rgba(0,0,0,0.04)", overflow: "hidden" }}>
         {loading ? (
-          <div style={{ textAlign: "center", padding: 40, color: "#6c757d" }}>
-            Loading audit trail...
+          <div style={{ textAlign: "center", padding: 40 }}>
+            <LoadingSpinner 
+              fullScreen={false} 
+              message="Loading audit trail..." 
+              size={32}
+            />
           </div>
         ) : (
           <table style={{ width: "100%", borderCollapse: "collapse" }}>

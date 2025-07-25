@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { uploadPanelFile, getHRFields, savePanelConfig, getPanels, getSOTFields, getSOTList } from "./api";
+import { uploadPanelFile, getHRFields, savePanelConfig, getPanels, getSOTFields, getSOTList } from "../../services/api";
 
 export default function AddPanel() {
   const [panelName, setPanelName] = useState("");

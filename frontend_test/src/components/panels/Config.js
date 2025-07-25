@@ -8,8 +8,8 @@ import {
   getPanelHeaders,
   getSOTFields,
   getSOTList 
-} from "./api";
-import "./tables.css";
+} from "../../services/api";
+import "../../styles/tables.css";
 
 export default function Config() {
   const [selectedFunction, setSelectedFunction] = useState("");
