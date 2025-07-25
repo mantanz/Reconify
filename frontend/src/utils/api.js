@@ -253,4 +253,67 @@ export const getInitialSummaryDetail = (reconId, statusType = "initial") => {
       }
       return response.json();
     });
-}; 
+};
+
+// Audit Trail API Functions
+export async function getAuditTrail(filters = {}) {
+  const queryParams = new URLSearchParams(filters);
+  const res = await fetch(`${API_BASE}/audit/trail?${queryParams}`, {
+    headers: createAuthHeaders(),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch audit trail: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function getAuditSummary() {
+  const res = await fetch(`${API_BASE}/audit/summary`, {
+    headers: createAuthHeaders(),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch audit summary: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function getAvailableActions() {
+  const res = await fetch(`${API_BASE}/audit/actions`, {
+    headers: createAuthHeaders(),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch available actions: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function getUserActivity(userName, limit = 50) {
+  const res = await fetch(`${API_BASE}/audit/user-activity/${encodeURIComponent(userName)}?limit=${limit}`, {
+    headers: createAuthHeaders(),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch user activity: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function getActionStatistics(action) {
+  const res = await fetch(`${API_BASE}/audit/action-stats/${encodeURIComponent(action)}`, {
+    headers: createAuthHeaders(),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch action statistics: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function cleanupAuditLogs(daysToKeep = 90) {
+  const res = await fetch(`${API_BASE}/audit/cleanup?days_to_keep=${daysToKeep}`, {
+    method: 'DELETE',
+    headers: createAuthHeaders(),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to cleanup audit logs: ${res.statusText}`);
+  }
+  return res.json();
+} 

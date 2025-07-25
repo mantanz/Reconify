@@ -13,6 +13,7 @@ import logging
 import pandas as pd
 from auth.routes import router as auth_router, init_oauth
 from auth.auth_handler import verify_token
+from audit import log_audit_event, audit_router
 
 # Configure logging for production
 logging.basicConfig(
@@ -161,6 +162,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
+app.include_router(audit_router, prefix="/audit", tags=["audit"])
 
 @app.get("/panels", response_model=List[PanelConfig])
 def get_panels():
@@ -168,32 +170,77 @@ def get_panels():
     return db["panels"]
 
 @app.post("/panels/add")
-def add_panel(panel: PanelConfig):
+def add_panel(panel: PanelConfig, request: Request):
     db = load_db()
+    user = get_current_user(request)
     if any(p["name"] == panel.name for p in db["panels"]):
         raise HTTPException(status_code=400, detail="Panel already exists")
     db["panels"].append(panel.dict())
     save_db(db)
+    # Audit log
+    try:
+        log_audit_event(
+            action="NEW_PANEL_ADDED",
+            user=user,
+            details={
+                "panel_name": panel.name,
+                "key_mapping": panel.key_mapping
+            },
+            status="success"
+        )
+    except Exception as audit_error:
+        logging.error(f"Failed to log audit event: {audit_error}")
     return {"message": "Panel added"}
 
 @app.put("/panels/modify")
-def modify_panel(update: PanelUpdate):
+def modify_panel(update: PanelUpdate, request: Request):
     db = load_db()
+    user = get_current_user(request)
     for panel in db["panels"]:
         if panel["name"] == update.name:
+            old_panel = panel.copy()
             if update.key_mapping is not None:
                 panel["key_mapping"] = update.key_mapping
             if update.panel_headers is not None:
                 panel["panel_headers"] = update.panel_headers
             save_db(db)
+            # Audit log
+            try:
+                log_audit_event(
+                    action="PANEL_CONFIG_MODIFY",
+                    user=user,
+                    details={
+                        "panel_name": update.name,
+                        "old": old_panel,
+                        "new": panel
+                    },
+                    status="success"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             return {"message": "Panel updated"}
     raise HTTPException(status_code=404, detail="Panel not found")
 
 @app.delete("/panels/delete")
-def delete_panel(panel: PanelName):
+def delete_panel(panel: PanelName, request: Request):
     db = load_db()
+    user = get_current_user(request)
+    deleted_panel = next((p for p in db["panels"] if p["name"] == panel.name), None)
     db["panels"] = [p for p in db["panels"] if p["name"] != panel.name]
     save_db(db)
+    # Audit log
+    try:
+        log_audit_event(
+            action="PANEL_CONFIG_DELETE",
+            user=user,
+            details={
+                "panel_name": panel.name,
+                "deleted_panel": deleted_panel
+            },
+            status="success"
+        )
+    except Exception as audit_error:
+        logging.error(f"Failed to log audit event: {audit_error}")
     return {"message": "Panel deleted"}
 
 @app.post("/panels/upload_file")
@@ -255,8 +302,9 @@ def upload_panel_file(file: UploadFile = File(...)):
 #     return {"fields": headers}
 
 @app.post("/panels/save")
-def save_panel(panel: PanelCreate):
+def save_panel(panel: PanelCreate, request: Request):
     db = load_db()
+    user = get_current_user(request)
     if any(p["name"] == panel.name for p in db["panels"]):
         raise HTTPException(status_code=400, detail="Panel already exists")
     db["panels"].append({
@@ -267,7 +315,37 @@ def save_panel(panel: PanelCreate):
     # Create table in MySQL
     success, error = create_panel_table(panel.name, panel.panel_headers or [])
     if not success:
+        # Log audit event for MySQL table creation failure
+        try:
+            log_audit_event(
+                action="NEW_PANEL_ADDED",
+                user=user,
+                details={
+                    "panel_name": panel.name,
+                    "key_mapping": panel.key_mapping,
+                    "error": f"MySQL table creation failed: {error}"
+                },
+                status="failed"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
         raise HTTPException(status_code=500, detail=f"MySQL table creation failed: {error}")
+    
+    # Log audit event for successful panel save
+    try:
+        log_audit_event(
+            action="NEW_PANEL_ADDED",
+            user=user,
+            details={
+                "panel_name": panel.name,
+                "key_mapping": panel.key_mapping,
+                "panel_headers": panel.panel_headers
+            },
+            status="success"
+        )
+    except Exception as audit_error:
+        logging.error(f"Failed to log audit event: {audit_error}")
+    
     return {"message": "Panel configuration saved and table created"}
 
 @app.get("/panels/{panel_name}/headers")
@@ -326,6 +404,23 @@ def upload_sot(request: Request, file: UploadFile = File(...), sot_type: str = F
             reader.fieldnames = [h.strip().lower() for h in reader.fieldnames]
             rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
     except Exception as e:
+        # Log audit event for file processing failure
+        try:
+            log_audit_event(
+                action="FILE_PROCESSING_ERROR",
+                user=uploaded_by,
+                details={
+                    "panel_name": panel_name,
+                    "file_name": doc_name,
+                    "doc_id": doc_id,
+                    "error": f"Error processing file: {str(e)}",
+                    "upload_timestamp": timestamp
+                },
+                status="failed"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
+        
         return {"error": f"Error processing file: {str(e)}", "doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": "failed", "sot_type": sot_type}
     
     # Validate file structure against existing table (if table exists)
@@ -333,12 +428,79 @@ def upload_sot(request: Request, file: UploadFile = File(...), sot_type: str = F
         file_headers = list(rows[0].keys())
         is_valid, validation_error = validate_file_structure(sot_type, file_headers)
         if not is_valid:
+            # Log audit event for file structure validation failure
+            try:
+                log_audit_event(
+                    action="FILE_STRUCTURE_VALIDATION",
+                    user=uploaded_by,
+                    details={
+                        "sot_type": sot_type,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "uploaded_headers": file_headers,
+                        "validation_error": validation_error,
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
+            
             return {"error": validation_error, "doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": "failed", "sot_type": sot_type}
+        else:
+            # Log audit event for successful file structure validation
+            try:
+                log_audit_event(
+                    action="FILE_STRUCTURE_VALIDATION",
+                    user=uploaded_by,
+                    details={
+                        "sot_type": sot_type,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "uploaded_headers": file_headers,
+                        "validation_status": "passed",
+                        "upload_timestamp": timestamp
+                    },
+                    status="success"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
     
     # Insert into the correct SOT table (auto-create if needed)
     db_status, db_error = insert_sot_data_rows(sot_type, rows)
     status = "uploaded" if db_status else "failed"
     error_message = None if db_status else db_error
+    
+    # Log audit event
+    try:
+        if db_status:
+            log_audit_event(
+                action="SOT_UPLOAD",
+                user=uploaded_by,
+                details={
+                    "sot_type": sot_type,
+                    "file_name": doc_name,
+                    "doc_id": doc_id,
+                    "records_processed": len(rows) if rows else 0,
+                    "upload_timestamp": timestamp
+                },
+                status="success"
+            )
+        else:
+            log_audit_event(
+                action="SOT_UPLOAD",
+                user=uploaded_by,
+                details={
+                    "sot_type": sot_type,
+                    "file_name": doc_name,
+                    "doc_id": doc_id,
+                    "error": db_error,
+                    "upload_timestamp": timestamp
+                },
+                status="failed"
+            )
+    except Exception as audit_error:
+        logging.error(f"Failed to log audit event: {audit_error}")
     
     # Store metadata in JSON
     meta = {"doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": status, "sot_type": sot_type}
@@ -432,6 +594,22 @@ def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile
             rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
             total_records = max(len(lines) - 1, 0)  # Exclude header
     except Exception as e:
+        # Log audit event for file processing failure
+        try:
+            log_audit_event(
+                action="FILE_PROCESSING_ERROR",
+                user=uploaded_by,
+                details={
+                    "panel_name": panel_name,
+                    "file_name": doc_name,
+                    "doc_id": doc_id,
+                    "error": f"Error processing file: {str(e)}",
+                    "upload_timestamp": timestamp
+                },
+                status="failed"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
         return {"error": f"Error processing file: {str(e)}", "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": 0, "uploadedby": uploaded_by, "status": "failed"}
     
     # Determine status based on actual success/failure
@@ -442,17 +620,68 @@ def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile
     if not rows or len(rows) == 0:
         status = "failed"
         error_message = "No data found in uploaded file"
+        
+        # Log audit event for empty file
+        try:
+            log_audit_event(
+                action="EMPTY_FILE_UPLOAD",
+                user=uploaded_by,
+                details={
+                    "panel_name": panel_name,
+                    "file_name": doc_name,
+                    "doc_id": doc_id,
+                    "error": error_message,
+                    "upload_timestamp": timestamp
+                },
+                status="failed"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
     else:
         # Insert into panel table
         db_status, db_error = insert_panel_data_rows(panel_name, rows)
         if not db_status:
             status = "failed"
             error_message = db_error
+            
+            # Log audit event for database insertion failure
+            try:
+                log_audit_event(
+                    action="PANEL_UPLOAD",
+                    user=uploaded_by,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": db_error,
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
         else:
             # Check if all records were inserted successfully
             if len(rows) != total_records:
                 status = "failed"
                 error_message = f"Only {len(rows)} out of {total_records} records were processed"
+                
+                # Log audit event for partial processing
+                try:
+                    log_audit_event(
+                        action="PARTIAL_DATA_PROCESSING",
+                        user=uploaded_by,
+                        details={
+                            "panel_name": panel_name,
+                            "file_name": doc_name,
+                            "doc_id": doc_id,
+                            "error": error_message,
+                            "upload_timestamp": timestamp
+                        },
+                        status="failed"
+                    )
+                except Exception as audit_error:
+                    logging.error(f"Failed to log audit event: {audit_error}")
     
     meta = {
         "panelname": panel_name,
@@ -468,6 +697,23 @@ def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile
     if error_message:
         meta["error"] = error_message
         return {"error": error_message, **meta}
+    
+    # Log audit event for successful panel upload
+    try:
+        log_audit_event(
+            action="PANEL_UPLOAD",
+            user=uploaded_by,
+            details={
+                "panel_name": panel_name,
+                "file_name": doc_name,
+                "doc_id": doc_id,
+                "total_records": total_records,
+                "upload_timestamp": timestamp
+            },
+            status="success"
+        )
+    except Exception as audit_error:
+        logging.error(f"Failed to log audit event: {audit_error}")
     
     try:
         if not os.path.exists(RECON_HISTORY_PATH):
@@ -784,6 +1030,27 @@ def reconcile_panel_with_sot(request: Request, panel_name: str = Form(...)):
         # Update upload history status to reflect completion
         if status == "complete":
             update_upload_history_status(panel_name, "complete")
+        
+        # Log audit event
+        try:
+            log_audit_event(
+                action="RECONCILIATION",
+                user=performed_by,
+                details={
+                    "panel_name": panel_name,
+                    "recon_id": recon_id,
+                    "users_to_reconcile": len(users_to_reconcile),
+                    "matched": summary["matched"],
+                    "found_active": summary["found_active"],
+                    "found_inactive": summary["found_inactive"],
+                    "not_found": summary["not_found"],
+                    "recon_month": recon_month,
+                    "status": status
+                },
+                status="success" if status == "complete" else "failed"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
         
         return {
             "recon_id": recon_id,
@@ -1315,6 +1582,27 @@ def categorize_users(panel_name: str = Form(...)):
             raise HTTPException(status_code=500, detail=f"Database update failed: {str(e)}")
         
         logging.info(f"User categorization completed for panel '{panel_name}'. Summary: {summary}")
+        
+        # Log audit event
+        try:
+            log_audit_event(
+                action="USER_CATEGORIZATION",
+                user="system",  # This function doesn't have user context, using system
+                details={
+                    "panel_name": panel_name,
+                    "total_users": len(panel_rows),
+                    "service_users": summary["service_users"],
+                    "internal_users": summary["internal_users"],
+                    "thirdparty_users": summary["thirdparty_users"],
+                    "not_found": summary["not_found"],
+                    "successful_updates": len(updates),
+                    "errors": summary.get("errors", 0)
+                },
+                status="success"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
+        
         return {
             "message": "User categorization complete", 
             "summary": summary,
@@ -1331,17 +1619,39 @@ def categorize_users(panel_name: str = Form(...)):
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 
 
 @app.post("/recategorize_users")
-def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)):
+def recategorize_users(request: Request, panel_name: str = Form(...), file: UploadFile = File(...)):
     """
     Recategorize users in a panel based on an uploaded file.
     Matches panel users with the uploaded file and updates final_status column.
     If no match found, uses initial_status value.
     """
+    # Get current user for audit logging
+    user = get_current_user(request)
+    timestamp = get_ist_timestamp()
+    doc_id = str(uuid.uuid4())
+    doc_name = file.filename
+    
     try:
         # Load panel configuration
         db = load_db()
         panel = next((p for p in db["panels"] if p["name"] == panel_name), None)
         if not panel:
+            # Log audit event for panel not found
+            try:
+                log_audit_event(
+                    action="USER_RECATEGORIZATION",
+                    user=user,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": "Panel not found",
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=404, detail="Panel not found")
         
         # Process uploaded file
@@ -1370,6 +1680,22 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
                     except UnicodeDecodeError:
                         continue
                 if lines is None:
+                    # Log audit event for file processing failure
+                    try:
+                        log_audit_event(
+                            action="FILE_PROCESSING_ERROR",
+                            user=user,
+                            details={
+                                "panel_name": panel_name,
+                                "file_name": doc_name,
+                                "doc_id": doc_id,
+                                "error": "Unable to decode file. Please ensure it's a valid CSV or Excel file.",
+                                "upload_timestamp": timestamp
+                            },
+                            status="failed"
+                        )
+                    except Exception as audit_error:
+                        logging.error(f"Failed to log audit event: {audit_error}")
                     raise HTTPException(status_code=400, detail="Unable to decode file. Please ensure it's a valid CSV or Excel file.")
                 
                 import csv
@@ -1378,25 +1704,105 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
                 reader.fieldnames = [h.strip().lower() for h in reader.fieldnames]
                 recategorization_data = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
         except Exception as e:
+            # Log audit event for file processing failure
+            try:
+                log_audit_event(
+                    action="FILE_PROCESSING_ERROR",
+                    user=user,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": f"Error processing file: {str(e)}",
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=400, detail=f"Error processing file: {str(e)}")
         
         if not recategorization_data:
+            # Log audit event for empty file
+            try:
+                log_audit_event(
+                    action="EMPTY_FILE_UPLOAD",
+                    user=user,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": "No data found in uploaded file",
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=400, detail="No data found in uploaded file")
         
         # Get panel data
         panel_rows = fetch_all_rows(panel_name)
         if not panel_rows:
+            # Log audit event for no panel data
+            try:
+                log_audit_event(
+                    action="USER_RECATEGORIZATION",
+                    user=user,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": "No panel data found",
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=404, detail="No panel data found")
         
         # Determine match field from panel configuration
         # Use the first available mapping field as the match field
         key_mapping = panel.get("key_mapping", {})
         if not key_mapping:
+            # Log audit event for no key mapping
+            try:
+                log_audit_event(
+                    action="USER_RECATEGORIZATION",
+                    user=user,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": "No key mappings configured for this panel",
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=400, detail="No key mappings configured for this panel")
         
         # Get the first mapping to determine the match field
         first_mapping = next(iter(key_mapping.values()))
         if not first_mapping:
+            # Log audit event for invalid key mapping
+            try:
+                log_audit_event(
+                    action="USER_RECATEGORIZATION",
+                    user=user,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": "Invalid key mapping configuration",
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=400, detail="Invalid key mapping configuration")
         
         # Extract panel field from mapping
@@ -1413,6 +1819,22 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
                 break
         
         if not type_column:
+            # Log audit event for missing type column
+            try:
+                log_audit_event(
+                    action="USER_RECATEGORIZATION",
+                    user=user,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": "No type column found in uploaded file. Expected one of: type, user_type, status, category, final_status, classification",
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=400, detail="No type column found in uploaded file. Expected one of: type, user_type, status, category, final_status, classification")
         
         # Determine match column from uploaded file
@@ -1426,6 +1848,22 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
                 break
         
         if not match_column:
+            # Log audit event for missing match column
+            try:
+                log_audit_event(
+                    action="USER_RECATEGORIZATION",
+                    user=user,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": "No match column found in uploaded file. Expected one of: email, user_email, domain, id, user_id, employee_id",
+                        "upload_timestamp": timestamp
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=400, detail="No match column found in uploaded file. Expected one of: email, user_email, domain, id, user_id, employee_id")
         
         logging.info(f"Recategorization: panel_field='{panel_field}', match_column='{match_column}', type_column='{type_column}'")
@@ -1489,9 +1927,50 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
         # Update database
         success, error_msg = update_final_status_bulk(panel_name, updates, match_field=panel_field)
         if not success:
+            # Log audit event for database update failure
+            try:
+                log_audit_event(
+                    action="USER_RECATEGORIZATION",
+                    user=user,
+                    details={
+                        "panel_name": panel_name,
+                        "file_name": doc_name,
+                        "doc_id": doc_id,
+                        "error": f"Database update failed: {error_msg}",
+                        "upload_timestamp": timestamp,
+                        "summary": summary
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=500, detail=f"Database update failed: {error_msg}")
         
         logging.info(f"User recategorization completed for panel '{panel_name}'. Summary: {summary}")
+        
+        # Log audit event for successful recategorization
+        try:
+            log_audit_event(
+                action="USER_RECATEGORIZATION",
+                user=user,
+                details={
+                    "panel_name": panel_name,
+                    "file_name": doc_name,
+                    "doc_id": doc_id,
+                    "total_panel_users": len(panel_rows),
+                    "matched": summary["matched"],
+                    "not_found": summary["not_found"],
+                    "errors": summary["errors"],
+                    "successful_updates": len(updates),
+                    "match_column": match_column,
+                    "type_column": type_column,
+                    "panel_field": panel_field,
+                    "upload_timestamp": timestamp
+                },
+                status="success"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
         
         return {
             "message": "User recategorization complete",
@@ -1508,7 +1987,25 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
         raise
     except Exception as e:
         logging.error(f"Unexpected error in recategorize_users: {e}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 
+        
+        # Log audit event for unexpected error
+        try:
+            log_audit_event(
+                action="USER_RECATEGORIZATION",
+                user=user,
+                details={
+                    "panel_name": panel_name,
+                    "file_name": doc_name,
+                    "doc_id": doc_id,
+                    "error": f"Unexpected error: {str(e)}",
+                    "upload_timestamp": timestamp
+                },
+                status="failed"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
+        
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @app.get("/users/summary")
 def get_user_wise_summary():

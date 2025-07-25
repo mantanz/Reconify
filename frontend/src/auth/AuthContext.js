@@ -66,11 +66,29 @@ export function AuthProvider({ children }) {
     window.location.href = `${API_BASE}/auth/login/google`;
   };
 
-  const logout = () => {
-    localStorage.removeItem('access_token');
-    document.cookie = "access_token=; Max-Age=0; path=/;";
-    setUser(null);
-    window.location.reload();
+  const logout = async () => {
+    try {
+      const token = getToken();
+      if (token) {
+        // Call backend logout endpoint for audit logging
+        await fetch(`${API_BASE}/auth/logout`, {
+          method: 'POST',
+          credentials: "include",
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Continue with logout even if backend call fails
+    } finally {
+      // Clear local storage and cookies
+      localStorage.removeItem('access_token');
+      document.cookie = "access_token=; Max-Age=0; path=/;";
+      setUser(null);
+      window.location.reload();
+    }
   };
 
   return (

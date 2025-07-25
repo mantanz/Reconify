@@ -9,6 +9,7 @@ import AppLauncher from "./components/common/AppLauncher";
 import UserMenu from "./components/common/UserMenu";
 import Reconsummary from "./components/reconciliation/Reconsummary";
 import InitialSummary from "./components/summaries/InitialSummary";
+import AuditTrail from "./components/audit/AuditTrail";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import ProtectedRoute from "./auth/ProtectedRoute";
 
@@ -31,6 +32,7 @@ const NAV_ITEMS = [
     </div>
   ) },
   { key: "reconciliation", label: "Reconciliation", component: <Reconciliation /> },
+  { key: "audit_trail", label: "Audit Trail", component: <AuditTrail /> },
 ];
 
 function App() {

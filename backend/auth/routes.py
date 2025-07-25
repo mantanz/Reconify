@@ -9,11 +9,26 @@ from .models import User, Token
 import os
 import urllib.parse
 import httpx
+import logging
+from datetime import datetime, timezone, timedelta
+
+# Import audit functionality
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from audit import log_audit_event
 
 router = APIRouter()
 
 # OAuth setup
 oauth = OAuth()
+
+def get_ist_timestamp():
+    """Get current timestamp in Indian Standard Time (IST) format: dd-mm-yyyy hh:mm:ss"""
+    ist_offset = timedelta(hours=5, minutes=30)
+    utc_now = datetime.now(timezone.utc)
+    ist_time = utc_now.astimezone(timezone(ist_offset))
+    return ist_time.strftime("%d-%m-%Y %H:%M:%S")
 
 def init_oauth(app):
     """Initialize OAuth with the FastAPI app"""
@@ -42,6 +57,22 @@ async def login_via_google(request: Request):
         return await oauth.google.authorize_redirect(request, redirect_uri)
     except Exception as e:
         print(f"OAuth login error: {str(e)}")
+        # Log audit event for login failure
+        try:
+            log_audit_event(
+                action="LOGIN",
+                user="unknown",
+                details={
+                    "auth_method": "google_oauth",
+                    "error": f"OAuth login error: {str(e)}",
+                    "login_timestamp": get_ist_timestamp(),
+                    "ip_address": request.client.host if request.client else None,
+                    "user_agent": request.headers.get("user-agent")
+                },
+                status="failed"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
         raise HTTPException(status_code=500, detail=f"OAuth error: {str(e)}")
 
 @router.get('/auth/google/callback')
@@ -72,9 +103,41 @@ async def auth_google_callback(request: Request):
                         user_info = response.json()
                         print(f"Successfully got userinfo via manual request: {user_info.get('email')}")
                     else:
+                        # Log audit event for user info fetch failure
+                        try:
+                            log_audit_event(
+                                action="LOGIN",
+                                user="unknown",
+                                details={
+                                    "auth_method": "google_oauth",
+                                    "error": "Failed to fetch user info from Google",
+                                    "login_timestamp": get_ist_timestamp(),
+                                    "ip_address": request.client.host if request.client else None,
+                                    "user_agent": request.headers.get("user-agent")
+                                },
+                                status="failed"
+                            )
+                        except Exception as audit_error:
+                            logging.error(f"Failed to log audit event: {audit_error}")
                         raise HTTPException(status_code=400, detail="Failed to fetch user info from Google.")
         
         if not user_info:
+            # Log audit event for missing user info
+            try:
+                log_audit_event(
+                    action="LOGIN",
+                    user="unknown",
+                    details={
+                        "auth_method": "google_oauth",
+                        "error": "No user info received from Google",
+                        "login_timestamp": get_ist_timestamp(),
+                        "ip_address": request.client.host if request.client else None,
+                        "user_agent": request.headers.get("user-agent")
+                    },
+                    status="failed"
+                )
+            except Exception as audit_error:
+                logging.error(f"Failed to log audit event: {audit_error}")
             raise HTTPException(status_code=400, detail="Failed to fetch user info from Google.")
         
         # Create JWT token with real user data
@@ -83,6 +146,25 @@ async def auth_google_callback(request: Request):
             "name": user_info.get("name"), 
             "picture": user_info.get("picture")
         })
+        
+        # Log successful login
+        user_email = user_info.get("email") or user_info.get("sub")
+        try:
+            log_audit_event(
+                action="LOGIN",
+                user=user_email,
+                details={
+                    "user_email": user_email,
+                    "user_name": user_info.get("name"),
+                    "auth_method": "google_oauth",
+                    "login_timestamp": get_ist_timestamp(),
+                    "ip_address": request.client.host if request.client else None,
+                    "user_agent": request.headers.get("user-agent")
+                },
+                status="success"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
         
         # Redirect to frontend with token in URL for cross-port development
         response = RedirectResponse(url=f"http://localhost:3000?token={access_token}")
@@ -99,6 +181,22 @@ async def auth_google_callback(request: Request):
         return response
     except Exception as e:
         print(f"OAuth callback error: {str(e)}")
+        # Log audit event for callback error
+        try:
+            log_audit_event(
+                action="LOGIN",
+                user="unknown",
+                details={
+                    "auth_method": "google_oauth",
+                    "error": f"OAuth callback error: {str(e)}",
+                    "login_timestamp": get_ist_timestamp(),
+                    "ip_address": request.client.host if request.client else None,
+                    "user_agent": request.headers.get("user-agent")
+                },
+                status="failed"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
         raise HTTPException(status_code=500, detail=f"Callback error: {str(e)}")
 
 @router.get('/me', response_model=User)
@@ -119,4 +217,67 @@ async def get_me(request: Request):
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid token")
     
-    return User(email=payload["sub"], name=payload.get("name"), picture=payload.get("picture")) 
+    return User(email=payload["sub"], name=payload.get("name"), picture=payload.get("picture"))
+
+@router.post('/logout')
+async def logout(request: Request):
+    """Logout endpoint to log user logout"""
+    try:
+        # Get user info from token if available
+        user_email = "unknown"
+        token = request.cookies.get("access_token")
+        
+        if not token:
+            auth_header = request.headers.get("Authorization")
+            if auth_header and auth_header.startswith("Bearer "):
+                token = auth_header.split(" ")[1]
+        
+        if token:
+            try:
+                payload = verify_token(token)
+                if payload:
+                    user_email = payload.get("sub", "unknown")
+            except:
+                pass  # Token might be invalid, but we still want to log logout attempt
+        
+        # Log logout event
+        try:
+            log_audit_event(
+                action="LOGOUT",
+                user=user_email,
+                details={
+                    "user_email": user_email,
+                    "logout_timestamp": get_ist_timestamp(),
+                    "ip_address": request.client.host if request.client else None,
+                    "user_agent": request.headers.get("user-agent")
+                },
+                status="success"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
+        
+        # Create response to clear cookies
+        response = JSONResponse(content={"message": "Logged out successfully"})
+        response.delete_cookie(key="access_token", path="/")
+        
+        return response
+        
+    except Exception as e:
+        logging.error(f"Logout error: {str(e)}")
+        # Log logout failure
+        try:
+            log_audit_event(
+                action="LOGOUT",
+                user="unknown",
+                details={
+                    "error": f"Logout error: {str(e)}",
+                    "logout_timestamp": get_ist_timestamp(),
+                    "ip_address": request.client.host if request.client else None,
+                    "user_agent": request.headers.get("user-agent")
+                },
+                status="failed"
+            )
+        except Exception as audit_error:
+            logging.error(f"Failed to log audit event: {audit_error}")
+        
+        raise HTTPException(status_code=500, detail=f"Logout error: {str(e)}") 

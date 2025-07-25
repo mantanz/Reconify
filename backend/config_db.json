@@ -16,6 +16,72 @@
           "user_email": "domain"
         }
       }
+    },
+    {
+      "name": "OE Panel",
+      "key_mapping": {
+        "hr_data": {
+          "email": "department"
+        },
+        "internal_users": {
+          "email": "domain"
+        },
+        "service_users": {
+          "email": "email"
+        },
+        "thirdparty_users": {
+          "email": "domain"
+        }
+      }
+    },
+    {
+      "name": "OE Demo",
+      "key_mapping": {
+        "hr_data": {
+          "email": "email"
+        },
+        "internal_users": {
+          "email": "domain"
+        },
+        "service_users": {
+          "email": "email"
+        },
+        "thirdparty_users": {
+          "email": "domain"
+        }
+      }
+    },
+    {
+      "name": "demo",
+      "key_mapping": {
+        "hr_data": {
+          "email": "email"
+        }
+      }
+    },
+    {
+      "name": "demooe",
+      "key_mapping": {
+        "hr_data": {
+          "email": "email"
+        }
+      }
+    },
+    {
+      "name": "test_panel_save_20250724_190341",
+      "key_mapping": {
+        "hr_data": {
+          "email": "email"
+        }
+      }
+    },
+    {
+      "name": "test_panel_save_20250724_190402",
+      "key_mapping": {
+        "hr_data": {
+          "email": "email"
+        }
+      }
     }
   ]
 }

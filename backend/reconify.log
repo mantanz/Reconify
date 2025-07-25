@@ -5218,3 +5218,7 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-24 14:33:00,830 - root - INFO - User-wise summary completed. Total users: 1385
 2025-07-24 14:45:52,612 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
 2025-07-24 14:45:52,955 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 15:45:35,407 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 15:45:36,046 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-24 18:14:35,063 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-24 18:14:35,440 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"

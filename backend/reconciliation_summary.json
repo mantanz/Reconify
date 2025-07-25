@@ -22,5 +22,77 @@
       "found_inactive": 39,
       "not_found": 615
     }
+  },
+  {
+    "recon_id": "RCN_508c0a1c",
+    "panelname": "Seller Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "start_date": "2025-07-24",
+    "performed_by": "Charul Mauni",
+    "error": null,
+    "summary": {
+      "panel_name": "Seller Panel",
+      "total_panel_users": 5540,
+      "internal_users": 3936,
+      "not_found_users": 0,
+      "users_to_reconcile": 3936,
+      "other_users": 1604,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 1496,
+      "found_active": 1320,
+      "found_inactive": 156,
+      "not_found": 2440
+    }
+  },
+  {
+    "recon_id": "RCN_da767080",
+    "panelname": "Seller Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "start_date": "2025-07-24",
+    "performed_by": "Charul Mauni",
+    "error": null,
+    "summary": {
+      "panel_name": "Seller Panel",
+      "total_panel_users": 5540,
+      "internal_users": 3936,
+      "not_found_users": 0,
+      "users_to_reconcile": 3936,
+      "other_users": 1604,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 1496,
+      "found_active": 1320,
+      "found_inactive": 156,
+      "not_found": 2440
+    }
+  },
+  {
+    "recon_id": "RCN_0b6c8b47",
+    "panelname": "OE Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "start_date": "2025-07-24",
+    "performed_by": "Charul Mauni",
+    "error": null,
+    "summary": {
+      "panel_name": "OE Panel",
+      "total_panel_users": 3029,
+      "internal_users": 1927,
+      "not_found_users": 0,
+      "users_to_reconcile": 1927,
+      "other_users": 1102,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 0,
+      "found_active": 0,
+      "found_inactive": 0,
+      "not_found": 1927
+    }
   }
 ]
