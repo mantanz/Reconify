@@ -7,6 +7,25 @@ import { HiOutlineUpload } from 'react-icons/hi';
 import { BsBinocularsFill, BsCheckCircle, BsCheckCircleFill, BsCheck2All } from 'react-icons/bs';
 import "./tables.css";
 
+// Helper function to get auth headers
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('access_token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+};
+
+// Helper function for fetch with auth
+const fetchWithAuth = async (url, options = {}) => {
+  const headers = {
+    ...getAuthHeaders(),
+    ...options.headers
+  };
+  
+  return fetch(url, {
+    ...options,
+    headers
+  });
+};
+
 // Progress component for upload percentage
 function Progress({ percent }) {
   return (
@@ -159,7 +178,7 @@ export default function Reconciliation() {
     formData.append("panel_name", selectedPanel);
       formData.append("file", files[0]); // Upload first file
 
-      const res = await fetch("http://127.0.0.1:8000/recon/upload", {
+      const res = await fetchWithAuth("http://127.0.0.1:8000/recon/upload", {
         method: "POST",
         body: formData,
       });

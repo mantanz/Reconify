@@ -9,6 +9,7 @@ from ..utils.database import load_db, save_db
 from ..utils.datetime import get_ist_timestamp
 from ..config.paths import SOT_UPLOADS_PATH
 from ..auth.user_upload import get_current_user
+from ..utils.audit_logger import log_sot_upload
 from db.mysql_utils import insert_sot_data_rows
 
 router = APIRouter(prefix="/sot", tags=["source_of_truth"])
@@ -72,6 +73,15 @@ def upload_sot(
     db_status, db_error = insert_sot_data_rows(sot_type, rows)
     status = "uploaded" if db_status else "failed"
     error_message = None if db_status else db_error
+    
+    # Log audit event with proper status (success/failed)
+    audit_status = "success" if db_status else "failed"
+    audit_details = {
+        "file_size": len(contents),
+        "records_processed": len(rows),
+        "error": error_message
+    }
+    log_sot_upload(request, doc_name, sot_type, audit_status, audit_details)
     
     # Store metadata in JSON
     meta = {"doc_id": doc_id, "doc_name": doc_name, "uploaded_by": uploaded_by, "timestamp": timestamp, "status": status, "sot_type": sot_type}

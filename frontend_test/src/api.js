@@ -1,9 +1,28 @@
 const API_BASE = "http://127.0.0.1:8000";
 
+// Helper function to get auth headers
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('access_token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+};
+
+// Helper function for fetch with auth
+const fetchWithAuth = async (url, options = {}) => {
+  const headers = {
+    ...getAuthHeaders(),
+    ...options.headers
+  };
+  
+  return fetch(url, {
+    ...options,
+    headers
+  });
+};
+
 export async function uploadPanelFile(file) {
   const formData = new FormData();
   formData.append("file", file);
-  const res = await fetch(`${API_BASE}/panels/upload_file`, {
+  const res = await fetchWithAuth(`${API_BASE}/panels/upload_file`, {
     method: "POST",
     body: formData,
   });
@@ -11,12 +30,12 @@ export async function uploadPanelFile(file) {
 }
 
 export async function getHRFields() {
-  const res = await fetch(`${API_BASE}/hr_data/fields`);
+  const res = await fetchWithAuth(`${API_BASE}/hr_data/fields`);
   return res.json();
 }
 
 export async function savePanelConfig(data) {
-  const res = await fetch(`${API_BASE}/panels/save`, {
+  const res = await fetchWithAuth(`${API_BASE}/panels/save`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -25,12 +44,12 @@ export async function savePanelConfig(data) {
 }
 
 export async function getPanels() {
-  const res = await fetch(`${API_BASE}/panels`);
+  const res = await fetchWithAuth(`${API_BASE}/panels`);
   return res.json();
 }
 
 export async function modifyPanelConfig(data) {
-  const res = await fetch(`${API_BASE}/panels/modify`, {
+  const res = await fetchWithAuth(`${API_BASE}/panels/modify`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -39,7 +58,7 @@ export async function modifyPanelConfig(data) {
 }
 
 export async function deletePanelByName(name) {
-  const res = await fetch(`${API_BASE}/panels/delete`, {
+  const res = await fetchWithAuth(`${API_BASE}/panels/delete`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),
@@ -48,7 +67,7 @@ export async function deletePanelByName(name) {
 }
 
 export async function getPanelHeaders(panelName) {
-  const res = await fetch(`http://127.0.0.1:8000/panels/${encodeURIComponent(panelName)}/headers`);
+  const res = await fetchWithAuth(`http://127.0.0.1:8000/panels/${encodeURIComponent(panelName)}/headers`);
   if (!res.ok) {
     throw new Error(`Failed to fetch panel headers: ${res.statusText}`);
   }
@@ -56,7 +75,7 @@ export async function getPanelHeaders(panelName) {
 }
 
 export async function getSOTFields(sotType) {
-  const res = await fetch(`${API_BASE}/sot/fields/${sotType}`);
+  const res = await fetchWithAuth(`${API_BASE}/sot/fields/${sotType}`);
   if (!res.ok) {
     throw new Error(`Failed to fetch SOT fields: ${res.statusText}`);
   }
@@ -64,13 +83,13 @@ export async function getSOTFields(sotType) {
 }
 
 export async function getSOTList() {
-  const res = await fetch(`${API_BASE}/sot/list`);
+  const res = await fetchWithAuth(`${API_BASE}/sot/list`);
   return res.json();
 }
 
 // Fetch panel config by name
 export async function getPanelConfig(panelName) {
-  const res = await fetch(`${API_BASE}/panels`);
+  const res = await fetchWithAuth(`${API_BASE}/panels`);
   const panels = await res.json();
   return panels.find(p => p.name === panelName);
 }
@@ -79,7 +98,7 @@ export async function getPanelConfig(panelName) {
 export async function categorizeUsers(panelName) {
   const formData = new FormData();
   formData.append("panel_name", panelName);
-  const res = await fetch(`http://localhost:8000/categorize_users`, {
+  const res = await fetchWithAuth(`http://localhost:8000/categorize_users`, {
     method: "POST",
     body: formData,
   });
@@ -90,7 +109,7 @@ export async function categorizeUsers(panelName) {
 export async function reconcilePanelWithHR(panelName) {
   const formData = new FormData();
   formData.append("panel_name", panelName);
-  const res = await fetch(`${API_BASE}/recon/process`, {
+  const res = await fetchWithAuth(`${API_BASE}/recon/process`, {
     method: "POST",
     body: formData,
   });
@@ -99,19 +118,19 @@ export async function reconcilePanelWithHR(panelName) {
 
 // Fetch all panel upload history
 export async function getAllReconHistory() {
-  const res = await fetch(`${API_BASE}/panels/upload_history`);
+  const res = await fetchWithAuth(`${API_BASE}/panels/upload_history`);
   return res.json();
 }
 
 // Fetch all reconciliation summaries (excluding details)
 export async function getReconSummaries() {
-  const res = await fetch(`${API_BASE}/recon/summary`);
+  const res = await fetchWithAuth(`${API_BASE}/recon/summary`);
   return res.json();
 }
 
 // Fetch panel details including configuration, data, and history
 export async function getPanelDetails(panelName) {
-  const res = await fetch(`${API_BASE}/panels/${encodeURIComponent(panelName)}/details`);
+  const res = await fetchWithAuth(`${API_BASE}/panels/${encodeURIComponent(panelName)}/details`);
   if (!res.ok) {
     throw new Error(`Failed to fetch panel details: ${res.statusText}`);
   }
@@ -120,7 +139,7 @@ export async function getPanelDetails(panelName) {
 
 // Fetch reconciliation summary details by recon_id
 export async function getReconSummaryDetail(reconId) {
-  const res = await fetch(`${API_BASE}/recon/summary/${reconId}`);
+  const res = await fetchWithAuth(`${API_BASE}/recon/summary/${reconId}`);
   return res.json();
 }
 
@@ -129,7 +148,7 @@ export async function recategorizeUsers(panelName, file) {
   const formData = new FormData();
   formData.append("panel_name", panelName);
   formData.append("file", file);
-  const res = await fetch(`${API_BASE}/recategorize_users`, {
+  const res = await fetchWithAuth(`${API_BASE}/recategorize_users`, {
     method: "POST",
     body: formData,
   });
@@ -141,7 +160,7 @@ export async function recategorizeUsers(panelName, file) {
 
 // Get user-wise summary across all panels
 export async function getUserWiseSummary() {
-  const res = await fetch(`${API_BASE}/users/summary`);
+  const res = await fetchWithAuth(`${API_BASE}/users/summary`);
   if (!res.ok) {
     throw new Error(`Failed to fetch user summary: ${res.statusText}`);
   }

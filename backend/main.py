@@ -17,6 +17,7 @@ from app.api.sot import router as sot_router
 from app.api.reconciliation import router as reconciliation_router
 from app.api.debug import router as debug_router
 from app.api.users import router as users_router
+from app.audit_trails.routes import router as audit_router
 
 app = FastAPI()
 
@@ -38,6 +39,7 @@ app.include_router(sot_router)
 app.include_router(reconciliation_router)
 app.include_router(debug_router)
 app.include_router(users_router)
+app.include_router(audit_router, prefix="/audit", tags=["audit"])
 
 if __name__ == "__main__":
     import uvicorn

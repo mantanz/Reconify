@@ -6,6 +6,7 @@ from authlib.integrations.starlette_client import OAuth
 from .config import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_DISCOVERY_URL
 from .auth_handler import create_access_token, verify_token
 from .models import User, Token
+from ..utils.audit_logger import log_user_login
 import os
 import urllib.parse
 import httpx
@@ -92,6 +93,10 @@ async def auth_google_callback(request: Request):
             "name": user_info.get("name"), 
             "picture": user_info.get("picture")
         })
+        
+        # Log successful login
+        user_email = user_info.get("email") or user_info.get("sub")
+        log_user_login(request, user_email, "success")
         
         # Redirect to frontend with token in URL for cross-port development
         response = RedirectResponse(url=f"http://localhost:3000?token={access_token}")

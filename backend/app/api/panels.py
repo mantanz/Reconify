@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, File, Request
 from typing import List
 import os
 import csv
@@ -8,6 +8,7 @@ import pandas as pd
 from app.schemas.panel import PanelConfig, PanelName, PanelUpdate, PanelCreate
 from app.utils.database import load_db, save_db
 from app.config.paths import RECON_HISTORY_PATH
+from app.utils.audit_logger import log_panel_config_save, log_panel_config_modify, log_panel_config_delete
 from db.mysql_utils import create_panel_table, get_panel_headers_from_db, fetch_all_rows
 
 router = APIRouter(prefix="/panels", tags=["panels"])
@@ -20,34 +21,48 @@ def get_panels():
 
 
 @router.post("/add")
-def add_panel(panel: PanelConfig):
+def add_panel(request: Request, panel: PanelConfig):
     db = load_db()
     if any(p["name"] == panel.name for p in db["panels"]):
         raise HTTPException(status_code=400, detail="Panel already exists")
     db["panels"].append(panel.dict())
     save_db(db)
+    
+    # Log audit event
+    log_panel_config_save(request, panel.name, panel.dict(), "success")
+    
     return {"message": "Panel added"}
 
 
 @router.put("/modify")
-def modify_panel(update: PanelUpdate):
+def modify_panel(request: Request, update: PanelUpdate):
     db = load_db()
     for panel in db["panels"]:
         if panel["name"] == update.name:
+            old_config = panel.copy()
             if update.key_mapping is not None:
                 panel["key_mapping"] = update.key_mapping
             if update.panel_headers is not None:
                 panel["panel_headers"] = update.panel_headers
             save_db(db)
+            
+            # Log audit event
+            new_config = panel.copy()
+            log_panel_config_modify(request, update.name, old_config, new_config, "success")
+            
             return {"message": "Panel updated"}
     raise HTTPException(status_code=404, detail="Panel not found")
 
 
 @router.delete("/delete")
-def delete_panel(panel: PanelName):
+def delete_panel(request: Request, panel: PanelName):
     db = load_db()
     db["panels"] = [p for p in db["panels"] if p["name"] != panel.name]
     save_db(db)
+    
+    # Log audit event
+    log_panel_config_delete(request, panel.name, "success")
+    
     return {"message": "Panel deleted"}
 
 

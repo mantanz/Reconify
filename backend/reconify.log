@@ -5195,3 +5195,87 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-25 11:25:57,524 - root - INFO - User-wise summary completed. Total users: 1385
 2025-07-25 11:25:57,693 - root - INFO - Processed 1385 users from panel: Seller Panel
 2025-07-25 11:25:57,694 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-25 12:30:54,590 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:31:23,186 - app.audit_trails.audit_utils - ERROR - Failed to create audit trail table: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:31:23,187 - app.audit_trails.audit_utils - ERROR - Failed to log audit event: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:31:23,188 - app.utils.audit_logger - ERROR - Failed to log audit: SOT_UPLOAD by demo
+2025-07-25 12:31:33,829 - app.audit_trails.audit_utils - ERROR - Failed to create audit trail table: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:31:33,830 - app.audit_trails.audit_utils - ERROR - Failed to log audit event: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:31:33,830 - app.utils.audit_logger - ERROR - Failed to log audit: SOT_UPLOAD by demo
+2025-07-25 12:31:40,704 - app.audit_trails.audit_utils - ERROR - Failed to get audit summary: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:31:40,705 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:31:40,708 - app.audit_trails.audit_utils - ERROR - Failed to get audit summary: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:31:40,708 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:32:48,874 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:32:48,874 - app.audit_trails.audit_utils - ERROR - Failed to get audit summary: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:32:48,879 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:32:48,879 - app.audit_trails.audit_utils - ERROR - Failed to get audit summary: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:33:57,852 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:35:31,843 - app.audit_trails.audit_utils - ERROR - Failed to create audit trail table: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:35:31,844 - app.audit_trails.audit_utils - ERROR - Failed to log audit event: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:35:31,844 - app.utils.audit_logger - ERROR - Failed to log audit: SOT_UPLOAD by demo
+2025-07-25 12:35:33,472 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:35:33,472 - app.audit_trails.audit_utils - ERROR - Failed to get audit summary: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:35:33,479 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:35:33,479 - app.audit_trails.audit_utils - ERROR - Failed to get audit summary: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:36:27,387 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:37:01,202 - app.audit_trails.audit_utils - ERROR - Failed to create audit trail table: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:37:01,203 - app.audit_trails.audit_utils - ERROR - Failed to log audit event: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:37:01,203 - app.utils.audit_logger - ERROR - Failed to log audit: SOT_UPLOAD by demo
+2025-07-25 12:37:09,623 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:37:53,628 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:38:09,694 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:38:46,686 - app.audit_trails.audit_utils - ERROR - Failed to retrieve audit trail: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-25 12:40:21,257 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 12:40:21,284 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - uploaded
+2025-07-25 12:40:21,284 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - uploaded
+2025-07-25 12:40:47,441 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-25 12:40:48,430 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 12:40:48,513 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-25 12:40:48,666 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 12:40:48,710 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 12:40:48,731 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 12:40:48,732 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 12:40:50,398 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 12:40:50,399 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 12:40:50,538 - root - INFO - Processed 2770 users from panel: Seller Panel
+2025-07-25 12:40:50,539 - root - INFO - User-wise summary completed. Total users: 2770
+2025-07-25 12:41:08,154 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 12:41:08,178 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - uploaded
+2025-07-25 12:41:08,178 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - uploaded
+2025-07-25 12:47:34,145 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 12:47:34,194 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - uploaded
+2025-07-25 12:47:34,194 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - uploaded
+2025-07-25 12:49:01,344 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 12:49:01,363 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 12:49:01,363 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 12:59:29,371 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 12:59:29,389 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 12:59:29,390 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success

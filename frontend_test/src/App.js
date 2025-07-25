@@ -5,6 +5,7 @@ import Reconciliation from "./Reconciliation";
 import UserSummary from "./UserSummary";
 import AppLauncher from "./AppLauncher";
 import Reconsummary from "./Reconsummary";
+import AuditTrail from "./components/common/AuditTrail";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import Login from "./auth/Login";
 
@@ -21,7 +22,7 @@ const NAV_ITEMS = [
       <UserSummary />
     </div>
   ) },
-  { key: "audit_trails", label: "Audit Trails", component: null },
+  { key: "audit_trails", label: "Audit Trails", component: <AuditTrail /> },
 ];
 
 function AppContent() {
@@ -56,7 +57,7 @@ function AppContent() {
 
   // Show loading spinner while checking authentication
   if (loading) {
-    return (
+        return (
       <div style={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%)',
@@ -78,14 +79,14 @@ function AppContent() {
             100% { transform: rotate(360deg); }
           }
         `}</style>
-      </div>
-    );
+          </div>
+        );
   }
 
   // Show login page if not authenticated
   if (!user) {
     return <Login />;
-  }
+    }
 
   const renderContent = () => {
     const selectedItem = NAV_ITEMS.find(item => item.key === selected);
@@ -454,16 +455,16 @@ function AppContent() {
               <div style={{
                 width: 32,
                 height: 32,
-                background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)",
+              background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)",
                 borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#fff",
-                fontWeight: "bold",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontWeight: "bold",
                 fontSize: 14,
                 boxShadow: "0 2px 8px rgba(0, 180, 216, 0.3)"
-              }}>
+            }}>
                 {user?.picture ? (
                   <img 
                     src={user.picture} 

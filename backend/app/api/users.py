@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Request
 import json
 import os
 import csv
@@ -13,6 +13,7 @@ from db.mysql_utils import (
     update_initial_status_bulk,
     update_final_status_bulk
 )
+from ..utils.audit_logger import log_user_recategorization
 
 router = APIRouter(tags=["users"])
 
@@ -265,7 +266,7 @@ def categorize_users(panel_name: str = Form(...)):
 
 
 @router.post("/recategorize_users")
-def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)):
+def recategorize_users(request: Request, panel_name: str = Form(...), file: UploadFile = File(...)):
     """
     Recategorize users in a panel based on an uploaded file.
     Matches panel users with the uploaded file and updates final_status column.
@@ -422,6 +423,16 @@ def recategorize_users(panel_name: str = Form(...), file: UploadFile = File(...)
         success, error_msg = update_final_status_bulk(panel_name, updates, match_field=panel_field)
         if not success:
             raise HTTPException(status_code=500, detail=f"Database update failed: {error_msg}")
+        
+        # Log audit event
+        audit_details = {
+            "records_processed": len(panel_rows),
+            "recategorization_results": summary,
+            "match_column": match_column,
+            "type_column": type_column,
+            "panel_field": panel_field
+        }
+        log_user_recategorization(request, panel_name, file.filename, "success", audit_details)
         
         logging.info(f"User recategorization completed for panel '{panel_name}'. Summary: {summary}")
         

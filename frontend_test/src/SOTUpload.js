@@ -3,6 +3,25 @@ import { parseISTTimestamp } from "./utils";
 import { FiUpload, FiRefreshCw } from 'react-icons/fi';
 import "./tables.css";
 
+// Helper function to get auth headers
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('access_token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+};
+
+// Helper function for fetch with auth
+const fetchWithAuth = async (url, options = {}) => {
+  const headers = {
+    ...getAuthHeaders(),
+    ...options.headers
+  };
+  
+  return fetch(url, {
+    ...options,
+    headers
+  });
+};
+
 export default function SOTUpload() {
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState(null);
@@ -15,7 +34,7 @@ export default function SOTUpload() {
 
   useEffect(() => {
     // Fetch SOT list from backend
-    fetch("http://127.0.0.1:8000/sot/list")
+    fetchWithAuth("http://127.0.0.1:8000/sot/list")
       .then(res => res.json())
       .then(data => {
         setSotList(data.sots || []);
@@ -26,7 +45,7 @@ export default function SOTUpload() {
   const fetchHistory = async () => {
     try {
       console.log("Fetching SOT upload history...");
-      const res = await fetch("http://127.0.0.1:8000/sot/uploads");
+      const res = await fetchWithAuth("http://127.0.0.1:8000/sot/uploads");
       const data = await res.json();
       console.log("Fetched SOT upload data:", data);
       setHistory(Array.isArray(data) ? data : []);
@@ -97,7 +116,7 @@ export default function SOTUpload() {
       // Get row counts for each SOT
       for (const sot of Object.keys(metadata)) {
         try {
-          const res = await fetch(`http://127.0.0.1:8000/debug/sot/${sot}`);
+          const res = await fetchWithAuth(`http://127.0.0.1:8000/debug/sot/${sot}`);
           const sotData = await res.json();
           metadata[sot].rowCount = sotData.row_count || 0;
         } catch (e) {
@@ -133,7 +152,7 @@ export default function SOTUpload() {
     formData.append("file", file);
     formData.append("sot_type", sotType);
     try {
-      const res = await fetch("http://127.0.0.1:8000/sot/upload", {
+      const res = await fetchWithAuth("http://127.0.0.1:8000/sot/upload", {
         method: "POST",
         body: formData,
       });

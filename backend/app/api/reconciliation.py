@@ -12,6 +12,7 @@ from ..utils.datetime import get_ist_timestamp, format_ist_timestamp
 from ..utils.history import update_upload_history_status
 from ..config.paths import RECON_HISTORY_PATH, RECON_SUMMARY_PATH
 from ..auth.user_upload import get_current_user
+from ..utils.audit_logger import log_panel_upload, log_reconciliation, log_user_recategorization
 from db.mysql_utils import (
     insert_panel_data_rows, 
     get_panel_headers_from_db, 
@@ -87,6 +88,15 @@ def upload_recon(
                 status = "failed"
                 error_message = f"Only {len(rows)} out of {total_records} records were processed"
     
+    # Log audit event with proper status (success/failed)
+    audit_status = "success" if status != "failed" else "failed"
+    audit_details = {
+        "file_size": len(contents),
+        "records_processed": len(rows),
+        "error": error_message
+    }
+    log_panel_upload(request, panel_name, doc_name, audit_status, audit_details)
+    
     meta = {
         "panelname": panel_name,
         "docid": doc_id,
@@ -142,7 +152,7 @@ def get_recon_summary_detail(recon_id: str = Path(...)):
 
 
 @router.post("/process")
-def reconcile_panel_with_sot(panel_name: str = Form(...)):
+def reconcile_panel_with_sot(request: Request, panel_name: str = Form(...)):
     """
     Reconcile internal users and not found users from panel with HR data.
     Processes records where initial_status indicates internal users or not found users.
@@ -358,6 +368,16 @@ def reconcile_panel_with_sot(panel_name: str = Form(...)):
             error = f"Failed to save reconciliation record: {str(e)}"
             recon_record["status"] = status
             recon_record["error"] = error
+        
+        # Log audit event with proper status (success/failed)
+        audit_status = "success" if status == "complete" else "failed"
+        audit_details = {
+            "total_users": len(panel_rows),
+            "users_to_reconcile": len(users_to_reconcile),
+            "reconciliation_results": summary,
+            "error": error
+        }
+        log_reconciliation(request, panel_name, audit_status, audit_details)
         
         logging.info(f"HR reconciliation completed for panel '{panel_name}'. Status: {status}, Summary: {summary}")
         
