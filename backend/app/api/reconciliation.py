@@ -1,16 +1,17 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Path
-import json
 import os
-import csv
-import logging
-import pandas as pd
+import json
 import uuid
+import logging
+import csv
+import pandas as pd
+from fastapi import APIRouter, File, UploadFile, Form, HTTPException, Request, Path, Depends
 from datetime import datetime, timezone, timedelta
 
-from app.utils.datetime import get_ist_timestamp, format_ist_timestamp
-from app.utils.database import load_db
-from app.utils.history import update_upload_history_status
-from app.config.paths import RECON_HISTORY_PATH, RECON_SUMMARY_PATH
+from ..utils.database import load_db, save_db
+from ..utils.datetime import get_ist_timestamp, format_ist_timestamp
+from ..utils.history import update_upload_history_status
+from ..config.paths import RECON_HISTORY_PATH, RECON_SUMMARY_PATH
+from ..auth.user_upload import get_current_user
 from db.mysql_utils import (
     insert_panel_data_rows, 
     get_panel_headers_from_db, 
@@ -23,10 +24,14 @@ router = APIRouter(prefix="/recon", tags=["reconciliation"])
 
 
 @router.post("/upload")
-def upload_recon(panel_name: str = File(...), file: UploadFile = File(...)):
+def upload_recon(
+    request: Request,
+    panel_name: str = File(...), 
+    file: UploadFile = File(...)
+):
     doc_id = str(uuid.uuid4())
     doc_name = file.filename
-    uploaded_by = "demo"
+    uploaded_by = get_current_user(request)
     timestamp = get_ist_timestamp()
     filename = file.filename.lower()
     contents = file.file.read()

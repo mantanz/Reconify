@@ -5135,3 +5135,63 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-24 16:31:11,233 - root - INFO - Processed 1385 users from panel: Seller Panel
 2025-07-24 16:31:11,234 - root - INFO - User-wise summary completed. Total users: 1385
 2025-07-24 16:31:15,800 - root - INFO - Fetched 1385 rows for panel 'Seller Panel'
+2025-07-24 16:39:56,920 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 16:39:56,921 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-24 16:39:57,082 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-24 16:39:57,083 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-25 01:08:22,283 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 01:08:22,550 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 01:09:04,060 - sqlalchemy.pool.impl.QueuePool - ERROR - Exception during reset or similar
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 987, in _finalize_fairy
+    fairy._reset(
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 1433, in _reset
+    pool._dialect.do_rollback(self)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/engine/default.py", line 703, in do_rollback
+    dbapi_connection.rollback()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 493, in rollback
+    self._read_ok_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 453, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 744, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 798, in _read_bytes
+    raise err.OperationalError(
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
+2025-07-25 01:09:21,188 - sqlalchemy.pool.impl.QueuePool - ERROR - Exception during reset or similar
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 987, in _finalize_fairy
+    fairy._reset(
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 1433, in _reset
+    pool._dialect.do_rollback(self)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/engine/default.py", line 703, in do_rollback
+    dbapi_connection.rollback()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 493, in rollback
+    self._read_ok_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 453, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 744, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 798, in _read_bytes
+    raise err.OperationalError(
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
+2025-07-25 10:48:16,264 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 10:48:16,467 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 10:48:26,787 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-25 10:48:26,788 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-25 10:48:26,944 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-25 10:48:26,945 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-25 11:07:30,178 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-25 11:07:30,180 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-25 11:07:30,308 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-25 11:07:30,309 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-25 11:20:26,958 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 11:20:27,150 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 11:25:10,515 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-25 11:25:11,623 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 11:25:11,760 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-25 11:25:12,116 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 11:25:57,522 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-25 11:25:57,524 - root - INFO - User-wise summary completed. Total users: 1385
+2025-07-25 11:25:57,693 - root - INFO - Processed 1385 users from panel: Seller Panel
+2025-07-25 11:25:57,694 - root - INFO - User-wise summary completed. Total users: 1385

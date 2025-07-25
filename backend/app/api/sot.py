@@ -1,25 +1,29 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
-import json
 import os
-import csv
-import logging
-import pandas as pd
+import json
 import uuid
+import logging
+import csv
+import pandas as pd
+from fastapi import APIRouter, File, UploadFile, Form, HTTPException, Request, Depends
+from ..utils.database import load_db, save_db
+from ..utils.datetime import get_ist_timestamp
+from ..config.paths import SOT_UPLOADS_PATH
+from ..auth.user_upload import get_current_user
+from db.mysql_utils import insert_sot_data_rows
 
-from app.utils.datetime import get_ist_timestamp
-from app.utils.database import load_db
-from app.config.paths import SOT_UPLOADS_PATH
-from db.mysql_utils import insert_sot_data_rows, get_panel_headers_from_db
-
-router = APIRouter(prefix="/sot", tags=["sot"])
+router = APIRouter(prefix="/sot", tags=["source_of_truth"])
 
 
 @router.post("/upload")
-def upload_sot(file: UploadFile = File(...), sot_type: str = Form("hr_data")):
+def upload_sot(
+    request: Request,
+    file: UploadFile = File(...), 
+    sot_type: str = Form("hr_data")
+):
     # Generate doc_id and metadata
     doc_id = str(uuid.uuid4())
     doc_name = file.filename
-    uploaded_by = "demo"
+    uploaded_by = get_current_user(request)
     timestamp = get_ist_timestamp()
     status = "uploaded"
     filename = file.filename.lower()
