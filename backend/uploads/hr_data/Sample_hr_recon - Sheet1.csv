@@ -1,0 +1,501 @@
+employee_id,name,department,email,employment_status
+EMP001,Harjeet Singh,Information Technology,harjeet1.singh@paytm.com,Active
+EMP002,Rajesh Kumar,Customer Service,paytmapp.bd001@paytm.com,Active
+EMP003,Priya Sharma,Digital Marketing,paytmapp.bd002@paytm.com,Active
+EMP004,Amit Patel,Operations,paytmapp.bd003@paytm.com,Active
+EMP005,Neha Gupta,Human Resources,paytmapp.bd004@paytm.com,Active
+EMP006,Suresh Singh,Finance,paytmapp.bd005@paytm.com,Active
+EMP007,Kavita Mehta,Customer Support,disha.bhartaria@paytm.com,Inactive
+EMP008,Rohit Jain,Product Management,dheerendra.mishra@paytm.com,Active
+EMP009,Anjali Verma,Quality Assurance,paytmapp.bd007@paytm.com,Active
+EMP010,Vikram Rao,Business Development,paytmapp.bd011@paytm.com,Active
+EMP011,Deepika Agarwal,Legal,paytmapp.bd012@paytm.com,Active
+EMP012,Manish Tiwari,Engineering,paytmapp.bd008@paytm.com,Inactive
+EMP013,Ritu Bansal,Sales,paytmapp.bd009@paytm.com,Active
+EMP014,Arun Mishra,Data Analytics,paytmapp.bd0010@paytm.com,Active
+EMP015,Pooja Kapoor,Marketing,paytmapp.bd018@paytm.com,Active
+EMP016,Sanjay Yadav,Information Technology,salesforcesystemadmin@paytm.com,Active
+EMP017,Meera Joshi,Customer Service,palash.kulshreshtha@paytm.com,Active
+EMP018,Ashish Srivastava,Digital Marketing,movies@paytm.com,Inactive
+EMP019,Sonali Dubey,Operations,aziz.zaidi@paytm.com,Active
+EMP020,Karan Chopra,Human Resources,rachna@paytm.com,Active
+EMP021,Shruti Pandey,Finance,kavender.kumar@paytm.com,Active
+EMP022,Rahul Saxena,Customer Support,ankur.tyagi@paytmpayments.com,Active
+EMP023,Nisha Arora,Product Management,marketcarriers@paytm.com,Active
+EMP024,Vinay Bhardwaj,Quality Assurance,travelpartners@paytm.com,Inactive
+EMP025,Swati Malhotra,Business Development,anant.bhavsar@paytmpayments.com,Active
+EMP026,Gaurav Chandra,Legal,ffservice.vinculum@paytm.com,Active
+EMP027,Priyanka Nair,Engineering,kapil.bhati@paytm.com,Active
+EMP028,Nitin Goyal,Sales,salesforce.tickets@paytm.com,Active
+EMP029,Rashmi Iyer,Data Analytics,gaurav.malpani@paytm.com,Active
+EMP030,Vivek Reddy,Marketing,ffdelhivery_lucknow@paytm.com,Active
+EMP031,Ankita Bajaj,Information Technology,ffdelhivery_guwahati@paytm.com,Active
+EMP032,Deepak Bhatt,Customer Service,ffdelhivery_cochin@paytm.com,Inactive
+EMP033,Shweta Khurana,Digital Marketing,ffdelhivery_delhi@paytm.com,Active
+EMP034,Manoj Tripathi,Operations,service.payout@paytm.com,Active
+EMP035,Vaishali Garg,Human Resources,kingcobra.alerts@paytm.com,Active
+EMP036,Ajay Thakur,Finance,chandra.prakash@paytm.com,Active
+EMP037,Kritika Sinha,Customer Support,ivr.api@paytm.com,Active
+EMP038,Devesh Shukla,Product Management,oldpanel@paytm.com,Active
+EMP039,Pallavi Bose,Quality Assurance,shivam.singh@paytm.com,Active
+EMP040,Tarun Mishra,Business Development,ravi.yadav@paytm.com,Inactive
+EMP041,Archana Rawat,Legal,flights.dev@paytm.com,Active
+EMP042,Yogesh Chauhan,Engineering,abhinav1.gupta@paytm.com,Active
+EMP043,Divya Agarwal,Sales,hotel.admin@paytm.com,Active
+EMP044,Mukesh Jain,Data Analytics,movies.admin@paytm.com,Active
+EMP045,Ruchi Kalra,Marketing,ajeet.chauhan@paytm.com,Active
+EMP046,Santosh Verma,Information Technology,hotels.admin@paytm.com,Active
+EMP047,Preeti Sharma,Customer Service,ffservice.gati@paytm.com,Active
+EMP048,Harsh Gupta,Digital Marketing,brand.training1@paytm.com,Active
+EMP049,Anita Singh,Operations,brand.training2@paytm.com,Inactive
+EMP050,Sumit Bansal,Human Resources,deepti.aggarwal@paytm.com,Active
+EMP051,Kamlesh Rao,Finance,anchal@paytm.com,Active
+EMP052,Sonal Mehta,Customer Support,Beta447526@paytm.com,Active
+EMP053,Ravi Pandey,Product Management,events.admin@paytm.com,Active
+EMP054,Geeta Tiwari,Quality Assurance,logistics.admin@paytm.com,Active
+EMP055,Anand Kumar,Business Development,diy.return@paytm.com,Active
+EMP056,Sneha Kapoor,Legal,paytm.playstore@one97.net,Active
+EMP057,Pankaj Soni,Engineering,mktqa.auto@paytm.com,Inactive
+EMP058,Vandana Ghosh,Sales,ffservice-dtdc@paytm.com,Active
+EMP059,Sachin Joshi,Data Analytics,mayank1.tyagi@paytm.com,Active
+EMP060,Lakshmi Pillai,Marketing,ffdtdc_delhi@paytm.com,Active
+EMP061,Rohit Agarwal,Information Technology,ffdtdc_bangalore@paytm.com,Active
+EMP062,Asha Kumari,Customer Service,Uttam.rawat@paytm.com,Active
+EMP063,Deepanshu Goyal,Digital Marketing,saurabh2.gupta@paytm.com,Active
+EMP064,Manisha Saxena,Operations,deepak6.kumar@paytm.com,Active
+EMP065,Nikhil Bhardwaj,Human Resources,Kumar.vinit@paytm.com,Inactive
+EMP066,Sunita Malhotra,Finance,ankur2.pandey@paytm.com,Active
+EMP067,Abhishek Chandra,Customer Support,flights.admin@paytm.com,Active
+EMP068,Smriti Nair,Product Management,fc.delhivery@paytm.com,Active
+EMP069,Rajat Goyal,Quality Assurance,wealthmgmt.tech@paytm.com,Active
+EMP070,Poornima Iyer,Business Development,sarfraz.alam@paytm.com,Active
+EMP071,Akash Reddy,Legal,prashant2.sharma@paytm.com,Active
+EMP072,Kavya Bajaj,Engineering,harsh.rawat@paipai.mobi,Active
+EMP073,Subhash Bhatt,Sales,trains.admin@paytm.com,Active
+EMP074,Richa Khurana,Data Analytics,mohit1.chauhan@paytm.com,Inactive
+EMP075,Alok Tripathi,Marketing,merchant.helpdesk@paytm.com,Active
+EMP076,Sudha Garg,Information Technology,harshit.jain@paytm.com,Active
+EMP077,Vinod Thakur,Customer Service,bus.admin@paytm.com,Active
+EMP078,Shilpa Sinha,Digital Marketing,jitul.nair@paytm.com,Active
+EMP079,Ramesh Shukla,Operations,testUser1@paytm.com,Active
+EMP080,Jyoti Bose,Human Resources,romesh.koul@paytm.com,Active
+EMP081,Ashok Mishra,Finance,rajender.rawat@paytm.com,Active
+EMP082,Sweta Rawat,Customer Support,labs.sugardaddy.tech@paytm.com,Inactive
+EMP083,Naveen Chauhan,Product Management,Motiur.Rahman@paytm.com,Active
+EMP084,Madhuri Agarwal,Quality Assurance,farzal.shah@paytm.com,Active
+EMP085,Anil Jain,Business Development,prince.priyanshu@paytm.com,Active
+EMP086,Rekha Kalra,Legal,vibhav.bajpayi@paytm.com,Active
+EMP087,Mohan Verma,Engineering,kapil1.chandel@paytm.com,Active
+EMP088,Neelam Sharma,Sales,piyush2.kumar@paytm.com,Active
+EMP089,Rajeev Gupta,Data Analytics,ankur.tayal@paytm.com,Active
+EMP090,Seema Singh,Marketing,madhur@paytm.com,Active
+EMP091,Bharat Bansal,Information Technology,balendra.singh@paytm.com,Inactive
+EMP092,Kiran Rao,Customer Service,ashwani3.kumar@paytm.com,Active
+EMP093,Tushar Mehta,Digital Marketing,satyam.mishra@paytm.com,Active
+EMP094,Shashi Pandey,Operations,shreyas.pai@paytm.com,Active
+EMP095,Hemant Tiwari,Human Resources,raman.gugnani@paytm.com,Active
+EMP096,Usha Kapoor,Finance,info@paytmmall.com,Active
+EMP097,Dinesh Soni,Customer Support,ffservice-delhivery@paytm.com,Active
+EMP098,Sapna Ghosh,Product Management,personaadmin@paytmmall.com,Active
+EMP099,Lalit Joshi,Quality Assurance,ff-service@paytm.com,Active
+EMP100,Surbhi Pillai,Business Development,ffservice@paytm.com,Inactive
+EMP101,Gaurav Agarwal,Legal,create_fulfillment@paytm.com,Active
+EMP102,Neelima Kumari,Engineering,utkarsh.pandey@paytm.com,Active
+EMP103,Pradeep Goyal,Sales,garima.agrawal@paytm.com,Active
+EMP104,Radha Saxena,Data Analytics,mukesh.meena@paytm.com,Active
+EMP105,Sanjiv Bhardwaj,Marketing,c2iservice@paytmmall.com,Active
+EMP106,Manju Malhotra,Information Technology,aman.kaushal@paytm.com,Active
+EMP107,Raj Chandra,Customer Service,v.giridhar@paytm.com,Active
+EMP108,Nidhi Nair,Digital Marketing,amit44.kumar@paytm.com,Active
+EMP109,Sunil Goyal,Operations,deepak1.gupta@paytm.com,Active
+EMP110,Kavita Iyer,Human Resources,facility.preorder@paytmmall.com,Inactive
+EMP111,Mahesh Reddy,Finance,prabhsimran.singh@paytm.com,Active
+EMP112,Priya Bajaj,Customer Support,travelcst.intprod@paytm.com,Active
+EMP113,Kaushal Bhatt,Product Management,cron_pdpquery@paytmmall.com,Active
+EMP114,Shanti Khurana,Quality Assurance,laxmi.khatri@paytm.com,Active
+EMP115,Vishnu Tripathi,Business Development,siddharth2.singh@paytm.com,Active
+EMP116,Gayatri Garg,Legal,kapil.bhatia@paytm.com,Active
+EMP117,Deepesh Thakur,Engineering,syed.sameer@paytm.com,Active
+EMP118,Renu Sinha,Sales,dhruva.somani@paytm.com,Active
+EMP119,Ajit Shukla,Data Analytics,abhimanyu.goswami@paytm.com,Active
+EMP120,Latha Bose,Marketing,Shakti.thakur@paytm.com,Inactive
+EMP121,Mahendra Mishra,Information Technology,auth_fulfilment_citybus@paytm.com,Active
+EMP122,Poonam Rawat,Customer Service,hari.singh@paytm.com,Active
+EMP123,Sameer Chauhan,Digital Marketing,desh.deep@paytm.com,Active
+EMP124,Radha Agarwal,Operations,akash.raghav@paytm.com,Active
+EMP125,Vijay Jain,Human Resources,deepali.malhotra@paytm.com,Active
+EMP126,Anupama Kalra,Finance,ankush.bhardwaj@paytm.com,Active
+EMP127,Ramesh Verma,Customer Support,amit2.bhatt@paytm.com,Active
+EMP128,Nisha Sharma,Product Management,cst-uap-support@paytm.com,Active
+EMP129,Subodh Gupta,Quality Assurance,promotion-tech@paytm.com,Active
+EMP130,Vidya Singh,Business Development,ftp_inventory@paytmmall.com,Active
+EMP131,Bhushan Bansal,Legal,gg.paytm.noida@paytm.com,Inactive
+EMP132,Urmila Rao,Engineering,ankur3.sharma@paytmcloud.in,Active
+EMP133,Lokesh Mehta,Sales,admin.coupons@paytm.com,Active
+EMP134,Sarika Pandey,Data Analytics,tarun.chabarwal@paytm.com,Active
+EMP135,Arun Tiwari,Marketing,sanyam.goel@paytm.com,Active
+EMP136,Bharti Kapoor,Information Technology,pos.prod@paytm.com,Active
+EMP137,Kishore Soni,Customer Service,gamepind.admin@paytm.com,Active
+EMP138,Garima Ghosh,Digital Marketing,ffinstallation-service@paytm.com,Active
+EMP139,Surendra Joshi,Operations,ffexchange_service@paytmmall.com,Active
+EMP140,Anila Pillai,Human Resources,catalog-admin-java@paytmmall.com,Active
+EMP141,Praveen Agarwal,Finance,seller.services@paytmmall.com,Inactive
+EMP142,Mona Kumari,Customer Support,sanjeev2.yadav@paytm.com,Active
+EMP143,Deepak Goyal,Product Management,ffintegration_service@paytmmall.com,Active
+EMP144,Shalini Saxena,Quality Assurance,travel.growthadmin@paytm.com,Active
+EMP145,Parag Bhardwaj,Business Development,midgar-engage-service-user@paytm.com,Active
+EMP146,Tanu Malhotra,Legal,anshu.vyas@paytm.com,Active
+EMP147,Ashwin Chandra,Engineering,jayesh.mathur@paytm.com,Active
+EMP148,Sanjana Nair,Sales,dgtinsurance@paytm.com,Active
+EMP149,Raman Goyal,Data Analytics,raj.dubey@paytm.com,Active
+EMP150,Vasanti Iyer,Marketing,amogh.bharadwaj@paytm.com,Active
+EMP151,Bhavesh Reddy,Information Technology,kavita.choudhary@paytm.com,Active
+EMP152,Chandrika Bajaj,Customer Service,vinay1.mishra@paytm.com,Inactive
+EMP153,Nilesh Bhatt,Digital Marketing,seedfilecenter@paytm.com,Active
+EMP154,Shobha Khurana,Operations,vinit.tomar@paytm.com,Active
+EMP155,Purushottam Tripathi,Human Resources,ankur.jaiswal@paytm.com,Active
+EMP156,Sushma Garg,Finance,suresh.vaid@paytm.com,Active
+EMP157,Jagdish Thakur,Customer Support,pankaj.garg@paytm.com,Active
+EMP158,Rajni Sinha,Product Management,sanjay11.kumar@paytm.com,Active
+EMP159,Pramod Shukla,Quality Assurance,lgfac-services-247around@paytm.com,Active
+EMP160,Kalpana Bose,Business Development,businessloans.tech@paytm.com,Active
+EMP161,Mahesh Mishra,Legal,mahesh.arora@paytm.com,Active
+EMP162,Sudha Rawat,Engineering,rahul2.agarwal@paytm.com,Inactive
+EMP163,Brijesh Chauhan,Sales,lgfac-services-tatasky@paytm.com,Active
+EMP164,Seema Agarwal,Data Analytics,ffservice-ecom@paytm.com,Active
+EMP165,Girish Jain,Marketing,digitalcatalog.services@paytm.com,Active
+EMP166,Meena Kalra,Information Technology,ganesh.bale@paytm.com,Active
+EMP167,Shailendra Verma,Customer Service,darshan.manorkar@paytm.com,Active
+EMP168,Neeraj Sharma,Digital Marketing,seller-pff-invoice@paytmmall.com,Active
+EMP169,Sangeeta Gupta,Operations,tech.hotels@paytm.com,Active
+EMP170,Umesh Singh,Human Resources,education.tech@paytm.com,Active
+EMP171,Pratibha Bansal,Finance,order.admin.middleware@paytm.com,Active
+EMP172,Sohan Rao,Customer Support,provider.bus@paytm.com,Inactive
+EMP173,Suvarna Mehta,Product Management,kalva.reddy@paytm.com,Active
+EMP174,Rakesh Pandey,Quality Assurance,macquette.admin@paytm.com,Active
+EMP175,Shweta Tiwari,Business Development,seller-promo@paytmmall.com,Active
+EMP176,Chander Kapoor,Legal,Travel-corp.services@paytm.com,Active
+EMP177,Nitin Soni,Engineering,lgfac-services-ifb@paytm.com,Active
+EMP178,Vandana Ghosh,Sales,yogita.mehra@paytm.com,Active
+EMP179,Sushil Joshi,Data Analytics,sourabh.chopra@paytm.com,Active
+EMP180,Chhaya Pillai,Marketing,seema.saher@paytm.com,Active
+EMP181,Shivam Agarwal,Information Technology,merchant.passbook@paytm.com,Active
+EMP182,Pushpa Kumari,Customer Service,nitin4.gupta@paytm.com,Inactive
+EMP183,Yash Goyal,Digital Marketing,mohd.shehzad@paytm.com,Active
+EMP184,Shikha Saxena,Operations,lgfac-acl-admin@paytm.com,Active
+EMP185,Nitesh Bhardwaj,Human Resources,recharge-service@paytm.com,Active
+EMP186,Sheetal Malhotra,Finance,prashantt@paytm.com,Active
+EMP187,Bhupesh Chandra,Customer Support,himanshu11.sharma@paytm.com,Active
+EMP188,Devi Nair,Product Management,ffservice-stomp@paytm.com,Active
+EMP189,Sanjay Goyal,Quality Assurance,parakh.agarwal@paytm.com,Active
+EMP190,Sandhya Iyer,Business Development,seller-service@paytm.com,Active
+EMP191,Ashish Reddy,Legal,avijit.jain@paytm.com,Active
+EMP192,Kiran Bajaj,Engineering,vishal.jangda@paytm.com,Inactive
+EMP193,Radhika Bhatt,Sales,akash9.gupta@paytm.com,Active
+EMP194,Vishal Khurana,Data Analytics,shivank.bhardwaj@paytm.com,Active
+EMP195,Sarita Tripathi,Marketing,paytm-events-admin@insider.in,Active
+EMP196,Krishnan Garg,Information Technology,gaurav.kohli@paytm.com,Active
+EMP197,Amrit Thakur,Customer Service,chetan.chawla@paytm.com,Active
+EMP198,Dipti Sinha,Digital Marketing,subscription-internal@paytm.com,Active
+EMP199,Haresh Shukla,Operations,channels.backend@paytm.com,Active
+EMP200,Laxmi Bose,Human Resources,rohit36.kumar@paytm.com,Active
+EMP201,Devendra Mishra,Finance,kousik.naga@paytm.com,Active
+EMP202,Swati Rawat,Customer Support,sanjeev15.kumar@paytminsurance.co.in,Inactive
+EMP203,Naveen Chauhan,Product Management,neha.tomar@paytm.com,Active
+EMP204,Priyanka Agarwal,Quality Assurance,abhishek.tiwari@paytminsurance.co.in,Active
+EMP205,Anil Jain,Business Development,divyad@ticketnew.com,Active
+EMP206,Reeta Kalra,Legal,madhus@ticketnew.com,Active
+EMP207,Mohan Verma,Engineering,sarthak.verma@paytm.com,Active
+EMP208,Namrata Sharma,Sales,food@paytm.com,Active
+EMP209,Rajeev Gupta,Data Analytics,anurag1.cheela@paytm.com,Active
+EMP210,Seema Singh,Marketing,deepanshu.saxena@paytm.com,Active
+EMP211,Bharat Bansal,Information Technology,sourabh.chandrakar@paytm.com,Active
+EMP212,Kiran Rao,Customer Service,faraaz.h@paytm.com,Inactive
+EMP213,Tushar Mehta,Digital Marketing,sunil.verma@paytm.com,Active
+EMP214,Shashi Pandey,Operations,vinod.bisht@paytm.com,Active
+EMP215,Hemant Tiwari,Human Resources,billpayments.dev@paytm.com,Active
+EMP216,Usha Kapoor,Finance,nitesh.lal@paytm.com,Active
+EMP217,Dinesh Soni,Customer Support,shantanu.haldar@paytm.com,Active
+EMP218,Sapna Ghosh,Product Management,gaurav6.singh@paytm.com,Active
+EMP219,Lalit Joshi,Quality Assurance,deepak50.kumar@paytm.com,Active
+EMP220,Surbhi Pillai,Business Development,sanjay7.kumar@paytm.com,Active
+EMP221,Gaurav Agarwal,Legal,mahesh.shetty@paytm.com,Active
+EMP222,Neelima Kumari,Engineering,shipra.bhadouria@paytmpayments.com,Inactive
+EMP223,Pradeep Goyal,Sales,abhishek1.shahi@paytm.com,Active
+EMP224,Radha Saxena,Data Analytics,kamlesh.tailor@paytm.com,Active
+EMP225,Sanjiv Bhardwaj,Marketing,pratiksha.naithani@paytm.com,Active
+EMP226,Manju Malhotra,Information Technology,akshat1.goel@paytm.com,Active
+EMP227,Raj Chandra,Customer Service,biplab.bawali@paytm.com,Active
+EMP228,Nidhi Nair,Digital Marketing,ffservice-vinculum@paytm.com,Active
+EMP229,Sunil Goyal,Operations,socom.dev@paytm.com,Active
+EMP230,Kavita Iyer,Human Resources,jeewan.singh@paytm.com,Active
+EMP231,Mahesh Reddy,Finance,ffservice-increff@paytm.com,Active
+EMP232,Priya Bajaj,Customer Support,engage.labs@paytm.com,Inactive
+EMP233,Kaushal Bhatt,Product Management,amrith.s@paytm.com,Active
+EMP234,Shanti Khurana,Quality Assurance,socomm.growthadmin@paytmmall.com,Active
+EMP235,Vishnu Tripathi,Business Development,abhishek26.sharma@paytm.com,Active
+EMP236,Gayatri Garg,Legal,gunjeet.singh@paytm.com,Active
+EMP237,Deepesh Thakur,Engineering,manoj.joshi@paytm.com,Active
+EMP238,Renu Sinha,Sales,gaganjeet.phogat@paytm.com,Active
+EMP239,Ajit Shukla,Data Analytics,ankur.mangal@paytm.com,Active
+EMP240,Latha Bose,Marketing,waseem.uddeen@paytm.com,Active
+EMP241,Mahendra Mishra,Information Technology,ebps.services@paytm.com,Active
+EMP242,Poonam Rawat,Customer Service,milind.saniya@paytm.com,Inactive
+EMP243,Sameer Chauhan,Digital Marketing,hemant11.kumar@paytm.com,Active
+EMP244,Radha Agarwal,Operations,nikita3.sharma@paytm.com,Active
+EMP245,Vijay Jain,Human Resources,sarthak.gangal@paytm.com,Active
+EMP246,Anupama Kalra,Finance,arun7.r@paytm.com,Active
+EMP247,Ramesh Verma,Customer Support,prasad.parmar@paytm.com,Active
+EMP248,Nisha Sharma,Product Management,lg-courier-platform-new@paytmmall.com,Active
+EMP249,Subodh Gupta,Quality Assurance,ffservice-new@paytm.com,Active
+EMP250,Vidya Singh,Business Development,rajesh2.verma@paytm.com,Active
+EMP251,Bhushan Bansal,Legal,ankita1.rai@paytm.com,Active
+EMP252,Urmila Rao,Engineering,digvijay5.singh@paytm.com,Inactive
+EMP253,Lokesh Mehta,Sales,ffservice-pff@paytm.com,Active
+EMP254,Sarika Pandey,Data Analytics,gaurav37.kumar@paytm.com,Active
+EMP255,Arun Tiwari,Marketing,kavya.ha@paytm.com,Active
+EMP256,Bharti Kapoor,Information Technology,shivam2.srivastava@paytm.com,Active
+EMP257,Kishore Soni,Customer Service,aniruddha.das@paytm.com,Active
+EMP258,Garima Ghosh,Digital Marketing,ishwar.rana@paytm.com,Active
+EMP259,Surendra Joshi,Operations,dheerendra.verma@paytm.com,Active
+EMP260,Anila Pillai,Human Resources,ravi.parshant@paytm.com,Active
+EMP261,Praveen Agarwal,Finance,garima.tyagi@paytm.com,Active
+EMP262,Mona Kumari,Customer Support,punit.gupta@paytm.com,Inactive
+EMP263,Deepak Goyal,Product Management,rajesh.chourasia@paytm.com,Active
+EMP264,Shalini Saxena,Quality Assurance,ganga.thakur@paytm.com,Active
+EMP265,Parag Bhardwaj,Business Development,kajal1.mittal@paytm.com,Active
+EMP266,Tanu Malhotra,Legal,salesforce-ffservice@paytm.com,Active
+EMP267,Ashwin Chandra,Engineering,sunny4.sharma@paytm.com,Active
+EMP268,Sanjana Nair,Sales,inventory-tech@paytmmall.com,Active
+EMP269,Raman Goyal,Data Analytics,parminder1.singh@paytm.com,Active
+EMP270,Vasanti Iyer,Marketing,kuldeep17.singh@paytm.com,Active
+EMP271,Bhavesh Reddy,Information Technology,rishav2.kumar@paytm.com,Active
+EMP272,Chandrika Bajaj,Customer Service,ghanshyam.singla@paytm.com,Inactive
+EMP273,Nilesh Bhatt,Digital Marketing,vivek6.sharma@paytmcloud.in,Active
+EMP274,Shobha Khurana,Operations,Arvind1.srivastava@paytm.com,Active
+EMP275,Purushottam Tripathi,Human Resources,ajit11.singh@paytm.com,Active
+EMP276,Sushma Garg,Finance,somnath.basu@paytm.com,Active
+EMP277,Jagdish Thakur,Customer Support,manisha1.singh@paytm.com,Active
+EMP278,Rajni Sinha,Product Management,sahil4.sharma@paytm.com,Active
+EMP279,Pramod Shukla,Quality Assurance,rahul.wagh@paytm.com,Active
+EMP280,Kalpana Bose,Business Development,vikrant.kakran@paytm.com,Active
+EMP281,Mahesh Mishra,Legal,ravi34.kumar@paytm.com,Active
+EMP282,Sudha Rawat,Engineering,aamir.hussain@paytmcloud.in,Inactive
+EMP283,Brijesh Chauhan,Sales,shijin.chirayil@paytm.com,Active
+EMP284,Seema Agarwal,Data Analytics,manish.kohli@paytm.com,Active
+EMP285,Girish Jain,Marketing,bhavesh.randhir@paytm.com,Active
+EMP286,Meena Kalra,Information Technology,kapil.v@paytm.com,Active
+EMP287,Shailendra Verma,Customer Service,aditya.ranade@paytm.com,Active
+EMP288,Neeraj Sharma,Digital Marketing,dharmendra6.kumar@paytm.com,Active
+EMP289,Sangeeta Gupta,Operations,mahesh.koduru@paytm.com,Active
+EMP290,Umesh Singh,Human Resources,jaganath.padmanaban@paytm.com,Inactive
+EMP291,Pratibha Bansal,Finance,shalabh1.joshi@paytm.com,Active
+EMP292,Sohan Rao,Customer Support,shalini.suman@paytm.com,Active
+EMP293,Suvarna Mehta,Product Management,ankit13.singh@paytm.com,Active
+EMP294,Rakesh Pandey,Quality Assurance,sachin.karnani@paytm.com,Active
+EMP295,Shweta Tiwari,Business Development,neeraj.bhati@paytm.com,Active
+EMP296,Chander Kapoor,Legal,rahul3.rana@paytm.com,Active
+EMP297,Nitin Soni,Engineering,digital-ticketing@paytm.com,Active
+EMP298,Vandana Ghosh,Sales,kuldeep5.sharma@paytm.com,Active
+EMP299,Sushil Joshi,Data Analytics,sankalp.swami@paytm.com,Active
+EMP300,Chhaya Pillai,Marketing,ekta1.agarwal@paytm.com,Inactive
+EMP301,Shivam Agarwal,Information Technology,suryansh.gupta@paytm.com,Active
+EMP302,Pushpa Kumari,Customer Service,sumit.mittal@paytm.com,Active
+EMP303,Yash Goyal,Digital Marketing,pankaj15.sharma@paytm.com,Active
+EMP304,Shikha Saxena,Operations,sumit.kataria@paytm.com,Active
+EMP305,Nitesh Bhardwaj,Human Resources,vikrant.bangia@paytm.com,Active
+EMP306,Sheetal Malhotra,Finance,vaibhav.kumawat@paytm.com,Active
+EMP307,Bhupesh Chandra,Customer Support,ayush5.kumar@paytm.com,Active
+EMP308,Devi Nair,Product Management,kashif.tirmizi@paytm.com,Active
+EMP309,Sanjay Goyal,Quality Assurance,Ankit4.chauhan@paytm.com,Active
+EMP310,Sandhya Iyer,Business Development,snehal.mhatre@paytm.com,Active
+EMP311,Ashish Reddy,Legal,gaurav.vats@paytm.com,Inactive
+EMP312,Kiran Bajaj,Engineering,rahul1.pawar@paytm.com,Active
+EMP313,Radhika Bhatt,Sales,praveen.negi@paytm.com,Active
+EMP314,Vishal Khurana,Data Analytics,nikita1.raj@paytm.com,Active
+EMP315,Sarita Tripathi,Marketing,arun.colaso@paytm.com,Active
+EMP316,Krishnan Garg,Information Technology,himanshu2.goel@paytm.com,Active
+EMP317,Amrit Thakur,Customer Service,Shalini1.singh@paytm.com,Active
+EMP318,Dipti Sinha,Digital Marketing,shifa.haneeya@paytm.com,Active
+EMP319,Haresh Shukla,Operations,umang.rathi@paytm.com,Active
+EMP320,Laxmi Bose,Human Resources,om.shukla@paytm.com,Active
+EMP321,Devendra Mishra,Finance,dev2.sharma@paytmcloud.in,Inactive
+EMP322,Swati Rawat,Customer Support,paul.s@paytm.com,Active
+EMP323,Naveen Chauhan,Product Management,shivangi.grover@paytm.com,Active
+EMP324,Priyanka Agarwal,Quality Assurance,krishna.bhandari@paytm.com,Active
+EMP325,Anil Jain,Business Development,sanjib.dutta@paytm.com,Active
+EMP326,Reeta Kalra,Legal,swati.panwanda@paytm.com,Active
+EMP327,Mohan Verma,Engineering,spardha.sharma@paytm.com,Active
+EMP328,Namrata Sharma,Sales,heena.kouser@paytm.com,Active
+EMP329,Rajeev Gupta,Data Analytics,ashish2.tripathi@paytm.com,Active
+EMP330,Seema Singh,Marketing,astha.upadhyay@paytm.com,Active
+EMP331,Bharat Bansal,Information Technology,arnab.poddar@paytm.com,Inactive
+EMP332,Kiran Rao,Customer Service,abhishek9.yadav@paytm.com,Active
+EMP333,Tushar Mehta,Digital Marketing,nidhi1.singh@paytm.com,Active
+EMP334,Shashi Pandey,Operations,abhimanyu.rathore@paytm.com,Active
+EMP335,Hemant Tiwari,Human Resources,chirag.shekhada@paytm.com,Active
+EMP336,Usha Kapoor,Finance,pooja8.singh@paytm.com,Active
+EMP337,Dinesh Soni,Customer Support,prashant1.soni@paytm.com,Active
+EMP338,Sapna Ghosh,Product Management,ruchi.rasaily@paytm.com,Active
+EMP339,Lalit Joshi,Quality Assurance,pallavi.tayal@paytm.com,Active
+EMP340,Surbhi Pillai,Business Development,priyanka2.yadav@paytm.com,Active
+EMP341,Gaurav Agarwal,Legal,deependra1.patel@paytm.com,Inactive
+EMP342,Neelima Kumari,Engineering,darothi.roy@paytm.com,Active
+EMP343,Pradeep Goyal,Sales,anish5.kumar@paytm.com,Active
+EMP344,Radha Saxena,Data Analytics,sumit2.s@paytm.com,Active
+EMP345,Sanjiv Bhardwaj,Marketing,anchal.jaiswal@paytm.com,Active
+EMP346,Manju Malhotra,Information Technology,syed1.farooq@paytm.com,Active
+EMP347,Raj Chandra,Customer Service,gurram.reddy@paytm.com,Active
+EMP348,Nidhi Nair,Digital Marketing,karthik1.rajendran@paytm.com,Active
+EMP349,Sunil Goyal,Operations,harleen.matharu@paytm.com,Active
+EMP350,Kavita Iyer,Human Resources,subhajit.gope@paytm.com,Active
+EMP351,Mahesh Reddy,Finance,jhamman.sharma@paytm.com,Inactive
+EMP352,Priya Bajaj,Customer Support,subhakanta1.mishra@paytm.com,Active
+EMP353,Kaushal Bhatt,Product Management,kapil2.vasdev@paytm.com,Active
+EMP354,Shanti Khurana,Quality Assurance,akhilesh5.kumar@paytm.com,Active
+EMP355,Vishnu Tripathi,Business Development,sanjay2.rawat@paytm.com,Active
+EMP356,Gayatri Garg,Legal,neha3.verma@paytm.com,Active
+EMP357,Deepesh Thakur,Engineering,shahbaz1.alam@paytm.com,Active
+EMP358,Renu Sinha,Sales,awadhesh.soni@paytm.com,Active
+EMP359,Ajit Shukla,Data Analytics,amrutha.chandwani@paytm.com,Active
+EMP360,Latha Bose,Marketing,ganes.hudekar@paytm.com,Active
+EMP361,Mahendra Mishra,Information Technology,shafijul.islam@paytm.com,Inactive
+EMP362,Poonam Rawat,Customer Service,aiswarya.mohapatra@paytm.com,Active
+EMP363,Sameer Chauhan,Digital Marketing,murali.jai@paytm.com,Active
+EMP364,Radha Agarwal,Operations,maulik.sheth@paytm.com,Active
+EMP365,Vijay Jain,Human Resources,vipul.narkhede@paytm.com,Active
+EMP366,Anupama Kalra,Finance,rahul.dugar@paytm.com,Active
+EMP367,Ramesh Verma,Customer Support,harish.pandey@paytm.com,Active
+EMP368,Nisha Sharma,Product Management,vishnu.haldar@paytm.com,Active
+EMP369,Subodh Gupta,Quality Assurance,ankit5.tiwari@paytm.com,Active
+EMP370,Vidya Singh,Business Development,sreedhar2.reddy@paytm.com,Active
+EMP371,Bhushan Bansal,Legal,satyendra.dubey@paytm.com,Inactive
+EMP372,Urmila Rao,Engineering,tanveer2.ahmed@paytm.com,Active
+EMP373,Lokesh Mehta,Sales,rahul2.rajan@paytm.com,Active
+EMP374,Sarika Pandey,Data Analytics,rajit.dua@paytm.com,Active
+EMP375,Arun Tiwari,Marketing,ruby.gera@paytm.com,Active
+EMP376,Bharti Kapoor,Information Technology,manzar.siddiqui@paytm.com,Active
+EMP377,Kishore Soni,Customer Service,balaram1.ramachandra@paytm.com,Active
+EMP378,Garima Ghosh,Digital Marketing,shikha.sharma@paytm.com,Active
+EMP379,Surendra Joshi,Operations,anshul.batra@paytm.com,Active
+EMP380,Anila Pillai,Human Resources,harshita.baswal@paytm.com,Active
+EMP381,Praveen Agarwal,Finance,shatakshi.jaiswal@paytm.com,Inactive
+EMP382,Mona Kumari,Customer Support,dhawal.renge@paytm.com,Active
+EMP383,Deepak Goyal,Product Management,kiran1.pk@paytm.com,Active
+EMP384,Shalini Saxena,Quality Assurance,isha1.gupta@paytm.com,Active
+EMP385,Parag Bhardwaj,Business Development,harmeet2.kaur@paytminsurance.co.in,Active
+EMP386,Tanu Malhotra,Legal,nitin1.shakya@paytm.com,Active
+EMP387,Ashwin Chandra,Engineering,aditya.bhattacharya@paytm.com,Active
+EMP388,Sanjana Nair,Sales,gaurav12.gupta@paytm.com,Active
+EMP389,Raman Goyal,Data Analytics,ratan.jha@paytm.com,Active
+EMP390,Vasanti Iyer,Marketing,prafull.anand@paytm.com,Active
+EMP391,Bhavesh Reddy,Information Technology,ankur1.tiwari@paytm.com,Inactive
+EMP392,Chandrika Bajaj,Customer Service,abhishek1.rana@paytm.com,Active
+EMP393,Nilesh Bhatt,Digital Marketing,narayan.rajput@paytm.com,Active
+EMP394,Shobha Khurana,Operations,bhaskar5.paytm@ileads.one,Active
+EMP395,Purushottam Tripathi,Human Resources,siddharth.makol@paytm.com,Active
+EMP396,Sushma Garg,Finance,uttam.sharma@paytm.com,Active
+EMP397,Jagdish Thakur,Customer Support,anil1.darji@paytm.com,Active
+EMP398,Rajni Sinha,Product Management,pradeep8.singh@paytmcloud.in,Active
+EMP399,Pramod Shukla,Quality Assurance,anshita.chandel@paytm.com,Active
+EMP400,Kalpana Bose,Business Development,patel.darshit@paytm.com,Active
+EMP401,Mahesh Mishra,Legal,sourabh.deshpande@paytm.com,Inactive
+EMP402,Sudha Rawat,Engineering,harshdeep2.singh@paytm.com,Active
+EMP403,Brijesh Chauhan,Sales,rahul9.verma@paytm.com,Active
+EMP404,Seema Agarwal,Data Analytics,ramthullap@ticketnew.com,Active
+EMP405,Girish Jain,Marketing,snehil1.gautam@paytm.com,Active
+EMP406,Meena Kalra,Information Technology,yash.baley@paytm.com,Active
+EMP407,Shailendra Verma,Customer Service,md.jawaid@paytm.com,Active
+EMP408,Neeraj Sharma,Digital Marketing,garima4.sharma@paytm.com,Active
+EMP409,Sangeeta Gupta,Operations,piyush.sethi@paytm.com,Active
+EMP410,Umesh Singh,Human Resources,hrishikesh.bharti@paytm.com,Active
+EMP411,Pratibha Bansal,Finance,sharma6.vijay@paytm.com,Inactive
+EMP412,Sohan Rao,Customer Support,p.pruthvi@paytm.com,Active
+EMP413,Suvarna Mehta,Product Management,ashish.kandpal@paytm.com,Active
+EMP414,Rakesh Pandey,Quality Assurance,nikhil1.bansal@paytm.com,Active
+EMP415,Shweta Tiwari,Business Development,richi.yadav@paytm.com,Active
+EMP416,Chander Kapoor,Legal,prem6.singh@paytm.com,Active
+EMP417,Nitin Soni,Engineering,vibhuti.raman@paytm.com,Active
+EMP418,Vandana Ghosh,Sales,gaurav5.kumar@paytm.com,Active
+EMP419,Sushil Joshi,Data Analytics,konark.kumar@paytm.com,Active
+EMP420,Chhaya Pillai,Marketing,manav.goel@paytm.com,Active
+EMP421,Shivam Agarwal,Information Technology,rohit.mahajan@paytmpayments.com,Inactive
+EMP422,Pushpa Kumari,Customer Service,himanshu2.dubey@paytmpayments.com,Active
+EMP423,Yash Goyal,Digital Marketing,akshaya1.pandey@paytm.com,Active
+EMP424,Shikha Saxena,Operations,sumitb53.paytm@ileads.one,Active
+EMP425,Nitesh Bhardwaj,Human Resources,archit1.goel@paytm.com,Active
+EMP426,Sheetal Malhotra,Finance,sandhya.chauhan@paytm.com,Active
+EMP427,Bhupesh Chandra,Customer Support,arpit1.mishra@paytm.com,Active
+EMP428,Devi Nair,Product Management,mm.products@paytm.com,Active
+EMP429,Sanjay Goyal,Quality Assurance,nitika1.kushwaha@paytmcloud.in,Active
+EMP430,Sandhya Iyer,Business Development,rahul.bikka@paytm.com,Active
+EMP431,Ashish Reddy,Legal,shivam.baijal@paytm.com,Inactive
+EMP432,Kiran Bajaj,Engineering,tanmay1.jaiswal@paytm.com,Active
+EMP433,Radhika Bhatt,Sales,paramjeet1.kaur@paytm.com,Active
+EMP434,Vishal Khurana,Data Analytics,abhinav2.srivastava@paytm.com,Active
+EMP435,Sarita Tripathi,Marketing,rekha.bhatt@paytm.com,Active
+EMP436,Krishnan Garg,Information Technology,paras.gambhir@paytm.com,Active
+EMP437,Amrit Thakur,Customer Service,shivam5.tiwari@paytm.com,Active
+EMP438,Dipti Sinha,Digital Marketing,dinesh3.singh@paytm.com,Active
+EMP439,Haresh Shukla,Operations,jafaruddeen.ansari@paytm.com,Active
+EMP440,Laxmi Bose,Human Resources,ram.chauhan@paytm.com,Active
+EMP441,Devendra Mishra,Finance,chetan.singh@paytm.com,Inactive
+EMP442,Swati Rawat,Customer Support,pushkars64.paytm@ileads.one,Active
+EMP443,Naveen Chauhan,Product Management,aksh.tiwari@paytm.com,Active
+EMP444,Priyanka Agarwal,Quality Assurance,dharmendra1.tomar@paytm.com,Active
+EMP445,Anil Jain,Business Development,lms.tech@paytm.com,Active
+EMP446,Reeta Kalra,Legal,samual.shiri@paytm.com,Active
+EMP447,Mohan Verma,Engineering,gaurav1.dixit@paytm.com,Active
+EMP448,Namrata Sharma,Sales,collection-tech-services@paytm.com,Active
+EMP449,Rajeev Gupta,Data Analytics,geetab67.paytm@ileads.one,Active
+EMP450,Seema Singh,Marketing,gold.tech@paytm.com,Active
+EMP451,Bharat Bansal,Information Technology,tarikh.anwar@paytm.com,Inactive
+EMP452,Kiran Rao,Customer Service,praful.prasad@paytm.com,Active
+EMP453,Tushar Mehta,Digital Marketing,jugal.thakkar@paytminsurance.co.in,Active
+EMP454,Shashi Pandey,Operations,govardhan.shekar@paytm.com,Active
+EMP455,Hemant Tiwari,Human Resources,somashekar.v@paytm.com,Active
+EMP456,Usha Kapoor,Finance,neha.sultan1@adityabirlacapital.com,Active
+EMP457,Dinesh Soni,Customer Support,sharath5.kumar@paytm.com,Active
+EMP458,Sapna Ghosh,Product Management,neeti.joshi@paytm.com,Active
+EMP459,Lalit Joshi,Quality Assurance,jagriti.yadav@paytm.com,Active
+EMP460,Surbhi Pillai,Business Development,suraj2.rawat@paytm.com,Inactive
+EMP461,Gaurav Agarwal,Legal,ravi2.chaudhary@paytm.com,Active
+EMP462,Neelima Kumari,Engineering,pavan1.kalyan@paytm.com,Active
+EMP463,Pradeep Goyal,Sales,nikhil2.kulshrestha@paytm.com,Active
+EMP464,Radha Saxena,Data Analytics,ramavali.more1@adityabirlacapital.com,Active
+EMP465,Sanjiv Bhardwaj,Marketing,vikrant.gaur@paytm.com,Active
+EMP466,Manju Malhotra,Information Technology,akash1.prajapati@paytm.com,Active
+EMP467,Raj Chandra,Customer Service,sidharth.kumar@paytm.com,Active
+EMP468,Nidhi Nair,Digital Marketing,nikhil.joshi2@adityabirlacapital.com,Active
+EMP469,Sunil Goyal,Operations,rahul.sahoo@paytm.com,Active
+EMP470,Kavita Iyer,Human Resources,subhash.varma@paytm.com,Inactive
+EMP471,Mahesh Reddy,Finance,dal.pratap@paytm.com,Active
+EMP472,Priya Bajaj,Customer Support,sunil48.kumar@paytm.com,Active
+EMP473,Kaushal Bhatt,Product Management,dheeraj.arya@paytm.com,Active
+EMP474,Shanti Khurana,Quality Assurance,twinkle.sehotia@paytm.com,Active
+EMP475,Vishnu Tripathi,Business Development,saurabh16.sharma@paytm.com,Active
+EMP476,Gayatri Garg,Legal,abhishek1.raj@paytm.com,Active
+EMP477,Deepesh Thakur,Engineering,kondireddy.sravan@paytm.com,Active
+EMP478,Renu Sinha,Sales,saqib.suhail@paytminsurance.co.in,Active
+EMP479,Ajit Shukla,Data Analytics,gaurav43.kumar@paipai.mobi,Active
+EMP480,Latha Bose,Marketing,abhinav.jaiswal@paytm.com,Inactive
+EMP481,Mahendra Mishra,Information Technology,ashish.powar@paytm.com,Active
+EMP482,Poonam Rawat,Customer Service,suman1.roy@paytm.com,Active
+EMP483,Sameer Chauhan,Digital Marketing,gunjan1.sharma@paytm.com,Active
+EMP484,Radha Agarwal,Operations,vanishree.puthran@paytm.com,Active
+EMP485,Vijay Jain,Human Resources,tabassum.banu@paytm.com,Active
+EMP486,Anupama Kalra,Finance,anchal.arora@paytm.com,Active
+EMP487,Ramesh Verma,Customer Support,rohit.wawre@paytm.com,Active
+EMP488,Nisha Sharma,Product Management,mamoni.mondal@tatwa.com,Active
+EMP489,Subodh Gupta,Quality Assurance,raka.dutta@paytm.com,Active
+EMP490,Vidya Singh,Business Development,vidit.bhardwaj@paytm.com,Active
+EMP491,Bhushan Bansal,Legal,charan1.jatav@paytm.com,Inactive
+EMP492,Urmila Rao,Engineering,fastag-issuer-prod@paytm.com,Active
+EMP493,Lokesh Mehta,Sales,ajay.meshram@paytm.com,Active
+EMP494,Sarika Pandey,Data Analytics,ami.ganjawalla@paytm.com,Active
+EMP495,Arun Tiwari,Marketing,rahul22.gupta@paytm.com,Active
+EMP496,Bharti Kapoor,Information Technology,gaurir83.apaytm@ileads.one,Active
+EMP497,Kishore Soni,Customer Service,preeti.verma@paytm.com,Active
+EMP498,Garima Ghosh,Digital Marketing,jaya.chauhan@adityabirlacapital.com,Active
+EMP499,Surendra Joshi,Operations,anandita.jain@paytm.com,Active
+EMP500,Anila Pillai,Human Resources,rupesh.sabne@paytm.com,Active

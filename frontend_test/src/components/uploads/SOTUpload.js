@@ -113,9 +113,20 @@ export default function SOTUpload() {
       setSotMetadata(metadata);
       console.log("Updated SOT metadata:", metadata);
       
-      // Clear temporary upload status since we now have real data from backend
-      setSotStatus({});
-      console.log("Cleared temporary upload status");
+      // Only clear temporary upload status if we have real data from backend
+      // This ensures status is preserved during upload process
+      const currentSotStatus = sotStatus;
+      const newSotStatus = {};
+      
+      // Preserve status for SOTs that don't have backend data yet
+      Object.keys(currentSotStatus).forEach(sot => {
+        if (!metadata[sot] || !metadata[sot].latestUpload) {
+          newSotStatus[sot] = currentSotStatus[sot];
+        }
+      });
+      
+      setSotStatus(newSotStatus);
+      console.log("Updated SOT status:", newSotStatus);
     } catch (e) {
       console.error("Failed to fetch SOT upload history:", e);
       setHistory([]);
@@ -150,13 +161,13 @@ export default function SOTUpload() {
         setError(data.error);
         setSotStatus(prev => ({ ...prev, [sotType]: "failed" }));
       } else {
-        setSotStatus(prev => ({ ...prev, [sotType]: "uploaded" }));
+        setSotStatus(prev => ({ ...prev, [sotType]: data.status || "uploaded" }));
       }
       
       // Small delay to ensure backend has finished saving
       setTimeout(() => {
         fetchHistory();
-      }, 500);
+      }, 1000);
     } catch (err) {
       setError("Upload failed. Please try again.");
       setSotStatus(prev => ({ ...prev, [sotType]: "failed" }));
@@ -184,12 +195,29 @@ export default function SOTUpload() {
     const currentStatus = sotStatus[sot];
     const status = backendStatus || currentStatus;
     
+    // Debug logging
+    console.log(`Status for ${sot}:`, { backendStatus, currentStatus, finalStatus: status, metadata: metadata.latestUpload });
+    
+    // If no status found, show a default "No Data" status
     if (!status) {
-      return <span style={{ color: "#6c757d" }}>-</span>;
+      return (
+        <span style={{
+          background: "#f3f4f6",
+          color: "#6b7280",
+          padding: "4px 12px",
+          borderRadius: "12px",
+          fontSize: "12px",
+          fontWeight: "600"
+        }}>
+          No Data
+        </span>
+      );
     }
 
     const isUploaded = status === "uploaded";
+    const isProcessing = status === "processing";
     const isFailed = status === "failed";
+    const isProcessed = status === "processed";
 
     if (isFailed) {
       return (
@@ -206,7 +234,7 @@ export default function SOTUpload() {
       );
     }
 
-    if (isUploaded) {
+    if (isProcessed) {
       return (
         <span style={{
           background: "#bbf7d0",
@@ -216,12 +244,39 @@ export default function SOTUpload() {
           fontSize: "12px",
           fontWeight: "600"
         }}>
-          uploaded
+          processed
         </span>
       );
     }
 
-    return <span style={{ color: "#6c757d" }}>-</span>;
+    if (isUploaded || isProcessing) {
+      return (
+        <span style={{
+          background: "#dbeafe",
+          color: "#1e40af",
+          padding: "4px 12px",
+          borderRadius: "12px",
+          fontSize: "12px",
+          fontWeight: "600"
+        }}>
+          {isUploaded ? "uploaded" : "processing"}
+        </span>
+      );
+    }
+
+    // For any other status, show it with a neutral color
+    return (
+      <span style={{
+        background: "#f3f4f6",
+        color: "#374151",
+        padding: "4px 12px",
+        borderRadius: "12px",
+        fontSize: "12px",
+        fontWeight: "600"
+      }}>
+        {status}
+      </span>
+    );
   };
 
   return (

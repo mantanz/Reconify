@@ -10,4 +10,4 @@ GOOGLE_DISCOVERY_URL = (
 )
 SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1  # Temporarily set to 1 minute for testing 
+ACCESS_TOKEN_EXPIRE_MINUTES = 60  # Temporarily set to 1 minute for testing 

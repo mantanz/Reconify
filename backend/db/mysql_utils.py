@@ -138,7 +138,8 @@ def insert_sot_data_rows(sot_name, rows):
     if not rows:
         return False, "No data to insert"
     metadata = MetaData()
-    table_name = sot_name.replace(" ", "_").lower()
+    # Use exact SOT name for table name (no modification)
+    table_name = sot_name
     try:
         sot_table = Table(table_name, metadata, autoload_with=engine)
         with engine.begin() as conn:

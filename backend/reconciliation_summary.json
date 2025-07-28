@@ -102,5 +102,31 @@
       "found_inactive": 7,
       "not_found": 1832
     }
+  },
+  {
+    "recon_id": "RCN_bef36fae",
+    "panelname": "OE Panel",
+    "sot_type": "hr_data",
+    "recon_month": "Jul'25",
+    "status": "complete",
+    "upload_date": "25-07-2025 18:08:24",
+    "uploaded_by": "demo",
+    "start_date": "2025-07-25",
+    "performed_by": "demo",
+    "error": null,
+    "summary": {
+      "panel_name": "OE Panel",
+      "total_panel_users": 6058,
+      "internal_users": 3854,
+      "not_found_users": 0,
+      "users_to_reconcile": 3854,
+      "other_users": 2204,
+      "service_users": 0,
+      "thirdparty_users": 0,
+      "matched": 190,
+      "found_active": 176,
+      "found_inactive": 14,
+      "not_found": 3664
+    }
   }
 ]

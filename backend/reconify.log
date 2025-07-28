@@ -5470,3 +5470,1031 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-25 16:56:28,263 - root - INFO - Processed 3029 users from panel: OE Panel
 2025-07-25 16:56:28,267 - root - INFO - User-wise summary completed. Total users: 8567
 2025-07-25 16:56:33,366 - root - INFO - Fetched 3029 rows for panel 'OE Panel'
+2025-07-25 16:57:47,414 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 16:57:47,555 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 16:57:47,558 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 16:57:47,852 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 16:57:48,105 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 16:57:48,109 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 16:57:50,587 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 16:57:50,793 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 16:57:50,796 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 16:57:51,026 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 16:57:51,164 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 16:57:51,167 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 16:58:25,721 - root - INFO - Fetched 3029 rows for panel 'OE Panel'
+2025-07-25 17:03:05,443 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 17:03:05,738 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 17:03:05,741 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 17:06:35,732 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 17:06:36,012 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 17:06:36,015 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 17:07:02,880 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 17:07:03,044 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 17:07:03,048 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 17:07:20,440 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 17:07:20,677 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 17:07:20,680 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 17:07:46,466 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-25 17:07:47,325 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 17:07:47,510 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-25 17:07:47,692 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 17:07:47,726 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 17:07:47,770 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 17:07:47,771 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 17:07:50,611 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 17:07:50,833 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 17:07:50,836 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 17:07:51,204 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 17:07:51,393 - root - INFO - Processed 3029 users from panel: OE Panel
+2025-07-25 17:07:51,396 - root - INFO - User-wise summary completed. Total users: 8567
+2025-07-25 17:50:05,770 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 17:50:05,786 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 17:50:05,787 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 18:04:24,794 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-25 18:04:25,807 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 18:04:25,895 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-25 18:04:26,073 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 18:04:26,217 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:04:26,236 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 18:04:26,236 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 18:04:37,564 - root - INFO - Attempting to upload internal_user.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:04:37,564 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:04:37,766 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:04:37,836 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:04:40,611 - paramiko.transport - INFO - Authentication (password) failed.
+2025-07-25 18:04:40,611 - root - ERROR - Failed to upload file to server: Authentication failed.
+2025-07-25 18:04:40,611 - root - ERROR - Server details - Host: 10.150.192.73, Username: one97, Path: /one97/Yash_Code/Data Uploads
+2025-07-25 18:04:40,611 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Authentication failed.
+2025-07-25 18:04:40,613 - root - INFO - File saved locally as fallback: uploads/internal_users/internal_user.csv
+2025-07-25 18:04:40,682 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:04:40,714 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 18:04:40,715 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 18:08:25,316 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:08:25,336 - app.audit_trails.audit_utils - INFO - Audit event logged: PANEL_UPLOAD by demo - success
+2025-07-25 18:08:25,336 - app.utils.audit_logger - INFO - Audit logged: PANEL_UPLOAD by demo - success
+2025-07-25 18:14:33,057 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 18:14:33,337 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 18:14:33,365 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:14:33,392 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 18:14:33,393 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 18:15:30,548 - root - INFO - Testing connection to server 10.150.192.73
+2025-07-25 18:15:30,597 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:15:30,646 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:15:33,311 - paramiko.transport - INFO - Authentication (password) failed.
+2025-07-25 18:15:33,312 - root - ERROR - Server connection test failed: Authentication failed.
+2025-07-25 18:17:22,308 - root - INFO - Attempting to upload test_internal_users.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:17:22,308 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:17:22,639 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:17:22,717 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:17:25,386 - paramiko.transport - INFO - Authentication (password) failed.
+2025-07-25 18:17:25,386 - root - ERROR - Failed to upload file to server: Authentication failed.
+2025-07-25 18:17:25,387 - root - ERROR - Server details - Host: 10.150.192.73, Username: one97, Path: /one97/Yash_Code/Data Uploads
+2025-07-25 18:17:25,387 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Authentication failed.
+2025-07-25 18:17:25,388 - root - INFO - File saved locally as fallback: uploads/internal_users/test_internal_users.csv
+2025-07-25 18:17:25,471 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:17:25,493 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 18:17:25,493 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 18:20:39,166 - root - INFO - Attempting to upload test_internal_users.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:20:39,166 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:20:39,461 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:20:39,528 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:20:42,196 - paramiko.transport - INFO - Authentication (password) failed.
+2025-07-25 18:20:42,197 - root - ERROR - Failed to upload file to server: Authentication failed.
+2025-07-25 18:20:42,197 - root - ERROR - Server details - Host: 10.150.192.73, Username: one97, Path: /one97/Yash_Code/Data Uploads
+2025-07-25 18:20:42,198 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Authentication failed.
+2025-07-25 18:20:42,199 - root - INFO - File saved locally as fallback: uploads/internal_users/test_internal_users.csv
+2025-07-25 18:20:42,298 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:20:42,330 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 18:20:42,330 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 18:20:57,138 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 18:20:57,410 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 18:20:57,437 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:20:57,464 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 18:20:57,465 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 18:21:07,882 - root - INFO - Attempting to upload internal_user.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:21:07,882 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:21:07,911 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:21:07,963 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:21:10,648 - paramiko.transport - INFO - Authentication (password) failed.
+2025-07-25 18:21:10,649 - root - ERROR - Failed to upload file to server: Authentication failed.
+2025-07-25 18:21:10,649 - root - ERROR - Server details - Host: 10.150.192.73, Username: one97, Path: /one97/Yash_Code/Data Uploads
+2025-07-25 18:21:10,649 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Authentication failed.
+2025-07-25 18:21:10,651 - root - INFO - File saved locally as fallback: uploads/internal_users/internal_user.csv
+2025-07-25 18:21:10,727 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:21:10,759 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 18:21:10,759 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 18:24:12,609 - root - INFO - Attempting to upload test_internal_users.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:24:12,610 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:24:12,663 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:24:12,717 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:24:15,388 - paramiko.transport - INFO - Authentication (password) failed.
+2025-07-25 18:24:15,389 - root - ERROR - Failed to upload file to server: Authentication failed.
+2025-07-25 18:24:15,389 - root - ERROR - Server details - Host: 10.150.192.73, Username: one97, Path: /one97/Yash_Code/Data Uploads
+2025-07-25 18:24:15,389 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Authentication failed.
+2025-07-25 18:24:15,391 - root - INFO - File saved locally as fallback: uploads/internal_users/test_internal_users.csv
+2025-07-25 18:24:15,469 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:24:15,496 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 18:24:15,497 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 18:28:12,070 - root - INFO - Attempting to upload test_internal_users.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:28:12,070 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:28:12,109 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:28:12,159 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:28:14,824 - paramiko.transport - INFO - Authentication (password) failed.
+2025-07-25 18:28:14,825 - root - ERROR - Failed to upload file to server: Authentication failed.
+2025-07-25 18:28:14,825 - root - ERROR - Server details - Host: 10.150.192.73, Username: one97, Path: /one97/Yash_Code/Data Uploads
+2025-07-25 18:28:14,825 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Authentication failed.
+2025-07-25 18:28:14,826 - root - INFO - File saved locally as fallback: uploads/internal_users/test_internal_users.csv
+2025-07-25 18:28:14,885 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:28:14,908 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 18:28:14,908 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 18:28:51,918 - root - INFO - Attempting to upload test_internal_users.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:28:51,918 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:28:52,020 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:28:52,076 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:28:52,114 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:28:52,114 - root - INFO - SSH connection established successfully
+2025-07-25 18:28:52,223 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:28:52,223 - root - INFO - SFTP client created successfully
+2025-07-25 18:28:52,223 - root - INFO - Creating/checking directory: /home/one97/Yash_Code/Data Uploads/internal_users
+2025-07-25 18:28:52,235 - root - INFO - Directory already exists or error creating: [Errno 2] No such file
+2025-07-25 18:28:52,235 - root - INFO - Uploading file to: /home/one97/Yash_Code/Data Uploads/internal_users/test_internal_users.csv
+2025-07-25 18:28:52,247 - root - ERROR - Failed to upload file to server: [Errno 2] No such file
+2025-07-25 18:28:52,247 - root - ERROR - Server details - Host: 10.150.192.73, Username: one97, Path: /home/one97/Yash_Code/Data Uploads
+2025-07-25 18:28:52,248 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: [Errno 2] No such file
+2025-07-25 18:28:52,248 - root - INFO - File saved locally as fallback: uploads/internal_users/test_internal_users.csv
+2025-07-25 18:28:52,489 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:28:52,506 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 18:28:52,507 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 18:31:41,990 - root - INFO - Attempting to upload test_internal_users.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:31:41,991 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:31:42,045 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:31:42,107 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:31:42,149 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:31:42,149 - root - INFO - SSH connection established successfully
+2025-07-25 18:31:42,249 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:31:42,249 - root - INFO - SFTP client created successfully
+2025-07-25 18:31:42,249 - root - INFO - Creating/checking directory: /home/one97/Yash_Code/Data Uploads/internal_users
+2025-07-25 18:31:42,267 - root - INFO - Directory already exists or error creating: [Errno 2] No such file
+2025-07-25 18:31:42,268 - root - INFO - Uploading file to: /home/one97/Yash_Code/Data Uploads/internal_users/test_internal_users.csv
+2025-07-25 18:31:42,280 - root - ERROR - Failed to upload file to server: [Errno 2] No such file
+2025-07-25 18:31:42,280 - root - ERROR - Server details - Host: 10.150.192.73, Username: one97, Path: /home/one97/Yash_Code/Data Uploads
+2025-07-25 18:31:42,280 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: [Errno 2] No such file
+2025-07-25 18:31:42,281 - root - INFO - File saved locally as fallback: uploads/internal_users/test_internal_users.csv
+2025-07-25 18:31:42,342 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:31:42,363 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 18:31:42,364 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 18:31:51,853 - root - INFO - Testing connection to server 10.150.192.73
+2025-07-25 18:31:51,890 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:31:51,939 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:31:51,972 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:31:51,972 - root - INFO - SSH connection test successful
+2025-07-25 18:31:52,075 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:31:52,075 - root - INFO - SFTP connection test successful
+2025-07-25 18:31:52,090 - root - WARNING - Directory access test failed: [Errno 2] No such file
+2025-07-25 18:31:52,090 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-25 18:32:38,150 - root - INFO - Attempting to upload test_internal_users.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:32:38,150 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:32:38,186 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:32:38,233 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:32:38,267 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:32:38,267 - root - INFO - SSH connection established successfully
+2025-07-25 18:32:38,386 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:32:38,386 - root - INFO - SFTP client created successfully
+2025-07-25 18:32:38,386 - root - INFO - Creating/checking directory: /home/one97/Yash_Code/Data Uploads/internal_users
+2025-07-25 18:32:38,397 - root - INFO - Directory already exists or error creating: [Errno 2] No such file
+2025-07-25 18:32:38,398 - root - INFO - Uploading file to: /home/one97/Yash_Code/Data Uploads/internal_users/test_internal_users.csv
+2025-07-25 18:32:38,410 - root - ERROR - Failed to upload file to server: [Errno 2] No such file
+2025-07-25 18:32:38,410 - root - ERROR - Server details - Host: 10.150.192.73, Username: one97, Path: /home/one97/Yash_Code/Data Uploads
+2025-07-25 18:32:38,410 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: [Errno 2] No such file
+2025-07-25 18:32:38,411 - root - INFO - File saved locally as fallback: uploads/internal_users/test_internal_users.csv
+2025-07-25 18:32:38,489 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:32:38,509 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 18:32:38,509 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 18:34:12,475 - root - INFO - Attempting to upload test_internal_users.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:34:12,475 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:34:12,526 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:34:12,573 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:34:12,613 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:34:12,613 - root - INFO - SSH connection established successfully
+2025-07-25 18:34:12,709 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:34:12,709 - root - INFO - SFTP client created successfully
+2025-07-25 18:34:12,709 - root - INFO - Creating/checking directory: /home/one97/Yash_Code/Data Uploads/internal_users
+2025-07-25 18:34:12,720 - root - INFO - Created directory: /home/one97/Yash_Code/Data Uploads/internal_users
+2025-07-25 18:34:12,720 - root - INFO - Uploading file to: /home/one97/Yash_Code/Data Uploads/internal_users/test_internal_users.csv
+2025-07-25 18:34:12,754 - root - INFO - File uploaded successfully to: /home/one97/Yash_Code/Data Uploads/internal_users/test_internal_users.csv
+2025-07-25 18:34:12,755 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-25 18:34:12,755 - root - INFO - SSH and SFTP connections closed
+2025-07-25 18:34:12,755 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/test_internal_users.csv
+2025-07-25 18:34:12,811 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:34:12,878 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:34:12,925 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:34:13,033 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:34:13,092 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-25 18:34:13,153 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:34:13,170 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-25 18:34:13,170 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-25 18:35:10,167 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-25 18:35:21,272 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 18:35:21,381 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-25 18:35:21,605 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 18:35:21,629 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:35:21,646 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 18:35:21,646 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 18:35:35,327 - root - INFO - Attempting to upload internal_user.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-25 18:35:35,328 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:35:35,357 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:35:35,411 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:35:35,464 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:35:35,464 - root - INFO - SSH connection established successfully
+2025-07-25 18:35:35,582 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:35:35,582 - root - INFO - SFTP client created successfully
+2025-07-25 18:35:35,582 - root - INFO - Creating/checking directory: /home/one97/Yash_Code/Data Uploads/internal_users
+2025-07-25 18:35:35,594 - root - INFO - Directory already exists or error creating: Failure
+2025-07-25 18:35:35,595 - root - INFO - Uploading file to: /home/one97/Yash_Code/Data Uploads/internal_users/internal_user.csv
+2025-07-25 18:35:35,631 - root - INFO - File uploaded successfully to: /home/one97/Yash_Code/Data Uploads/internal_users/internal_user.csv
+2025-07-25 18:35:35,631 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-25 18:35:35,632 - root - INFO - SSH and SFTP connections closed
+2025-07-25 18:35:35,632 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/internal_user.csv
+2025-07-25 18:35:35,670 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:35:35,740 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:35:35,809 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:35:35,888 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:35:35,945 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-25 18:35:36,009 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:35:36,029 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 18:35:36,030 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 18:36:31,122 - root - INFO - Attempting to upload thirdpartyuser.csv to server 10.150.192.73 for SOT type: thirdparty_users
+2025-07-25 18:36:31,123 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-25 18:36:31,182 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:36:31,243 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:36:31,286 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:36:31,286 - root - INFO - SSH connection established successfully
+2025-07-25 18:36:31,391 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:36:31,391 - root - INFO - SFTP client created successfully
+2025-07-25 18:36:31,392 - root - INFO - Creating/checking directory: /home/one97/Yash_Code/Data Uploads/thirdparty_users
+2025-07-25 18:36:31,405 - root - INFO - Created directory: /home/one97/Yash_Code/Data Uploads/thirdparty_users
+2025-07-25 18:36:31,405 - root - INFO - Uploading file to: /home/one97/Yash_Code/Data Uploads/thirdparty_users/thirdpartyuser.csv
+2025-07-25 18:36:31,446 - root - INFO - File uploaded successfully to: /home/one97/Yash_Code/Data Uploads/thirdparty_users/thirdpartyuser.csv
+2025-07-25 18:36:31,446 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-25 18:36:31,447 - root - INFO - SSH and SFTP connections closed
+2025-07-25 18:36:31,447 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/thirdparty_users/thirdpartyuser.csv
+2025-07-25 18:36:31,485 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-25 18:36:31,544 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-25 18:36:31,580 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-25 18:36:31,681 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-25 18:36:31,731 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-25 18:36:31,790 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 18:36:31,807 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 18:36:31,807 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-25 19:07:39,181 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:07:39,472 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:07:39,476 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-25 19:07:39,752 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:07:39,907 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:07:39,911 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-25 19:07:51,312 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-25 19:07:51,496 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-25 19:07:51,525 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 19:07:51,544 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 19:07:51,544 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-25 19:07:55,490 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:07:55,645 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:07:55,649 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-25 19:07:55,892 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:07:56,034 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:07:56,038 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-25 19:09:17,513 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:09:17,654 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:09:17,658 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-25 19:09:17,917 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:09:18,067 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:09:18,070 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-25 19:09:23,467 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:09:23,627 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:09:23,631 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-25 19:09:23,900 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:09:24,090 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:09:24,094 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-25 19:10:19,058 - root - INFO - Starting user categorization for panel: OE Panel
+2025-07-25 19:10:19,058 - root - INFO - Configured SOTs for categorization: ['internal_users', 'service_users', 'thirdparty_users']
+2025-07-25 19:10:19,095 - root - INFO - Fetched 124 rows from SOT: internal_users
+2025-07-25 19:10:19,158 - root - INFO - Fetched 1874 rows from SOT: service_users
+2025-07-25 19:10:19,197 - root - INFO - Fetched 114 rows from SOT: thirdparty_users
+2025-07-25 19:10:19,338 - root - INFO - Fetched 6058 rows from panel: OE Panel
+2025-07-25 19:10:19,338 - root - INFO - Using 'email' as primary key field (from service_users)
+2025-07-25 19:10:19,338 - root - INFO - SOT internal_users: panel_field='email', sot_field='domain'
+2025-07-25 19:10:19,338 - root - INFO - Built lookup for internal_users with 20 entries using field 'domain'
+2025-07-25 19:10:19,338 - root - INFO - SOT service_users: panel_field='email', sot_field='email'
+2025-07-25 19:10:19,339 - root - INFO - Built lookup for service_users with 1841 entries using field 'email'
+2025-07-25 19:10:19,339 - root - INFO - SOT thirdparty_users: panel_field='email', sot_field='domain'
+2025-07-25 19:10:19,339 - root - INFO - Built lookup for thirdparty_users with 57 entries using field 'domain'
+2025-07-25 19:10:19,400 - root - INFO - Updating table 'oe_panel' with 6058 records using match_field 'email'
+2025-07-25 19:10:28,280 - root - WARNING - Update 387: match_value is None or empty
+2025-07-25 19:10:45,387 - root - WARNING - Update 1131: match_value is None or empty
+2025-07-25 19:11:38,503 - root - WARNING - Update 3416: match_value is None or empty
+2025-07-25 19:11:55,754 - root - WARNING - Update 4160: match_value is None or empty
+2025-07-25 19:12:39,833 - root - INFO - Bulk update completed: 12132 records updated, 4 errors
+2025-07-25 19:12:39,834 - root - WARNING - Database update completed with warnings: Update completed with 4 errors out of 6058 records
+2025-07-25 19:12:39,834 - root - INFO - Successfully updated 6058 rows in panel 'OE Panel'
+2025-07-25 19:12:39,834 - root - INFO - User categorization completed for panel 'OE Panel'. Summary: {'internal_users': 3854, 'service_users': 0, 'thirdparty_users': 2200, 'not_found': 4, 'total': 6058, 'errors': 0}
+2025-07-25 19:12:40,010 - root - INFO - Found 3854 users to reconcile (3854 internal + 0 not found) and 2204 other users out of 6058 total panel users
+2025-07-25 19:12:40,049 - root - INFO - Updating table 'oe_panel' with 3854 records using match_field 'email'
+2025-07-25 19:14:08,620 - root - INFO - Bulk update completed: 7724 records updated, 0 errors
+2025-07-25 19:14:08,656 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-25 19:14:08,681 - app.audit_trails.audit_utils - INFO - Audit event logged: RECONCILIATION by Yash Priyadershi - success
+2025-07-25 19:14:08,682 - app.utils.audit_logger - INFO - Audit logged: RECONCILIATION by Yash Priyadershi - success
+2025-07-25 19:14:08,682 - root - INFO - HR reconciliation completed for panel 'OE Panel'. Status: complete, Summary: {'panel_name': 'OE Panel', 'total_panel_users': 6058, 'internal_users': 3854, 'not_found_users': 0, 'users_to_reconcile': 3854, 'other_users': 2204, 'service_users': 0, 'thirdparty_users': 0, 'matched': 190, 'found_active': 176, 'found_inactive': 14, 'not_found': 3664}
+2025-07-25 19:14:08,685 - root - INFO - Updated upload history status for panel 'OE Panel' to 'complete'
+2025-07-25 19:18:05,155 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:18:05,325 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:18:05,329 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-25 19:18:05,585 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-25 19:18:05,736 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-25 19:18:05,739 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 10:58:30,082 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 10:58:30,285 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-28 10:58:48,241 - app.audit_trails.audit_utils - ERROR - Failed to create audit trail table: (pymysql.err.OperationalError) (2013, 'Lost connection to MySQL server during query')
+[SQL: DESCRIBE `reconify_db`.`audit_trail`]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-28 10:58:48,330 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 10:58:48,331 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 11:33:44,927 - root - INFO - Testing connection to server 10.150.192.73
+2025-07-28 11:33:44,999 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:33:45,078 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:33:45,123 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:33:45,124 - root - INFO - SSH connection test successful
+2025-07-28 11:33:45,258 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:33:45,258 - root - INFO - SFTP connection test successful
+2025-07-28 11:33:45,339 - root - INFO - Directory access test successful for /home/one97/Yash_Code/Data Uploads
+2025-07-28 11:33:45,339 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:33:45,362 - root - INFO - Attempting to upload test_users.csv to server 10.150.192.73 for SOT type: internal_users
+2025-07-28 11:33:45,362 - root - INFO - Connecting to 10.150.192.73 with username one97
+2025-07-28 11:33:45,401 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:33:45,457 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:33:45,518 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:33:45,519 - root - INFO - SSH connection established successfully
+2025-07-28 11:33:45,628 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:33:45,628 - root - INFO - SFTP client created successfully
+2025-07-28 11:33:45,629 - root - INFO - Creating/checking directory: /home/one97/Yash_Code/Data Uploads/internal_users
+2025-07-28 11:33:45,643 - root - INFO - Directory already exists or error creating: Failure
+2025-07-28 11:33:45,643 - root - INFO - Uploading file to: /home/one97/Yash_Code/Data Uploads/internal_users/test_users.csv
+2025-07-28 11:33:45,709 - root - INFO - File uploaded successfully to: /home/one97/Yash_Code/Data Uploads/internal_users/test_users.csv
+2025-07-28 11:33:45,709 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:33:45,710 - root - INFO - SSH and SFTP connections closed
+2025-07-28 11:33:45,710 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/test_users.csv
+2025-07-28 11:33:45,750 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:33:45,820 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:33:45,856 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:33:45,956 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:33:46,024 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:34:03,971 - sqlalchemy.pool.impl.QueuePool - ERROR - Exception during reset or similar
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 987, in _finalize_fairy
+    fairy._reset(
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 1433, in _reset
+    pool._dialect.do_rollback(self)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/engine/default.py", line 703, in do_rollback
+    dbapi_connection.rollback()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 493, in rollback
+    self._read_ok_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 453, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 744, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 798, in _read_bytes
+    raise err.OperationalError(
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
+2025-07-28 11:34:22,805 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:34:22,830 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - failed
+2025-07-28 11:34:22,830 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - failed
+2025-07-28 11:38:01,318 - paramiko.transport - ERROR - Exception (client): Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:01,328 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:38:01,328 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2369, in _check_banner
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR -     buf = self.packetizer.readline(timeout)
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 395, in readline
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR -     buf += self._read_timeout(timeout)
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 663, in _read_timeout
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR -     x = self.__socket.recv(128)
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR - ConnectionResetError: [Errno 54] Connection reset by peer
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR - 
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR - During handling of the above exception, another exception occurred:
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR - 
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2185, in run
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR -     self._check_banner()
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2373, in _check_banner
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR -     raise SSHException(
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR - paramiko.ssh_exception.SSHException: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:01,329 - paramiko.transport - ERROR - 
+2025-07-28 11:38:01,329 - root - ERROR - Failed to list files by stage: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:10,009 - root - INFO - Testing connection to server 192.168.1.100
+2025-07-28 11:38:14,019 - paramiko.transport - ERROR - Exception (client): Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:14,019 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:38:14,019 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2369, in _check_banner
+2025-07-28 11:38:14,019 - paramiko.transport - ERROR -     buf = self.packetizer.readline(timeout)
+2025-07-28 11:38:14,020 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 395, in readline
+2025-07-28 11:38:14,020 - paramiko.transport - ERROR -     buf += self._read_timeout(timeout)
+2025-07-28 11:38:14,020 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 663, in _read_timeout
+2025-07-28 11:38:14,020 - paramiko.transport - ERROR -     x = self.__socket.recv(128)
+2025-07-28 11:38:14,020 - paramiko.transport - ERROR - ConnectionResetError: [Errno 54] Connection reset by peer
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR - 
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR - During handling of the above exception, another exception occurred:
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR - 
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2185, in run
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR -     self._check_banner()
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2373, in _check_banner
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR -     raise SSHException(
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR - paramiko.ssh_exception.SSHException: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:14,021 - paramiko.transport - ERROR - 
+2025-07-28 11:38:14,022 - root - ERROR - Server connection test failed: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:14,042 - root - INFO - Starting 3-stage upload process for test_users.csv to internal_users
+2025-07-28 11:38:18,049 - paramiko.transport - ERROR - Exception (client): Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:18,050 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:38:18,050 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2369, in _check_banner
+2025-07-28 11:38:18,050 - paramiko.transport - ERROR -     buf = self.packetizer.readline(timeout)
+2025-07-28 11:38:18,050 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 395, in readline
+2025-07-28 11:38:18,051 - paramiko.transport - ERROR -     buf += self._read_timeout(timeout)
+2025-07-28 11:38:18,051 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 663, in _read_timeout
+2025-07-28 11:38:18,051 - paramiko.transport - ERROR -     x = self.__socket.recv(128)
+2025-07-28 11:38:18,051 - paramiko.transport - ERROR - ConnectionResetError: [Errno 54] Connection reset by peer
+2025-07-28 11:38:18,051 - paramiko.transport - ERROR - 
+2025-07-28 11:38:18,051 - paramiko.transport - ERROR - During handling of the above exception, another exception occurred:
+2025-07-28 11:38:18,051 - paramiko.transport - ERROR - 
+2025-07-28 11:38:18,051 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:38:18,052 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2185, in run
+2025-07-28 11:38:18,052 - paramiko.transport - ERROR -     self._check_banner()
+2025-07-28 11:38:18,052 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2373, in _check_banner
+2025-07-28 11:38:18,052 - paramiko.transport - ERROR -     raise SSHException(
+2025-07-28 11:38:18,052 - paramiko.transport - ERROR - paramiko.ssh_exception.SSHException: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:18,053 - paramiko.transport - ERROR - 
+2025-07-28 11:38:18,053 - root - ERROR - Failed to upload file with stages: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:18,054 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:18,055 - root - INFO - File saved locally as fallback: uploads/internal_users/test_users.csv
+2025-07-28 11:38:18,519 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:38:18,541 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-28 11:38:18,541 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-28 11:38:22,560 - paramiko.transport - ERROR - Exception (client): Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:22,561 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:38:22,561 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2369, in _check_banner
+2025-07-28 11:38:22,561 - paramiko.transport - ERROR -     buf = self.packetizer.readline(timeout)
+2025-07-28 11:38:22,561 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 395, in readline
+2025-07-28 11:38:22,561 - paramiko.transport - ERROR -     buf += self._read_timeout(timeout)
+2025-07-28 11:38:22,561 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 663, in _read_timeout
+2025-07-28 11:38:22,561 - paramiko.transport - ERROR -     x = self.__socket.recv(128)
+2025-07-28 11:38:22,561 - paramiko.transport - ERROR - ConnectionResetError: [Errno 54] Connection reset by peer
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR - 
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR - During handling of the above exception, another exception occurred:
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR - 
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2185, in run
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR -     self._check_banner()
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2373, in _check_banner
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR -     raise SSHException(
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR - paramiko.ssh_exception.SSHException: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:38:22,562 - paramiko.transport - ERROR - 
+2025-07-28 11:38:22,563 - root - ERROR - Failed to list files by stage: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:27,203 - root - INFO - Testing connection to server 192.168.1.100
+2025-07-28 11:40:31,212 - paramiko.transport - ERROR - Exception (client): Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:31,212 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:40:31,213 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2369, in _check_banner
+2025-07-28 11:40:31,213 - paramiko.transport - ERROR -     buf = self.packetizer.readline(timeout)
+2025-07-28 11:40:31,213 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 395, in readline
+2025-07-28 11:40:31,213 - paramiko.transport - ERROR -     buf += self._read_timeout(timeout)
+2025-07-28 11:40:31,213 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 663, in _read_timeout
+2025-07-28 11:40:31,213 - paramiko.transport - ERROR -     x = self.__socket.recv(128)
+2025-07-28 11:40:31,213 - paramiko.transport - ERROR - ConnectionResetError: [Errno 54] Connection reset by peer
+2025-07-28 11:40:31,213 - paramiko.transport - ERROR - 
+2025-07-28 11:40:31,214 - paramiko.transport - ERROR - During handling of the above exception, another exception occurred:
+2025-07-28 11:40:31,214 - paramiko.transport - ERROR - 
+2025-07-28 11:40:31,214 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:40:31,214 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2185, in run
+2025-07-28 11:40:31,214 - paramiko.transport - ERROR -     self._check_banner()
+2025-07-28 11:40:31,214 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2373, in _check_banner
+2025-07-28 11:40:31,214 - paramiko.transport - ERROR -     raise SSHException(
+2025-07-28 11:40:31,214 - paramiko.transport - ERROR - paramiko.ssh_exception.SSHException: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:31,215 - paramiko.transport - ERROR - 
+2025-07-28 11:40:31,215 - root - ERROR - Server connection test failed: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:31,235 - root - INFO - Starting 3-stage upload process for test_users.csv to internal_users
+2025-07-28 11:40:35,243 - paramiko.transport - ERROR - Exception (client): Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:35,244 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:40:35,244 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2369, in _check_banner
+2025-07-28 11:40:35,244 - paramiko.transport - ERROR -     buf = self.packetizer.readline(timeout)
+2025-07-28 11:40:35,244 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 395, in readline
+2025-07-28 11:40:35,244 - paramiko.transport - ERROR -     buf += self._read_timeout(timeout)
+2025-07-28 11:40:35,244 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 663, in _read_timeout
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR -     x = self.__socket.recv(128)
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR - ConnectionResetError: [Errno 54] Connection reset by peer
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR - 
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR - During handling of the above exception, another exception occurred:
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR - 
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2185, in run
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR -     self._check_banner()
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2373, in _check_banner
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR -     raise SSHException(
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR - paramiko.ssh_exception.SSHException: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:35,245 - paramiko.transport - ERROR - 
+2025-07-28 11:40:35,246 - root - ERROR - Failed to upload file with stages: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:35,246 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:35,247 - root - INFO - File saved locally as fallback: uploads/internal_users/test_users.csv
+2025-07-28 11:40:35,344 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:40:35,360 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-28 11:40:35,361 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-28 11:40:39,374 - paramiko.transport - ERROR - Exception (client): Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2369, in _check_banner
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -     buf = self.packetizer.readline(timeout)
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 395, in readline
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -     buf += self._read_timeout(timeout)
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 663, in _read_timeout
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -     x = self.__socket.recv(128)
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR - ConnectionResetError: [Errno 54] Connection reset by peer
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR - 
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR - During handling of the above exception, another exception occurred:
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR - 
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2185, in run
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -     self._check_banner()
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2373, in _check_banner
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR -     raise SSHException(
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR - paramiko.ssh_exception.SSHException: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:39,375 - paramiko.transport - ERROR - 
+2025-07-28 11:40:39,375 - root - ERROR - Failed to list files by stage: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:46,559 - root - INFO - Testing connection to server 192.168.1.100
+2025-07-28 11:40:50,568 - paramiko.transport - ERROR - Exception (client): Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:50,568 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:40:50,569 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2369, in _check_banner
+2025-07-28 11:40:50,569 - paramiko.transport - ERROR -     buf = self.packetizer.readline(timeout)
+2025-07-28 11:40:50,569 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 395, in readline
+2025-07-28 11:40:50,569 - paramiko.transport - ERROR -     buf += self._read_timeout(timeout)
+2025-07-28 11:40:50,569 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/packet.py", line 663, in _read_timeout
+2025-07-28 11:40:50,569 - paramiko.transport - ERROR -     x = self.__socket.recv(128)
+2025-07-28 11:40:50,569 - paramiko.transport - ERROR - ConnectionResetError: [Errno 54] Connection reset by peer
+2025-07-28 11:40:50,570 - paramiko.transport - ERROR - 
+2025-07-28 11:40:50,570 - paramiko.transport - ERROR - During handling of the above exception, another exception occurred:
+2025-07-28 11:40:50,570 - paramiko.transport - ERROR - 
+2025-07-28 11:40:50,570 - paramiko.transport - ERROR - Traceback (most recent call last):
+2025-07-28 11:40:50,570 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2185, in run
+2025-07-28 11:40:50,570 - paramiko.transport - ERROR -     self._check_banner()
+2025-07-28 11:40:50,570 - paramiko.transport - ERROR -   File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/paramiko/transport.py", line 2373, in _check_banner
+2025-07-28 11:40:50,570 - paramiko.transport - ERROR -     raise SSHException(
+2025-07-28 11:40:50,570 - paramiko.transport - ERROR - paramiko.ssh_exception.SSHException: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:40:50,571 - paramiko.transport - ERROR - 
+2025-07-28 11:40:50,571 - root - ERROR - Server connection test failed: Error reading SSH protocol banner[Errno 54] Connection reset by peer
+2025-07-28 11:41:58,436 - root - INFO - Testing connection to server 10.150.192.73
+2025-07-28 11:41:58,504 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:41:58,574 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:41:58,607 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:41:58,607 - root - INFO - SSH connection test successful
+2025-07-28 11:41:58,716 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:41:58,716 - root - INFO - SFTP connection test successful
+2025-07-28 11:41:58,791 - root - INFO - Directory access test successful for /home/one97/Yash_Code/Data Uploads
+2025-07-28 11:41:58,791 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:41:58,803 - root - INFO - Starting 3-stage upload process for test_users.csv to internal_users
+2025-07-28 11:41:58,859 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:41:58,908 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:41:58,956 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:41:59,081 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:41:59,096 - root - INFO - Created directory: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 11:41:59,110 - root - INFO - Created directory: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 11:41:59,124 - root - INFO - Created directory: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 11:41:59,124 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/test_users.csv
+2025-07-28 11:41:59,178 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 11:41:59,192 - root - INFO - Moved file from uploaded to processing: test_users.csv
+2025-07-28 11:41:59,192 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:41:59,193 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/test_users.csv
+2025-07-28 11:41:59,228 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:41:59,320 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:41:59,379 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:41:59,500 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:41:59,736 - root - INFO - Moved file from processing to processed: test_users.csv
+2025-07-28 11:41:59,737 - root - INFO - File successfully processed and moved to processed stage: /home/one97/Yash_Code/Data Uploads/internal_users/processed/test_users.csv
+2025-07-28 11:41:59,737 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:41:59,855 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:41:59,922 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-28 11:41:59,922 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-28 11:41:59,982 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:42:00,041 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:42:00,121 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:42:00,241 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:42:00,451 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:43:15,880 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-28 11:43:17,138 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 11:43:17,259 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-28 11:43:17,430 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-28 11:43:17,459 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:43:17,507 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 11:43:17,507 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 11:43:32,235 - root - INFO - Starting 3-stage upload process for internal_user.csv to internal_users
+2025-07-28 11:43:32,298 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:43:32,367 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:43:32,414 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:43:32,528 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:43:32,559 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 11:43:32,572 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 11:43:32,584 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 11:43:32,585 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/internal_user.csv
+2025-07-28 11:43:32,623 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 11:43:32,658 - root - INFO - Moved file from uploaded to processing: internal_user.csv
+2025-07-28 11:43:32,659 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:43:32,660 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv
+2025-07-28 11:43:32,695 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:43:32,780 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:43:32,872 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:43:33,071 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:43:33,237 - root - INFO - Moved file from processing to processed: internal_user.csv
+2025-07-28 11:43:33,237 - root - INFO - File successfully processed and moved to processed stage: /home/one97/Yash_Code/Data Uploads/internal_users/processed/internal_user.csv
+2025-07-28 11:43:33,237 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:43:33,282 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:43:33,305 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 11:43:33,306 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 11:46:01,064 - root - INFO - Starting 3-stage upload process for internal_user.csv to internal_users
+2025-07-28 11:46:01,137 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:46:01,252 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:46:01,358 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:46:01,416 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:46:01,445 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 11:46:01,470 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 11:46:01,492 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 11:46:01,492 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/internal_user.csv
+2025-07-28 11:46:01,540 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 11:46:01,564 - root - INFO - Moved file from uploaded to processing: internal_user.csv
+2025-07-28 11:46:01,565 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:46:01,566 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv
+2025-07-28 11:46:01,609 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:46:01,702 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:46:01,755 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:46:01,886 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:46:02,030 - root - ERROR - Failed to move file from processing to processed: Failure
+2025-07-28 11:46:02,031 - root - ERROR - Upload processing failed: Error processing file: 500: Failed to process file: Failure
+2025-07-28 11:46:02,084 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:46:02,105 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - failed
+2025-07-28 11:46:02,105 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - failed
+2025-07-28 11:48:37,486 - root - INFO - Starting 3-stage upload process for internal_user.csv to internal_users
+2025-07-28 11:48:37,558 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:48:37,625 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:48:37,687 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:48:37,796 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:48:37,809 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 11:48:37,822 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 11:48:37,867 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 11:48:37,867 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/internal_user.csv
+2025-07-28 11:48:37,902 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 11:48:37,924 - root - ERROR - Failed to move file from uploaded to processing: Failure
+2025-07-28 11:48:37,924 - root - ERROR - Failed to upload file with stages: Failure
+2025-07-28 11:48:37,925 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Failure
+2025-07-28 11:48:37,927 - root - INFO - File saved locally as fallback: uploads/internal_users/internal_user.csv
+2025-07-28 11:48:38,072 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:48:38,104 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 11:48:38,105 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 11:51:13,521 - root - INFO - Testing connection to server 10.150.192.73
+2025-07-28 11:51:13,578 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:51:13,656 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:51:13,695 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:51:13,695 - root - INFO - SSH connection test successful
+2025-07-28 11:51:13,809 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:51:13,809 - root - INFO - SFTP connection test successful
+2025-07-28 11:51:13,855 - root - INFO - Directory access test successful for /home/one97/Yash_Code/Data Uploads
+2025-07-28 11:51:13,855 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:51:13,866 - root - INFO - Starting 3-stage upload process for test_users.csv to internal_users
+2025-07-28 11:51:13,933 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:51:13,986 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:51:14,042 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:51:14,367 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:51:14,382 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 11:51:14,395 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 11:51:14,428 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 11:51:14,428 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/test_users.csv
+2025-07-28 11:51:14,471 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 11:51:14,484 - root - INFO - Moved file from uploaded to processing: test_users.csv
+2025-07-28 11:51:14,484 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:51:14,485 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/test_users.csv
+2025-07-28 11:51:14,533 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:51:14,597 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:51:14,663 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:51:14,860 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:51:14,991 - root - ERROR - Failed to move file from processing to processed: Failure
+2025-07-28 11:51:14,991 - root - ERROR - Upload processing failed: Error processing file: 500: Failed to process file: Failure
+2025-07-28 11:51:15,029 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:51:15,053 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - failed
+2025-07-28 11:51:15,053 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - failed
+2025-07-28 11:51:15,104 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:51:15,205 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:51:15,288 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:51:15,402 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:51:15,725 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:53:38,677 - root - INFO - Testing connection to server 10.150.192.73
+2025-07-28 11:53:38,736 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:53:38,842 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:53:38,921 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:53:38,921 - root - INFO - SSH connection test successful
+2025-07-28 11:53:38,969 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:53:38,969 - root - INFO - SFTP connection test successful
+2025-07-28 11:53:39,088 - root - INFO - Directory access test successful for /home/one97/Yash_Code/Data Uploads
+2025-07-28 11:53:39,088 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:53:39,101 - root - INFO - Starting 3-stage upload process for test_users.csv to internal_users
+2025-07-28 11:53:39,149 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:53:39,269 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:53:39,393 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:53:39,497 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:53:39,527 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 11:53:39,542 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 11:53:39,565 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 11:53:39,566 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/test_users.csv
+2025-07-28 11:53:39,637 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 11:53:39,678 - root - ERROR - Failed to move file from uploaded to processing: Failure
+2025-07-28 11:53:39,678 - root - ERROR - Failed to upload file with stages: Failure
+2025-07-28 11:53:39,678 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Failure
+2025-07-28 11:53:39,679 - root - INFO - File saved locally as fallback: uploads/internal_users/test_users.csv
+2025-07-28 11:53:39,847 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:53:39,927 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-28 11:53:39,928 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-28 11:53:39,966 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:53:40,077 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:53:40,151 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:53:40,252 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:53:40,480 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:53:48,581 - root - INFO - Testing connection to server 10.150.192.73
+2025-07-28 11:53:48,613 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:53:48,689 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:53:48,739 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:53:48,739 - root - INFO - SSH connection test successful
+2025-07-28 11:53:48,869 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:53:48,869 - root - INFO - SFTP connection test successful
+2025-07-28 11:53:48,941 - root - INFO - Directory access test successful for /home/one97/Yash_Code/Data Uploads
+2025-07-28 11:53:48,942 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:54:37,741 - root - INFO - Starting 3-stage upload process for test_internal_users.csv to internal_users
+2025-07-28 11:54:37,780 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:54:37,851 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:54:37,907 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:54:38,030 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:54:38,044 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 11:54:38,056 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 11:54:38,069 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 11:54:38,069 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/test_internal_users.csv
+2025-07-28 11:54:38,130 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 11:54:38,162 - root - INFO - Moved file from uploaded to processing: test_internal_users.csv
+2025-07-28 11:54:38,162 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:54:38,163 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/test_internal_users.csv
+2025-07-28 11:54:38,214 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:54:38,312 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:54:38,348 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:54:38,458 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:54:38,652 - root - INFO - Moved file from processing to processed: test_internal_users.csv
+2025-07-28 11:54:38,652 - root - INFO - File successfully processed and moved to processed stage: /home/one97/Yash_Code/Data Uploads/internal_users/processed/test_internal_users.csv
+2025-07-28 11:54:38,652 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:54:38,674 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:54:38,712 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-28 11:54:38,712 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-28 11:55:11,281 - root - INFO - Starting 3-stage upload process for internal_user.csv to internal_users
+2025-07-28 11:55:11,321 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:55:11,405 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:55:11,450 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:55:11,587 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:55:11,598 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 11:55:11,611 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 11:55:11,624 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 11:55:11,624 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/internal_user.csv
+2025-07-28 11:55:11,696 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 11:55:11,717 - root - ERROR - Failed to move file from uploaded to processing: Failure
+2025-07-28 11:55:11,717 - root - ERROR - Failed to upload file with stages: Failure
+2025-07-28 11:55:11,718 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: Failure
+2025-07-28 11:55:11,719 - root - INFO - File saved locally as fallback: uploads/internal_users/internal_user.csv
+2025-07-28 11:55:11,837 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:55:11,900 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 11:55:11,901 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 11:57:22,978 - root - INFO - Starting 3-stage upload process for internal_user.csv to internal_users
+2025-07-28 11:57:23,017 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:57:23,100 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:57:23,164 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:57:23,274 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:57:23,289 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 11:57:23,303 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 11:57:23,318 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 11:57:23,319 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/internal_user.csv
+2025-07-28 11:57:23,380 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 11:57:23,398 - root - INFO - Moved file from uploaded to processing: internal_user.csv
+2025-07-28 11:57:23,398 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:57:23,399 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv
+2025-07-28 11:57:23,429 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 11:57:23,501 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 11:57:23,545 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 11:57:23,648 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 11:57:23,806 - root - INFO - Moved file from processing to processed: internal_user.csv
+2025-07-28 11:57:23,806 - root - INFO - File successfully processed and moved to processed stage: /home/one97/Yash_Code/Data Uploads/internal_users/processed/internal_user.csv
+2025-07-28 11:57:23,806 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 11:57:23,831 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 11:57:23,902 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 11:57:23,903 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 12:00:20,816 - root - INFO - Starting 3-stage upload process for internal_user.csv to internal_users
+2025-07-28 12:00:20,885 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:00:20,961 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:00:21,000 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:00:21,147 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:00:21,164 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 12:00:21,177 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 12:00:21,189 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 12:00:21,190 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/internal_user.csv
+2025-07-28 12:00:21,256 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 12:00:21,269 - root - INFO - Moved file from uploaded to processing: internal_user.csv
+2025-07-28 12:00:21,270 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:00:21,270 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv
+2025-07-28 12:00:21,307 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:00:21,392 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:00:21,458 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:00:21,587 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:00:21,877 - root - INFO - Moved file from processing to processed: internal_user.csv
+2025-07-28 12:00:21,878 - root - INFO - File successfully processed and moved to processed stage: /home/one97/Yash_Code/Data Uploads/internal_users/processed/internal_user.csv
+2025-07-28 12:00:21,878 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:00:21,985 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 12:00:22,051 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 12:00:22,051 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 12:05:58,772 - root - INFO - Starting 3-stage upload process for Sample_hr_recon - Sheet1.csv to hr_data
+2025-07-28 12:05:58,852 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:05:58,907 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:05:58,958 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:05:59,071 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:05:59,092 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/hr_data/uploaded
+2025-07-28 12:05:59,107 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/hr_data/processing
+2025-07-28 12:05:59,121 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/hr_data/processed
+2025-07-28 12:05:59,122 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/hr_data/uploaded/Sample_hr_recon - Sheet1.csv
+2025-07-28 12:05:59,168 - root - ERROR - Failed to upload file with stages: [Errno 2] No such file
+2025-07-28 12:05:59,169 - root - ERROR - Remote upload failed: 500: Failed to upload file to server: [Errno 2] No such file
+2025-07-28 12:05:59,171 - root - INFO - File saved locally as fallback: uploads/hr_data/Sample_hr_recon - Sheet1.csv
+2025-07-28 12:05:59,365 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 12:05:59,390 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 12:05:59,391 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 12:10:15,696 - root - INFO - Testing connection to server 10.150.192.73
+2025-07-28 12:10:15,737 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:15,823 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:15,909 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:15,909 - root - INFO - SSH connection test successful
+2025-07-28 12:10:16,093 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:16,093 - root - INFO - SFTP connection test successful
+2025-07-28 12:10:16,278 - root - INFO - Directory access test successful for /home/one97/Yash_Code/Data Uploads
+2025-07-28 12:10:16,278 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:10:16,294 - root - INFO - Starting 3-stage upload process for test_hr_data.csv to hr_data
+2025-07-28 12:10:16,335 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:16,453 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:16,533 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:16,656 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:16,692 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/hr_data/uploaded
+2025-07-28 12:10:16,716 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/hr_data/processing
+2025-07-28 12:10:16,734 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/hr_data/processed
+2025-07-28 12:10:16,734 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/hr_data/uploaded/test_hr_data.csv
+2025-07-28 12:10:16,854 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 12:10:16,899 - root - INFO - Moved file from uploaded to processing: test_hr_data.csv
+2025-07-28 12:10:16,899 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:10:16,900 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/hr_data/processing/test_hr_data.csv
+2025-07-28 12:10:16,944 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:17,036 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:17,112 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:17,531 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:17,845 - root - INFO - Moved file from processing to processed: test_hr_data.csv
+2025-07-28 12:10:17,845 - root - INFO - File successfully processed and moved to processed stage: /home/one97/Yash_Code/Data Uploads/hr_data/processed/test_hr_data.csv
+2025-07-28 12:10:17,845 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:10:17,886 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 12:10:17,930 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-28 12:10:17,931 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-28 12:10:17,943 - root - INFO - Starting 3-stage upload process for test_internal_users.csv to internal_users
+2025-07-28 12:10:17,977 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:18,058 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:18,121 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:18,361 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:18,396 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 12:10:18,456 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 12:10:18,492 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 12:10:18,492 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/test_internal_users.csv
+2025-07-28 12:10:18,583 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 12:10:18,600 - root - INFO - Moved file from uploaded to processing: test_internal_users.csv
+2025-07-28 12:10:18,600 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:10:18,601 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/test_internal_users.csv
+2025-07-28 12:10:18,644 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:18,789 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:18,869 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:18,957 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:19,187 - root - ERROR - Failed to move file from processing to processed: Failure
+2025-07-28 12:10:19,187 - root - ERROR - Upload processing failed: Error processing file: 500: Failed to process file: Failure
+2025-07-28 12:10:19,244 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 12:10:19,277 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - failed
+2025-07-28 12:10:19,277 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - failed
+2025-07-28 12:10:19,286 - root - INFO - Starting 3-stage upload process for test_service_users.csv to service_users
+2025-07-28 12:10:19,323 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:19,394 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:19,461 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:19,600 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:19,615 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/service_users/uploaded
+2025-07-28 12:10:19,632 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/service_users/processing
+2025-07-28 12:10:19,681 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/service_users/processed
+2025-07-28 12:10:19,681 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/service_users/uploaded/test_service_users.csv
+2025-07-28 12:10:19,758 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 12:10:19,779 - root - INFO - Moved file from uploaded to processing: test_service_users.csv
+2025-07-28 12:10:19,779 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:10:19,780 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/service_users/processing/test_service_users.csv
+2025-07-28 12:10:19,826 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:19,911 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:19,973 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:20,179 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:20,515 - root - INFO - Moved file from processing to processed: test_service_users.csv
+2025-07-28 12:10:20,516 - root - INFO - File successfully processed and moved to processed stage: /home/one97/Yash_Code/Data Uploads/service_users/processed/test_service_users.csv
+2025-07-28 12:10:20,516 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:10:20,576 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 12:10:20,613 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-28 12:10:20,614 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-28 12:10:20,622 - root - INFO - Starting 3-stage upload process for test_thirdparty_users.csv to thirdparty_users
+2025-07-28 12:10:20,652 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:20,756 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:20,836 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:20,962 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:20,998 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/thirdparty_users/uploaded
+2025-07-28 12:10:21,020 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/thirdparty_users/processing
+2025-07-28 12:10:21,039 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/thirdparty_users/processed
+2025-07-28 12:10:21,040 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/thirdparty_users/uploaded/test_thirdparty_users.csv
+2025-07-28 12:10:21,129 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 12:10:21,144 - root - INFO - Moved file from uploaded to processing: test_thirdparty_users.csv
+2025-07-28 12:10:21,144 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:10:21,145 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/thirdparty_users/processing/test_thirdparty_users.csv
+2025-07-28 12:10:21,229 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:21,312 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:21,358 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:21,454 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:21,676 - root - INFO - Moved file from processing to processed: test_thirdparty_users.csv
+2025-07-28 12:10:21,676 - root - INFO - File successfully processed and moved to processed stage: /home/one97/Yash_Code/Data Uploads/thirdparty_users/processed/test_thirdparty_users.csv
+2025-07-28 12:10:21,676 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:10:21,719 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 12:10:21,752 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by demo - success
+2025-07-28 12:10:21,752 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by demo - success
+2025-07-28 12:10:28,807 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:10:28,914 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:10:28,974 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:10:29,085 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:10:29,487 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:11:16,722 - root - INFO - Starting 3-stage upload process for internal_user.csv to internal_users
+2025-07-28 12:11:16,762 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:11:16,858 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:11:16,950 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:11:17,065 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:11:17,107 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 12:11:17,151 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 12:11:17,171 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 12:11:17,171 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/internal_user.csv
+2025-07-28 12:11:17,244 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 12:11:17,258 - root - INFO - Moved file from uploaded to processing: internal_user.csv
+2025-07-28 12:11:17,258 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:11:17,259 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv
+2025-07-28 12:11:17,313 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:11:17,378 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:11:17,425 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:11:17,591 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:11:17,854 - root - ERROR - Failed to move file from processing to processed: Failure
+2025-07-28 12:11:17,854 - root - ERROR - Upload processing failed: Error processing file: 500: Failed to process file: Failure
+2025-07-28 12:11:17,883 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 12:11:17,943 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - failed
+2025-07-28 12:11:17,943 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - failed
+2025-07-28 12:11:54,285 - root - INFO - Starting 3-stage upload process for internal_user.csv to internal_users
+2025-07-28 12:11:54,394 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:11:54,504 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:11:54,589 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:11:54,637 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:11:54,661 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 12:11:54,710 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 12:11:54,731 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 12:11:54,731 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/internal_user.csv
+2025-07-28 12:11:54,804 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 12:11:54,822 - root - INFO - Moved file from uploaded to processing: internal_user.csv
+2025-07-28 12:11:54,822 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:11:54,823 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv
+2025-07-28 12:11:54,862 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:11:54,943 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:11:55,009 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:11:55,248 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:11:55,661 - root - ERROR - Failed to move file from processing to processed: Failure
+2025-07-28 12:11:55,661 - root - ERROR - Upload processing failed: Error processing file: 500: Failed to process file: Failure
+2025-07-28 12:11:55,760 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 12:11:55,836 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - failed
+2025-07-28 12:11:55,837 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - failed
+2025-07-28 12:12:21,168 - root - INFO - Starting 3-stage upload process for internal_user.csv to internal_users
+2025-07-28 12:12:21,214 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:12:21,413 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:12:21,526 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:12:21,693 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:12:21,752 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded
+2025-07-28 12:12:21,786 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processing
+2025-07-28 12:12:21,839 - root - INFO - Directory already exists: /home/one97/Yash_Code/Data Uploads/internal_users/processed
+2025-07-28 12:12:21,840 - root - INFO - Uploading file to uploaded stage: /home/one97/Yash_Code/Data Uploads/internal_users/uploaded/internal_user.csv
+2025-07-28 12:12:22,089 - root - INFO - File successfully uploaded to uploaded stage
+2025-07-28 12:12:22,137 - root - INFO - Moved file from uploaded to processing: internal_user.csv
+2025-07-28 12:12:22,138 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:12:22,139 - root - INFO - File uploaded to remote server: /home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv
+2025-07-28 12:12:22,181 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.9p1)
+2025-07-28 12:12:22,342 - paramiko.transport - INFO - Authentication (publickey) failed.
+2025-07-28 12:12:22,540 - paramiko.transport - INFO - Authentication (password) successful!
+2025-07-28 12:12:22,684 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2025-07-28 12:12:23,103 - root - INFO - Moved file from processing to processed: internal_user.csv
+2025-07-28 12:12:23,104 - root - INFO - File successfully processed and moved to processed stage: /home/one97/Yash_Code/Data Uploads/internal_users/processed/internal_user.csv
+2025-07-28 12:12:23,104 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2025-07-28 12:12:23,186 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 12:12:23,331 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 12:12:23,332 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success

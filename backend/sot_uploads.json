@@ -238,5 +238,351 @@
     "timestamp": "25-07-2025 16:49:43",
     "status": "uploaded",
     "sot_type": "thirdparty_users"
+  },
+  {
+    "doc_id": "c1f77356-fb81-4d47-85df-bf7613d9af72",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "demo",
+    "timestamp": "25-07-2025 17:50:05",
+    "status": "uploaded",
+    "sot_type": "internal_users"
+  },
+  {
+    "doc_id": "676865b2-b253-486f-a67a-84a7a044b1f3",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "25-07-2025 18:04:37",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/internal_user.csv",
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Authentication failed."
+  },
+  {
+    "doc_id": "741138b1-03c6-4fa4-9ce0-0f3e065fe26b",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "25-07-2025 18:17:22",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_internal_users.csv",
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Authentication failed."
+  },
+  {
+    "doc_id": "adfc8849-d3d1-4264-acec-5be853e1b928",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "25-07-2025 18:20:39",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_internal_users.csv",
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Authentication failed."
+  },
+  {
+    "doc_id": "b18bfe84-d9a1-475a-96f0-6e63c675196c",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "25-07-2025 18:21:07",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/internal_user.csv",
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Authentication failed."
+  },
+  {
+    "doc_id": "36b9fed0-16e2-4c3d-8663-3d177415753d",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "25-07-2025 18:24:12",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_internal_users.csv",
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Authentication failed."
+  },
+  {
+    "doc_id": "061e0157-e119-492c-bddf-24634961afcb",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "25-07-2025 18:28:12",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_internal_users.csv",
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Authentication failed."
+  },
+  {
+    "doc_id": "63af475b-f5f0-4acc-befa-a24ce753222d",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "25-07-2025 18:28:51",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_internal_users.csv",
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: [Errno 2] No such file"
+  },
+  {
+    "doc_id": "be9be33b-6b4b-4d05-ac87-e70a94643ecc",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "25-07-2025 18:31:41",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_internal_users.csv",
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: [Errno 2] No such file"
+  },
+  {
+    "doc_id": "3b30f0f0-6895-4456-b298-71df5e0f117b",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "25-07-2025 18:32:38",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_internal_users.csv",
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: [Errno 2] No such file"
+  },
+  {
+    "doc_id": "28d7c9df-4758-4f57-8f90-db15ce610af7",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "25-07-2025 18:34:12",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/test_internal_users.csv"
+  },
+  {
+    "doc_id": "4ffdb712-abf5-405d-918a-d4289f06bd34",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "25-07-2025 18:35:35",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/internal_user.csv"
+  },
+  {
+    "doc_id": "d2437f11-dbdc-48ad-8e2b-070a7dbe294f",
+    "doc_name": "thirdpartyuser.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "25-07-2025 18:36:31",
+    "status": "uploaded",
+    "sot_type": "thirdparty_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/thirdparty_users/thirdpartyuser.csv"
+  },
+  {
+    "doc_id": "865baefd-34db-43b1-8673-12529dcf0a11",
+    "doc_name": "test_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 11:33:45",
+    "status": "failed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/test_users.csv",
+    "error": "(pymysql.err.OperationalError) (2013, 'Lost connection to MySQL server during query')\n[SQL: SHOW CREATE TABLE `internal_users`]\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"
+  },
+  {
+    "doc_id": "19100f1a-aeff-411a-8d53-812f5482b977",
+    "doc_name": "test_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 11:38:14",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_users.csv",
+    "processed_file_path": null,
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Error reading SSH protocol banner[Errno 54] Connection reset by peer"
+  },
+  {
+    "doc_id": "ced6221a-ce07-4a3e-a0c8-0f89770131c3",
+    "doc_name": "test_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 11:40:31",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_users.csv",
+    "processed_file_path": null,
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Error reading SSH protocol banner[Errno 54] Connection reset by peer"
+  },
+  {
+    "doc_id": "a40616ea-45c9-4be1-a865-1f7ae2b45fa3",
+    "doc_name": "test_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 11:41:58",
+    "status": "processed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/test_users.csv",
+    "processed_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processed/test_users.csv"
+  },
+  {
+    "doc_id": "15b52846-506c-4367-89c6-9f8210754637",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 11:43:32",
+    "status": "processed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv",
+    "processed_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processed/internal_user.csv"
+  },
+  {
+    "doc_id": "ee6b5b5a-264e-47c6-8cc1-3b1ac715c88a",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 11:46:01",
+    "status": "failed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv",
+    "processed_file_path": null,
+    "error": "Error processing file: 500: Failed to process file: Failure"
+  },
+  {
+    "doc_id": "cf9f4f5c-3a8b-4839-ba62-c8c2fe8fe0b6",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 11:48:37",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/internal_user.csv",
+    "processed_file_path": null,
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Failure"
+  },
+  {
+    "doc_id": "d2404b8d-8534-4409-b159-1fd635b5340e",
+    "doc_name": "test_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 11:51:13",
+    "status": "failed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/test_users.csv",
+    "processed_file_path": null,
+    "error": "Error processing file: 500: Failed to process file: Failure"
+  },
+  {
+    "doc_id": "17bf7559-915d-438b-9443-deeb3aede1c9",
+    "doc_name": "test_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 11:53:39",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/test_users.csv",
+    "processed_file_path": null,
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Failure"
+  },
+  {
+    "doc_id": "a28d18cd-f565-4caf-80af-34bdf5e16c08",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 11:54:37",
+    "status": "processed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/test_internal_users.csv",
+    "processed_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processed/test_internal_users.csv"
+  },
+  {
+    "doc_id": "f38a6cab-c3d7-475b-8572-98466989405e",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 11:55:11",
+    "status": "uploaded",
+    "sot_type": "internal_users",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/internal_users/internal_user.csv",
+    "processed_file_path": null,
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: Failure"
+  },
+  {
+    "doc_id": "83a6170d-5509-4f58-bb90-495e72a5930e",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 11:57:22",
+    "status": "processed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv",
+    "processed_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processed/internal_user.csv"
+  },
+  {
+    "doc_id": "4b29b10c-29f9-4547-b2f8-0d6f9afd64bc",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 12:00:20",
+    "status": "processed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv",
+    "processed_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processed/internal_user.csv"
+  },
+  {
+    "doc_id": "4c21249e-1a33-46a1-af91-1499f1fc14b7",
+    "doc_name": "Sample_hr_recon - Sheet1.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 12:05:58",
+    "status": "uploaded",
+    "sot_type": "hr_data",
+    "remote_file_path": "LOCAL_FALLBACK:uploads/hr_data/Sample_hr_recon - Sheet1.csv",
+    "processed_file_path": null,
+    "error": "Remote upload failed, saved locally: 500: Failed to upload file to server: [Errno 2] No such file"
+  },
+  {
+    "doc_id": "7db3dd00-2766-4c59-9f2c-a2ecf05b7224",
+    "doc_name": "test_hr_data.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 12:10:16",
+    "status": "processed",
+    "sot_type": "hr_data",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/hr_data/processing/test_hr_data.csv",
+    "processed_file_path": "/home/one97/Yash_Code/Data Uploads/hr_data/processed/test_hr_data.csv"
+  },
+  {
+    "doc_id": "c727c5b5-d87f-4f60-be4a-594d657ca4d8",
+    "doc_name": "test_internal_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 12:10:17",
+    "status": "failed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/test_internal_users.csv",
+    "processed_file_path": null,
+    "error": "Error processing file: 500: Failed to process file: Failure"
+  },
+  {
+    "doc_id": "667f8c99-e582-40fe-be78-33d1da175fed",
+    "doc_name": "test_service_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 12:10:19",
+    "status": "processed",
+    "sot_type": "service_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/service_users/processing/test_service_users.csv",
+    "processed_file_path": "/home/one97/Yash_Code/Data Uploads/service_users/processed/test_service_users.csv"
+  },
+  {
+    "doc_id": "770e01dd-16a3-4f31-834c-86355e9735b8",
+    "doc_name": "test_thirdparty_users.csv",
+    "uploaded_by": "demo",
+    "timestamp": "28-07-2025 12:10:20",
+    "status": "processed",
+    "sot_type": "thirdparty_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/thirdparty_users/processing/test_thirdparty_users.csv",
+    "processed_file_path": "/home/one97/Yash_Code/Data Uploads/thirdparty_users/processed/test_thirdparty_users.csv"
+  },
+  {
+    "doc_id": "eb152ec9-339a-4036-bb91-36ffca4cadc6",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 12:11:16",
+    "status": "failed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv",
+    "processed_file_path": null,
+    "error": "Error processing file: 500: Failed to process file: Failure"
+  },
+  {
+    "doc_id": "b04989ad-b8e3-4e1f-9f57-ca2dc726ef3a",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 12:11:54",
+    "status": "failed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv",
+    "processed_file_path": null,
+    "error": "Error processing file: 500: Failed to process file: Failure"
+  },
+  {
+    "doc_id": "504b8c00-41b1-4fdb-92c5-2bbee04db010",
+    "doc_name": "internal_user.csv",
+    "uploaded_by": "Yash Priyadershi",
+    "timestamp": "28-07-2025 12:12:21",
+    "status": "processed",
+    "sot_type": "internal_users",
+    "remote_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processing/internal_user.csv",
+    "processed_file_path": "/home/one97/Yash_Code/Data Uploads/internal_users/processed/internal_user.csv"
   }
 ]
