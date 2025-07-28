@@ -48,11 +48,26 @@ export function AuthProvider({ children }) {
           const data = await res.json();
           setUser(data);
         } else {
+          // Token is invalid/expired - log session expiration
+          try {
+            await fetch(`${API_BASE}/auth/logout`, {
+              method: 'POST',
+              credentials: "include",
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+          } catch (error) {
+            console.error('Failed to log session expiration:', error);
+          }
+          
           // Token is invalid, remove it
           localStorage.removeItem('access_token');
           setUser(null);
         }
-      } catch {
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        // Token is invalid, remove it
         localStorage.removeItem('access_token');
         setUser(null);
       } finally {

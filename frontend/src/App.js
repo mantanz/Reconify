@@ -17,7 +17,7 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 const NAV_ITEMS = [
   { key: "home", label: "Home", component: null },
   { key: "config", label: "Config", component: null },
-  { key: "sot_upload", label: "SOT Upload", component: <SOTUpload /> },
+  { key: "sot_upload", label: "SOT", component: <SOTUpload /> },
   { key: "user_summary", label: "Reports", component: (
     <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
       <div>
@@ -32,7 +32,7 @@ const NAV_ITEMS = [
     </div>
   ) },
   { key: "reconciliation", label: "Reconciliation", component: <Reconciliation /> },
-  { key: "audit_trail", label: "Audit Trail", component: <AuditTrail /> },
+  { key: "audit_trail", label: "Audit", component: <AuditTrail /> },
 ];
 
 function App() {

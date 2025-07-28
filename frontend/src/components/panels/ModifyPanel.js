@@ -11,6 +11,8 @@ export default function ModifyPanel() {
   const [message, setMessage] = useState("");
   const [panelExists, setPanelExists] = useState(true);
   const [availableSOTs, setAvailableSOTs] = useState([]);
+  const [hasModifications, setHasModifications] = useState(false);
+  const [originalMappings, setOriginalMappings] = useState({});
 
   useEffect(() => {
     getPanels().then(setPanels);
@@ -44,6 +46,8 @@ export default function ModifyPanel() {
             : { panel: "", hr: "" };
         });
         setKeyMappings(newKeyMappings);
+        setOriginalMappings(newKeyMappings); // Store original mappings
+        setHasModifications(false); // Reset modification state
         // Set default SOT type to first available
         const firstSot = Object.keys(mapping)[0] || "";
         setSotType(firstSot);
@@ -59,6 +63,8 @@ export default function ModifyPanel() {
         console.error("Error fetching panel headers:", error);
         setPanelHeaders([]);
         setKeyMappings({});
+        setOriginalMappings({});
+        setHasModifications(false);
         setSotType("");
         setHRFields([]);
         setPanelExists(false);
@@ -68,6 +74,8 @@ export default function ModifyPanel() {
     } else {
       setPanelHeaders([]);
       setKeyMappings({});
+      setOriginalMappings({});
+      setHasModifications(false);
       setSotType("");
       setHRFields([]);
       setPanelExists(false);
@@ -96,13 +104,25 @@ export default function ModifyPanel() {
   };
 
   const handleKeyMappingChange = (field, value) => {
-    setKeyMappings(km => ({
-      ...km,
-      [sotType]: {
-        ...km[sotType],
-        [field]: value
-      }
-    }));
+    setKeyMappings(km => {
+      const newMappings = {
+        ...km,
+        [sotType]: {
+          ...km[sotType],
+          [field]: value
+        }
+      };
+      
+      // Check if mappings have been modified compared to original
+      const hasChanges = Object.keys(newMappings).some(sot => {
+        const current = newMappings[sot];
+        const original = originalMappings[sot];
+        return !original || current.panel !== original.panel || current.hr !== original.hr;
+      });
+      
+      setHasModifications(hasChanges);
+      return newMappings;
+    });
   };
 
   const handleSave = async () => {
@@ -132,6 +152,8 @@ export default function ModifyPanel() {
     try {
       const res = await modifyPanelConfig(data);
       setMessage(res.message || "Updated!");
+      setOriginalMappings(keyMappings); // Update original mappings to current state
+      setHasModifications(false); // Reset modification state
       getPanels().then(setPanels);
     } catch (error) {
       console.error("Error modifying panel config:", error);
@@ -142,18 +164,70 @@ export default function ModifyPanel() {
   const renderExistingMappings = () => {
     if (!selectedPanel || !selectedPanel.key_mapping) return null;
     const mapping = selectedPanel.key_mapping;
+    
     return (
-      <div style={{ marginBottom: 16 }}>
-        <strong>Existing Mapping(s):</strong>
-        <ul style={{ margin: 0, paddingLeft: 20 }}>
-          {Object.entries(mapping).map(([sot, map], idx) =>
-            Object.entries(map).length > 0 ? (
-              <li key={sot + idx}><b>{sot.toUpperCase()}</b>: {Object.entries(map).map(([panelField, hrField]) => `${panelField} → ${hrField}`).join(", ")}</li>
-            ) : (
-              <li key={sot + idx}><b>{sot.toUpperCase()}</b>: <i>No mapping</i></li>
-            )
-          )}
-        </ul>
+      <div style={{ 
+        marginBottom: 20,
+        padding: 16,
+        background: "#f8f9fa",
+        borderRadius: 8,
+        border: "1px solid #e9ecef"
+      }}>
+        <div style={{ 
+          marginBottom: 12,
+          fontWeight: 600,
+          color: "#343a40",
+          fontSize: 14
+        }}>
+          Current Mappings:
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {Object.entries(mapping).map(([sot, map], idx) => {
+            const hasMapping = Object.entries(map).length > 0;
+            const sotDisplayName = sot === "hr_data" ? "HR Data" : 
+              sot === "service_users" ? "Service Users" :
+              sot === "internal_users" ? "Internal Users" :
+              sot === "thirdparty_users" ? "Third Party Users" :
+              sot.toUpperCase();
+            
+            return (
+              <div key={sot + idx} style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "8px 12px",
+                background: hasMapping ? "#e8f5e8" : "#fff3cd",
+                borderRadius: 6,
+                border: `1px solid ${hasMapping ? "#c3e6c3" : "#ffeaa7"}`
+              }}>
+                <div style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: hasMapping ? "#28a745" : "#ffc107"
+                }}></div>
+                <span style={{
+                  fontWeight: 500,
+                  color: "#343a40",
+                  fontSize: 13,
+                  minWidth: 120
+                }}>
+                  {sotDisplayName}:
+                </span>
+                <span style={{
+                  color: hasMapping ? "#28a745" : "#856404",
+                  fontSize: 12,
+                  fontWeight: 500
+                }}>
+                  {hasMapping 
+                    ? Object.entries(map).map(([panelField, hrField]) => `${panelField} → ${hrField}`).join(", ")
+                    : "No mapping configured"
+                  }
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   };
@@ -324,30 +398,132 @@ export default function ModifyPanel() {
                 )}
               </div>
               
+              {/* Mapping Status Summary */}
+              {availableSOTs.length > 0 && hasModifications && (
+                <div style={{ 
+                  marginBottom: 20,
+                  padding: 16,
+                  background: "#f8f9fa",
+                  borderRadius: 8,
+                  border: "1px solid #e9ecef"
+                }}>
+                  <div style={{ 
+                    marginBottom: 12,
+                    fontWeight: 600,
+                    color: "#343a40",
+                    fontSize: 14
+                  }}>
+                    Updated Mapping Status:
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {availableSOTs.map(sot => {
+                      const mapping = keyMappings[sot];
+                      const originalMapping = originalMappings[sot];
+                      const isComplete = mapping && mapping.panel && mapping.hr;
+                      const hasChanged = !originalMapping || 
+                        mapping.panel !== originalMapping.panel || 
+                        mapping.hr !== originalMapping.hr;
+                      const sotDisplayName = sot === "hr_data" ? "HR Data" : 
+                        sot === "service_users" ? "Service Users" :
+                        sot === "internal_users" ? "Internal Users" :
+                        sot === "thirdparty_users" ? "Third Party Users" :
+                        sot.toUpperCase();
+                      
+                      return (
+                        <div key={sot} style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          padding: "8px 12px",
+                          background: hasChanged ? "#e8f5e8" : "#f8f9fa",
+                          borderRadius: 6,
+                          border: `1px solid ${hasChanged ? "#c3e6c3" : "#e9ecef"}`
+                        }}>
+                          <div style={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: "50%",
+                            background: hasChanged ? "#28a745" : "#6c757d"
+                          }}></div>
+                          <span style={{
+                            fontWeight: 500,
+                            color: "#343a40",
+                            fontSize: 13,
+                            minWidth: 120
+                          }}>
+                            {sotDisplayName}:
+                          </span>
+                          <span style={{
+                            color: hasChanged ? "#28a745" : "#6c757d",
+                            fontSize: 12,
+                            fontWeight: 500
+                          }}>
+                            {isComplete 
+                              ? `${mapping.panel} → ${mapping.hr}`
+                              : mapping && (mapping.panel || mapping.hr)
+                                ? `${mapping.panel || "Not selected"} → ${mapping.hr || "Not selected"}`
+                                : "Mapping incomplete"
+                            }
+                            {hasChanged && (
+                              <span style={{ 
+                                marginLeft: 8, 
+                                fontSize: 11, 
+                                color: "#28a745",
+                                fontStyle: "italic"
+                              }}>
+                                (modified)
+                              </span>
+                            )}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {Object.values(keyMappings).some(km => km.panel && km.hr) && (
+                    <div style={{
+                      marginTop: 12,
+                      padding: "8px 12px",
+                      background: "#d4edda",
+                      borderRadius: 6,
+                      border: "1px solid #c3e6c3",
+                      color: "#155724",
+                      fontSize: 12,
+                      fontWeight: 500,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6
+                    }}>
+                      <span>✓</span>
+                      At least one mapping is complete. You can save the changes.
+                    </div>
+                  )}
+                </div>
+              )}
+              
               <button
                 style={{
                   width: "100%",
-                  background: hrFields.length === 0 ? "#adb5bd" : "#6c5ce7",
+                  background: !hasModifications ? "#adb5bd" : "#6c5ce7",
                   color: "#fff",
                   border: "none",
                   borderRadius: 8,
                   padding: "14px 32px",
                   fontWeight: 600,
                   fontSize: 16,
-                  cursor: hrFields.length === 0 ? "not-allowed" : "pointer",
-                  boxShadow: hrFields.length === 0 ? "none" : "0 2px 8px rgba(108, 92, 231, 0.3)",
+                  cursor: !hasModifications ? "not-allowed" : "pointer",
+                  boxShadow: !hasModifications ? "none" : "0 2px 8px rgba(108, 92, 231, 0.3)",
                   transition: "all 0.2s ease"
                 }}
                 onClick={handleSave}
-                disabled={hrFields.length === 0}
+                disabled={!hasModifications}
                 onMouseEnter={(e) => {
-                  if (hrFields.length > 0) {
+                  if (hasModifications) {
                     e.target.style.background = "#5a4fd8";
                     e.target.style.boxShadow = "0 4px 12px rgba(108, 92, 231, 0.4)";
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (hrFields.length > 0) {
+                  if (hasModifications) {
                     e.target.style.background = "#6c5ce7";
                     e.target.style.boxShadow = "0 2px 8px rgba(108, 92, 231, 0.3)";
                   }

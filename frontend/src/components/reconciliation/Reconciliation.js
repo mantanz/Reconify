@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API_BASE, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, uploadPanelData } from "../../utils/api";
+import { MAX_FILE_SIZE } from '../../utils/constants';
 
 export default function Reconciliation() {
   const [selectedPanel, setSelectedPanel] = useState("");
@@ -27,11 +28,31 @@ export default function Reconciliation() {
   };
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      // File size validation
+      if (selectedFile.size > MAX_FILE_SIZE) {
+        const sizeInMB = (MAX_FILE_SIZE / (1024 * 1024)).toFixed(1);
+        alert(`File size exceeds the maximum limit of ${sizeInMB}MB. Please choose a smaller file.`);
+        e.target.value = '';
+        return;
+      }
+    }
+    setSelectedFile(selectedFile);
   };
 
   const handleRecategorizationFileChange = (e) => {
-    setRecategorizationFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      // File size validation
+      if (selectedFile.size > MAX_FILE_SIZE) {
+        const sizeInMB = (MAX_FILE_SIZE / (1024 * 1024)).toFixed(1);
+        alert(`File size exceeds the maximum limit of ${sizeInMB}MB. Please choose a smaller file.`);
+        e.target.value = '';
+        return;
+      }
+    }
+    setRecategorizationFile(selectedFile);
   };
 
   const handleShowRecategorization = (reconId) => {

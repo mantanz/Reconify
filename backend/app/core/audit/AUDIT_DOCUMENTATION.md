@@ -48,6 +48,7 @@ The Reconify Audit Trail System provides comprehensive logging and tracking of a
 | `NEW_PANEL_ADDED` | New panel added | ✅ | Panel creation details |
 | `LOGIN` | User login via OAuth | ✅ | User info, auth method, IP, user agent |
 | `LOGOUT` | User logout | ✅ | User info, logout timestamp, IP, user agent |
+| `SESSION_EXPIRED` | User session expired | ✅ | Expiration reason, IP, user agent, endpoint |
 | `FILE_STRUCTURE_VALIDATION` | File structure validation | ✅ | Validation results |
 | `DATA_PROCESSING` | Data processing operation | ✅ | Processing details |
 | `FILE_PROCESSING_ERROR` | File processing error | ✅ | Error details |
@@ -248,6 +249,42 @@ The frontend authentication system (`AuthContext.js`) includes:
 ```json
 {
   "error": "Logout error: Invalid token",
+  "logout_timestamp": "24-07-2025 19:16:51",
+  "ip_address": "192.168.1.100",
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+}
+```
+
+#### Session Expiration (`SESSION_EXPIRED`)
+**Triggered by:** Invalid/expired JWT token detection
+
+**Success Details:**
+```json
+{
+  "reason": "Invalid or expired token",
+  "ip_address": "192.168.1.100",
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+  "endpoint": "/auth/me",
+  "method": "GET"
+}
+```
+
+**JWT Error Details:**
+```json
+{
+  "reason": "JWT error: Token has expired",
+  "ip_address": "192.168.1.100",
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+  "endpoint": "/sot/upload",
+  "method": "POST"
+}
+```
+
+**Logout with Invalid Token Details:**
+```json
+{
+  "user_email": "unknown",
+  "reason": "Token validation failed during logout",
   "logout_timestamp": "24-07-2025 19:16:51",
   "ip_address": "192.168.1.100",
   "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"

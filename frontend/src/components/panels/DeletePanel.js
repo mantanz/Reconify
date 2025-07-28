@@ -35,18 +35,86 @@ export default function DeletePanel() {
   const renderExistingMappings = () => {
     if (!selectedPanel || !selectedPanel.key_mapping) return null;
     const mapping = selectedPanel.key_mapping;
+    
     return (
-      <div style={{ marginBottom: 16 }}>
-        <strong>Existing Mapping(s):</strong>
-        <ul style={{ margin: 0, paddingLeft: 20 }}>
-          {Object.entries(mapping).map(([sot, map], idx) =>
-            Object.entries(map).length > 0 ? (
-              <li key={sot + idx}><b>{sot.toUpperCase()}</b>: {Object.entries(map).map(([panelField, hrField]) => `${panelField} → ${hrField}`).join(", ")}</li>
-            ) : (
-              <li key={sot + idx}><b>{sot.toUpperCase()}</b>: <i>No mapping</i></li>
-            )
-          )}
-        </ul>
+      <div style={{ 
+        marginBottom: 20,
+        padding: 16,
+        background: "#f8f9fa",
+        borderRadius: 8,
+        border: "1px solid #e9ecef"
+      }}>
+        <div style={{ 
+          marginBottom: 12,
+          fontWeight: 600,
+          color: "#343a40",
+          fontSize: 14
+        }}>
+          Panel Mappings:
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {Object.entries(mapping).map(([sot, map], idx) => {
+            const hasMapping = Object.entries(map).length > 0;
+            const sotDisplayName = sot === "hr_data" ? "HR Data" : 
+              sot === "service_users" ? "Service Users" :
+              sot === "internal_users" ? "Internal Users" :
+              sot === "thirdparty_users" ? "Third Party Users" :
+              sot.toUpperCase();
+            
+            return (
+              <div key={sot + idx} style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "8px 12px",
+                background: hasMapping ? "#e8f5e8" : "#fff3cd",
+                borderRadius: 6,
+                border: `1px solid ${hasMapping ? "#c3e6c3" : "#ffeaa7"}`
+              }}>
+                <div style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: hasMapping ? "#28a745" : "#ffc107"
+                }}></div>
+                <span style={{
+                  fontWeight: 500,
+                  color: "#343a40",
+                  fontSize: 13,
+                  minWidth: 120
+                }}>
+                  {sotDisplayName}:
+                </span>
+                <span style={{
+                  color: hasMapping ? "#28a745" : "#856404",
+                  fontSize: 12,
+                  fontWeight: 500
+                }}>
+                  {hasMapping 
+                    ? Object.entries(map).map(([panelField, hrField]) => `${panelField} → ${hrField}`).join(", ")
+                    : "No mapping configured"
+                  }
+                </span>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{
+          marginTop: 12,
+          padding: "8px 12px",
+          background: "#fff3cd",
+          borderRadius: 6,
+          border: "1px solid #ffeaa7",
+          color: "#856404",
+          fontSize: 12,
+          fontWeight: 500,
+          display: "flex",
+          alignItems: "center",
+          gap: 6
+        }}>
+          <span>⚠️</span>
+          This action will permanently delete this panel and all its data.
+        </div>
       </div>
     );
   };

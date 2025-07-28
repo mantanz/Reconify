@@ -1,0 +1,31 @@
+[
+  {
+    "panelname": "Seller Panel",
+    "docid": "02f5e098-7a24-4c0f-b555-a7103bdc5524",
+    "docname": "1. Seller Panel Users List with Assigned Roles.csv",
+    "timestamp": "27-07-2025 12:23:18",
+    "total_records": 1385,
+    "uploadedby": "Charul Mauni",
+    "status": "complete"
+  },
+  {
+    "panelname": "OE Panel",
+    "docid": "3602f480-9cc8-48d3-a897-659b586eaad6",
+    "docname": "5. OE_PANEL.csv",
+    "timestamp": "27-07-2025 16:06:38",
+    "total_records": 3029,
+    "uploadedby": "Charul Mauni",
+    "status": "complete",
+    "file_hash": "1ea76117e076c3c60d7fe00dd212c73dff0078b4b2b01766606b4ebf00b50c87"
+  },
+  {
+    "panelname": "OE_ODS_PANEL_PMMS",
+    "docid": "4166f65f-a078-4874-be81-d4b6ede31822",
+    "docname": "6. OE_ODS_PANEL_PMMS.csv",
+    "timestamp": "27-07-2025 23:34:16",
+    "total_records": 111,
+    "uploadedby": "Charul Mauni",
+    "status": "uploaded",
+    "file_hash": "18b9b5556ba40c74e1bda6bdcd579856f0cee7e2e70a66ed0812a56990b2febf"
+  }
+]

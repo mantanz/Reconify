@@ -20,13 +20,18 @@ PORT = int(os.getenv("PORT", 8000))
 # CORS Configuration
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
 
-# File Paths
-DB_PATH = "data/config_db.json"
-HR_DATA_SAMPLE_PATH = os.path.join("data", "samples", "HR_data_sample.csv")
+# File paths
 SOT_UPLOADS_PATH = "data/sot_uploads.json"
+SOT_CONFIG_PATH = "data/sot_config.json"
+PANEL_CONFIG_PATH = "data/panel_config.json"
 RECON_HISTORY_PATH = "data/panel_history.json"
+CONFIG_DB_PATH = "data/config_db.json"
+HR_DATA_SAMPLE_PATH = os.path.join("data", "samples", "HR_data_sample.csv")
 RECON_SUMMARY_PATH = "data/reconciliation_summary.json"
 
 # Logging Configuration
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
-LOG_FILE = "logs/reconify.log" 
+LOG_FILE = "logs/reconify.log"
+
+# Session Configuration
+SESSION_SECRET_KEY = "your-secret-key-here" 

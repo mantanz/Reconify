@@ -229,6 +229,49 @@ export async function getSOTUploads() {
   return res.json();
 }
 
+// Get SOT configurations
+export async function getSOTConfigs() {
+  const res = await fetch(`${API_BASE}/sot/config`, {
+    headers: createAuthHeaders(),
+  });
+  return res.json();
+}
+
+// Create new SOT configuration
+export async function createSOTConfig(sotData) {
+  const res = await fetch(`${API_BASE}/sot/config`, {
+    method: "POST",
+    headers: {
+      ...createAuthHeaders(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(sotData),
+  });
+  return res.json();
+}
+
+// Update SOT configuration
+export async function updateSOTConfig(sotName, sotData) {
+  const res = await fetch(`${API_BASE}/sot/config/${sotName}`, {
+    method: "PUT",
+    headers: {
+      ...createAuthHeaders(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(sotData),
+  });
+  return res.json();
+}
+
+// Delete SOT configuration
+export async function deleteSOTConfig(sotName) {
+  const res = await fetch(`${API_BASE}/sot/config/${sotName}`, {
+    method: "DELETE",
+    headers: createAuthHeaders(),
+  });
+  return res.json();
+}
+
 // Fetch all initial status summaries
 export const getInitialSummaries = (statusType = "initial") => {
   return fetch(`${API_BASE}/recon/initialsummary?status_type=${statusType}`, {

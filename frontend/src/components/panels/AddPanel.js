@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { uploadPanelFile, getHRFields, savePanelConfig, getPanels, getSOTFields, getSOTList } from "../../utils/api";
+import { MAX_FILE_SIZE } from '../../utils/constants';
 
 export default function AddPanel() {
   const [panelName, setPanelName] = useState("");
@@ -12,6 +13,18 @@ export default function AddPanel() {
   const [panels, setPanels] = useState([]);
   const [panelExists, setPanelExists] = useState(false);
   const [availableSOTs, setAvailableSOTs] = useState([]);
+
+  // Function to check if all mappings are complete
+  const areAllMappingsComplete = () => {
+    if (availableSOTs.length === 0) return false;
+    if (!panelName.trim()) return false;
+    if (panelHeaders.length === 0) return false;
+    
+    return availableSOTs.every(sot => {
+      const mapping = keyMappings[sot];
+      return mapping && mapping.panel && mapping.hr;
+    });
+  };
 
   useEffect(() => {
     getPanels().then(setPanels);
@@ -62,6 +75,15 @@ export default function AddPanel() {
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
+    
+    // File size validation
+    if (file && file.size > MAX_FILE_SIZE) {
+      const sizeInMB = (MAX_FILE_SIZE / (1024 * 1024)).toFixed(1);
+      setMessage(`File size exceeds the maximum limit of ${sizeInMB}MB. Please choose a smaller file.`);
+      e.target.value = '';
+      return;
+    }
+    
     setPanelFile(file);
     try {
       const res = await uploadPanelFile(file);
@@ -109,10 +131,9 @@ export default function AddPanel() {
   };
 
   const handleSave = async () => {
-    // At least one SOT mapping must be filled
-    const hasMapping = Object.values(keyMappings).some(km => km.panel && km.hr);
-    if (!panelName || !hasMapping) {
-      setMessage("Please fill all fields and select key mapping for at least one SOT.");
+    // Check if all mappings are complete
+    if (!areAllMappingsComplete()) {
+      setMessage("Please fill all fields and select key mapping for all SOTs.");
       return;
     }
     if (panelExists) {
@@ -341,30 +362,115 @@ export default function AddPanel() {
         </div>
       )}
       
+      {/* Mapping Status Summary */}
+      {panelHeaders.length > 0 && availableSOTs.length > 0 && (
+        <div style={{ 
+          marginBottom: 20,
+          padding: 16,
+          background: "#f8f9fa",
+          borderRadius: 8,
+          border: "1px solid #e9ecef"
+        }}>
+          <div style={{ 
+            marginBottom: 12,
+            fontWeight: 600,
+            color: "#343a40",
+            fontSize: 14
+          }}>
+            Mapping Status:
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {availableSOTs.map(sot => {
+              const mapping = keyMappings[sot];
+              const isComplete = mapping && mapping.panel && mapping.hr;
+              const sotDisplayName = sot === "hr_data" ? "HR Data" : 
+                sot === "service_users" ? "Service Users" :
+                sot === "internal_users" ? "Internal Users" :
+                sot === "thirdparty_users" ? "Third Party Users" :
+                sot.toUpperCase();
+              
+              return (
+                <div key={sot} style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "8px 12px",
+                  background: isComplete ? "#e8f5e8" : "#fff3cd",
+                  borderRadius: 6,
+                  border: `1px solid ${isComplete ? "#c3e6c3" : "#ffeaa7"}`
+                }}>
+                  <div style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    background: isComplete ? "#28a745" : "#ffc107"
+                  }}></div>
+                  <span style={{
+                    fontWeight: 500,
+                    color: "#343a40",
+                    fontSize: 13
+                  }}>
+                    {sotDisplayName}:
+                  </span>
+                  <span style={{
+                    color: isComplete ? "#28a745" : "#856404",
+                    fontSize: 12,
+                    fontWeight: 500
+                  }}>
+                    {isComplete 
+                      ? `${mapping.panel} → ${mapping.hr}`
+                      : "Mapping incomplete"
+                    }
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+          {areAllMappingsComplete() && (
+            <div style={{
+              marginTop: 12,
+              padding: "8px 12px",
+              background: "#d4edda",
+              borderRadius: 6,
+              border: "1px solid #c3e6c3",
+              color: "#155724",
+              fontSize: 12,
+              fontWeight: 500,
+              display: "flex",
+              alignItems: "center",
+              gap: 6
+            }}>
+              <span>✓</span>
+              All mappings complete! You can now save the panel.
+            </div>
+          )}
+        </div>
+      )}
+      
       <button
         onClick={handleSave}
-        disabled={panelExists || hrFields.length === 0}
+        disabled={panelExists || !areAllMappingsComplete()}
         style={{
           width: "100%",
-          background: panelExists || hrFields.length === 0 ? "#adb5bd" : "#6c5ce7",
+          background: panelExists || !areAllMappingsComplete() ? "#adb5bd" : "#6c5ce7",
           color: "#fff",
           border: "none",
           borderRadius: 8,
           padding: "14px 32px",
           fontWeight: 600,
           fontSize: 16,
-          cursor: panelExists || hrFields.length === 0 ? "not-allowed" : "pointer",
-          boxShadow: panelExists || hrFields.length === 0 ? "none" : "0 2px 8px rgba(108, 92, 231, 0.3)",
+          cursor: panelExists || !areAllMappingsComplete() ? "not-allowed" : "pointer",
+          boxShadow: panelExists || !areAllMappingsComplete() ? "none" : "0 2px 8px rgba(108, 92, 231, 0.3)",
           transition: "all 0.2s ease"
         }}
         onMouseEnter={(e) => {
-          if (!panelExists && hrFields.length > 0) {
+          if (!panelExists && areAllMappingsComplete()) {
             e.target.style.background = "#5a4fd8";
             e.target.style.boxShadow = "0 4px 12px rgba(108, 92, 231, 0.4)";
           }
         }}
         onMouseLeave={(e) => {
-          if (!panelExists && hrFields.length > 0) {
+          if (!panelExists && areAllMappingsComplete()) {
             e.target.style.background = "#6c5ce7";
             e.target.style.boxShadow = "0 2px 8px rgba(108, 92, 231, 0.3)";
           }

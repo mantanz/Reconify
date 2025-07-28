@@ -13,24 +13,25 @@ MYSQL_URL = "mysql+pymysql://reconify:Paytmkaro%4012@localhost/reconify"
 engine = create_engine(MYSQL_URL)
 metadata = MetaData()
 
-# Audit action constants
+# Audit action types
 AUDIT_ACTIONS = {
-    "SOT_UPLOAD": "Source of Truth file upload",
-    "PANEL_UPLOAD": "Panel data upload",
-    "USER_CATEGORIZATION": "User categorization process",
-    "RECONCILIATION": "HR reconciliation process",
-    "USER_RECATEGORIZATION": "User recategorization with file",
-    "PANEL_CONFIG_SAVE": "Panel configuration saved",
-    "PANEL_CONFIG_MODIFY": "Panel configuration modified",
-    "PANEL_CONFIG_DELETE": "Panel configuration deleted",
-    "NEW_PANEL_ADDED": "New panel added",
     "LOGIN": "User login",
     "LOGOUT": "User logout",
+    "SESSION_EXPIRED": "User session expired",
+    "SOT_UPLOAD": "SOT file upload",
+    "PANEL_UPLOAD": "Panel data upload",
+    "RECONCILIATION": "Reconciliation process",
+    "USER_CATEGORIZATION": "User categorization",
+    "PANEL_CONFIG_SAVED": "Panel configuration saved",
+    "PANEL_CONFIG_MODIFIED": "Panel configuration modified",
+    "PANEL_CONFIG_DELETED": "Panel configuration deleted",
+    "NEW_PANEL_ADDED": "New panel added",
     "FILE_STRUCTURE_VALIDATION": "File structure validation",
-    "DATA_PROCESSING": "Data processing operation",
-    "FILE_PROCESSING_ERROR": "File processing error",
-    "EMPTY_FILE_UPLOAD": "Empty file upload attempt",
-    "PARTIAL_DATA_PROCESSING": "Partial data processing"
+    "DUPLICATE_FILE_UPLOAD": "Duplicate file upload attempt",
+    "DATA_BACKUP": "Data backup operation",
+    "SOT_CONFIG_CREATED": "SOT configuration created",
+    "SOT_CONFIG_UPDATED": "SOT configuration updated",
+    "SOT_CONFIG_DELETED": "SOT configuration deleted"
 }
 
 def get_ist_timestamp():
@@ -85,21 +86,25 @@ def log_audit_event(action, user, details, status="success", ip_address=None, us
         # Ensure audit table exists
         create_audit_table()
         
+        # Get current timestamp
+        current_timestamp = get_ist_timestamp()
+        
         # Insert audit record
         with engine.begin() as conn:
             insert_query = text("""
-                INSERT INTO audit_trail (timestamp, action, user_name, details, status, ip_address, user_agent)
-                VALUES (:timestamp, :action, :user_name, :details, :status, :ip_address, :user_agent)
+                INSERT INTO audit_trail (timestamp, action, user_name, details, status, ip_address, user_agent, created_at)
+                VALUES (:timestamp, :action, :user_name, :details, :status, :ip_address, :user_agent, :created_at)
             """)
             
             conn.execute(insert_query, {
-                'timestamp': get_ist_timestamp(),
+                'timestamp': current_timestamp,
                 'action': action,
                 'user_name': user,
                 'details': json.dumps(details, default=str),
                 'status': status,
                 'ip_address': ip_address,
-                'user_agent': user_agent
+                'user_agent': user_agent,
+                'created_at': current_timestamp
             })
         
         logger.info(f"Audit event logged: {action} by {user} - {status}")
@@ -140,15 +145,33 @@ def get_audit_trail(filters=None, limit=100, offset=0):
                 params['status'] = filters['status']
             
             if filters.get('date_from'):
-                query += " AND created_at >= :date_from"
-                params['date_from'] = filters['date_from']
+                # Convert YYYY-MM-DD to dd-mm-yyyy format for database comparison
+                from datetime import datetime
+                try:
+                    date_obj = datetime.strptime(filters['date_from'], '%Y-%m-%d')
+                    date_from_str = date_obj.strftime('%d-%m-%Y')
+                    query += " AND timestamp >= :date_from"
+                    params['date_from'] = date_from_str
+                except ValueError:
+                    # If conversion fails, use as-is
+                    query += " AND timestamp >= :date_from"
+                    params['date_from'] = filters['date_from']
             
             if filters.get('date_to'):
-                query += " AND created_at <= :date_to"
-                params['date_to'] = filters['date_to']
+                # Convert YYYY-MM-DD to dd-mm-yyyy format for database comparison
+                from datetime import datetime
+                try:
+                    date_obj = datetime.strptime(filters['date_to'], '%Y-%m-%d')
+                    date_to_str = date_obj.strftime('%d-%m-%Y')
+                    query += " AND timestamp <= :date_to"
+                    params['date_to'] = date_to_str + " 23:59:59"  # End of day
+                except ValueError:
+                    # If conversion fails, use as-is
+                    query += " AND timestamp <= :date_to"
+                    params['date_to'] = filters['date_to']
         
         # Add ordering and pagination
-        query += " ORDER BY created_at DESC LIMIT :limit OFFSET :offset"
+        query += " ORDER BY timestamp DESC LIMIT :limit OFFSET :offset"
         params['limit'] = limit
         params['offset'] = offset
         
@@ -224,12 +247,18 @@ def get_audit_summary():
                     'count': row[1]
                 })
             
-            # Recent activity (last 24 hours)
+            # Recent activity (last 24 hours) - using string comparison
+            # Get current IST timestamp and calculate 24 hours ago
+            from datetime import datetime, timedelta
+            now = datetime.now()
+            yesterday = now - timedelta(hours=24)
+            yesterday_str = yesterday.strftime("%d-%m-%Y %H:%M:%S")
+            
             result = conn.execute(text("""
                 SELECT COUNT(*) as recent_count
                 FROM audit_trail 
-                WHERE created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
-            """))
+                WHERE timestamp >= :yesterday
+            """), {'yesterday': yesterday_str})
             recent_activity = result.fetchone()[0]
             
             return {
@@ -251,13 +280,18 @@ def cleanup_old_audit_logs(days_to_keep=90):
         days_to_keep (int): Number of days to keep audit logs
     """
     try:
+        # Calculate the cutoff date using string format
+        from datetime import datetime, timedelta
+        cutoff_date = datetime.now() - timedelta(days=days_to_keep)
+        cutoff_str = cutoff_date.strftime("%d-%m-%Y %H:%M:%S")
+        
         with engine.begin() as conn:
             delete_query = text("""
                 DELETE FROM audit_trail 
-                WHERE created_at < DATE_SUB(NOW(), INTERVAL :days DAY)
+                WHERE timestamp < :cutoff_date
             """)
             
-            result = conn.execute(delete_query, {'days': days_to_keep})
+            result = conn.execute(delete_query, {'cutoff_date': cutoff_str})
             deleted_count = result.rowcount
         
         logger.info(f"Cleaned up {deleted_count} old audit log entries")

@@ -1,0 +1,12 @@
+{
+  "sots": [
+  
+    {
+      "name": "sample_data",
+      "headers": [
+        "user_email",
+        "category"
+      ]
+    }
+  ]
+}

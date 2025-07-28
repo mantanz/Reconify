@@ -1,15 +1,17 @@
 import React from "react";
+import sellerPanelIcon from "../../assets/images/seller panel.png";
 
 export default function AppLauncher({ isOpen, onClose, onLinkClick }) {
   if (!isOpen) return null;
 
   const quickLinks = [
     {
-      name: "Account",
-      url: "https://myaccount.google.com",
-      icon: "👤",
+      name: "Seller Panel",
+      url: "https://seller.paytm.com/login",
+      icon: sellerPanelIcon,
       color: "#8e63ce",
-      description: "Manage your account"
+      description: "Manage your account",
+      isImage: true
     },
     {
       name: "Gmail",
@@ -196,15 +198,29 @@ export default function AppLauncher({ isOpen, onClose, onLinkClick }) {
             <div style={{
               width: "40px",
               height: "40px",
-              background: link.color,
+              background: link.isImage ? "transparent" : link.color,
               borderRadius: "12px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: "20px",
-              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)"
+              boxShadow: link.isImage ? "none" : "0 2px 8px rgba(0, 0, 0, 0.2)",
+              overflow: "hidden"
             }}>
-              {link.icon}
+              {link.isImage ? (
+                <img 
+                  src={link.icon} 
+                  alt={link.name}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "12px"
+                  }}
+                />
+              ) : (
+                link.icon
+              )}
             </div>
             <div style={{
               fontWeight: "500",
