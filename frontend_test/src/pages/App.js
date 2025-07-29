@@ -19,12 +19,7 @@ const NAV_ITEMS = [
   { key: "sot", label: "SOT", component: <SOTUpload /> },
   { key: "reconciliation", label: "Reconciliation", component: <Reconciliation /> },
   { key: "recertification", label: "Recertification", component: null },
-  { key: "reports", label: "Dashboard", component: (
-    <div>
-      <Reconsummary />
-      <UserSummary />
-    </div>
-  ) },
+  { key: "reports", label: "Dashboard", component: null }, // This will be handled specially
   { key: "audit_trails", label: "Audit", component: <AuditTrail /> },
 ];
 
@@ -83,12 +78,22 @@ function AppContent() {
     return <LoadingSpinner message="Checking authentication..." />;
   }
 
-  // Show login page if not authenticated
+  // 
   if (!user) {
     return <Login />;
     }
 
   const renderContent = () => {
+    // Handle special cases for dashboard items
+    if (selected === "summary") {
+      return <UserSummary />;
+    }
+    
+    if (selected === "recon_summary") {
+      return <Reconsummary />;
+    }
+    
+    // Handle regular navigation items
     const selectedItem = NAV_ITEMS.find(item => item.key === selected);
     
     if (selectedItem?.component) {
@@ -124,15 +129,16 @@ function AppContent() {
               color: "#4a5568", 
               fontSize: 18, 
               lineHeight: 1.7,
-              marginBottom: 40
+              marginBottom: 48
             }}>
-              Data reconciliation and panel management system for efficient user categorization and HR data processing.
+              Your comprehensive reconciliation platform for managing panel data, user analytics, and audit trails.
             </p>
+            
+            {/* Feature Grid */}
             <div style={{ 
               display: "grid", 
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", 
-              gap: 24, 
-              marginTop: 32 
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", 
+              gap: 24 
             }}>
               <div style={{ 
                 background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)", 
@@ -164,9 +170,112 @@ function AppContent() {
                 }}>
                   📊
                 </div>
+                <h3 style={{ color: "#002e6e", marginBottom: 12, fontSize: 20, fontWeight: 700 }}>Dashboard</h3>
+                <p style={{ color: "#4a5568", fontSize: 15, lineHeight: 1.6 }}>View comprehensive summaries and analytics</p>
+              </div>
+              
+              <div style={{ 
+                background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)", 
+                padding: 32, 
+                borderRadius: 16, 
+                textAlign: "center",
+                border: "1px solid #e8ecff",
+                boxShadow: "0 8px 24px rgba(0, 123, 255, 0.06)",
+                transition: "all 0.3s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = "translateY(-4px)";
+                e.target.style.boxShadow = "0 12px 32px rgba(0, 123, 255, 0.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 8px 24px rgba(0, 123, 255, 0.06)";
+              }}>
+                <div style={{ 
+                  width: 60, 
+                  height: 60, 
+                  background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)", 
+                  borderRadius: "50%", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center",
+                  margin: "0 auto 16px",
+                  fontSize: 24
+                }}>
+                  ⚙️
+                </div>
+                <h3 style={{ color: "#002e6e", marginBottom: 12, fontSize: 20, fontWeight: 700 }}>Configuration</h3>
+                <p style={{ color: "#4a5568", fontSize: 15, lineHeight: 1.6 }}>Manage panels and system settings</p>
+              </div>
+              
+              <div style={{ 
+                background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)", 
+                padding: 32, 
+                borderRadius: 16, 
+                textAlign: "center",
+                border: "1px solid #e8ecff",
+                boxShadow: "0 8px 24px rgba(0, 123, 255, 0.06)",
+                transition: "all 0.3s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = "translateY(-4px)";
+                e.target.style.boxShadow = "0 12px 32px rgba(0, 123, 255, 0.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 8px 24px rgba(0, 123, 255, 0.06)";
+              }}>
+                <div style={{ 
+                  width: 60, 
+                  height: 60, 
+                  background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)", 
+                  borderRadius: "50%", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center",
+                  margin: "0 auto 16px",
+                  fontSize: 24
+                }}>
+                  📤
+                </div>
+                <h3 style={{ color: "#002e6e", marginBottom: 12, fontSize: 20, fontWeight: 700 }}>SOT Upload</h3>
+                <p style={{ color: "#4a5568", fontSize: 15, lineHeight: 1.6 }}>Upload and manage SOT data files</p>
+              </div>
+              
+              <div style={{ 
+                background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)", 
+                padding: 32, 
+                borderRadius: 16, 
+                textAlign: "center",
+                border: "1px solid #e8ecff",
+                boxShadow: "0 8px 24px rgba(0, 123, 255, 0.06)",
+                transition: "all 0.3s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = "translateY(-4px)";
+                e.target.style.boxShadow = "0 12px 32px rgba(0, 123, 255, 0.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 8px 24px rgba(0, 123, 255, 0.06)";
+              }}>
+                <div style={{ 
+                  width: 60, 
+                  height: 60, 
+                  background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)", 
+                  borderRadius: "50%", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center",
+                  margin: "0 auto 16px",
+                  fontSize: 24
+                }}>
+                  🔄
+                </div>
                 <h3 style={{ color: "#002e6e", marginBottom: 12, fontSize: 20, fontWeight: 700 }}>Reconciliation</h3>
                 <p style={{ color: "#4a5568", fontSize: 15, lineHeight: 1.6 }}>Process panel data with HR information for user categorization</p>
               </div>
+              
               <div style={{ 
                 background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)", 
                 padding: 32, 
@@ -197,46 +306,15 @@ function AppContent() {
                 }}>
                   📋
                 </div>
-                <h3 style={{ color: "#002e6e", marginBottom: 12, fontSize: 20, fontWeight: 700 }}>SOT Management</h3>
-                <p style={{ color: "#4a5568", fontSize: 15, lineHeight: 1.6 }}>Upload and manage Source of Truth data files</p>
-              </div>
-              <div style={{ 
-                background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)", 
-                padding: 32, 
-                borderRadius: 16, 
-                textAlign: "center",
-                border: "1px solid #e8ecff",
-                boxShadow: "0 8px 24px rgba(0, 123, 255, 0.06)",
-                transition: "all 0.3s ease"
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = "translateY(-4px)";
-                e.target.style.boxShadow = "0 12px 32px rgba(0, 123, 255, 0.12)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = "0 8px 24px rgba(0, 123, 255, 0.06)";
-              }}>
-                <div style={{ 
-                  width: 60, 
-                  height: 60, 
-                  background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)", 
-                  borderRadius: "50%", 
-                  display: "flex", 
-                  alignItems: "center", 
-                  justifyContent: "center",
-                  margin: "0 auto 16px",
-                  fontSize: 24
-                }}>
-                  👥
-                </div>
-                <h3 style={{ color: "#002e6e", marginBottom: 12, fontSize: 20, fontWeight: 700 }}>User Summary</h3>
-                <p style={{ color: "#4a5568", fontSize: 15, lineHeight: 1.6 }}>View comprehensive user data across all panels</p>
+                <h3 style={{ color: "#002e6e", marginBottom: 12, fontSize: 20, fontWeight: 700 }}>Audit Trail</h3>
+                <p style={{ color: "#4a5568", fontSize: 15, lineHeight: 1.6 }}>Track all system activities and changes</p>
               </div>
             </div>
           </div>
         );
-
+      case "reports":
+        // Default to Summary when Dashboard is clicked directly
+        return <UserSummary />;
       default:
         return null;
     }

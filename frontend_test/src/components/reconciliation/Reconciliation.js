@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getPanels, getAllReconHistory, categorizeUsers, reconcilePanelWithHR, recategorizeUsers } from "../../services/api";
 import { parseISTTimestamp, fetchWithAuth } from "../../utils/utils";
 import { validateMultipleFiles, validateSingleFile } from "../../utils/fileValidation";
-import { FiUpload, FiSettings } from 'react-icons/fi';
+import { FiUpload, FiSettings, FiX } from 'react-icons/fi';
 import { HiOutlineUpload } from 'react-icons/hi';
 import { BsBinocularsFill, BsCheckCircle, BsCheckCircleFill, BsCheck2All } from 'react-icons/bs';
 import "../../styles/tables.css";
@@ -58,18 +58,78 @@ export default function Reconciliation() {
   const [recategorizationFile, setRecategorizationFile] = useState(null);
   const [recategorizationLoading, setRecategorizationLoading] = useState({});
   const [recategorizationCompleted, setRecategorizationCompleted] = useState({});
+  const [recategorizationCancelled, setRecategorizationCancelled] = useState({});
   const [showRecategorization, setShowRecategorization] = useState(false);
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [recategoriseDragActive, setRecategoriseDragActive] = useState(false);
+  const [backgroundProcesses, setBackgroundProcesses] = useState(new Set());
 
   const MAX_FILES = 10;
   const MAX_SIZE_MB = 50;
+
+  // Note: localStorage loading moved to after history is loaded
+
+  // Save recategorization state to localStorage whenever it changes
+  useEffect(() => {
+    console.log('Saving completed state to localStorage:', recategorizationCompleted);
+    localStorage.setItem('recategorizationCompleted', JSON.stringify(recategorizationCompleted));
+  }, [recategorizationCompleted]);
+
+  useEffect(() => {
+    console.log('Saving cancelled state to localStorage:', recategorizationCancelled);
+    localStorage.setItem('recategorizationCancelled', JSON.stringify(recategorizationCancelled));
+  }, [recategorizationCancelled]);
 
   useEffect(() => {
     getPanels().then(setPanels);
     getAllReconHistory().then(setHistory);
   }, []);
+
+  // Load persistent recategorization state from localStorage AFTER history is loaded
+  useEffect(() => {
+    if (history.length > 0) {
+      const savedCompleted = localStorage.getItem('recategorizationCompleted');
+      const savedCancelled = localStorage.getItem('recategorizationCancelled');
+      
+      console.log('Loading from localStorage after history loaded:', { savedCompleted, savedCancelled });
+      
+      if (savedCompleted) {
+        const parsed = JSON.parse(savedCompleted);
+        console.log('Parsed completed state:', parsed);
+        setRecategorizationCompleted(parsed);
+      }
+      if (savedCancelled) {
+        const parsed = JSON.parse(savedCancelled);
+        console.log('Parsed cancelled state:', parsed);
+        setRecategorizationCancelled(parsed);
+      }
+    }
+  }, [history]);
+
+  // Debug: Log state changes
+  useEffect(() => {
+    console.log('Recategorization State:', {
+      completed: recategorizationCompleted,
+      cancelled: recategorizationCancelled,
+      loading: recategorizationLoading,
+      backgroundProcesses: Array.from(backgroundProcesses)
+    });
+    
+    // Debug: Log history items and their states
+    if (history.length > 0) {
+      console.log('History Items with States:', history.map((item, idx) => ({
+        index: idx,
+        panelname: item.panelname,
+        docid: item.docid,
+        doc_id: item.doc_id,
+        reconId: item.docid || item.doc_id,
+        isComplete: isRecategorizationComplete(item),
+        isCancelled: isRecategorizationCancelled(item),
+        isInProgress: isRecategorizationInProgress(item)
+      })));
+    }
+  }, [recategorizationCompleted, recategorizationCancelled, recategorizationLoading, backgroundProcesses, history]);
 
   const handlePanelChange = (e) => {
     setSelectedPanel(e.target.value);
@@ -254,29 +314,67 @@ export default function Reconciliation() {
     if (!upload) return;
 
     const reconId = upload.docid || upload.doc_id;
+    
+    // Add to background processes
+    setBackgroundProcesses(prev => new Set([...prev, reconId]));
     setRecategorizationLoading(l => ({ ...l, [reconId]: true }));
     
-    try {
-      const result = await recategorizeUsers(upload.panelname, recategorizationFile);
-      alert(`Recategorization completed!\n\nSummary:\n- Total users: ${result.summary.total_panel_users}\n- Matched: ${result.summary.matched}\n- Not found: ${result.summary.not_found}\n- Errors: ${result.summary.errors}`);
-      
-      // Mark recategorization as completed for this upload
-      setRecategorizationCompleted(c => ({ ...c, [reconId]: true }));
-      
-      // Clear the file and hide recategorization interface
-      setRecategorizationFile(null);
-      setShowRecategorization(false);
-      setSelectedRowIndex(null);
-      
-      // Reload history
-      getAllReconHistory().then(setHistory);
-      
-    } catch (error) {
-      console.error("Recategorization failed:", error);
-      alert(`Recategorization failed: ${error.message || "Unknown error"}`);
-    } finally {
-      setRecategorizationLoading(l => ({ ...l, [reconId]: false }));
-    }
+    // Clear cancelled state if it was previously cancelled
+    setRecategorizationCancelled(c => ({ ...c, [reconId]: false }));
+    
+    // Start background process
+    const processRecategorization = async () => {
+      try {
+        const result = await recategorizeUsers(upload.panelname, recategorizationFile);
+        
+        // Only show alert if modal is still open
+        if (showRecategorization && selectedRowIndex !== null) {
+          alert(`Recategorization completed!\n\nSummary:\n- Total users: ${result.summary.total_panel_users}\n- Matched: ${result.summary.matched}\n- Not found: ${result.summary.not_found}\n- Errors: ${result.summary.errors}`);
+        }
+        
+        // Mark recategorization as completed for this upload
+        console.log('Marking recategorization as completed for:', reconId);
+        setRecategorizationCompleted(c => {
+          const newState = { ...c, [reconId]: true };
+          console.log('New completed state:', newState);
+          return newState;
+        });
+        
+        // Clear the file and hide recategorization interface
+        setRecategorizationFile(null);
+        setShowRecategorization(false);
+        setSelectedRowIndex(null);
+        
+        // Reload history but preserve our state
+        getAllReconHistory().then(newHistory => {
+          setHistory(newHistory);
+          // Ensure our completion state persists
+          setRecategorizationCompleted(prev => {
+            const finalState = { ...prev, [reconId]: true };
+            console.log('Final completed state after history reload:', finalState);
+            return finalState;
+          });
+        });
+        
+      } catch (error) {
+        console.error("Recategorization failed:", error);
+        
+        // Only show alert if modal is still open
+        if (showRecategorization && selectedRowIndex !== null) {
+          alert(`Recategorization failed: ${error.message || "Unknown error"}`);
+        }
+      } finally {
+        setRecategorizationLoading(l => ({ ...l, [reconId]: false }));
+        setBackgroundProcesses(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(reconId);
+          return newSet;
+        });
+      }
+    };
+
+    // Start the background process
+    processRecategorization();
   };
 
   const handleRecategoriseCancel = () => {
@@ -284,6 +382,34 @@ export default function Reconciliation() {
     setRecategorizationFile(null);
     setRecategoriseDragActive(false);
     setSelectedRowIndex(null);
+  };
+
+  const handleCancelRecategorization = (index) => {
+    const upload = history[index];
+    if (!upload) return;
+
+    const reconId = upload.docid || upload.doc_id;
+    
+    // Mark as cancelled
+    setRecategorizationCancelled(c => ({ ...c, [reconId]: true }));
+    
+    // Remove from background processes
+    setBackgroundProcesses(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(reconId);
+      return newSet;
+    });
+    
+    // Stop loading state
+    setRecategorizationLoading(l => ({ ...l, [reconId]: false }));
+    
+    // Close modal if open
+    if (showRecategorization && selectedRowIndex === index) {
+      setShowRecategorization(false);
+      setRecategorizationFile(null);
+      setRecategoriseDragActive(false);
+      setSelectedRowIndex(null);
+    }
   };
 
   // Handle escape key to close modal
@@ -325,6 +451,16 @@ export default function Reconciliation() {
   const isRecategorizationComplete = (item) => {
     const reconId = item.docid || item.doc_id;
     return recategorizationCompleted[reconId] === true;
+  };
+
+  const isRecategorizationCancelled = (item) => {
+    const reconId = item.docid || item.doc_id;
+    return recategorizationCancelled[reconId] === true;
+  };
+
+  const isRecategorizationInProgress = (item) => {
+    const reconId = item.docid || item.doc_id;
+    return recategorizationLoading[reconId] === true || backgroundProcesses.has(reconId);
   };
 
   const isEntireProcessComplete = (item) => {
@@ -628,12 +764,13 @@ export default function Reconciliation() {
                             {/* Recategorization Button */}
                         <Tooltip label={
                           isRecategorizationComplete(item) ? "Recategorization Completed" :
-                          recategorizationLoading[item.docid || item.doc_id] ? "Processing Recategorization..." :
+                          isRecategorizationCancelled(item) ? "Recategorization Cancelled" :
+                          isRecategorizationInProgress(item) ? "Processing Recategorization..." :
                           "Recategorise"
                         }>
                             <button
                             onClick={() => handleRecategorise(idx)}
-                            disabled={!canRecategorize(item) || recategorizationLoading[item.docid || item.doc_id] || isRecategorizationComplete(item)}
+                            disabled={!canRecategorize(item) || isRecategorizationInProgress(item) || isRecategorizationComplete(item) || isRecategorizationCancelled(item)}
                               style={{
                               width: '32px',
                               height: '32px',
@@ -643,15 +780,16 @@ export default function Reconciliation() {
                               border: 'none',
                               borderRadius: '6px',
                               background: isRecategorizationComplete(item) ? '#059669' : 
+                                         isRecategorizationCancelled(item) ? '#dc2626' :
                                          canRecategorize(item) ? '#2563eb' : '#6c757d',
                               color: '#fff',
                               fontSize: '14px',
-                              cursor: (canRecategorize(item) && !recategorizationLoading[item.docid || item.doc_id] && !isRecategorizationComplete(item)) ? 'pointer' : 'not-allowed',
+                              cursor: (canRecategorize(item) && !isRecategorizationInProgress(item) && !isRecategorizationComplete(item) && !isRecategorizationCancelled(item)) ? 'pointer' : 'not-allowed',
                               transition: 'all 0.2s ease',
-                              opacity: (canRecategorize(item) || isRecategorizationComplete(item)) ? 1 : 0.6
+                              opacity: (canRecategorize(item) || isRecategorizationComplete(item) || isRecategorizationCancelled(item)) ? 1 : 0.6
                             }}
                             onMouseEnter={(e) => {
-                              if (canRecategorize(item) && !recategorizationLoading[item.docid || item.doc_id] && !isRecategorizationComplete(item)) {
+                              if (canRecategorize(item) && !isRecategorizationInProgress(item) && !isRecategorizationComplete(item) && !isRecategorizationCancelled(item)) {
                                 e.target.style.transform = "scale(1.1)";
                                 e.target.style.boxShadow = "0 2px 8px rgba(37,99,235,0.3)";
                               }
@@ -661,16 +799,17 @@ export default function Reconciliation() {
                               e.target.style.boxShadow = "none";
                             }}
                           >
-                            {recategorizationLoading[item.docid || item.doc_id] ? "⏳" : 
+                            {isRecategorizationInProgress(item) ? "⏳" : 
                              isRecategorizationComplete(item) ? <BsCheckCircleFill style={{ width: '16px', height: '16px', display: 'block' }} /> :
+                             isRecategorizationCancelled(item) ? "×" :
                              <FiSettings style={{ width: '16px', height: '16px' }} />}
                           </button>
                         </Tooltip>
                         
-                        {/* Cancel Button */}
-                        <Tooltip label="Cancel">
+                                                {/* Cancel Button */}
+                        <Tooltip label={isRecategorizationInProgress(item) ? "Cancel Recategorization" : "Cancel"}>
                           <button 
-                            onClick={() => handleCancel(idx)} 
+                            onClick={isRecategorizationInProgress(item) ? () => handleCancelRecategorization(idx) : () => handleCancel(idx)} 
                             style={{
                               width: '32px',
                               height: '32px',
@@ -876,31 +1015,31 @@ export default function Reconciliation() {
                 Cancel
               </button>
                                   <button
-                onClick={handleRecategoriseUpload}
-                disabled={!recategorizationFile || recategorizationLoading[history[selectedRowIndex]?.docid]}
-                                    style={{
+                                onClick={handleRecategoriseUpload}
+                disabled={!recategorizationFile || isRecategorizationInProgress(history[selectedRowIndex])}
+                style={{
                   flex: 1,
                   padding: '8px 16px',
                   backgroundColor: '#2563eb',
                   color: 'white',
                   border: 'none',
                   borderRadius: '6px',
-                  cursor: (!recategorizationFile || recategorizationLoading[history[selectedRowIndex]?.docid]) ? 'not-allowed' : 'pointer',
-                  opacity: (!recategorizationFile || recategorizationLoading[history[selectedRowIndex]?.docid]) ? 0.5 : 1,
+                  cursor: (!recategorizationFile || isRecategorizationInProgress(history[selectedRowIndex])) ? 'not-allowed' : 'pointer',
+                  opacity: (!recategorizationFile || isRecategorizationInProgress(history[selectedRowIndex])) ? 0.5 : 1,
                   fontSize: '14px'
                 }}
                 onMouseEnter={(e) => {
-                  if (recategorizationFile && !recategorizationLoading[history[selectedRowIndex]?.docid]) {
+                  if (recategorizationFile && !isRecategorizationInProgress(history[selectedRowIndex])) {
                     e.target.style.backgroundColor = '#1d4ed8';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (recategorizationFile && !recategorizationLoading[history[selectedRowIndex]?.docid]) {
+                  if (recategorizationFile && !isRecategorizationInProgress(history[selectedRowIndex])) {
                     e.target.style.backgroundColor = '#2563eb';
                   }
-                                    }}
-                                  >
-                {recategorizationLoading[history[selectedRowIndex]?.docid] ? "Processing..." : "Upload & Recategorise"}
+                }}
+              >
+                {isRecategorizationInProgress(history[selectedRowIndex]) ? "Processing..." : "Upload & Recategorise"}
                                   </button>
                                 </div>
                               </div>

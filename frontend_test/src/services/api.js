@@ -148,4 +148,13 @@ export async function getUserWiseSummary() {
     throw new Error(`Failed to fetch user summary: ${res.statusText}`);
   }
   return res.json();
+}
+
+// Debug endpoint to check final_status values
+export async function debugFinalStatus(panelName) {
+  const res = await fetchWithAuth(`${API_BASE}/debug/final_status/${encodeURIComponent(panelName)}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch debug data: ${res.statusText}`);
+  }
+  return res.json();
 } 

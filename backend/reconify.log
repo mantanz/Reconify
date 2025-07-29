@@ -6498,3 +6498,277 @@ pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during que
 2025-07-28 12:12:23,186 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
 2025-07-28 12:12:23,331 - app.audit_trails.audit_utils - INFO - Audit event logged: SOT_UPLOAD by Yash Priyadershi - success
 2025-07-28 12:12:23,332 - app.utils.audit_logger - INFO - Audit logged: SOT_UPLOAD by Yash Priyadershi - success
+2025-07-28 13:28:01,693 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-28 13:28:02,946 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 13:28:03,080 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-28 13:28:03,269 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-28 13:28:03,542 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 13:28:03,586 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 13:28:03,587 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 13:52:26,061 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 13:53:40,925 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 13:53:41,122 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-28 13:53:41,173 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 13:53:41,217 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 13:53:41,217 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 14:58:20,564 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 14:58:20,759 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 14:58:20,763 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 14:58:21,039 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 14:58:21,237 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 14:58:21,241 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 14:58:24,610 - root - INFO - Fetched 5540 rows for panel 'Seller Panel'
+2025-07-28 14:58:52,982 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 14:58:53,262 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 14:58:53,266 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 14:58:53,599 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 14:58:53,804 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 14:58:53,808 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 14:59:13,489 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 14:59:13,686 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 14:59:13,689 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 14:59:14,009 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 14:59:14,197 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 14:59:14,201 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:00:34,449 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:00:34,675 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:00:34,679 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:00:34,962 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:00:35,149 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:00:35,153 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:00:55,858 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-28 15:00:56,926 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 15:00:57,029 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-28 15:00:57,191 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-28 15:00:57,215 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 15:00:57,266 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 15:00:57,267 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 15:01:01,190 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:01:01,400 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:01:01,404 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:01:01,651 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:01:01,840 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:01:01,845 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:01:49,742 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:01:49,948 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:01:49,952 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:01:50,231 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:01:50,423 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:01:50,428 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:05:33,163 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:05:33,459 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:05:33,463 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:05:33,724 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:05:33,928 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:05:33,932 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:05:40,837 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:05:41,015 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:05:41,020 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:05:41,296 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:05:41,473 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:05:41,478 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:05:50,886 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:05:51,121 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:05:51,125 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:05:51,412 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:05:51,557 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:05:51,562 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:07:54,164 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:07:54,407 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:07:54,411 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:07:54,710 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:07:54,890 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:07:54,894 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:12:01,095 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:12:01,356 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:12:01,359 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:12:01,650 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:12:01,893 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:12:01,897 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:12:38,519 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:12:38,901 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:12:38,908 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:12:39,206 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:12:39,454 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:12:39,463 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:12:57,339 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:12:57,637 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:12:57,641 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:12:57,996 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 15:12:58,202 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 15:12:58,206 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 15:19:29,215 - root - INFO - Fetched 5540 rows for panel 'Seller Panel'
+2025-07-28 16:07:56,621 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-28 16:07:57,495 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 16:07:57,649 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-28 16:07:57,854 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-28 16:07:57,898 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 16:07:57,952 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 16:07:57,953 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 16:15:36,091 - root - INFO - Fetched 5540 rows for panel 'Seller Panel'
+2025-07-28 16:16:06,855 - root - INFO - Fetched 6058 rows for panel 'OE Panel'
+2025-07-28 16:21:52,182 - root - INFO - Fetched 5540 rows for panel 'Seller Panel'
+2025-07-28 16:21:55,689 - root - INFO - Fetched 6058 rows for panel 'OE Panel'
+2025-07-28 16:23:28,274 - root - INFO - Fetched 5540 rows for panel 'Seller Panel'
+2025-07-28 16:30:57,638 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-28 16:30:57,638 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-28 16:30:57,683 - root - INFO - Updating final_status for table 'seller_panel' with 5540 records using match_field 'user_email'
+2025-07-28 16:33:33,966 - root - INFO - Final status bulk update completed: 22160 records updated, 0 errors
+2025-07-28 16:33:33,996 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 16:33:34,013 - app.audit_trails.audit_utils - INFO - Audit event logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 16:33:34,014 - app.utils.audit_logger - INFO - Audit logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 16:33:34,014 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 5540, 'matched': 40, 'not_found': 5500, 'errors': 0}
+2025-07-28 16:34:57,615 - root - INFO - Fetched 5540 rows for panel 'Seller Panel'
+2025-07-28 16:42:20,408 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 16:42:20,624 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 16:42:20,628 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 16:42:21,141 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 16:42:21,499 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 16:42:21,503 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 16:43:48,632 - root - INFO - Fetched 5540 rows for panel 'Seller Panel'
+2025-07-28 16:53:21,690 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 16:53:21,892 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 16:53:21,895 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 16:53:22,145 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 16:53:22,296 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 16:53:22,300 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 17:11:46,933 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-28 17:11:48,101 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 17:11:48,164 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-28 17:11:48,364 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-28 17:11:48,393 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 17:11:48,450 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 17:11:48,450 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 17:23:58,186 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-28 17:23:59,239 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 17:24:00,369 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-28 17:24:00,577 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-28 17:24:00,684 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 17:24:00,703 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 17:24:00,704 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 17:24:14,823 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 17:24:15,117 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 17:24:15,121 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 17:24:15,410 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 17:24:15,572 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 17:24:15,576 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 17:48:27,749 - httpx - INFO - HTTP Request: GET https://accounts.google.com/.well-known/openid-configuration "HTTP/1.1 200 OK"
+2025-07-28 17:48:28,570 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-28 17:48:28,656 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v3/certs "HTTP/1.1 200 OK"
+2025-07-28 17:48:28,835 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-28 17:48:28,949 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 17:48:28,973 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 17:48:28,974 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-28 17:53:56,510 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 17:53:56,807 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 17:53:56,810 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 17:53:57,074 - root - INFO - Processed 5540 users from panel: Seller Panel
+2025-07-28 17:53:57,232 - root - INFO - Processed 6058 users from panel: OE Panel
+2025-07-28 17:53:57,236 - root - INFO - User-wise summary completed. Total users: 11594
+2025-07-28 17:59:48,096 - root - INFO - Final status bulk update completed: 22160 records updated, 0 errors
+2025-07-28 17:59:48,263 - root - INFO - Processing 5540 rows for final status counting
+2025-07-28 17:59:48,264 - root - INFO - Final status counts: {'active': 1320, 'service id': 528, 'inactive': 156, 'zomato': 80, 'third party': 996, 'active-movement case': 16, 'delay in exit clearance': 12, 'incorrect email': 4, 'movement case': 8, 'not found': 2420}
+2025-07-28 17:59:48,266 - root - INFO - Updated reconciliation summary for panel 'Seller Panel' with dynamic final status data: {'active': 1320, 'service id': 528, 'inactive': 156, 'zomato': 80, 'third party': 996, 'active-movement case': 16, 'delay in exit clearance': 12, 'incorrect email': 4, 'movement case': 8, 'not found': 2420}
+2025-07-28 17:59:48,291 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 17:59:48,330 - app.audit_trails.audit_utils - INFO - Audit event logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 17:59:48,330 - app.utils.audit_logger - INFO - Audit logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 17:59:48,330 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 5540, 'matched': 40, 'not_found': 5500, 'errors': 0}
+2025-07-28 18:03:54,637 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-28 18:03:54,637 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-28 18:03:54,638 - root - INFO - Sample recategorization data: [('dhanashree.telavane@paytm.com', 'Active-Movement case'), ('vidhi.balwani@paytm.com', 'Delay in exit clearance'), ('hemlata2.mishra@paytm.com', 'Incorrect Email'), ('sanjit.pramanick@paytm.com', 'Movement case'), ('sumit15.singh@paytm.com', 'Active-Movement case')]
+2025-07-28 18:03:54,646 - root - INFO - Final status values that will be set: {'third party', 'movement case', 'inactive', 'active-movement case', 'active', 'not found', 'zomato', 'delay in exit clearance', 'service id', 'incorrect email'}
+2025-07-28 18:03:54,667 - root - INFO - Updating final_status for table 'seller_panel' with 5540 records using match_field 'user_email'
+2025-07-28 18:05:52,792 - root - INFO - Final status bulk update completed: 22160 records updated, 0 errors
+2025-07-28 18:05:52,952 - root - INFO - Processing 5540 rows for final status counting
+2025-07-28 18:05:52,954 - root - INFO - Final status counts: {'active': 1320, 'service id': 528, 'inactive': 156, 'zomato': 80, 'third party': 996, 'active-movement case': 16, 'delay in exit clearance': 12, 'incorrect email': 4, 'movement case': 8, 'not found': 2420}
+2025-07-28 18:05:52,955 - root - INFO - Updated reconciliation summary for panel 'Seller Panel' with dynamic final status data: {'active': 1320, 'service id': 528, 'inactive': 156, 'zomato': 80, 'third party': 996, 'active-movement case': 16, 'delay in exit clearance': 12, 'incorrect email': 4, 'movement case': 8, 'not found': 2420}
+2025-07-28 18:05:52,972 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 18:05:52,992 - app.audit_trails.audit_utils - INFO - Audit event logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 18:05:52,992 - app.utils.audit_logger - INFO - Audit logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 18:05:52,992 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 5540, 'matched': 40, 'not_found': 5500, 'errors': 0}
+2025-07-28 18:13:50,615 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 18:13:50,637 - app.audit_trails.audit_utils - INFO - Audit event logged: PANEL_CONFIG_DELETE by Yash Priyadershi - success
+2025-07-28 18:13:50,637 - app.utils.audit_logger - INFO - Audit logged: PANEL_CONFIG_DELETE by Yash Priyadershi - success
+2025-07-28 18:14:56,014 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 18:14:56,031 - app.audit_trails.audit_utils - INFO - Audit event logged: PANEL_UPLOAD by Yash Priyadershi - success
+2025-07-28 18:14:56,032 - app.utils.audit_logger - INFO - Audit logged: PANEL_UPLOAD by Yash Priyadershi - success
+2025-07-28 18:15:15,558 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-28 18:15:15,559 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-28 18:15:15,559 - root - INFO - Sample recategorization data: [('dhanashree.telavane@paytm.com', 'Active-Movement case'), ('vidhi.balwani@paytm.com', 'Delay in exit clearance'), ('hemlata2.mishra@paytm.com', 'Incorrect Email'), ('sanjit.pramanick@paytm.com', 'Movement case'), ('sumit15.singh@paytm.com', 'Active-Movement case')]
+2025-07-28 18:15:15,563 - root - INFO - Final status values that will be set: {'movement case', 'active-movement case', 'not_found', 'delay in exit clearance', 'incorrect email'}
+2025-07-28 18:15:15,617 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-28 18:15:30,830 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-28 18:15:30,895 - root - INFO - Processing 1385 rows for final status counting
+2025-07-28 18:15:30,896 - root - INFO - Final status counts: {'not_found': 1375, 'active-movement case': 4, 'delay in exit clearance': 3, 'incorrect email': 1, 'movement case': 2}
+2025-07-28 18:15:30,896 - root - INFO - Updated reconciliation summary for panel 'Seller Panel' with dynamic final status data: {'not_found': 1375, 'active-movement case': 4, 'delay in exit clearance': 3, 'incorrect email': 1, 'movement case': 2}
+2025-07-28 18:15:30,917 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 18:15:30,936 - app.audit_trails.audit_utils - INFO - Audit event logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 18:15:30,936 - app.utils.audit_logger - INFO - Audit logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 18:15:30,936 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-28 18:16:50,122 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-28 18:16:50,122 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-28 18:16:50,122 - root - INFO - Sample recategorization data: [('dhanashree.telavane@paytm.com', 'Active-Movement case'), ('vidhi.balwani@paytm.com', 'Delay in exit clearance'), ('hemlata2.mishra@paytm.com', 'Incorrect Email'), ('sanjit.pramanick@paytm.com', 'Movement case'), ('sumit15.singh@paytm.com', 'Active-Movement case')]
+2025-07-28 18:16:50,127 - root - INFO - Final status values that will be set: {'movement case', 'active-movement case', 'not_found', 'delay in exit clearance', 'incorrect email'}
+2025-07-28 18:16:50,142 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-28 18:17:06,536 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-28 18:17:06,619 - root - INFO - Processing 1385 rows for final status counting
+2025-07-28 18:17:06,619 - root - INFO - Final status counts: {'not_found': 1375, 'active-movement case': 4, 'delay in exit clearance': 3, 'incorrect email': 1, 'movement case': 2}
+2025-07-28 18:17:06,621 - root - INFO - Updated reconciliation summary for panel 'Seller Panel' with dynamic final status data: {'not_found': 1375, 'active-movement case': 4, 'delay in exit clearance': 3, 'incorrect email': 1, 'movement case': 2}
+2025-07-28 18:17:06,643 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 18:17:06,675 - app.audit_trails.audit_utils - INFO - Audit event logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 18:17:06,675 - app.utils.audit_logger - INFO - Audit logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 18:17:06,675 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-28 18:18:47,893 - root - INFO - Recategorization: panel_field='user_email', match_column='user_email', type_column='category'
+2025-07-28 18:18:47,894 - root - INFO - Created recategorization lookup with 10 entries
+2025-07-28 18:18:47,894 - root - INFO - Sample recategorization data: [('dhanashree.telavane@paytm.com', 'Active-Movement case'), ('vidhi.balwani@paytm.com', 'Delay in exit clearance'), ('hemlata2.mishra@paytm.com', 'Incorrect Email'), ('sanjit.pramanick@paytm.com', 'Movement case'), ('sumit15.singh@paytm.com', 'Active-Movement case')]
+2025-07-28 18:18:47,899 - root - INFO - Final status values that will be set: {'movement case', 'active-movement case', 'not_found', 'delay in exit clearance', 'incorrect email'}
+2025-07-28 18:18:47,913 - root - INFO - Updating final_status for table 'seller_panel' with 1385 records using match_field 'user_email'
+2025-07-28 18:19:02,967 - root - INFO - Final status bulk update completed: 1385 records updated, 0 errors
+2025-07-28 18:19:03,091 - root - INFO - Processing 1385 rows for final status counting
+2025-07-28 18:19:03,092 - root - INFO - Final status counts: {'not_found': 1375, 'active-movement case': 4, 'delay in exit clearance': 3, 'incorrect email': 1, 'movement case': 2}
+2025-07-28 18:19:03,093 - root - INFO - Updated reconciliation summary for panel 'Seller Panel' with dynamic final status data: {'not_found': 1375, 'active-movement case': 4, 'delay in exit clearance': 3, 'incorrect email': 1, 'movement case': 2}
+2025-07-28 18:19:03,111 - app.audit_trails.audit_utils - INFO - Audit trail table created successfully
+2025-07-28 18:19:03,139 - app.audit_trails.audit_utils - INFO - Audit event logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 18:19:03,139 - app.utils.audit_logger - INFO - Audit logged: USER_RECATEGORIZATION by Yash Priyadershi - success
+2025-07-28 18:19:03,139 - root - INFO - User recategorization completed for panel 'Seller Panel'. Summary: {'total_panel_users': 1385, 'matched': 10, 'not_found': 1375, 'errors': 0}
+2025-07-29 10:13:44,186 - httpx - INFO - HTTP Request: POST https://oauth2.googleapis.com/token "HTTP/1.1 200 OK"
+2025-07-29 10:13:44,530 - httpx - INFO - HTTP Request: GET https://www.googleapis.com/oauth2/v2/userinfo "HTTP/1.1 200 OK"
+2025-07-29 10:14:02,477 - app.audit_trails.audit_utils - ERROR - Failed to create audit trail table: (pymysql.err.OperationalError) (2013, 'Lost connection to MySQL server during query')
+[SQL: DESCRIBE `reconify_db`.`audit_trail`]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-29 10:14:02,575 - app.audit_trails.audit_utils - INFO - Audit event logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-29 10:14:02,575 - app.utils.audit_logger - INFO - Audit logged: LOGIN by t-yash.priyadershi@ocltp.com - success
+2025-07-29 10:17:33,056 - sqlalchemy.pool.impl.QueuePool - ERROR - Exception during reset or similar
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 987, in _finalize_fairy
+    fairy._reset(
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 1433, in _reset
+    pool._dialect.do_rollback(self)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/engine/default.py", line 703, in do_rollback
+    dbapi_connection.rollback()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 493, in rollback
+    self._read_ok_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 453, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 744, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 798, in _read_bytes
+    raise err.OperationalError(
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
+2025-07-29 10:17:36,516 - sqlalchemy.pool.impl.QueuePool - ERROR - Exception during reset or similar
+Traceback (most recent call last):
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 987, in _finalize_fairy
+    fairy._reset(
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/pool/base.py", line 1433, in _reset
+    pool._dialect.do_rollback(self)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/sqlalchemy/engine/default.py", line 703, in do_rollback
+    dbapi_connection.rollback()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 493, in rollback
+    self._read_ok_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 453, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 744, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/Users/yashpriyadershi/Library/Python/3.9/lib/python/site-packages/pymysql/connections.py", line 798, in _read_bytes
+    raise err.OperationalError(
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')

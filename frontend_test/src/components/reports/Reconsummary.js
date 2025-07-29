@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getReconSummaries, getReconSummaryDetail, getPanelDetails } from "../../services/api";
 import { parseISTTimestamp } from "../../utils/utils";
+import PanelWiseReconSummary from "./PanelWiseReconSummary";
 
 export default function Reconsummary() {
   const [summaries, setSummaries] = useState([]);
@@ -181,14 +182,15 @@ export default function Reconsummary() {
     return item.status;
   };
 
-
-
   return (
     <div style={{ 
       maxWidth: 1200, 
       margin: "40px auto", 
       padding: "0 20px"
     }}>
+      {/* Panel-wise Reconciliation Summary Section */}
+      <PanelWiseReconSummary />
+      
       {/* Reconciliation Summary Section */}
       <div style={{ 
         background: "#fff", 

@@ -25,5 +25,14 @@
     "total_records": 3029,
     "uploadedby": "demo",
     "status": "complete"
+  },
+  {
+    "panelname": "Seller Panel",
+    "docid": "ac7cf386-6263-4211-bff6-311fd7a08049",
+    "docname": "1. Seller Panel Users List with Assigned Roles.csv",
+    "timestamp": "28-07-2025 18:14:55",
+    "total_records": 1385,
+    "uploadedby": "Yash Priyadershi",
+    "status": "uploaded"
   }
 ]

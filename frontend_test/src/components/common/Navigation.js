@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 const Navigation = ({ 
   selected, 
@@ -10,6 +10,54 @@ const Navigation = ({
   onLogout,
   navItems 
 }) => {
+  const [dashboardDropdownOpen, setDashboardDropdownOpen] = useState(false);
+  const dropdownTimeoutRef = useRef(null);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+
+  // Close user dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userDropdownOpen && !event.target.closest('[data-user-dropdown]')) {
+        setUserDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [userDropdownOpen]);
+
+  const handleDashboardMouseEnter = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    setDashboardDropdownOpen(true);
+  };
+
+  const handleDashboardMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setDashboardDropdownOpen(false);
+    }, 300); // 300ms delay before closing
+  };
+
+  const handleDropdownMouseEnter = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+  };
+
+  const handleDropdownMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setDashboardDropdownOpen(false);
+    }, 200); // 300ms delay before closing
+  };
+
+  const handleDashboardItemClick = (item) => {
+    onNavClick(item);
+    setDashboardDropdownOpen(false);
+  };
+
   return (
     <nav style={{ 
       background: "linear-gradient(135deg, #002e6e 0%, #0056b6 100%)", 
@@ -19,7 +67,14 @@ const Navigation = ({
       top: 0,
       zIndex: 1000
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 48, maxWidth: 1400, margin: "0 auto" }}>
+      <div style={{ 
+        display: "flex", 
+        alignItems: "center", 
+        justifyContent: "space-between",
+        maxWidth: 1400, 
+        margin: "0 auto",
+        width: "100%"
+      }}>
         {/* Left Section - Brand/Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <div style={{ 
@@ -63,14 +118,182 @@ const Navigation = ({
           </div>
         </div>
 
-        {/* Center Section - Navigation Links */}
-        <div style={{ display: "flex", alignItems: "center", gap: 24, marginLeft: "auto" }}>
-          {navItems.map(item => (
+        {/* Center Section - Navigation Items */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          {navItems.map(item => {
+            // Special handling for Dashboard dropdown
+            if (item.key === "reports") {
+              return (
+                <div
+                  key={item.key}
+                  style={{ position: "relative" }}
+                  onMouseEnter={handleDashboardMouseEnter}
+                  onMouseLeave={handleDashboardMouseLeave}
+                >
+                  <button
+                    style={{
+                      background: selected === item.key ? "rgba(255,255,255,0.2)" : "transparent",
+                      color: selected === item.key ? "#fff" : "rgba(255,255,255,0.9)",
+                      border: "none",
+                      padding: "12px 20px",
+                      borderRadius: 8,
+                      cursor: "pointer",
+                      fontSize: 16,
+                      fontWeight: selected === item.key ? 700 : 600,
+                      textDecoration: "none",
+                      transition: "all 0.3s ease",
+                      backdropFilter: selected === item.key ? "blur(10px)" : "none",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8
+                    }}
+                    onMouseEnter={(e) => {
+                      if (selected !== item.key) {
+                        e.target.style.background = "rgba(255,255,255,0.1)";
+                        e.target.style.color = "#fff";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (selected !== item.key) {
+                        e.target.style.background = selected === item.key ? "rgba(255,255,255,0.2)" : "transparent";
+                        e.target.style.color = selected === item.key ? "#fff" : "rgba(255,255,255,0.9)";
+                      }
+                    }}
+                  >
+                    {item.label}
+                    <span style={{ fontSize: 12 }}>▼</span>
+                  </button>
+                  
+                  {/* Dashboard Dropdown */}
+                  {dashboardDropdownOpen && (
+                    <div 
+                      style={{
+                        position: "absolute",
+                        top: "100%",
+                        left: 0,
+                        background: "linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)",
+                        borderRadius: "16px",
+                        boxShadow: "0 20px 60px rgba(0, 46, 110, 0.15), 0 8px 32px rgba(0, 46, 110, 0.1)",
+                        border: "1px solid rgba(0, 46, 110, 0.1)",
+                        padding: "20px",
+                        zIndex: 1001,
+                        minWidth: "320px",
+                        marginTop: "8px",
+                        backdropFilter: "blur(20px)"
+                      }}
+                      onMouseEnter={handleDropdownMouseEnter}
+                      onMouseLeave={handleDropdownMouseLeave}
+                    >
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "16px"
+                      }}>
+                        <button
+                          onClick={() => handleDashboardItemClick("recon_summary")}
+                          style={{
+                            background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)",
+                            border: "1px solid rgba(0, 46, 110, 0.1)",
+                            color: "#002e6e",
+                            cursor: "pointer",
+                            padding: "16px 20px",
+                            borderRadius: "12px",
+                            textAlign: "left",
+                            transition: "all 0.3s ease",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "8px",
+                            boxShadow: "0 4px 16px rgba(0, 46, 110, 0.06)"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.transform = "translateY(-2px)";
+                            e.target.style.boxShadow = "0 8px 24px rgba(0, 46, 110, 0.12)";
+                            e.target.style.background = "linear-gradient(135deg, #ffffff 0%, #e8ecff 100%)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = "translateY(0)";
+                            e.target.style.boxShadow = "0 4px 16px rgba(0, 46, 110, 0.06)";
+                            e.target.style.background = "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)";
+                          }}
+                        >
+                          <div style={{ 
+                            fontSize: 18, 
+                            fontWeight: 700,
+                            color: "#002e6e",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px"
+                          }}>
+                            📊 Recon Summary
+                          </div>
+                          <div style={{ 
+                            fontSize: 14, 
+                            color: "#4a5568",
+                            lineHeight: 1.4
+                          }}>
+                            View reconciliation summaries and details
+                          </div>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleDashboardItemClick("summary")}
+                          style={{
+                            background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)",
+                            border: "1px solid rgba(0, 46, 110, 0.1)",
+                            color: "#002e6e",
+                            cursor: "pointer",
+                            padding: "16px 20px",
+                            borderRadius: "12px",
+                            textAlign: "left",
+                            transition: "all 0.3s ease",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "8px",
+                            boxShadow: "0 4px 16px rgba(0, 46, 110, 0.06)"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.transform = "translateY(-2px)";
+                            e.target.style.boxShadow = "0 8px 24px rgba(0, 46, 110, 0.12)";
+                            e.target.style.background = "linear-gradient(135deg, #ffffff 0%, #e8ecff 100%)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = "translateY(0)";
+                            e.target.style.boxShadow = "0 4px 16px rgba(0, 46, 110, 0.06)";
+                            e.target.style.background = "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)";
+                          }}
+                        >
+                          <div style={{ 
+                            fontSize: 18, 
+                            fontWeight: 700,
+                            color: "#002e6e",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px"
+                          }}>
+                            👥 Summary
+                          </div>
+                          <div style={{ 
+                            fontSize: 14, 
+                            color: "#4a5568",
+                            lineHeight: 1.4
+                          }}>
+                            View user summary and analytics
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            
+            // Regular navigation items
+            return (
             <button
               key={item.key}
               onClick={() => onNavClick(item.key)}
               style={{
-                background: selected === item.key ? "rgba(255,255,255,0.15)" : "transparent",
+                  background: selected === item.key ? "rgba(255,255,255,0.2)" : "transparent",
                 color: selected === item.key ? "#fff" : "rgba(255,255,255,0.9)",
                 border: "none",
                 padding: "12px 20px",
@@ -97,11 +320,12 @@ const Navigation = ({
             >
               {item.label}
             </button>
-          ))}
+            );
+          })}
         </div>
 
         {/* Right Section - Utility Icons */}
-        <div style={{ display: "flex", alignItems: "center", gap: 20, marginLeft: 40 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <button
             className="grid-button"
             style={{
@@ -202,19 +426,16 @@ const Navigation = ({
           </button>
           {/* User Profile Section */}
           <div style={{
+            position: "relative",
             display: "flex",
-            alignItems: "center",
-            gap: 12,
-            background: "rgba(255,255,255,0.1)",
-            padding: "8px 12px",
-            borderRadius: "12px",
-            backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255,255,255,0.2)"
-          }}>
-            {/* User Avatar */}
-            <div style={{
-              width: 32,
-              height: 32,
+            alignItems: "center"
+          }} data-user-dropdown>
+            {/* User Avatar with Dropdown */}
+            <button
+              onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+              style={{
+                width: 40,
+                height: 40,
               background: "linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)",
               borderRadius: "50%",
               display: "flex",
@@ -222,9 +443,21 @@ const Navigation = ({
               justifyContent: "center",
               color: "#fff",
               fontWeight: "bold",
-              fontSize: 14,
-              boxShadow: "0 2px 8px rgba(0, 180, 216, 0.3)"
-            }}>
+                fontSize: 16,
+                boxShadow: "0 2px 8px rgba(0, 180, 216, 0.3)",
+                border: "none",
+                cursor: "pointer",
+                transition: "all 0.2s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = "scale(1.05)";
+                e.target.style.boxShadow = "0 4px 12px rgba(0, 180, 216, 0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = "scale(1)";
+                e.target.style.boxShadow = "0 2px 8px rgba(0, 180, 216, 0.3)";
+              }}
+            >
               {user?.picture ? (
                 <img 
                   src={user.picture} 
@@ -239,54 +472,81 @@ const Navigation = ({
               ) : (
                 user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || "U"
               )}
-            </div>
+            </button>
             
-            {/* User Info */}
+            {/* User Dropdown Menu */}
+            {userDropdownOpen && (
             <div style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start"
+                position: "absolute",
+                top: "100%",
+                right: 0,
+                background: "linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)",
+                borderRadius: "12px",
+                boxShadow: "0 20px 60px rgba(0, 46, 110, 0.15), 0 8px 32px rgba(0, 46, 110, 0.1)",
+                border: "1px solid rgba(0, 46, 110, 0.1)",
+                padding: "12px",
+                zIndex: 1001,
+                minWidth: "200px",
+                marginTop: "8px",
+                backdropFilter: "blur(20px)"
+              }}>
+                {/* User Info in Dropdown */}
+                <div style={{
+                  padding: "8px 12px",
+                  borderBottom: "1px solid rgba(0, 46, 110, 0.1)",
+                  marginBottom: "8px"
             }}>
-              <span style={{
-                color: "#fff",
-                fontSize: 12,
+                  <div style={{
+                    color: "#002e6e",
+                    fontSize: 14,
                 fontWeight: "600",
-                lineHeight: 1
+                    marginBottom: "2px"
               }}>
                 {user?.name || "User"}
-              </span>
-              <span style={{
-                color: "rgba(255,255,255,0.7)",
-                fontSize: 10,
-                lineHeight: 1
+                  </div>
+                  <div style={{
+                    color: "#6c757d",
+                    fontSize: 12
               }}>
                 {user?.email}
-              </span>
+                  </div>
             </div>
             
             {/* Logout Button */}
             <button
-              onClick={onLogout}
+                  onClick={() => {
+                    setUserDropdownOpen(false);
+                    onLogout();
+                  }}
               style={{
-                background: "rgba(255,255,255,0.2)",
+                    width: "100%",
+                    background: "linear-gradient(135deg, #dc3545 0%, #c82333 100%)",
                 border: "none",
-                borderRadius: "6px",
+                    borderRadius: "8px",
                 color: "#fff",
                 cursor: "pointer",
-                padding: "4px 8px",
-                fontSize: 10,
+                    padding: "10px 16px",
+                    fontSize: 14,
                 fontWeight: "600",
-                transition: "all 0.2s ease"
+                    transition: "all 0.2s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px"
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = "rgba(255,255,255,0.3)";
+                    e.target.style.background = "linear-gradient(135deg, #c82333 0%, #bd2130 100%)";
+                    e.target.style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = "rgba(255,255,255,0.2)";
+                    e.target.style.background = "linear-gradient(135deg, #dc3545 0%, #c82333 100%)";
+                    e.target.style.transform = "translateY(0)";
               }}
             >
-              Logout
+                  🚪 Logout
             </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

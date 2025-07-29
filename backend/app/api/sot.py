@@ -5,6 +5,7 @@ import logging
 import csv
 import pandas as pd
 import paramiko
+from dotenv import load_dotenv
 from fastapi import APIRouter, File, UploadFile, Form, HTTPException, Request, Depends
 from fastapi.responses import JSONResponse
 from ..utils.database import load_db, save_db
@@ -14,14 +15,34 @@ from ..auth.user_upload import get_current_user
 from ..utils.audit_logger import log_sot_upload
 from db.mysql_utils import insert_sot_data_rows, get_sot_headers_from_db
 
+# Load environment variables from .env file
+load_dotenv()
+
 router = APIRouter(prefix="/sot", tags=["source_of_truth"])
 
 
-# Server configuration
-SERVER_HOST = "10.150.192.73"
-SERVER_USERNAME = "one97"
-SERVER_PASSWORD = "Dep@123"
-SERVER_UPLOAD_PATH = "/home/one97/Yash_Code/Data Uploads"
+# Server configuration from environment variables
+SERVER_HOST = os.getenv("SERVER_HOST")
+SERVER_USERNAME = os.getenv("SERVER_USERNAME")
+SERVER_PASSWORD = os.getenv("SERVER_PASSWORD")
+SERVER_UPLOAD_PATH = os.getenv("SERVER_UPLOAD_PATH")
+
+# Validate that all required environment variables are loaded
+if not all([SERVER_HOST, SERVER_USERNAME, SERVER_PASSWORD, SERVER_UPLOAD_PATH]):
+    missing_vars = []
+    if not SERVER_HOST:
+        missing_vars.append("SERVER_HOST")
+    if not SERVER_USERNAME:
+        missing_vars.append("SERVER_USERNAME")
+    if not SERVER_PASSWORD:
+        missing_vars.append("SERVER_PASSWORD")
+    if not SERVER_UPLOAD_PATH:
+        missing_vars.append("SERVER_UPLOAD_PATH")
+    
+    logging.error(f"Missing required environment variables: {', '.join(missing_vars)}")
+    raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
+
+logging.info("Server configuration loaded from environment variables successfully")
 
 def create_sot_directories(sftp, sot_type: str):
     """Create the 3-stage directory structure for SOT"""

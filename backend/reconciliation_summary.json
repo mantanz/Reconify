@@ -22,8 +22,16 @@
       "matched": 369,
       "found_active": 330,
       "found_inactive": 39,
-      "not_found": 615
-    }
+      "not_found": 615,
+      "final_status_data": {
+        "not_found": 1375,
+        "active-movement case": 4,
+        "delay in exit clearance": 3,
+        "incorrect email": 1,
+        "movement case": 2
+      }
+    },
+    "has_final_status": true
   },
   {
     "recon_id": "RCN_71566340",
@@ -48,8 +56,21 @@
       "matched": 369,
       "found_active": 330,
       "found_inactive": 39,
-      "not_found": 615
-    }
+      "not_found": 615,
+      "final_status_data": {
+        "active": 1320,
+        "service id": 528,
+        "inactive": 156,
+        "zomato": 80,
+        "third party": 996,
+        "active-movement case": 16,
+        "delay in exit clearance": 12,
+        "incorrect email": 4,
+        "movement case": 8,
+        "not found": 2420
+      }
+    },
+    "has_final_status": true
   },
   {
     "recon_id": "RCN_48710082",
@@ -74,8 +95,21 @@
       "matched": 369,
       "found_active": 330,
       "found_inactive": 39,
-      "not_found": 615
-    }
+      "not_found": 615,
+      "final_status_data": {
+        "active": 1320,
+        "service id": 528,
+        "inactive": 156,
+        "zomato": 80,
+        "third party": 996,
+        "active-movement case": 16,
+        "delay in exit clearance": 12,
+        "incorrect email": 4,
+        "movement case": 8,
+        "not found": 2420
+      }
+    },
+    "has_final_status": true
   },
   {
     "recon_id": "RCN_403aac85",
@@ -100,8 +134,18 @@
       "matched": 95,
       "found_active": 88,
       "found_inactive": 7,
-      "not_found": 1832
-    }
+      "not_found": 1832,
+      "final_status_data": {
+        "not found": 1828,
+        "third party": 1100,
+        "active": 88,
+        "inactive": 7,
+        "active-movement case": 2,
+        "delay in exit clearance": 1,
+        "movement case": 1
+      }
+    },
+    "has_final_status": true
   },
   {
     "recon_id": "RCN_bef36fae",
@@ -126,7 +170,17 @@
       "matched": 190,
       "found_active": 176,
       "found_inactive": 14,
-      "not_found": 3664
-    }
+      "not_found": 3664,
+      "final_status_data": {
+        "not found": 1828,
+        "third party": 1100,
+        "active": 88,
+        "inactive": 7,
+        "active-movement case": 2,
+        "delay in exit clearance": 1,
+        "movement case": 1
+      }
+    },
+    "has_final_status": true
   }
 ]

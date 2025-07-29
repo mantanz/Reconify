@@ -373,6 +373,7 @@ def recategorize_users(request: Request, panel_name: str = Form(...), file: Uplo
                 recategorization_lookup[str(match_value).strip().lower()] = str(type_value).strip()
         
         logging.info(f"Created recategorization lookup with {len(recategorization_lookup)} entries")
+        logging.info(f"Sample recategorization data: {list(recategorization_lookup.items())[:5]}")
         
         # Process each panel user
         updates = []
@@ -382,6 +383,9 @@ def recategorize_users(request: Request, panel_name: str = Form(...), file: Uplo
             "not_found": 0,
             "errors": 0
         }
+        
+        # Debug: Track what final_status values are being set
+        final_status_values = set()
         
         for row_idx, panel_row in enumerate(panel_rows):
             try:
@@ -398,11 +402,13 @@ def recategorize_users(request: Request, panel_name: str = Form(...), file: Uplo
                 if panel_value in recategorization_lookup:
                     final_status = recategorization_lookup[panel_value]
                     summary["matched"] += 1
+                    final_status_values.add(final_status.lower())
                     logging.debug(f"Row {row_idx}: Matched '{panel_value}' -> '{final_status}'")
                 else:
                     # No match found, use initial_status
                     final_status = initial_status if initial_status else "not_found"
                     summary["not_found"] += 1
+                    final_status_values.add(final_status.lower())
                     logging.debug(f"Row {row_idx}: No match for '{panel_value}', using initial_status '{initial_status}'")
                 
                 # Prepare update
@@ -416,6 +422,8 @@ def recategorize_users(request: Request, panel_name: str = Form(...), file: Uplo
                 summary["errors"] += 1
                 continue
         
+        logging.info(f"Final status values that will be set: {final_status_values}")
+        
         # Add final_status column if it doesn't exist
         add_column_if_not_exists(panel_name, "final_status", "VARCHAR(255)")
         
@@ -423,6 +431,52 @@ def recategorize_users(request: Request, panel_name: str = Form(...), file: Uplo
         success, error_msg = update_final_status_bulk(panel_name, updates, match_field=panel_field)
         if not success:
             raise HTTPException(status_code=500, detail=f"Database update failed: {error_msg}")
+        
+        # Update reconciliation summary with final status data
+        try:
+            if os.path.exists(RECON_SUMMARY_PATH):
+                with open(RECON_SUMMARY_PATH, "r") as f:
+                    recon_summaries = json.load(f)
+                
+                # Find the most recent reconciliation for this panel
+                panel_recons = [r for r in recon_summaries if r.get("panelname") == panel_name]
+                if panel_recons:
+                    # Get the most recent reconciliation
+                    latest_recon = max(panel_recons, key=lambda x: x.get('start_date', '') or '')
+                    
+                    # Get updated panel data to count final status categories
+                    updated_panel_rows = fetch_all_rows(panel_name)
+                    logging.info(f"Processing {len(updated_panel_rows)} rows for final status counting")
+                    
+                    # Count final status values dynamically
+                    final_status_counts = {}
+                    
+                    for row in updated_panel_rows:
+                        final_status = row.get("final_status", "")
+                        if final_status:
+                            final_status_lower = final_status.lower()
+                            final_status_counts[final_status_lower] = final_status_counts.get(final_status_lower, 0) + 1
+                    
+                    logging.info(f"Final status counts: {final_status_counts}")
+                    
+                    # Update the latest reconciliation summary with dynamic final status data
+                    if "summary" in latest_recon:
+                        # Store the dynamic final status data
+                        latest_recon["summary"]["final_status_data"] = final_status_counts
+                        
+                        # Mark as having final status data
+                        latest_recon["has_final_status"] = True
+                        
+                        # Write updated data back to file
+                        with open(RECON_SUMMARY_PATH, "w") as f:
+                            json.dump(recon_summaries, f, indent=2)
+                        
+                        logging.info(f"Updated reconciliation summary for panel '{panel_name}' with dynamic final status data: {final_status_counts}")
+                
+        except Exception as e:
+            logging.error(f"Failed to update reconciliation summary with final status data: {e}")
+            # Don't fail the recategorization if summary update fails
+            pass
         
         # Log audit event
         audit_details = {
@@ -565,3 +619,37 @@ def get_user_wise_summary():
     except Exception as e:
         logging.error(f"Unexpected error in get_user_wise_summary: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 
+
+
+@router.get("/debug/final_status/{panel_name}")
+def debug_final_status(panel_name: str):
+    """
+    Debug endpoint to check final_status values in the database
+    """
+    try:
+        panel_rows = fetch_all_rows(panel_name)
+        if not panel_rows:
+            return {"error": "No panel data found"}
+        
+        # Count final status values
+        final_status_counts = {}
+        unique_final_statuses = set()
+        
+        for row in panel_rows:
+            final_status = row.get("final_status", "")
+            if final_status:
+                final_status_lower = final_status.lower()
+                unique_final_statuses.add(final_status_lower)
+                final_status_counts[final_status_lower] = final_status_counts.get(final_status_lower, 0) + 1
+        
+        return {
+            "panel_name": panel_name,
+            "total_rows": len(panel_rows),
+            "unique_final_statuses": list(unique_final_statuses),
+            "final_status_counts": final_status_counts,
+            "sample_rows": panel_rows[:3] if panel_rows else []
+        }
+        
+    except Exception as e:
+        logging.error(f"Error in debug_final_status: {e}")
+        return {"error": str(e)} 
