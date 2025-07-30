@@ -1,11 +1,34 @@
 {
   "sots": [
-  
     {
-      "name": "sample_data",
+      "name": "hr_data",
       "headers": [
-        "user_email",
-        "category"
+        "employee_id",
+        "name",
+        "department",
+        "email",
+        "employment_status"
+      ]
+    },
+    {
+      "name": "internal_users",
+      "headers": [
+        "domain",
+        "usertype"
+      ]
+    },
+    {
+      "name": "service_users",
+      "headers": [
+        "email",
+        "usertype"
+      ]
+    },
+    {
+      "name": "thirdparty_users",
+      "headers": [
+        "domain",
+        "usertype"
       ]
     }
   ]

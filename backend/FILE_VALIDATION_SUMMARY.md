@@ -24,6 +24,7 @@ This document summarizes all file validation features implemented in the Reconif
 - **Location**: `backend/app/utils/validators.py`
 - **Algorithm**: SHA-256 content hashing
 - **Storage**: File hash stored in upload metadata
+- **Smart Detection**: Only considers successful uploads, ignores failed uploads
 - **Endpoints**:
   - `POST /sot/upload` - SOT file uploads
   - `POST /recon/upload` - Panel data uploads  
@@ -31,9 +32,17 @@ This document summarizes all file validation features implemented in the Reconif
 
 ### Features
 - Content-based duplicate detection (not just filename)
+- **Success-Only Detection**: Only flags duplicates for successfully uploaded files
+- **Retry Support**: Failed uploads can be retried without duplicate detection issues
 - Detailed duplicate information (original uploader, timestamp, filename)
 - Audit trail integration for duplicate attempts
 - Prevents data redundancy and processing waste
+
+### Status-Based Filtering
+- **SOT Uploads**: Only considers files with status `"success"` or `"uploaded"`
+- **Panel Uploads**: Only considers files with status `"uploaded"` or `"complete"`
+- **Recategorization**: Only considers files with status `"uploaded"` or `"complete"`
+- **Failed Uploads**: Ignored for duplicate detection, allowing retry attempts
 
 ## 3. File Format and Structure Validation
 

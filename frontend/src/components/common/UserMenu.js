@@ -4,12 +4,16 @@ import { useAuth } from "../../auth/AuthContext";
 export default function UserMenu() {
   const { user, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const dropdownRef = useRef(null);
   
-  // Only show user menu when authenticated (login page handles unauthenticated state)
-  if (!user) {
-    return null;
-  }
+  // Debug: Log user data to see what's available
+  useEffect(() => {
+    if (user) {
+      console.log("User data in UserMenu:", user);
+      console.log("User picture URL:", user.picture);
+    }
+  }, [user]);
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -24,6 +28,11 @@ export default function UserMenu() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  
+  // Only show user menu when authenticated (login page handles unauthenticated state)
+  if (!user) {
+    return null;
+  }
 
   const handleProfileClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -32,6 +41,11 @@ export default function UserMenu() {
   const handleLogout = () => {
     setIsDropdownOpen(false);
     logout();
+  };
+
+  const handleImageError = () => {
+    console.log("Profile image failed to load, using fallback");
+    setImageError(true);
   };
   
   // Show user menu when authenticated
@@ -63,7 +77,7 @@ export default function UserMenu() {
           e.target.style.border = "2px solid rgba(255,255,255,0.3)";
         }}
       >
-        {user.picture ? (
+        {user.picture && !imageError ? (
           <img 
             src={user.picture} 
             alt="Profile" 
@@ -72,7 +86,8 @@ export default function UserMenu() {
               height: "100%", 
               borderRadius: "50%",
               objectFit: "cover"
-            }} 
+            }}
+            onError={handleImageError}
           />
         ) : (
           <div style={{
@@ -120,7 +135,7 @@ export default function UserMenu() {
               gap: 12,
               marginBottom: 8
             }}>
-              {user.picture ? (
+              {user.picture && !imageError ? (
                 <img 
                   src={user.picture} 
                   alt="Profile" 
@@ -129,7 +144,8 @@ export default function UserMenu() {
                     height: 40, 
                     borderRadius: "50%",
                     border: "2px solid rgba(0, 46, 110, 0.2)"
-                  }} 
+                  }}
+                  onError={handleImageError}
                 />
               ) : (
                 <div style={{

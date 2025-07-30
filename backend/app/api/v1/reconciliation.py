@@ -6,6 +6,7 @@ import pandas as pd
 import csv
 import io
 import logging
+import time
 from datetime import datetime, timezone, timedelta
 
 from app.api.deps import get_current_user
@@ -15,12 +16,18 @@ from app.utils.validators import generate_file_hash, check_duplicate_file, valid
 from app.config.settings import RECON_HISTORY_PATH, RECON_SUMMARY_PATH
 from app.core.database.mysql_utils import insert_panel_data_rows, fetch_all_rows, update_initial_status_bulk
 from app.core.audit.audit_utils import log_audit_event
+from app.utils.file_server_manager import file_server_manager
 
 router = APIRouter()
 
 @router.post("/recon/upload")
 def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile = File(...)):
-    doc_id = str(uuid.uuid4())
+    """
+    3-Stage Panel File Upload Process using only doc_id:
+    - doc_id: Single identifier for entire process and file naming
+    """
+    # Generate single doc_id for entire process
+    doc_id = str(uuid.uuid4())  # ✅ This is used for everything
     doc_name = file.filename
     uploaded_by = get_current_user(request)
     timestamp = get_ist_timestamp()
@@ -61,10 +68,124 @@ def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile
             "status": "failed"
         }
     
+    # Initialize upload record
+    upload_record = {
+        "panelname": panel_name,
+        "docid": doc_id,  # ✅ Single doc_id for entire process
+        "docname": doc_name,
+        "timestamp": timestamp,
+        "total_records": 0,
+        "uploadedby": uploaded_by,
+        "status": "uploading",  # Initial status
+        "file_hash": file_hash
+    }
+    
+    # Helper function to update history
+    def update_history(status, error_message=None, total_records=0):
+        upload_record["status"] = status
+        upload_record["total_records"] = total_records
+        if error_message:
+            upload_record["error"] = error_message
+        
+        try:
+            if not os.path.exists(RECON_HISTORY_PATH):
+                with open(RECON_HISTORY_PATH, "w") as f:
+                    json.dump([], f)
+            
+            with open(RECON_HISTORY_PATH, "r+") as f:
+                history = json.load(f)
+                # Remove existing entry with same docid if exists
+                history = [item for item in history if item.get("docid") != doc_id]
+                history.append(upload_record)
+                f.seek(0)
+                json.dump(history, f, indent=2)
+        except Exception as e:
+            logging.error(f"Failed to write upload history: {e}")
+    
+    # Stage 1: Save file to upload directory on file server
     try:
-        # Read and parse file
+        # Test connection before attempting file operations
+        if not file_server_manager.test_connection():
+            logging.error(f"❌ File server connection test failed for doc_id: {doc_id}")
+            update_history("failed", "File server connection failed. Please try again later.")
+            return {
+                "error": "File server connection failed. Please try again later.", 
+                "panelname": panel_name,
+                "docid": doc_id,
+                "docname": doc_name,
+                "timestamp": timestamp,
+                "total_records": 0,
+                "uploadedby": uploaded_by,
+                "status": "failed"
+            }
+        
+        file_info = file_server_manager.save_uploaded_file(
+            contents, 
+            doc_name, 
+            upload_type="panels", 
+            entity_name=panel_name,
+            doc_id=doc_id
+        )
+        logging.info(f"📁 Stage 1: Panel file '{doc_name}' saved to panels/{panel_name}/upload with doc_id: {doc_id}")
+        
+        # Update status to reflect Stage 1 completion
+        update_history("uploaded")
+        
+        # 🕐 DELAY: Wait 3 seconds to show "uploaded" status
+        logging.info(f"⏳ Stage 1 completed - waiting 3 seconds to show 'uploaded' status for doc_id: {doc_id}")
+        time.sleep(3)
+        
+    except Exception as e:
+        logging.error(f"❌ Stage 1: Failed to save uploaded file: {str(e)}")
+        update_history("failed", f"Failed to save uploaded file: {str(e)}")
+        return {
+            "error": f"Failed to save uploaded file: {str(e)}", 
+            "panelname": panel_name,
+            "docid": doc_id,
+            "docname": doc_name,
+            "timestamp": timestamp,
+            "total_records": 0,
+            "uploadedby": uploaded_by,
+            "status": "failed"
+        }
+    
+    # Stage 2: Move to processing
+    if not file_server_manager.start_processing(doc_id, doc_name, "panels", panel_name):
+        file_server_manager.cleanup_failed_upload(doc_id, doc_name, "panels", panel_name, "upload")
+        logging.error(f"❌ Stage 2: Failed to start processing for doc_id: {doc_id}")
+        update_history("failed", "Failed to start processing")
+        return {
+            "error": "Failed to start processing", 
+            "panelname": panel_name,
+            "docid": doc_id,
+            "docname": doc_name,
+            "timestamp": timestamp,
+            "total_records": 0,
+            "uploadedby": uploaded_by,
+            "status": "failed"
+        }
+    
+    # Update status to reflect Stage 2 completion
+    update_history("processing")
+    logging.info(f"🔄 Stage 2: Panel file '{doc_name}' moved to processing stage (doc_id: {doc_id})")
+    
+    # 🕐 DELAY: Wait 4 seconds to show "processing" status
+    logging.info(f"⏳ Stage 2 completed - waiting 4 seconds to show 'processing' status for doc_id: {doc_id}")
+    time.sleep(4)
+    
+    # Initialize variables
+    error_message = None
+    total_records = 0
+    
+    try:
+        # Get file content from processing stage
+        file_content = file_server_manager.get_file_content(doc_id, doc_name, "panels", panel_name, "processing")
+        if not file_content:
+            raise Exception("Failed to read file from processing stage")
+        
+        # Read and parse file (existing logic)
         if filename.endswith(".xlsx") or filename.endswith(".xls") or filename.endswith(".xlsb"):
-            df = pd.read_excel(io.BytesIO(contents))
+            df = pd.read_excel(io.BytesIO(file_content))
             # Clean NaN values - replace with None for database compatibility
             df = df.replace({pd.NA: None, pd.NaT: None})
             df = df.where(pd.notnull(df), None)
@@ -77,7 +198,7 @@ def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile
             
             for encoding in encodings:
                 try:
-                    lines = contents.decode(encoding).splitlines()
+                    lines = file_content.decode(encoding).splitlines()
                     break
                 except UnicodeDecodeError:
                     continue
@@ -88,7 +209,91 @@ def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile
             reader = csv.DictReader(lines)
             rows = [dict((k.strip().lower(), v.strip() if v is not None else "") for k, v in row.items()) for row in reader]
             total_records = max(len(lines) - 1, 0)  # Exclude header
+        
+        # Check if we have data to process
+        if not rows or len(rows) == 0:
+            raise Exception("No data found in uploaded file")
+        
+        # Validate panel file structure against existing table (if table exists)
+        if rows:
+            file_headers = list(rows[0].keys())
+            is_valid, validation_error = validate_file_structure(panel_name, file_headers)
+            if not is_valid:
+                # Log audit event for file structure validation failure
+                try:
+                    log_audit_event(
+                        action="FILE_STRUCTURE_VALIDATION",
+                        user=uploaded_by,
+                        details={
+                            "panel_name": panel_name,
+                            "file_name": doc_name,
+                            "doc_id": doc_id,
+                            "uploaded_headers": file_headers,
+                            "validation_error": validation_error,
+                            "upload_timestamp": timestamp
+                        },
+                        status="failed"
+                    )
+                except Exception as audit_error:
+                    logging.error(f"Failed to log audit event: {audit_error}")
+                
+                raise Exception(validation_error)
+            else:
+                # Log audit event for successful file structure validation
+                try:
+                    log_audit_event(
+                        action="FILE_STRUCTURE_VALIDATION",
+                        user=uploaded_by,
+                        details={
+                            "panel_name": panel_name,
+                            "file_name": doc_name,
+                            "doc_id": doc_id,
+                            "uploaded_headers": file_headers,
+                            "validation_status": "passed",
+                            "upload_timestamp": timestamp
+                        },
+                        status="success"
+                    )
+                except Exception as audit_error:
+                    logging.error(f"Failed to log audit event: {audit_error}")
+        
+        # Insert data (existing logic)
+        from app.core.database.mysql_utils import insert_panel_data_rows_with_backup
+        success, error_message, backup_count = insert_panel_data_rows_with_backup(panel_name, rows, doc_id, timestamp)
+        
+        if success:
+            # Stage 3: Move to processed
+            if file_server_manager.complete_processing(doc_id, doc_name, "panels", panel_name):
+                update_history("processed", total_records=total_records)
+                logging.info(f"✅ Stage 3: Panel file '{doc_name}' successfully processed and moved to panels/{panel_name}/processed (doc_id: {doc_id})")
+            else:
+                update_history("processed_with_warning", total_records=total_records)
+                logging.warning(f"⚠️ Stage 3: Data inserted but failed to move file to processed stage: {doc_id}")
+            
+            # Log backup operation if data was backed up
+            if backup_count > 0:
+                try:
+                    log_audit_event(
+                        action="DATA_BACKUP",
+                        user=uploaded_by,
+                        details={
+                            "panel_name": panel_name,
+                            "backup_count": backup_count,
+                            "doc_id": doc_id,
+                            "backup_timestamp": timestamp
+                        },
+                        status="success"
+                    )
+                except Exception as audit_error:
+                    logging.error(f"Failed to log backup audit event: {audit_error}")
+        else:
+            update_history("failed", f"Error inserting data: {error_message}")
+            
     except Exception as e:
+        error_message = str(e)
+        logging.error(f"❌ File processing error: {str(e)} (doc_id: {doc_id})")
+        update_history("failed", error_message)
+        
         # Log audit event for file processing failure
         try:
             log_audit_event(
@@ -105,159 +310,14 @@ def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile
             )
         except Exception as audit_error:
             logging.error(f"Failed to log audit event: {audit_error}")
-        return {"error": f"Error processing file: {str(e)}", "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": 0, "uploadedby": uploaded_by, "status": "failed"}
     
-    # Validate panel file structure against existing table (if table exists)
-    if rows:
-        file_headers = list(rows[0].keys())
-        is_valid, validation_error = validate_file_structure(panel_name, file_headers)
-        if not is_valid:
-            # Log audit event for file structure validation failure
-            try:
-                log_audit_event(
-                    action="FILE_STRUCTURE_VALIDATION",
-                    user=uploaded_by,
-                    details={
-                        "panel_name": panel_name,
-                        "file_name": doc_name,
-                        "doc_id": doc_id,
-                        "uploaded_headers": file_headers,
-                        "validation_error": validation_error,
-                        "upload_timestamp": timestamp
-                    },
-                    status="failed"
-                )
-            except Exception as audit_error:
-                logging.error(f"Failed to log audit event: {audit_error}")
-            
-            return {"error": validation_error, "panelname": panel_name, "docid": doc_id, "docname": doc_name, "timestamp": timestamp, "total_records": 0, "uploadedby": uploaded_by, "status": "failed"}
-        else:
-            # Log audit event for successful file structure validation
-            try:
-                log_audit_event(
-                    action="FILE_STRUCTURE_VALIDATION",
-                    user=uploaded_by,
-                    details={
-                        "panel_name": panel_name,
-                        "file_name": doc_name,
-                        "doc_id": doc_id,
-                        "uploaded_headers": file_headers,
-                        "validation_status": "passed",
-                        "upload_timestamp": timestamp
-                    },
-                    status="success"
-                )
-            except Exception as audit_error:
-                logging.error(f"Failed to log audit event: {audit_error}")
-    
-    # Determine status based on actual success/failure
-    status = "uploaded"
-    error_message = None
-    
-    # Check if we have data to process
-    if not rows or len(rows) == 0:
-        status = "failed"
-        error_message = "No data found in uploaded file"
-        
-        # Log audit event for empty file
-        try:
-            log_audit_event(
-                action="EMPTY_FILE_UPLOAD",
-                user=uploaded_by,
-                details={
-                    "panel_name": panel_name,
-                    "file_name": doc_name,
-                    "doc_id": doc_id,
-                    "error": error_message,
-                    "upload_timestamp": timestamp
-                },
-                status="failed"
-            )
-        except Exception as audit_error:
-            logging.error(f"Failed to log audit event: {audit_error}")
-    else:
-        # Insert into panel table
-        try:
-            # Use the new backup-enabled insert function
-            from app.core.database.mysql_utils import insert_panel_data_rows_with_backup
-            success, error_message, backup_count = insert_panel_data_rows_with_backup(panel_name, rows, doc_id, timestamp)
-            
-            if success:
-                status = "uploaded"
-                # Log backup operation if data was backed up
-                if backup_count > 0:
-                    try:
-                        log_audit_event(
-                            action="DATA_BACKUP",
-                            user=uploaded_by,
-                            details={
-                                "panel_name": panel_name,
-                                "backup_count": backup_count,
-                                "doc_id": doc_id,
-                                "backup_timestamp": timestamp
-                            },
-                            status="success"
-                        )
-                    except Exception as audit_error:
-                        logging.error(f"Failed to log backup audit event: {audit_error}")
-            else:
-                status = "failed"
-                error_message = f"Error inserting data: {error_message}"
-                logging.error(f"Error inserting panel data: {error_message}")
-        except Exception as e:
-            status = "failed"
-            error_message = f"Error inserting data: {str(e)}"
-            logging.error(f"Error inserting panel data: {e}")
-            
-            # Log audit event for database insertion failure
-            try:
-                log_audit_event(
-                    action="FILE_PROCESSING_ERROR",
-                    user=uploaded_by,
-                    details={
-                        "panel_name": panel_name,
-                        "file_name": doc_name,
-                        "doc_id": doc_id,
-                        "error": error_message,
-                        "upload_timestamp": timestamp
-                    },
-                    status="failed"
-                )
-            except Exception as audit_error:
-                logging.error(f"Failed to log audit event: {audit_error}")
-    
-    # Save upload history with file hash
-    upload_record = {
-        "panelname": panel_name,
-        "docid": doc_id,
-        "docname": doc_name,
-        "timestamp": timestamp,
-        "total_records": total_records,
-        "uploadedby": uploaded_by,
-        "status": status,
-        "file_hash": file_hash  # Add file hash for duplicate detection
-    }
-    
-    if error_message:
-        upload_record["error"] = error_message
-    
-    try:
-        if not os.path.exists(RECON_HISTORY_PATH):
-            with open(RECON_HISTORY_PATH, "w") as f:
-                json.dump([], f)
-        
-        with open(RECON_HISTORY_PATH, "r+") as f:
-            history = json.load(f)
-            history.append(upload_record)
-            f.seek(0)
-            json.dump(history, f, indent=2)
-    except Exception as e:
-        logging.error(f"Failed to write upload history: {e}")
-        upload_record["status"] = "failed"
-        upload_record["error"] = f"Failed to write history: {e}"
+    # Clean up if processing failed
+    if upload_record["status"] == "failed":
+        file_server_manager.cleanup_failed_upload(doc_id, doc_name, "panels", panel_name, "processing")
+        logging.info(f"🧹 Cleaned up failed panel upload: {doc_id}")
     
     # Log audit event for successful upload
-    if status == "uploaded":
+    if upload_record["status"] == "processed":
         try:
             log_audit_event(
                 action="PANEL_UPLOAD",
@@ -267,14 +327,24 @@ def upload_recon(request: Request, panel_name: str = File(...), file: UploadFile
                     "file_name": doc_name,
                     "doc_id": doc_id,
                     "total_records": total_records,
-                    "upload_timestamp": timestamp
+                    "upload_timestamp": timestamp,
+                    "server_type": file_info["server_type"]
                 },
                 status="success"
             )
         except Exception as audit_error:
             logging.error(f"Failed to log audit event: {audit_error}")
     
-    return upload_record
+    return {
+        "panelname": panel_name,
+        "docid": doc_id,  # ✅ Single doc_id
+        "docname": doc_name,
+        "timestamp": timestamp,
+        "total_records": total_records,
+        "uploadedby": uploaded_by,
+        "status": upload_record["status"],
+        "error": error_message if error_message else None
+    }
 
 @router.get("/panels/upload_history")
 def get_panel_upload_history():
@@ -332,7 +402,7 @@ def reconcile_panel_with_sot(request: Request, panel_name: str = Form(...)):
                 # Count by category for summary
                 if initial_status in ["service", "service_user", "service users"]:
                     service_users_count += 1
-                elif initial_status in ["thirdparty", "thirdparty_user", "thirdparty users"]:
+                elif initial_status in ["thirdparty", "thirdparty_user", "thirdparty users", "third_party", "third_party_user", "third_party users"]:
                     thirdparty_users_count += 1
         
         logging.info(f"Found {len(users_to_reconcile)} users to reconcile ({internal_users_count} internal + {not_found_count} not found) and {len(other_users)} other users out of {len(panel_rows)} total panel users")

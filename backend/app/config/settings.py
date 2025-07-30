@@ -34,4 +34,42 @@ LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 LOG_FILE = "logs/reconify.log"
 
 # Session Configuration
-SESSION_SECRET_KEY = "your-secret-key-here" 
+SESSION_SECRET_KEY = "your-secret-key-here"
+
+# File Server Configuration (Local, SSH/SFTP and S3)
+FILE_SERVER_CONFIG = {
+    "type": os.getenv("FILE_SERVER_TYPE", "local").lower(),  # "local", "ssh" or "s3"
+    "local": {
+        "base_path": os.getenv("FILE_SERVER_BASE_PATH", "/tmp/reconify_uploads")
+    },
+    "ssh": {
+        "host": os.getenv("FILE_SERVER_HOST"),
+        "port": int(os.getenv("FILE_SERVER_PORT", "22")),
+        "username": os.getenv("FILE_SERVER_USERNAME"),
+        "password": os.getenv("FILE_SERVER_PASSWORD"),
+        "ssh_key": os.getenv("FILE_SERVER_SSH_KEY"),
+        "base_path": os.getenv("FILE_SERVER_BASE_PATH", "/data/uploads"),
+        "timeout": int(os.getenv("FILE_SERVER_TIMEOUT", "30"))
+    },
+    "s3": {
+        "access_key": os.getenv("AWS_ACCESS_KEY_ID"),
+        "secret_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
+        "region": os.getenv("AWS_REGION", "us-east-1"),
+        "bucket": os.getenv("S3_BUCKET_NAME")
+    }
+}
+
+# Cloud Storage Configuration (for future use)
+CLOUD_STORAGE_CONFIG = {
+    "aws_s3": {
+        "access_key": os.getenv("AWS_ACCESS_KEY_ID"),
+        "secret_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
+        "region": os.getenv("AWS_REGION", "us-east-1"),
+        "bucket": os.getenv("S3_BUCKET_NAME")
+    },
+    "google_cloud": {
+        "project_id": os.getenv("GOOGLE_CLOUD_PROJECT_ID"),
+        "credentials_file": os.getenv("GOOGLE_CLOUD_CREDENTIALS_FILE"),
+        "bucket": os.getenv("GOOGLE_CLOUD_BUCKET")
+    }
+} 

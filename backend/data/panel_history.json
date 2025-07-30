@@ -1,31 +1,49 @@
 [
   {
     "panelname": "Seller Panel",
-    "docid": "02f5e098-7a24-4c0f-b555-a7103bdc5524",
+    "docid": "245aa292-bc66-4a93-810c-dbd3fe915b09",
     "docname": "1. Seller Panel Users List with Assigned Roles.csv",
-    "timestamp": "27-07-2025 12:23:18",
+    "timestamp": "29-07-2025 17:56:31",
     "total_records": 1385,
     "uploadedby": "Charul Mauni",
-    "status": "complete"
+    "status": "Processed",
+    "file_hash": "ab42134b25edf5148053685de1827ce45d51f7cf8518d137c5eea4c72f4cbdbe",
+    "upload_type": "panels",
+    "entity_name": "Seller Panel",
+    "stages": {
+      "stage_1_upload": {
+        "timestamp": "2025-07-29T17:56:32.799786",
+        "file_path": "/home/one97/reconify_data_files/panels/Seller Panel/upload/245aa292-bc66-4a93-810c-dbd3fe915b09.csv",
+        "status": "uploaded"
+      },
+      "stage_2_processing": {
+        "timestamp": "29-07-2025 17:56:31",
+        "status": "processing"
+      },
+      "stage_3_processed": {
+        "timestamp": "29-07-2025 17:56:31",
+        "status": "completed"
+      }
+    }
   },
   {
     "panelname": "OE Panel",
-    "docid": "3602f480-9cc8-48d3-a897-659b586eaad6",
+    "docid": "fc9fef88-b563-4fec-bb32-643d8cd8e6eb",
     "docname": "5. OE_PANEL.csv",
-    "timestamp": "27-07-2025 16:06:38",
+    "timestamp": "30-07-2025 09:44:08",
     "total_records": 3029,
-    "uploadedby": "Charul Mauni",
+    "uploadedby": "demo",
     "status": "complete",
     "file_hash": "1ea76117e076c3c60d7fe00dd212c73dff0078b4b2b01766606b4ebf00b50c87"
   },
   {
-    "panelname": "OE_ODS_PANEL_PMMS",
-    "docid": "4166f65f-a078-4874-be81-d4b6ede31822",
+    "panelname": "demo panel",
+    "docid": "be1d4319-5f6d-4212-bbef-f76f601a256c",
     "docname": "6. OE_ODS_PANEL_PMMS.csv",
-    "timestamp": "27-07-2025 23:34:16",
+    "timestamp": "30-07-2025 10:15:09",
     "total_records": 111,
-    "uploadedby": "Charul Mauni",
-    "status": "uploaded",
+    "uploadedby": "demo",
+    "status": "complete",
     "file_hash": "18b9b5556ba40c74e1bda6bdcd579856f0cee7e2e70a66ed0812a56990b2febf"
   }
 ]

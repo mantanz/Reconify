@@ -227,6 +227,7 @@ def insert_panel_data_rows_with_backup(panel_name, rows, doc_id, upload_timestam
     """
     Insert a list of dicts (rows) into the given panel's table with backup support.
     This function will backup existing data before inserting new data.
+    After backup, it removes initial_status and final_status columns to ensure clean table structure.
     
     Args:
         panel_name (str): Name of the panel table
@@ -264,12 +265,22 @@ def insert_panel_data_rows_with_backup(panel_name, rows, doc_id, upload_timestam
             clear_success, clear_error = clear_table_data(table_name)
             if not clear_success:
                 return False, f"Failed to clear existing data: {clear_error}", backup_count
+            
+            # Step 3: Remove status columns to ensure clean table structure
+            status_columns = ["initial_status", "final_status"]
+            for column_name in status_columns:
+                remove_success, remove_error = remove_column_if_exists(table_name, column_name)
+                if not remove_success:
+                    logging.warning(f"Failed to remove column '{column_name}' from {table_name}: {remove_error}")
+                    # Continue with upload even if column removal fails
+                else:
+                    logging.info(f"Successfully removed column '{column_name}' from table '{table_name}'")
         else:
             # First-time upload - no data to backup or clear
             backup_count = 0
             logging.info(f"First-time upload for table '{table_name}'. No existing data to backup.")
         
-        # Step 3: Insert new data
+        # Step 4: Insert new data
         try:
             panel_table = Table(table_name, metadata, autoload_with=engine)
             with engine.begin() as conn:
@@ -311,6 +322,37 @@ def add_column_if_not_exists(table_name, column_name, column_type="VARCHAR(255)"
         with engine.connect() as conn:
             alter_stmt = f'ALTER TABLE `{table_name}` ADD COLUMN `{column_name}` {column_type}'
             conn.execute(text(alter_stmt))
+
+def remove_column_if_exists(table_name, column_name):
+    """
+    Removes a column from the table if it exists.
+    
+    Args:
+        table_name (str): Name of the table
+        column_name (str): Name of the column to remove
+        
+    Returns:
+        tuple: (success: bool, error_message: str or None)
+    """
+    table_name = table_name.replace(" ", "_").lower()
+    insp = inspect(engine)
+    
+    try:
+        columns = [col['name'] for col in insp.get_columns(table_name)]
+        if column_name in columns:
+            with engine.connect() as conn:
+                alter_stmt = f'ALTER TABLE `{table_name}` DROP COLUMN `{column_name}`'
+                conn.execute(text(alter_stmt))
+                conn.commit()
+            logging.info(f"Successfully removed column '{column_name}' from table '{table_name}'")
+            return True, None
+        else:
+            logging.info(f"Column '{column_name}' does not exist in table '{table_name}'")
+            return True, None
+    except Exception as e:
+        error_msg = f"Error removing column '{column_name}' from table '{table_name}': {str(e)}"
+        logging.error(error_msg)
+        return False, error_msg
 
 def update_initial_status_bulk(table_name, updates, match_field="email"):
     """

@@ -869,7 +869,7 @@ def reconcile_panel_with_sot(request: Request, panel_name: str = Form(...)):
                 # Count by category for summary
                 if initial_status in ["service", "service_user", "service users"]:
                     service_users_count += 1
-                elif initial_status in ["thirdparty", "thirdparty_user", "thirdparty users"]:
+                elif initial_status in ["thirdparty", "thirdparty_user", "thirdparty users", "third_party", "third_party_user", "third_party users"]:
                     thirdparty_users_count += 1
         
         logging.info(f"Found {len(users_to_reconcile)} users to reconcile ({internal_users_count} internal + {not_found_count} not found) and {len(other_users)} other users out of {len(panel_rows)} total panel users")
@@ -1385,13 +1385,13 @@ def categorize_users(panel_name: str = Form(...)):
             )
         
         # Restrict to only the three allowed SOTs for user categorization
-        allowed_sots = ["service_users", "internal_users", "thirdparty_users"]
+        allowed_sots = ["service_users", "internal_users", "thirdparty_users", "third_party_users"]
         configured_sots = [sot for sot in configured_sots if sot in allowed_sots]
         
         if not configured_sots:
             raise HTTPException(
                 status_code=400, 
-                detail=f"No valid SOTs configured for user categorization. Only 'service_users', 'internal_users', and 'thirdparty_users' are allowed. Available mappings: {list(key_mapping.keys())}"
+                detail=f"No valid SOTs configured for user categorization. Only 'service_users', 'internal_users', and 'thirdparty_users'/'third_party_users' are allowed. Available mappings: {list(key_mapping.keys())}"
             )
         
         # Production logging (replace print with proper logging)
@@ -1446,7 +1446,7 @@ def categorize_users(panel_name: str = Form(...)):
         match_field = None
         
         # Define the priority order for match_field determination
-        priority_sots = ["service_users", "internal_users", "thirdparty_users"]
+        priority_sots = ["service_users", "internal_users", "thirdparty_users", "third_party_users"]
         
         # Try to get match_field from SOTs in priority order
         for sot in priority_sots:
@@ -1495,7 +1495,7 @@ def categorize_users(panel_name: str = Form(...)):
                 found = False
                 
                 # Check SOTs in priority order: service_users -> internal_users -> thirdparty_users
-                priority_sots = ["service_users", "internal_users", "thirdparty_users"]
+                priority_sots = ["service_users", "internal_users", "thirdparty_users", "third_party_users"]
                 
                 for sot in priority_sots:
                     if sot not in configured_sots:
@@ -1518,7 +1518,7 @@ def categorize_users(panel_name: str = Form(...)):
                     # Apply domain matching for internal_users and thirdparty_users
                     # Check if this SOT uses domain matching (either by flag or by field name)
                     use_domain_matching = mapping.get("use_domain_matching", False)
-                    is_domain_sot = sot in ["internal_users", "thirdparty_users"] and sot_field == "domain"
+                    is_domain_sot = sot in ["internal_users", "thirdparty_users", "third_party_users"] and sot_field == "domain"
                     
                     if (use_domain_matching or is_domain_sot) and "@" in panel_value:
                         panel_value = panel_value.split("@")[-1].strip().lower()

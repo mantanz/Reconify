@@ -80,7 +80,13 @@ export default function SOTUpload() {
     const statusLower = status.toLowerCase();
     
     // Success statuses
-    if (statusLower === "complete" || statusLower === "uploaded") return "#27ae60"; // Green
+    if (statusLower === "complete" || statusLower === "processed") return "#27ae60"; // Green
+    
+    // Processing statuses
+    if (statusLower === "uploading" || statusLower === "uploaded" || statusLower === "processing") return "#f39c12"; // Orange
+    
+    // Warning statuses
+    if (statusLower === "processed_with_warning") return "#e67e22"; // Dark Orange
     
     // Failed statuses
     if (statusLower === "failed") return "#e74c3c"; // Red
@@ -106,18 +112,24 @@ export default function SOTUpload() {
     setError("");
     setResult(null);
     
+    // Start polling for status updates
+    const pollInterval = setInterval(async () => {
+      await fetchHistory();
+    }, 2000); // Poll every 2 seconds
+    
     try {
       const data = await uploadSOTFile(file, sotType);
       setResult(data);
       if (data.error) {
         setError(data.error);
       } else {
-        // Refresh history after successful upload
+        // Final refresh after upload completes
         await fetchHistory();
       }
     } catch (err) {
       setError(err.message || "Upload failed");
     } finally {
+      clearInterval(pollInterval); // Stop polling
       setUploading(false);
       setUploadingSot("");
     }
@@ -258,6 +270,405 @@ export default function SOTUpload() {
            sot === "internal_users" ? "Internal Users" :
            sot === "thirdparty_users" ? "Third Party Users" :
            sot.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+  };
+
+  const handleSOTNameClick = async (sotName) => {
+    try {
+      // Fetch the SOT data using the new details endpoint
+      const response = await fetch(`${API_BASE}/sot/${encodeURIComponent(sotName)}/details`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch SOT data: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      if (!data.rows || data.rows.length === 0) {
+        alert("No data available for this SOT.");
+        return;
+      }
+      
+      // Create a simple HTML page with pagination
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>SOT Data: ${getSotDisplayName(sotName)}</title>
+          <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              background-color: #f5f5f5;
+              padding: 20px;
+              line-height: 1.6;
+            }
+            
+            .container {
+              max-width: 1400px;
+              margin: 0 auto;
+              background: white;
+              border-radius: 8px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+              overflow: hidden;
+            }
+            
+            .header {
+              background: linear-gradient(135deg, #002e6e 0%, #0056b6 100%);
+              color: white;
+              padding: 30px;
+              text-align: center;
+            }
+            
+            .header h1 {
+              font-size: 28px;
+              font-weight: 700;
+              margin-bottom: 8px;
+            }
+            
+            .header p {
+              font-size: 16px;
+              opacity: 0.9;
+            }
+            
+            .content {
+              padding: 30px;
+            }
+            
+            .pagination-info {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 20px;
+              padding: 15px;
+              background: #f8f9fa;
+              border-radius: 8px;
+              border: 1px solid #e9ecef;
+            }
+            
+            .pagination-info .total-records {
+              font-weight: 600;
+              color: #495057;
+            }
+            
+            .pagination-info .page-info {
+              color: #6c757d;
+              font-size: 14px;
+            }
+            
+            .table-container {
+              overflow-x: auto;
+              border-radius: 8px;
+              box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+              margin-bottom: 20px;
+            }
+            
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              background: white;
+              font-size: 14px;
+            }
+            
+            th {
+              background: #002e6e;
+              color: white;
+              padding: 15px 12px;
+              text-align: left;
+              font-weight: 600;
+              white-space: nowrap;
+              position: sticky;
+              top: 0;
+            }
+            
+            td {
+              padding: 12px;
+              border-bottom: 1px solid #eee;
+              word-wrap: break-word;
+              white-space: normal;
+              max-width: none;
+            }
+            
+            tr:nth-child(even) {
+              background-color: #f8f9fa;
+            }
+            
+            tr:hover {
+              background-color: #f0f8ff;
+            }
+            
+            .pagination-controls {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 10px;
+              margin-top: 20px;
+            }
+            
+            .pagination-controls button {
+              padding: 10px 15px;
+              border: 1px solid #dee2e6;
+              background: white;
+              color: #495057;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: 14px;
+              font-weight: 500;
+              transition: all 0.2s ease;
+            }
+            
+            .pagination-controls button:hover:not(:disabled) {
+              background: #007bff;
+              color: white;
+              border-color: #007bff;
+            }
+            
+            .pagination-controls button:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+            
+            .pagination-controls .current-page {
+              background: #007bff;
+              color: white;
+              border-color: #007bff;
+            }
+            
+            .page-size-selector {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              margin-left: 20px;
+            }
+            
+            .page-size-selector select {
+              padding: 8px 12px;
+              border: 1px solid #dee2e6;
+              border-radius: 4px;
+              background: white;
+              font-size: 14px;
+            }
+            
+            .no-data {
+              text-align: center;
+              padding: 50px;
+              color: #666;
+              font-size: 16px;
+            }
+            
+            @media (max-width: 768px) {
+              body {
+                padding: 10px;
+              }
+              
+              .header {
+                padding: 20px;
+              }
+              
+              .header h1 {
+                font-size: 24px;
+              }
+              
+              .content {
+                padding: 20px;
+              }
+              
+              .pagination-info {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+              }
+              
+              .pagination-controls {
+                flex-wrap: wrap;
+                gap: 5px;
+              }
+              
+              .page-size-selector {
+                margin-left: 0;
+                margin-top: 10px;
+              }
+              
+              th, td {
+                padding: 10px 8px;
+                font-size: 13px;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>SOT Data: ${getSotDisplayName(sotName)}</h1>
+              <p>${data.rows.length} records</p>
+            </div>
+            
+            <div class="content">
+              ${data.rows.length > 0 ? `
+                <div class="pagination-info">
+                  <div class="total-records">Total Records: ${data.rows.length}</div>
+                  <div class="page-info">Showing <span id="startRecord">1</span> to <span id="endRecord">10</span> of ${data.rows.length}</div>
+                  <div class="page-size-selector">
+                    <label>Records per page:</label>
+                    <select id="pageSize" onchange="changePageSize()">
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="table-container">
+                  <table id="dataTable">
+                    <thead>
+                      <tr>
+                        ${Object.keys(data.rows[0]).map(header => `<th>${header}</th>`).join('')}
+                      </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                      ${data.rows.slice(0, 10).map(row => `
+                        <tr>
+                          ${Object.values(row).map(value => `<td>${value || '-'}</td>`).join('')}
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div class="pagination-controls">
+                  <button onclick="goToPage(1)" id="firstPage">First</button>
+                  <button onclick="goToPage(currentPage - 1)" id="prevPage">Previous</button>
+                  
+                  <div id="pageNumbers"></div>
+                  
+                  <button onclick="goToPage(currentPage + 1)" id="nextPage">Next</button>
+                  <button onclick="goToPage(totalPages)" id="lastPage">Last</button>
+                </div>
+              ` : `
+                <div class="no-data">
+                  No data available for this SOT.
+                </div>
+              `}
+            </div>
+          </div>
+          
+          <script>
+            // Pagination variables
+            let currentPage = 1;
+            let pageSize = 10;
+            let totalPages = Math.ceil(${data.rows.length} / pageSize);
+            const allData = ${JSON.stringify(data.rows)};
+            
+            // Initialize pagination
+            function initializePagination() {
+              updateTable();
+              updatePaginationInfo();
+              updatePageNumbers();
+              updateButtonStates();
+            }
+            
+            // Update table with current page data
+            function updateTable() {
+              const startIndex = (currentPage - 1) * pageSize;
+              const endIndex = startIndex + pageSize;
+              const pageData = allData.slice(startIndex, endIndex);
+              
+              const tableBody = document.getElementById('tableBody');
+              tableBody.innerHTML = pageData.map(row => 
+                '<tr>' + Object.values(row).map(value => '<td>' + (value || '-') + '</td>').join('') + '</tr>'
+              ).join('');
+            }
+            
+            // Update pagination information
+            function updatePaginationInfo() {
+              const startRecord = (currentPage - 1) * pageSize + 1;
+              const endRecord = Math.min(currentPage * pageSize, allData.length);
+              
+              document.getElementById('startRecord').textContent = startRecord;
+              document.getElementById('endRecord').textContent = endRecord;
+            }
+            
+            // Update page numbers
+            function updatePageNumbers() {
+              const pageNumbersDiv = document.getElementById('pageNumbers');
+              let pageNumbersHTML = '';
+              
+              const maxVisiblePages = 5;
+              let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+              let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+              
+              if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+              }
+              
+              for (let i = startPage; i <= endPage; i++) {
+                const buttonClass = i === currentPage ? 'current-page' : '';
+                pageNumbersHTML += '<button onclick="goToPage(' + i + ')" class="' + buttonClass + '">' + i + '</button>';
+              }
+              
+              pageNumbersDiv.innerHTML = pageNumbersHTML;
+            }
+            
+            // Update button states
+            function updateButtonStates() {
+              document.getElementById('firstPage').disabled = currentPage === 1;
+              document.getElementById('prevPage').disabled = currentPage === 1;
+              document.getElementById('nextPage').disabled = currentPage === totalPages;
+              document.getElementById('lastPage').disabled = currentPage === totalPages;
+            }
+            
+            // Go to specific page
+            function goToPage(page) {
+              if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                updateTable();
+                updatePaginationInfo();
+                updatePageNumbers();
+                updateButtonStates();
+              }
+            }
+            
+            // Change page size
+            function changePageSize() {
+              pageSize = parseInt(document.getElementById('pageSize').value);
+              totalPages = Math.ceil(allData.length / pageSize);
+              currentPage = 1;
+              initializePagination();
+            }
+            
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', function() {
+              initializePagination();
+            });
+          </script>
+        </body>
+        </html>
+      `;
+      
+      // Open new tab and write content
+      const newTab = window.open('', '_blank');
+      if (newTab) {
+        newTab.document.write(htmlContent);
+        newTab.document.close();
+      } else {
+        alert("Please allow popups for this site to view SOT data in a new tab.");
+      }
+      
+    } catch (error) {
+      console.error("Error fetching SOT data:", error);
+      alert("Failed to fetch SOT data. Please try again.");
+    }
   };
 
   return (
@@ -418,13 +829,14 @@ export default function SOTUpload() {
               <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>#Rows</th>
               <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Last Refreshed DateTime</th>
               <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Uploaded By</th>
+              <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Status</th>
               <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid #dee2e6" }}>Upload</th>
             </tr>
           </thead>
           <tbody>
             {sotList.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ textAlign: "center", color: "#adb5bd", padding: 24 }}>
+                <td colSpan={6} style={{ textAlign: "center", color: "#adb5bd", padding: 24 }}>
                   No SOTs configured. Create a new SOT above or configure SOT mappings in panel settings.
                 </td>
               </tr>
@@ -435,15 +847,17 @@ export default function SOTUpload() {
                 
                 return (
                   <React.Fragment key={sot}>
-                    <SOTRow 
-                      sot={sot}
-                      metadata={metadata}
-                      isUploading={isUploading}
-                      uploading={uploading}
-                      onUpload={handleUpload}
-                      getSotDisplayName={getSotDisplayName}
-                      formatDateTime={formatDateTime}
-                    />
+                  <SOTRow 
+                    sot={sot}
+                    metadata={metadata}
+                    isUploading={isUploading}
+                    uploading={uploading}
+                    onUpload={handleUpload}
+                    getSotDisplayName={getSotDisplayName}
+                    formatDateTime={formatDateTime}
+                    onSOTNameClick={handleSOTNameClick}
+                    getStatusColor={getStatusColor}
+                  />
                   </React.Fragment>
                 );
               })
@@ -497,7 +911,7 @@ export default function SOTUpload() {
 }
 
 // Separate component for SOT row with integrated file upload
-function SOTRow({ sot, metadata, isUploading, uploading, onUpload, getSotDisplayName, formatDateTime }) {
+function SOTRow({ sot, metadata, isUploading, uploading, onUpload, getSotDisplayName, formatDateTime, onSOTNameClick, getStatusColor }) {
   const fileInputRef = React.useRef(null);
 
   const handleUploadClick = () => {
@@ -524,10 +938,29 @@ function SOTRow({ sot, metadata, isUploading, uploading, onUpload, getSotDisplay
     }
   };
 
+  // Check if there's actual data available
+  const hasData = metadata.rowCount > 0;
+
   return (
     <tr style={{ borderBottom: "1px solid #f1f3f5" }}>
       <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 500 }}>
+        {hasData ? (
+          <span 
+            style={{ 
+              cursor: "pointer", 
+              color: "#007bff", 
+              textDecoration: "underline", 
+              fontWeight: 600 
+            }} 
+            onClick={() => onSOTNameClick(sot)}
+          >
+            {getSotDisplayName(sot)}
+          </span>
+        ) : (
+          <span style={{ color: "#6c757d" }}>
         {getSotDisplayName(sot)}
+          </span>
+        )}
       </td>
       <td style={{ padding: "12px 16px", fontSize: 14 }}>
         {metadata.rowCount || 0}
@@ -537,6 +970,9 @@ function SOTRow({ sot, metadata, isUploading, uploading, onUpload, getSotDisplay
       </td>
       <td style={{ padding: "12px 16px", fontSize: 14 }}>
         {metadata.uploadedBy || "-"}
+      </td>
+      <td style={{ padding: "12px 16px", fontSize: 14, color: getStatusColor(metadata.latestUpload?.status) }}>
+        {metadata.latestUpload?.status || "-"}
       </td>
       <td style={{ padding: "12px 16px", fontSize: 14 }}>
         <button

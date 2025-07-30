@@ -5,15 +5,6 @@
       "key_mapping": {
         "hr_data": {
           "user_email": "email"
-        },
-        "internal_users": {
-          "user_email": "domain"
-        },
-        "service_users": {
-          "user_email": "email"
-        },
-        "thirdparty_users": {
-          "user_email": "domain"
         }
       }
     },
@@ -35,7 +26,7 @@
       }
     },
     {
-      "name": "OE_ODS_PANEL_PMMS",
+      "name": "demo panel",
       "key_mapping": {
         "hr_data": {
           "email": "email"

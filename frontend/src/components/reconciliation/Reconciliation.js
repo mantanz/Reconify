@@ -88,6 +88,412 @@ export default function Reconciliation() {
     }
   };
 
+  const handlePanelNameClick = async (panelName) => {
+    try {
+      // Fetch the data first
+      const response = await fetch(`${API_BASE}/panels/${encodeURIComponent(panelName)}/details`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch panel data: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      // Filter out status columns on the frontend
+      const statusColumns = ["initial_status", "final_status"];
+      const filteredRows = data.rows.map(row => {
+        const filteredRow = {};
+        Object.keys(row).forEach(key => {
+          if (!statusColumns.includes(key)) {
+            filteredRow[key] = row[key];
+          }
+        });
+        return filteredRow;
+      });
+      
+      // Create a simple HTML page with pagination
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Panel Data: ${panelName}</title>
+          <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              background-color: #f5f5f5;
+              padding: 20px;
+              line-height: 1.6;
+            }
+            
+            .container {
+              max-width: 1400px;
+              margin: 0 auto;
+              background: white;
+              border-radius: 8px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+              overflow: hidden;
+            }
+            
+            .header {
+              background: linear-gradient(135deg, #002e6e 0%, #0056b6 100%);
+              color: white;
+              padding: 30px;
+              text-align: center;
+            }
+            
+            .header h1 {
+              font-size: 28px;
+              font-weight: 700;
+              margin-bottom: 8px;
+            }
+            
+            .header p {
+              font-size: 16px;
+              opacity: 0.9;
+            }
+            
+            .content {
+              padding: 30px;
+            }
+            
+            .pagination-info {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 20px;
+              padding: 15px;
+              background: #f8f9fa;
+              border-radius: 8px;
+              border: 1px solid #e9ecef;
+            }
+            
+            .pagination-info .total-records {
+              font-weight: 600;
+              color: #495057;
+            }
+            
+            .pagination-info .page-info {
+              color: #6c757d;
+              font-size: 14px;
+            }
+            
+            .table-container {
+              overflow-x: auto;
+              border-radius: 8px;
+              box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+              margin-bottom: 20px;
+            }
+            
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              background: white;
+              font-size: 14px;
+            }
+            
+            th {
+              background: #002e6e;
+              color: white;
+              padding: 15px 12px;
+              text-align: left;
+              font-weight: 600;
+              white-space: nowrap;
+              position: sticky;
+              top: 0;
+            }
+            
+            td {
+              padding: 12px;
+              border-bottom: 1px solid #eee;
+              word-wrap: break-word;
+              white-space: normal;
+              max-width: none;
+            }
+            
+            tr:nth-child(even) {
+              background-color: #f8f9fa;
+            }
+            
+            tr:hover {
+              background-color: #f0f8ff;
+            }
+            
+            .pagination-controls {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 10px;
+              margin-top: 20px;
+            }
+            
+            .pagination-controls button {
+              padding: 10px 15px;
+              border: 1px solid #dee2e6;
+              background: white;
+              color: #495057;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: 14px;
+              font-weight: 500;
+              transition: all 0.2s ease;
+            }
+            
+            .pagination-controls button:hover:not(:disabled) {
+              background: #007bff;
+              color: white;
+              border-color: #007bff;
+            }
+            
+            .pagination-controls button:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+            
+            .pagination-controls .current-page {
+              background: #007bff;
+              color: white;
+              border-color: #007bff;
+            }
+            
+            .page-size-selector {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              margin-left: 20px;
+            }
+            
+            .page-size-selector select {
+              padding: 8px 12px;
+              border: 1px solid #dee2e6;
+              border-radius: 4px;
+              background: white;
+              font-size: 14px;
+            }
+            
+            .no-data {
+              text-align: center;
+              padding: 50px;
+              color: #666;
+              font-size: 16px;
+            }
+            
+            @media (max-width: 768px) {
+              body {
+                padding: 10px;
+              }
+              
+              .header {
+                padding: 20px;
+              }
+              
+              .header h1 {
+                font-size: 24px;
+              }
+              
+              .content {
+                padding: 20px;
+              }
+              
+              .pagination-info {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+              }
+              
+              .pagination-controls {
+                flex-wrap: wrap;
+                gap: 5px;
+              }
+              
+              .page-size-selector {
+                margin-left: 0;
+                margin-top: 10px;
+              }
+              
+              th, td {
+                padding: 10px 8px;
+                font-size: 13px;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Panel Data: ${panelName}</h1>
+              <p>${filteredRows.length} records</p>
+            </div>
+            
+            <div class="content">
+              ${filteredRows.length > 0 ? `
+                <div class="pagination-info">
+                  <div class="total-records">Total Records: ${filteredRows.length}</div>
+                  <div class="page-info">Showing <span id="startRecord">1</span> to <span id="endRecord">10</span> of ${filteredRows.length}</div>
+                  <div class="page-size-selector">
+                    <label>Records per page:</label>
+                    <select id="pageSize" onchange="changePageSize()">
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="table-container">
+                  <table id="dataTable">
+                    <thead>
+                      <tr>
+                        ${Object.keys(filteredRows[0]).map(header => `<th>${header}</th>`).join('')}
+                      </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                      ${filteredRows.slice(0, 10).map(row => `
+                        <tr>
+                          ${Object.values(row).map(value => `<td>${value || '-'}</td>`).join('')}
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div class="pagination-controls">
+                  <button onclick="goToPage(1)" id="firstPage">First</button>
+                  <button onclick="goToPage(currentPage - 1)" id="prevPage">Previous</button>
+                  
+                  <div id="pageNumbers"></div>
+                  
+                  <button onclick="goToPage(currentPage + 1)" id="nextPage">Next</button>
+                  <button onclick="goToPage(totalPages)" id="lastPage">Last</button>
+                </div>
+              ` : `
+                <div class="no-data">
+                  No data available for this panel.
+                </div>
+              `}
+            </div>
+          </div>
+          
+          <script>
+            // Pagination variables
+            let currentPage = 1;
+            let pageSize = 10;
+            let totalPages = Math.ceil(${filteredRows.length} / pageSize);
+            const allData = ${JSON.stringify(filteredRows)};
+            
+            // Initialize pagination
+            function initializePagination() {
+              updateTable();
+              updatePaginationInfo();
+              updatePageNumbers();
+              updateButtonStates();
+            }
+            
+            // Update table with current page data
+            function updateTable() {
+              const startIndex = (currentPage - 1) * pageSize;
+              const endIndex = startIndex + pageSize;
+              const pageData = allData.slice(startIndex, endIndex);
+              
+              const tableBody = document.getElementById('tableBody');
+              tableBody.innerHTML = pageData.map(row => 
+                '<tr>' + Object.values(row).map(value => '<td>' + (value || '-') + '</td>').join('') + '</tr>'
+              ).join('');
+            }
+            
+            // Update pagination information
+            function updatePaginationInfo() {
+              const startRecord = (currentPage - 1) * pageSize + 1;
+              const endRecord = Math.min(currentPage * pageSize, allData.length);
+              
+              document.getElementById('startRecord').textContent = startRecord;
+              document.getElementById('endRecord').textContent = endRecord;
+            }
+            
+            // Update page numbers
+            function updatePageNumbers() {
+              const pageNumbersDiv = document.getElementById('pageNumbers');
+              let pageNumbersHTML = '';
+              
+              const maxVisiblePages = 5;
+              let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+              let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+              
+              if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+              }
+              
+              for (let i = startPage; i <= endPage; i++) {
+                const buttonClass = i === currentPage ? 'current-page' : '';
+                pageNumbersHTML += '<button onclick="goToPage(' + i + ')" class="' + buttonClass + '">' + i + '</button>';
+              }
+              
+              pageNumbersDiv.innerHTML = pageNumbersHTML;
+            }
+            
+            // Update button states
+            function updateButtonStates() {
+              document.getElementById('firstPage').disabled = currentPage === 1;
+              document.getElementById('prevPage').disabled = currentPage === 1;
+              document.getElementById('nextPage').disabled = currentPage === totalPages;
+              document.getElementById('lastPage').disabled = currentPage === totalPages;
+            }
+            
+            // Go to specific page
+            function goToPage(page) {
+              if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                updateTable();
+                updatePaginationInfo();
+                updatePageNumbers();
+                updateButtonStates();
+              }
+            }
+            
+            // Change page size
+            function changePageSize() {
+              pageSize = parseInt(document.getElementById('pageSize').value);
+              totalPages = Math.ceil(allData.length / pageSize);
+              currentPage = 1;
+              initializePagination();
+            }
+            
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', function() {
+              initializePagination();
+            });
+          </script>
+        </body>
+        </html>
+      `;
+      
+      // Open new tab and write content
+      const newTab = window.open('', '_blank');
+      if (newTab) {
+        newTab.document.write(htmlContent);
+        newTab.document.close();
+      } else {
+        alert("Please allow popups for this site to view panel data in a new tab.");
+      }
+      
+    } catch (error) {
+      console.error("Error fetching panel data:", error);
+      alert("Failed to fetch panel data. Please try again.");
+    }
+  };
+
   const handleUpload = async () => {
     if (!selectedPanel || !selectedFile) {
       setError("Please select both a panel and a file.");
@@ -97,14 +503,23 @@ export default function Reconciliation() {
     setError("");
     setResult(null);
     
+    // Start polling for status updates
+    const pollInterval = setInterval(async () => {
+      const updatedHistory = await getAllReconHistory();
+      setHistory(updatedHistory);
+    }, 2000); // Poll every 2 seconds
+    
     try {
       const data = await uploadPanelData(selectedPanel, selectedFile);
       setResult(data);
       if (data.error) setError(data.error);
-      getAllReconHistory().then(setHistory);
+      // Final refresh after upload completes
+      const finalHistory = await getAllReconHistory();
+      setHistory(finalHistory);
     } catch (err) {
       setError("Upload failed. Please try again.");
     } finally {
+      clearInterval(pollInterval); // Stop polling
       setUploading(false);
     }
   };
@@ -171,7 +586,16 @@ export default function Reconciliation() {
     const statusLower = status.toLowerCase();
     
     // Success statuses
-    if (statusLower === "complete" || statusLower === "uploaded" || statusLower === "ready to recon" || statusLower === "recon finished") return "#27ae60"; // Green
+    if (statusLower === "complete" || statusLower === "processed" || statusLower === "recon finished") return "#27ae60"; // Green
+    
+    // Ready statuses
+    if (statusLower === "ready to recon") return "#f1c40f"; // Yellow
+    
+    // Processing statuses
+    if (statusLower === "uploading" || statusLower === "uploaded" || statusLower === "processing") return "#f39c12"; // Orange
+    
+    // Warning statuses
+    if (statusLower === "processed_with_warning") return "#e67e22"; // Dark Orange
     
     // Failed statuses
     if (statusLower === "failed") return "#e74c3c"; // Red
@@ -191,14 +615,14 @@ export default function Reconciliation() {
     if (statusLower === "complete") return "Recon Finished";
     
     // If upload was successful but no reconciliation yet, show "Ready to Recon"
-    if (statusLower === "uploaded") return "Ready to Recon";
+    if (statusLower === "processed") return "Ready to Recon";
     
     // Default fallback
     return item.status;
   };
 
   const canStartReconciliation = (item) => {
-    return item.status && item.status.toLowerCase() === "uploaded";
+    return item.status && item.status.toLowerCase() === "processed";
   };
 
   // Helper function to parse IST timestamp format (dd-mm-yyyy hh:mm:ss)
@@ -562,7 +986,30 @@ export default function Reconciliation() {
                     <React.Fragment key={item.docid || idx}>
                       <tr style={{ borderBottom: "1px solid #f1f3f5" }}>
                         <td style={{ padding: "12px 16px", fontSize: 14, fontWeight: 500, color: "#343a40" }}>
+                          {item.status && item.status.toLowerCase() === "failed" ? (
+                            <span style={{ color: "#6c757d" }}>
                           {item.panelname}
+                            </span>
+                          ) : (
+                            <span 
+                              onClick={() => handlePanelNameClick(item.panelname)}
+                              style={{
+                                color: "#007bff",
+                                cursor: "pointer",
+                                textDecoration: "underline",
+                                fontWeight: 600,
+                                transition: "color 0.2s ease"
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.color = "#0056b3";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.color = "#007bff";
+                              }}
+                            >
+                              {item.panelname}
+                            </span>
+                          )}
                         </td>
                         <td style={{ padding: "12px 16px", fontSize: 14, color: "#495057" }}>
                           {item.docname}
@@ -849,6 +1296,19 @@ export default function Reconciliation() {
           </div>
         </div>
       </div>
+
+      {/* Panel Data Popup */}
+      {/* This section is no longer needed as panel data is opened in a new tab */}
+
+      {/* CSS for loading animation */}
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}
+      </style>
     </div>
   );
 } 

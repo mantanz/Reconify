@@ -16,6 +16,7 @@ def get_current_user(request: Request):
             token = auth_header.split(" ")[1]
     
     if not token:
+        logging.warning(f"No token found in request. Cookies: {request.cookies}, Headers: {dict(request.headers)}")
         return "demo"  # Fallback to demo if no token
     
     try:
@@ -40,10 +41,23 @@ def get_current_user(request: Request):
             except Exception as audit_error:
                 logging.error(f"Failed to log session expiration audit event: {audit_error}")
             
+            logging.warning(f"Invalid token payload: {payload}")
             return "demo"  # Fallback to demo if invalid token
         
-        # Return user name or email as fallback
-        return payload.get("name") or payload.get("sub") or "demo"
+        # Extract user information from payload
+        user_name = payload.get("name")
+        user_email = payload.get("sub")
+        
+        logging.info(f"Token payload: {payload}, User name: {user_name}, User email: {user_email}")
+        
+        # Return user name if available, otherwise email, otherwise demo
+        if user_name:
+            return user_name
+        elif user_email:
+            return user_email
+        else:
+            logging.warning(f"No user name or email found in token payload: {payload}")
+            return "demo"
         
     except JWTError as e:
         # JWT token is expired or malformed - log session expiration
@@ -65,4 +79,5 @@ def get_current_user(request: Request):
         except Exception as audit_error:
             logging.error(f"Failed to log session expiration audit event: {audit_error}")
         
+        logging.error(f"JWT error in get_current_user: {str(e)}")
         return "demo"  # Fallback to demo if JWT error 

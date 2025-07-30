@@ -27,7 +27,7 @@ def categorize_users(panel_name: str = Form(...)):
     NOTE: User categorization is restricted to only three SOTs:
     - service_users (highest priority)
     - internal_users (medium priority) 
-    - thirdparty_users (lowest priority)
+    - thirdparty_users or third_party_users (lowest priority)
     
     Other SOTs in the key_mapping will be ignored for categorization purposes.
     """
@@ -52,14 +52,21 @@ def categorize_users(panel_name: str = Form(...)):
                 detail=f"No SOTs configured for panel '{panel_name}'. Please configure at least one SOT mapping."
             )
         
+        # Function to normalize SOT names for categorization
+        def normalize_sot_name(sot_name):
+            """Normalize SOT names to handle variations like thirdparty_users and third_party_users"""
+            if sot_name in ["thirdparty_users", "third_party_users"]:
+                return "thirdparty_users"  # Use consistent name internally
+            return sot_name
+        
         # Restrict to only the three allowed SOTs for user categorization
-        allowed_sots = ["service_users", "internal_users", "thirdparty_users"]
+        allowed_sots = ["service_users", "internal_users", "thirdparty_users", "third_party_users"]
         configured_sots = [sot for sot in configured_sots if sot in allowed_sots]
         
         if not configured_sots:
             raise HTTPException(
                 status_code=400, 
-                detail=f"No valid SOTs configured for user categorization. Only 'service_users', 'internal_users', and 'thirdparty_users' are allowed. Available mappings: {list(key_mapping.keys())}"
+                detail=f"No valid SOTs configured for user categorization. Only 'service_users', 'internal_users', and 'thirdparty_users'/'third_party_users' are allowed. Available mappings: {list(key_mapping.keys())}"
             )
         
         # Production logging (replace print with proper logging)
@@ -85,8 +92,12 @@ def categorize_users(panel_name: str = Form(...)):
             logging.error(f"Failed to fetch panel data: {e}")
             raise HTTPException(status_code=500, detail=f"Failed to fetch panel data: {str(e)}")
         
-        # Initialize summary dynamically
-        summary = {sot: 0 for sot in configured_sots}
+        # Initialize summary dynamically with normalized SOT names
+        summary = {}
+        for sot in configured_sots:
+            normalized_name = normalize_sot_name(sot)
+            summary[normalized_name] = 0
+        
         summary["not_found"] = 0
         summary["total"] = len(panel_rows)
         summary["errors"] = 0
@@ -114,7 +125,7 @@ def categorize_users(panel_name: str = Form(...)):
         match_field = None
         
         # Define the priority order for match_field determination
-        priority_sots = ["service_users", "internal_users", "thirdparty_users"]
+        priority_sots = ["service_users", "internal_users", "thirdparty_users", "third_party_users"]
         
         # Try to get match_field from SOTs in priority order
         for sot in priority_sots:
@@ -162,8 +173,8 @@ def categorize_users(panel_name: str = Form(...)):
                 status = "not found"
                 found = False
                 
-                # Check SOTs in priority order: service_users -> internal_users -> thirdparty_users
-                priority_sots = ["service_users", "internal_users", "thirdparty_users"]
+                # Check SOTs in priority order: service_users -> internal_users -> thirdparty_users/third_party_users
+                priority_sots = ["service_users", "internal_users", "thirdparty_users", "third_party_users"]
                 
                 for sot in priority_sots:
                     if sot not in configured_sots:
@@ -183,10 +194,10 @@ def categorize_users(panel_name: str = Form(...)):
                     panel_value = str(panel_value).strip().lower()
                     original_panel_value = panel_value  # Keep original for logging
                     
-                    # Apply domain matching for internal_users and thirdparty_users
+                    # Apply domain matching for internal_users and thirdparty_users/third_party_users
                     # Check if this SOT uses domain matching (either by flag or by field name)
                     use_domain_matching = mapping.get("use_domain_matching", False)
-                    is_domain_sot = sot in ["internal_users", "thirdparty_users"] and sot_field == "domain"
+                    is_domain_sot = sot in ["internal_users", "thirdparty_users", "third_party_users"] and sot_field == "domain"
                     
                     if (use_domain_matching or is_domain_sot) and "@" in panel_value:
                         panel_value = panel_value.split("@")[-1].strip().lower()
@@ -205,7 +216,8 @@ def categorize_users(panel_name: str = Form(...)):
                                 break
                         
                         status = user_type if user_type else "found"
-                        summary[sot] += 1
+                        normalized_sot_name = normalize_sot_name(sot)
+                        summary[normalized_sot_name] += 1
                         found = True
                         logging.debug(f"Row {row_idx}: Found in {sot} with status '{status}' (looked for '{panel_value}')")
                         break  # Stop checking other SOTs once a match is found
@@ -258,9 +270,9 @@ def categorize_users(panel_name: str = Form(...)):
                 details={
                     "panel_name": panel_name,
                     "total_users": len(panel_rows),
-                    "service_users": summary["service_users"],
-                    "internal_users": summary["internal_users"],
-                    "thirdparty_users": summary["thirdparty_users"],
+                    "service_users": summary.get("service_users", 0),
+                    "internal_users": summary.get("internal_users", 0),
+                    "thirdparty_users": summary.get("thirdparty_users", 0),
                     "not_found": summary["not_found"],
                     "successful_updates": len(updates),
                     "errors": summary.get("errors", 0)

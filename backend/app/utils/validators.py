@@ -33,7 +33,8 @@ def generate_file_hash(file_contents):
 
 def check_duplicate_file(file_hash, file_name, upload_type="sot"):
     """
-    Check if a file with the same hash has been uploaded before.
+    Check if a file with the same hash has been successfully uploaded before.
+    Only considers successful uploads, ignoring failed uploads.
     
     Args:
         file_hash (str): SHA-256 hash of file contents
@@ -58,7 +59,9 @@ def check_duplicate_file(file_hash, file_name, upload_type="sot"):
                     sot_uploads = json.load(f)
                 
                 for upload in sot_uploads:
-                    if upload.get("file_hash") == file_hash:
+                    # Only consider successful uploads
+                    if (upload.get("file_hash") == file_hash and 
+                        upload.get("status") in ["success", "uploaded"]):
                         return True, {
                             "upload_type": "SOT",
                             "file_name": upload.get("doc_name"),
@@ -78,9 +81,33 @@ def check_duplicate_file(file_hash, file_name, upload_type="sot"):
                     panel_history = json.load(f)
                 
                 for upload in panel_history:
-                    if upload.get("file_hash") == file_hash:
+                    # Only consider successful uploads
+                    if (upload.get("file_hash") == file_hash and 
+                        upload.get("status") in ["uploaded", "complete"]):
                         return True, {
                             "upload_type": "Panel",
+                            "file_name": upload.get("docname"),
+                            "uploaded_by": upload.get("uploadedby"),
+                            "timestamp": upload.get("timestamp"),
+                            "panel_name": upload.get("panelname")
+                        }
+        
+        elif upload_type == "recategorization":
+            # Check panel uploads for recategorization files
+            from app.config.settings import RECON_HISTORY_PATH
+            import json
+            import os
+            
+            if os.path.exists(RECON_HISTORY_PATH):
+                with open(RECON_HISTORY_PATH, "r") as f:
+                    panel_history = json.load(f)
+                
+                for upload in panel_history:
+                    # Only consider successful uploads
+                    if (upload.get("file_hash") == file_hash and 
+                        upload.get("status") in ["uploaded", "complete"]):
+                        return True, {
+                            "upload_type": "Recategorization",
                             "file_name": upload.get("docname"),
                             "uploaded_by": upload.get("uploadedby"),
                             "timestamp": upload.get("timestamp"),
